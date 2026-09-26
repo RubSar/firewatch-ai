@@ -79,10 +79,11 @@ await shot('04b-thermal')
 await thermalBtn.click()
 
 step('arrival-time isochrones')
-await page.getByLabel('Arrival-time isochrones').check()
+const isoBtn = page.getByRole('button', { name: 'Arrival-time isochrones' })
+await isoBtn.click()
 await page.waitForTimeout(600)
 await shot('05-isochrones')
-await page.getByLabel('Arrival-time isochrones').uncheck()
+await isoBtn.click()
 
 step('fuel tint over imagery')
 await page.getByLabel('Tint by fuel model').check()
@@ -149,17 +150,17 @@ await shot('11-worldwide')
 console.log(`  area=${await readStat('Area burnt')} ros=${await readStat('Head-fire spread')}`)
 
 step('show current fires (NASA FIRMS)')
-const firesBox = page.getByLabel('Show current fires')
+const firesBox = page.getByRole('button', { name: 'Show current fires' })
 if (await firesBox.isDisabled()) {
   console.log('  layer disabled in browser-only mode (FIRMS has no CORS) — as designed')
 } else {
-  await firesBox.check()
+  await firesBox.click()
   await page.locator('.fires-note').waitFor({ timeout: 20000 })
   // The first pull is a 6 MB global file; wait for it to resolve, not just appear.
   await page.locator('.fires-note').filter({ hasNotText: 'Loading' }).waitFor({ timeout: 90000 })
   console.log(`  ${(await page.locator('.fires-note').innerText()).replace(/\n/g, ' · ')}`)
   await shot('11b-active-fires')
-  await firesBox.uncheck()
+  await firesBox.click()
 }
 
 step('resize the area of interest -> 40 km')

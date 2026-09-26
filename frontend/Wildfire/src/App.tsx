@@ -344,7 +344,6 @@ export default function App() {
       <div className="body">
         <aside className="panel-left">
           <ControlPanel
-            canShowActiveFires={Boolean(API_URL)}
             params={params}
             onParams={(patch) => setParams((p) => ({ ...p, ...patch }))}
             preset={presetId}
@@ -379,6 +378,11 @@ export default function App() {
               hasLines={hasLines}
               thermal={layers.thermal}
               onThermal={(v) => setLayers((l) => ({ ...l, thermal: v }))}
+              isochrones={layers.isochrones}
+              onIsochrones={(v) => setLayers((l) => ({ ...l, isochrones: v }))}
+              activeFires={layers.activeFires}
+              onActiveFires={(v) => setLayers((l) => ({ ...l, activeFires: v }))}
+              canShowActiveFires={Boolean(API_URL)}
             />
           </div>
 
