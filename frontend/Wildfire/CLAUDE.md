@@ -117,6 +117,32 @@ Three things that must stay:
   suppression is modelled. These numbers are not operational accuracy and must not be
   quoted as such.
 
+### What the hindcast says is actually wrong
+
+Measured, not assumed. `npm run hindcast` reports reachable area alongside burnt area,
+because "burns too fast" and "can reach too much" look identical in a Dice score:
+
+| fire | burnt | reachable | % reached | grid burnable |
+|---|---|---|---|---|
+| Cypress Creek | 5,574 ha | 13,184 ha | 42% | 92% |
+| 113 Incident | 4,771 ha | 9,747 ha | 49% | 98% |
+| County Rd 169 | 44,250 ha | 61,572 ha | 72% | 99% |
+
+Three conclusions, each of which overturned a guess:
+
+- **Not reach-limited.** The model stops at 42-72% of what it could burn, with weather
+  putting it out. So saturating the fuel-connected region is not the mechanism.
+- **Not duration-limited.** Extending the replay from 96 h to 313 h changed Cypress
+  Creek's area not at all; two of three burn out before the old window ended.
+- **The fuel map is the suspect.** Only 7% of the Cypress Creek landscape is
+  unburnable, and 52% of it is classified `Agriculture` — in a national forest. The
+  visible-band proxy is putting burnable fuel almost everywhere, which inflates the
+  reachable area far beyond what a real landscape offers.
+
+So the area over-prediction is more likely fuel classification and missing barriers than
+spread rate. Note also that **the hindcast replay passes no `blockFrac`**, so OSM
+barriers are not active in it at all — that is a gap, not a finding.
+
 ### Benchmark against Rothermel
 
 `npm run bench` compares this kernel against Rothermel (1972) — the model underneath
