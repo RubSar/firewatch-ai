@@ -3,6 +3,7 @@ import L from 'leaflet'
 import type { Sim } from '@firewatch/sim/model'
 import type { Terrain } from '@firewatch/sim/terrain'
 import { baseIsEmpty, paintGrid } from '../render/paint.ts'
+import { paintThermal, thermalColour } from '../render/thermal.ts'
 import { buildFireGeometry, makeBuffers, type FireGeometry, type GeometryBuffers } from '../render/fireGeometry.ts'
 import type { Layers, Tool } from './ControlPanel.tsx'
 import type { FireDetection, FiresDto } from '@firewatch/contracts/wire'
@@ -20,6 +21,8 @@ interface Props {
   registerGetView?: (fn: () => { lat: number; lng: number; spanKm: number }) => void
   /** Base URL of the incident API. Required for the FIRMS layer. */
   apiUrl?: string
+  /** Ambient air temperature in Celsius — the floor of the thermal scale. */
+  ambientC: number
   /** Reports what the active-fire layer found, for the status line. */
   onFiresLoaded?: (s: { count: number; note: string; truncated: boolean; loading?: boolean } | null) => void
 }
@@ -44,6 +47,7 @@ export function MapView(props: Props) {
   const tileRef = useRef<L.TileLayer | null>(null)
   const gridRef = useRef<HTMLCanvasElement | null>(null)
   const imgRef = useRef<ImageData | null>(null)
+  const thermalRef = useRef<{ canvas: HTMLCanvasElement; img: ImageData } | null>(null)
   const shadeRef = useRef<HTMLCanvasElement | null>(null)
   const domainRef = useRef<L.Rectangle | null>(null)
   const firesRef = useRef<L.LayerGroup | null>(null)
@@ -102,6 +106,12 @@ export function MapView(props: Props) {
     const gctx = g.getContext('2d')!
     const { cols, rows, shade } = props.terrain
     imgRef.current = gctx.createImageData(cols, rows)
+    // Separate grid-resolution canvas for the infrared raster, so toggling the
+    // view never disturbs the cached base raster.
+    const tc = document.createElement('canvas')
+    tc.width = cols
+    tc.height = rows
+    thermalRef.current = { canvas: tc, img: tc.getContext('2d')!.createImageData(cols, rows) }
     bufRef.current = makeBuffers(cols * rows)
     geomRef.current = null
     lastGeom.current = { time: -1, revision: -1, iso: false, at: 0 }
@@ -288,18 +298,26 @@ export function MapView(props: Props) {
         // swamping the map.
         const r = Math.max(3, Math.min(14, 3 + Math.sqrt(d.frp) * 0.7))
         const hot = Math.min(1, d.frp / 120)
+        // In infrared, colour the detection by its own measured brightness
+        // temperature on the same scale as the model — that comparison is the
+        // whole point of having both on one map.
+        const ir = p.current.layers.thermal
+        const fill = ir
+          ? thermalColour((d.brightness - (p.current.ambientC + 273.15)) / 1050)
+          : hot > 0.6 ? '#ffe8a3' : hot > 0.25 ? '#ff8c25' : '#e0452a'
         L.circleMarker([d.lat, d.lng], {
           radius: r,
-          color: '#ffd7a1',
+          color: ir ? '#cfe4ff' : '#ffd7a1',
           weight: 1,
           opacity: 0.55 + 0.35 * d.confidence,
-          fillColor: hot > 0.6 ? '#ffe8a3' : hot > 0.25 ? '#ff8c25' : '#e0452a',
+          fillColor: fill,
           fillOpacity: 0.35 + 0.45 * d.confidence,
         })
           .bindTooltip(
             `<b>${d.frp.toFixed(1)} MW</b> · ${d.satellite} ${d.day ? 'day' : 'night'}<br/>` +
               `${new Date(d.at).toUTCString().replace('GMT', 'UTC')}<br/>` +
-              `confidence ${(d.confidence * 100).toFixed(0)}% · ${d.brightness.toFixed(0)} K<br/>` +
+              `confidence ${(d.confidence * 100).toFixed(0)}% · ${d.brightness.toFixed(0)} K ` +
+              `(${(d.brightness - 273.15).toFixed(0)} °C measured)<br/>` +
               `<i>click to ignite here</i>`,
             { direction: 'top', opacity: 0.95 }
           )
@@ -327,7 +345,7 @@ export function MapView(props: Props) {
       firesRef.current?.remove()
       firesRef.current = null
     }
-  }, [props.layers.activeFires, props.apiUrl, props.terrain])
+  }, [props.layers.activeFires, props.layers.thermal, props.apiUrl, props.terrain])
 
   // --- render loop hook --------------------------------------------------
   useEffect(() => {
@@ -393,8 +411,30 @@ export function MapView(props: Props) {
         ctx.drawImage(grid, nw.x, nw.y, w, h)
       }
 
+      // --- infrared view -------------------------------------------------
+      // Rebuilt on the same throttle as the contours, then drawn every frame,
+      // so panning stays at full rate. Replaces the fire's own colouring
+      // entirely rather than tinting it: a thermal image is a measurement,
+      // and blending it with stylised flame colours would make it a decoration.
+      if (layers.thermal) {
+        const th = thermalRef.current
+        if (th) {
+          if (changed && now - lg.at > 50) {
+            paintThermal(th.img, sim, { ambientC: p.current.ambientC })
+            th.canvas.getContext('2d')!.putImageData(th.img, 0, 0)
+          }
+          ctx.imageSmoothingEnabled = true
+          ctx.imageSmoothingQuality = 'high'
+          ctx.drawImage(th.canvas, nw.x, nw.y, w, h)
+        }
+      }
+
       const geom = geomRef.current
       if (!geom) return
+      // In infrared the temperature raster IS the fire; the scar and flame
+      // bands would only double-draw it. Control lines still matter, though —
+      // a dozer line is a real feature of the incident, not a fire colour.
+      const irOnly = layers.thermal
 
       // Everything below is drawn in grid coordinates; the transform maps them
       // onto the map, so the paths stay smooth however far the user zooms in.
@@ -402,12 +442,12 @@ export function MapView(props: Props) {
       ctx.translate(nw.x, nw.y)
       ctx.scale(w / cols, h / rows)
 
-      if (geom.isochrones.length) {
+      if (!irOnly && geom.isochrones.length) {
         for (const band of geom.isochrones) {
           ctx.fillStyle = band.fill
           ctx.fill(band.path)
         }
-      } else if (geom.scar) {
+      } else if (!irOnly && geom.scar) {
         ctx.fillStyle = 'rgba(28, 24, 22, 0.88)'
         ctx.fill(geom.scar)
         // Hillshade inside the scar, so burnt ground keeps the shape of the
@@ -437,7 +477,7 @@ export function MapView(props: Props) {
         ctx.fill(geom.dozer)
       }
 
-      if (geom.flames.length) {
+      if (!irOnly && geom.flames.length) {
         ctx.save()
         // Glow, in grid units so it scales with the map.
         ctx.shadowColor = 'rgba(255, 120, 30, 0.75)'

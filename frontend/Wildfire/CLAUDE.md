@@ -195,6 +195,25 @@ domain is drawn as a dashed rectangle so it stays findable.
 - **The global CSV is ~6 MB and refreshes hourly**, so it is cached for 15 minutes and concurrent
   misses are collapsed onto one in-flight request. A map pan must not cost 6 MB.
 
+### Thermal view
+
+`render/thermal.ts` renders apparent temperature as a raster, not contours — temperature
+is a continuous field and banding it into paths would invent edges. Three rules:
+
+- **It replaces the fire graphics, it does not tint them.** `MapView` skips the scar,
+  isochrones and flame bands when `layers.thermal` is on (`irOnly`). Control lines still
+  draw — a dozer line is a feature of the incident, not a fire colour.
+- **The temperature map is the one in ARCHITECTURE.md §4**: `T_amb + 1050·tanh(I/I_ref)`,
+  saturating. Keep them in sync; if §4's `T_f` changes, this changes.
+- **The blur is a sensor model, not a smoothing hack.** One `smoothField` pass stands in
+  for a thermal camera's point-spread function. Without it the raster is single-pixel
+  speckle and reads as noise. Two passes erase the flanks, same as the flame contours.
+
+The scale is fixed to ambient → ambient+1050 K rather than tracking each frame's maximum,
+so the fire's apparent brightness tracks its actual temperature. FIRMS markers reuse the
+same ramp via `thermalColour()` keyed on measured brightness temperature, which is what
+makes modelled and observed heat comparable (§6).
+
 ### Water comes from Sentinel-2, not from colour
 
 `frontend/api/src/providers/sentinel.ts` reads the Sentinel-2 L2A **Scene
