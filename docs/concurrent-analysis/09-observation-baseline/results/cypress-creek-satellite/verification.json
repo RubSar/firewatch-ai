@@ -1,0 +1,12 @@
+{
+  "verified_at_utc": "2026-09-26T22:41:56.455837Z",
+  "python_tests_passed": 70,
+  "new_satellite_tests": 12,
+  "offline_replay_identical_output_hashes": true,
+  "offline_replay_identical_scores": true,
+  "native_crops_checked": 9,
+  "selected_stac_geotiff_scale_offset_agreement": true,
+  "local_document_links_checked": 27,
+  "source_code_sha256": "7d7145d8bf0203ee57ae8d8008f20bbb7516245cb68001cb9746bd7bcf9cad99",
+  "source_control": "Uncommitted changes in codex/cypress-creek-case; no PR created or teammate notified."
+}

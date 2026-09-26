@@ -1,0 +1,128 @@
+{
+  "schema_version": "firewatch.research.ir-reference-registry.v1",
+  "created_at_utc": "2026-09-26T23:27:17.429055+00:00",
+  "incident_id": "CA-ENF-024030-2021-Caldor",
+  "split": "reference-development",
+  "source_record_id": 20279621,
+  "source_manifest_sha256": "6f480cab43c119bba29086879c2428b8f9df284f5a46be5ff67354314b172399",
+  "timestamp_basis": "Explicit timezone-bearing PERIMETER_TIMES list in pinned FireBench configuration; publisher documents extraction from Imagery Date/Time in NIROPS reports. Original reports unavailable to this run.",
+  "timestamp_source": {
+    "url": "https://github.com/wirc-sjsu/firebench/blob/82c233cff702699335c6b8e88fb79596b98775de/src/firebench/benchmarks/c001_caldor_config.py",
+    "sha256": "2f5fd4aeec7180190f1f2a00b0e40b480603b7ef76e303e32a9c36d4cb77868f",
+    "commit": "82c233cff702699335c6b8e88fb79596b98775de",
+    "read_method": "Python AST literal only, external code never imported or executed"
+  },
+  "perimeters": [
+    {
+      "path": "kml/Caldor_2021_08_17T20_20_07_00.kml",
+      "publisher_time": "2021-08-17T20:20-07:00",
+      "sha256": "eeb3f48b39a70a2c573dddc3ffb2f842bc32924869ce1edbcda4895a2c8c6697"
+    },
+    {
+      "path": "kml/Caldor_2021_08_18T20_30_07_00.kml",
+      "publisher_time": "2021-08-18T20:30-07:00",
+      "sha256": "1d1c61f2d563a7500e148b933b013ab87aacd875852c1383907d33ff486868c5"
+    },
+    {
+      "path": "kml/Caldor_2021_08_19T20_45_07_00.kml",
+      "publisher_time": "2021-08-19T20:45-07:00",
+      "sha256": "8524e00f05ffa6c2055fcd1afe535845c6f2ed5922b85dda9d468546ec987188"
+    },
+    {
+      "path": "kml/Caldor_2021_08_20T20_20_07_00.kml",
+      "publisher_time": "2021-08-20T20:20-07:00",
+      "sha256": "544df2c456cddd7aa38be188c4b2e53d3715bcd20ef39579a1d025fbff848c9a"
+    },
+    {
+      "path": "kml/Caldor_2021_08_21T21_15_07_00.kml",
+      "publisher_time": "2021-08-21T21:15-07:00",
+      "sha256": "fb454b2813cf9d22d69c7ffc97a598c3091a2c61bafd18876c6dc93755df0e1a"
+    },
+    {
+      "path": "kml/Caldor_2021_08_24T22_07_07_00.kml",
+      "publisher_time": "2021-08-24T22:07-07:00",
+      "sha256": "c1ae8dcc93823833d10c274585034b09d9551399922722f07ac6be4fbe2cdd1e"
+    },
+    {
+      "path": "kml/Caldor_2021_08_26T03_30_06_00.kml",
+      "publisher_time": "2021-08-26T03:30-06:00",
+      "sha256": "d19e7fb01fde9306c335b97813791ed87345211a6b55ad2fca6b176447dd21c5"
+    },
+    {
+      "path": "kml/Caldor_2021_08_26T22_15_06_00.kml",
+      "publisher_time": "2021-08-26T22:15-06:00",
+      "sha256": "c67ecc386deaa3fa5f9470b75763176a1dd2ef375bd60db2d11c2feb4d7186d2"
+    },
+    {
+      "path": "kml/Caldor_2021_08_27T00_22_06_00.kml",
+      "publisher_time": "2021-08-27T00:22-06:00",
+      "sha256": "c6f76867648729d03ea399bc652952c8d96be6bf3bafccacb29034f8da72e1da"
+    },
+    {
+      "path": "kml/Caldor_2021_08_28T21_30_06_00.kml",
+      "publisher_time": "2021-08-28T21:30-06:00",
+      "sha256": "564c93d0d698fc254b91237baf42ba411554931a7e92068722d1fcd1fff0402d"
+    },
+    {
+      "path": "kml/Caldor_2021_08_29T22_32_07_00.kml",
+      "publisher_time": "2021-08-29T22:32-07:00",
+      "sha256": "bfd2fce80db22f0d1571673793552b18766f203ccc6d4366121944e87f1e0327"
+    },
+    {
+      "path": "kml/Caldor_2021_08_30T21_09_07_00.kml",
+      "publisher_time": "2021-08-30T21:09-07:00",
+      "sha256": "77ddd8e0e647ab9a475e0c6b5ba8a9eacece7270a5e25023dd82fed843bf5547"
+    },
+    {
+      "path": "kml/Caldor_2021_08_31T21_08_07_00.kml",
+      "publisher_time": "2021-08-31T21:08-07:00",
+      "sha256": "1b115d95390148ced392761a53647f9d25898e6095aab6e4cd62942917c3a509"
+    },
+    {
+      "path": "kml/Caldor_2021_09_01T21_12_07_00.kml",
+      "publisher_time": "2021-09-01T21:12-07:00",
+      "sha256": "fbd92682faf590187dee799f453de2bb3cd090bca238629d3c6b1c1a953b60ad"
+    },
+    {
+      "path": "kml/Caldor_2021_09_03T00_40_07_00.kml",
+      "publisher_time": "2021-09-03T00:40-07:00",
+      "sha256": "0a0fca95732b3371d4e704209c58bae5a4a06b78a63da1d9e1b671963e9c164b"
+    },
+    {
+      "path": "kml/Caldor_2021_09_04T23_29_07_00.kml",
+      "publisher_time": "2021-09-04T23:29-07:00",
+      "sha256": "2700b51fa647ffe4b19a1b07dd3246b754c544d3fc303a64ce4f7d98904ddfa3"
+    },
+    {
+      "path": "kml/Caldor_2021_09_05T23_41_07_00.kml",
+      "publisher_time": "2021-09-05T23:41-07:00",
+      "sha256": "58aca6c446d115e23e64d69b91afbfad7665ae9f23829acaca659f2cc6782ed1"
+    },
+    {
+      "path": "kml/Caldor_2021_09_06T23_09_07_00.kml",
+      "publisher_time": "2021-09-06T23:09-07:00",
+      "sha256": "b88ed3624b2148c7aa29fcd49d3615f084119c4ee7874617c592f9a091a86fa6"
+    },
+    {
+      "path": "kml/Caldor_2021_09_07T22_40_07_00.kml",
+      "publisher_time": "2021-09-07T22:40-07:00",
+      "sha256": "43ce5d0ce15d7e2d028f4bb2be973c8934e86ac68457d43d1227471802ca7dda"
+    },
+    {
+      "path": "kml/Caldor_2021_09_08T22_33_07_00.kml",
+      "publisher_time": "2021-09-08T22:33-07:00",
+      "sha256": "7eaaa8f64995f90111ec361a3574c18623a12d7ce8c17d827788fcdd2e722ad2"
+    },
+    {
+      "path": "kml/Caldor_2021_09_10T23_34_07_00.kml",
+      "publisher_time": "2021-09-10T23:34-07:00",
+      "sha256": "7816f607dd7f39f416b39e3442b7143fabc2ba27a44f9a17a945d47fc3852fba"
+    }
+  ],
+  "original_flight_reports_verified": false,
+  "prior_development_incidents": [
+    "8432b888-2a01-4825-8eb6-c74589de24fc",
+    "d05cf942-a3e3-425d-bfe1-0c994ec8956a",
+    "84284851-f0f8-4253-b5bc-da7771e0150d"
+  ]
+}

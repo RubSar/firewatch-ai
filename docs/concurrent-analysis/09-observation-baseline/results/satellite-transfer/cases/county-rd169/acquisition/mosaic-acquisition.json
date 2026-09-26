@@ -1,0 +1,1179 @@
+{
+  "schema_version": "firewatch.research.mosaic-acquisition.v1",
+  "created_at_utc": "2026-09-26T23:10:09.331677Z",
+  "catalog_sha256": "d8dc337488450188fe9160ff8b2b79428b7be3595962fe93e615a73e39d86917",
+  "selected": {
+    "pre": {
+      "platform": "sentinel-2a",
+      "datatake_id": "GS2A_20260206T175321_055508_N05.12",
+      "time_start_utc": "2026-02-06T17:53:28.805000Z",
+      "time_end_utc": "2026-02-06T17:53:31.996000Z",
+      "members": [
+        "S2A_T13SED_20260206T175316_L2A",
+        "S2A_T13SFD_20260206T175316_L2A"
+      ]
+    },
+    "post": {
+      "platform": "sentinel-2c",
+      "datatake_id": "GS2C_20260303T174231_007790_N05.12",
+      "time_start_utc": "2026-03-03T17:53:06.864000Z",
+      "time_end_utc": "2026-03-03T17:53:10.281000Z",
+      "members": [
+        "S2C_T13SED_20260303T175037_L2A",
+        "S2C_T13SFD_20260303T175037_L2A"
+      ]
+    }
+  },
+  "crops": {
+    "S2A_T13SED_20260216T175318_L2A": {
+      "scl": {
+        "path": "pre-0-0-scl.tif",
+        "scene_id": "S2A_T13SED_20260216T175318_L2A",
+        "source_url": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/13/S/ED/2026/2/S2A_T13SED_20260216T175318_L2A/SCL.tif",
+        "retrieved_at_utc": "2026-09-26T23:09:37.505535Z",
+        "source_shape": [
+          5490,
+          5490
+        ],
+        "source_transform": [
+          20.0,
+          0.0,
+          499980.0,
+          0.0,
+          -20.0,
+          4400040.0
+        ],
+        "read_window": [
+          4772,
+          3301,
+          718,
+          254
+        ],
+        "requested_window": [
+          4772,
+          3301,
+          885,
+          254
+        ],
+        "native_resolution_m": 20,
+        "scale": null,
+        "offset": null,
+        "nodata": 0.0,
+        "source_scales": [
+          1.0
+        ],
+        "source_offsets": [
+          0.0
+        ],
+        "source_published_multihash": "122064542e110245db709357b0cbc74e2ea6de4f8ce2f84daa59da21071dc30119a9",
+        "complete_source_checksum_verified": false,
+        "sha256": "77b8e34c3374a2fc561c40c04d9e24d53e449812ed880d1f7fb8e68576ceb202"
+      }
+    },
+    "S2A_T13SFD_20260216T175318_L2A": {
+      "scl": {
+        "path": "pre-0-1-scl.tif",
+        "scene_id": "S2A_T13SFD_20260216T175318_L2A",
+        "source_url": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/13/S/FD/2026/2/S2A_T13SFD_20260216T175318_L2A/SCL.tif",
+        "retrieved_at_utc": "2026-09-26T23:09:38.434703Z",
+        "source_shape": [
+          5490,
+          5490
+        ],
+        "source_transform": [
+          20.0,
+          0.0,
+          600000.0,
+          0.0,
+          -20.0,
+          4400040.0
+        ],
+        "read_window": [
+          0,
+          3301,
+          656,
+          254
+        ],
+        "requested_window": [
+          -229,
+          3301,
+          885,
+          254
+        ],
+        "native_resolution_m": 20,
+        "scale": null,
+        "offset": null,
+        "nodata": 0.0,
+        "source_scales": [
+          1.0
+        ],
+        "source_offsets": [
+          0.0
+        ],
+        "source_published_multihash": "12201f1a3c609a68694764638847c507598e668568ec57925c2db180fe7c9287ab27",
+        "complete_source_checksum_verified": false,
+        "sha256": "c22f70ec8b7abdca903f6a1b0feec2b34e566f6ce8f05d6a98437256bf9d1869"
+      }
+    },
+    "S2B_T13SED_20260216T175133_L2A": {
+      "scl": {
+        "path": "pre-1-0-scl.tif",
+        "scene_id": "S2B_T13SED_20260216T175133_L2A",
+        "source_url": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/13/S/ED/2026/2/S2B_T13SED_20260216T175133_L2A/SCL.tif",
+        "retrieved_at_utc": "2026-09-26T23:09:39.329827Z",
+        "source_shape": [
+          5490,
+          5490
+        ],
+        "source_transform": [
+          20.0,
+          0.0,
+          499980.0,
+          0.0,
+          -20.0,
+          4400040.0
+        ],
+        "read_window": [
+          4772,
+          3301,
+          718,
+          254
+        ],
+        "requested_window": [
+          4772,
+          3301,
+          885,
+          254
+        ],
+        "native_resolution_m": 20,
+        "scale": null,
+        "offset": null,
+        "nodata": 0.0,
+        "source_scales": [
+          1.0
+        ],
+        "source_offsets": [
+          0.0
+        ],
+        "source_published_multihash": "1220d19b69e00ccccb29858ad2fe845e20633041df1c4431123d7528ed1dcd02e08f",
+        "complete_source_checksum_verified": false,
+        "sha256": "a66472c0125c4c25228f30e27d764e8c5df00516ced645d486ab2be24441d764"
+      }
+    },
+    "S2B_T13SFD_20260216T175133_L2A": {
+      "scl": {
+        "path": "pre-1-1-scl.tif",
+        "scene_id": "S2B_T13SFD_20260216T175133_L2A",
+        "source_url": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/13/S/FD/2026/2/S2B_T13SFD_20260216T175133_L2A/SCL.tif",
+        "retrieved_at_utc": "2026-09-26T23:09:40.251521Z",
+        "source_shape": [
+          5490,
+          5490
+        ],
+        "source_transform": [
+          20.0,
+          0.0,
+          600000.0,
+          0.0,
+          -20.0,
+          4400040.0
+        ],
+        "read_window": [
+          0,
+          3301,
+          656,
+          254
+        ],
+        "requested_window": [
+          -229,
+          3301,
+          885,
+          254
+        ],
+        "native_resolution_m": 20,
+        "scale": null,
+        "offset": null,
+        "nodata": 0.0,
+        "source_scales": [
+          1.0
+        ],
+        "source_offsets": [
+          0.0
+        ],
+        "source_published_multihash": "12208b7552ee251cc4a3918b47d5d7e4b2f93e1d60118bd783ed6c5188496b84f005",
+        "complete_source_checksum_verified": false,
+        "sha256": "3ac274adb1a900328e3b15373fa2ccdfc9111d6a4c9d322556cdbded920c562f"
+      }
+    },
+    "S2A_T13SED_20260206T175316_L2A": {
+      "scl": {
+        "path": "pre-2-0-scl.tif",
+        "scene_id": "S2A_T13SED_20260206T175316_L2A",
+        "source_url": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/13/S/ED/2026/2/S2A_T13SED_20260206T175316_L2A/SCL.tif",
+        "retrieved_at_utc": "2026-09-26T23:09:41.172641Z",
+        "source_shape": [
+          5490,
+          5490
+        ],
+        "source_transform": [
+          20.0,
+          0.0,
+          499980.0,
+          0.0,
+          -20.0,
+          4400040.0
+        ],
+        "read_window": [
+          4772,
+          3301,
+          718,
+          254
+        ],
+        "requested_window": [
+          4772,
+          3301,
+          885,
+          254
+        ],
+        "native_resolution_m": 20,
+        "scale": null,
+        "offset": null,
+        "nodata": 0.0,
+        "source_scales": [
+          1.0
+        ],
+        "source_offsets": [
+          0.0
+        ],
+        "source_published_multihash": "1220cf332928b997fb72b8c48db170c08d9c4d15d94ccb506079e95e594584f93dac",
+        "complete_source_checksum_verified": false,
+        "sha256": "feb297c7efbafc49196fc07eac4445bbcc64b126b92b65c4ba18fe8b3a11f31b"
+      },
+      "nir": {
+        "path": "pre-0-nir.tif",
+        "scene_id": "S2A_T13SED_20260206T175316_L2A",
+        "source_url": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/13/S/ED/2026/2/S2A_T13SED_20260206T175316_L2A/B08.tif",
+        "retrieved_at_utc": "2026-09-26T23:09:54.134268Z",
+        "source_shape": [
+          10980,
+          10980
+        ],
+        "source_transform": [
+          10.0,
+          0.0,
+          499980.0,
+          0.0,
+          -10.0,
+          4400040.0
+        ],
+        "read_window": [
+          9544,
+          6602,
+          1436,
+          508
+        ],
+        "requested_window": [
+          9544,
+          6602,
+          1770,
+          508
+        ],
+        "native_resolution_m": 10,
+        "scale": 0.0001,
+        "offset": -0.1,
+        "nodata": 0.0,
+        "source_scales": [
+          0.0001
+        ],
+        "source_offsets": [
+          -0.1
+        ],
+        "source_published_multihash": "122080b2eb791cea0faca635e1347a981cd3a0962733bd04ebc1bbc76535a4c87b21",
+        "complete_source_checksum_verified": false,
+        "sha256": "c294e9b4a0790d30a1712542c2831f2d639db12fb2c9f2d790cd3e0fedf8b12c"
+      },
+      "swir22": {
+        "path": "pre-0-swir22.tif",
+        "scene_id": "S2A_T13SED_20260206T175316_L2A",
+        "source_url": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/13/S/ED/2026/2/S2A_T13SED_20260206T175316_L2A/B12.tif",
+        "retrieved_at_utc": "2026-09-26T23:09:55.650952Z",
+        "source_shape": [
+          5490,
+          5490
+        ],
+        "source_transform": [
+          20.0,
+          0.0,
+          499980.0,
+          0.0,
+          -20.0,
+          4400040.0
+        ],
+        "read_window": [
+          4772,
+          3301,
+          718,
+          254
+        ],
+        "requested_window": [
+          4772,
+          3301,
+          885,
+          254
+        ],
+        "native_resolution_m": 20,
+        "scale": 0.0001,
+        "offset": -0.1,
+        "nodata": 0.0,
+        "source_scales": [
+          0.0001
+        ],
+        "source_offsets": [
+          -0.1
+        ],
+        "source_published_multihash": "1220c65e166cf62a23179a4a5d76f6701c7b4914b3c3b40dfaa84d542e2ce99e749a",
+        "complete_source_checksum_verified": false,
+        "sha256": "414c2972119be2a13435c73798c4f814e3cf46963e3d93104e52110d8dd74357"
+      }
+    },
+    "S2A_T13SFD_20260206T175316_L2A": {
+      "scl": {
+        "path": "pre-2-1-scl.tif",
+        "scene_id": "S2A_T13SFD_20260206T175316_L2A",
+        "source_url": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/13/S/FD/2026/2/S2A_T13SFD_20260206T175316_L2A/SCL.tif",
+        "retrieved_at_utc": "2026-09-26T23:09:42.096978Z",
+        "source_shape": [
+          5490,
+          5490
+        ],
+        "source_transform": [
+          20.0,
+          0.0,
+          600000.0,
+          0.0,
+          -20.0,
+          4400040.0
+        ],
+        "read_window": [
+          0,
+          3301,
+          656,
+          254
+        ],
+        "requested_window": [
+          -229,
+          3301,
+          885,
+          254
+        ],
+        "native_resolution_m": 20,
+        "scale": null,
+        "offset": null,
+        "nodata": 0.0,
+        "source_scales": [
+          1.0
+        ],
+        "source_offsets": [
+          0.0
+        ],
+        "source_published_multihash": "1220a20eeba80e214d1d1ffdde4fad7170a6e65ba083f6d751392b15814464782fb3",
+        "complete_source_checksum_verified": false,
+        "sha256": "6745d0895350c892a46b696b167804ebb2f9adf67697e5e37481b3160bf7cd0e"
+      },
+      "nir": {
+        "path": "pre-1-nir.tif",
+        "scene_id": "S2A_T13SFD_20260206T175316_L2A",
+        "source_url": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/13/S/FD/2026/2/S2A_T13SFD_20260206T175316_L2A/B08.tif",
+        "retrieved_at_utc": "2026-09-26T23:09:58.284037Z",
+        "source_shape": [
+          10980,
+          10980
+        ],
+        "source_transform": [
+          10.0,
+          0.0,
+          600000.0,
+          0.0,
+          -10.0,
+          4400040.0
+        ],
+        "read_window": [
+          0,
+          6602,
+          1312,
+          508
+        ],
+        "requested_window": [
+          -458,
+          6602,
+          1770,
+          508
+        ],
+        "native_resolution_m": 10,
+        "scale": 0.0001,
+        "offset": -0.1,
+        "nodata": 0.0,
+        "source_scales": [
+          0.0001
+        ],
+        "source_offsets": [
+          -0.1
+        ],
+        "source_published_multihash": "1220b53693177e0d9abe8fe30acd87077014ee0bcf792447ac93860620f655a71a20",
+        "complete_source_checksum_verified": false,
+        "sha256": "0126f581536b08aa98af061d74c842e014900cde51dc761feb9e61b236cf30be"
+      },
+      "swir22": {
+        "path": "pre-1-swir22.tif",
+        "scene_id": "S2A_T13SFD_20260206T175316_L2A",
+        "source_url": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/13/S/FD/2026/2/S2A_T13SFD_20260206T175316_L2A/B12.tif",
+        "retrieved_at_utc": "2026-09-26T23:09:59.911377Z",
+        "source_shape": [
+          5490,
+          5490
+        ],
+        "source_transform": [
+          20.0,
+          0.0,
+          600000.0,
+          0.0,
+          -20.0,
+          4400040.0
+        ],
+        "read_window": [
+          0,
+          3301,
+          656,
+          254
+        ],
+        "requested_window": [
+          -229,
+          3301,
+          885,
+          254
+        ],
+        "native_resolution_m": 20,
+        "scale": 0.0001,
+        "offset": -0.1,
+        "nodata": 0.0,
+        "source_scales": [
+          0.0001
+        ],
+        "source_offsets": [
+          -0.1
+        ],
+        "source_published_multihash": "1220ea6e2fa1f31618c5ea091397c5de4a51b88a489fe647eb619523bda508b68365",
+        "complete_source_checksum_verified": false,
+        "sha256": "030a3c22181c231ed9168ecbd8d2a3f029168b7c06d8a8ae7ac9c55de1e15c22"
+      }
+    },
+    "S2B_T13SED_20260206T174757_L2A": {
+      "scl": {
+        "path": "pre-3-0-scl.tif",
+        "scene_id": "S2B_T13SED_20260206T174757_L2A",
+        "source_url": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/13/S/ED/2026/2/S2B_T13SED_20260206T174757_L2A/SCL.tif",
+        "retrieved_at_utc": "2026-09-26T23:09:43.165602Z",
+        "source_shape": [
+          5490,
+          5490
+        ],
+        "source_transform": [
+          20.0,
+          0.0,
+          499980.0,
+          0.0,
+          -20.0,
+          4400040.0
+        ],
+        "read_window": [
+          4772,
+          3301,
+          718,
+          254
+        ],
+        "requested_window": [
+          4772,
+          3301,
+          885,
+          254
+        ],
+        "native_resolution_m": 20,
+        "scale": null,
+        "offset": null,
+        "nodata": 0.0,
+        "source_scales": [
+          1.0
+        ],
+        "source_offsets": [
+          0.0
+        ],
+        "source_published_multihash": "1220934d447f62ba9175d27401ce1e1350f0713eef65f57018a9fd6983f152a8f544",
+        "complete_source_checksum_verified": false,
+        "sha256": "8997d8a979c85b8f74c65ad5447b78093aeadcf929f969d5da812f7c79ec4e2c"
+      }
+    },
+    "S2B_T13SFD_20260206T174757_L2A": {
+      "scl": {
+        "path": "pre-3-1-scl.tif",
+        "scene_id": "S2B_T13SFD_20260206T174757_L2A",
+        "source_url": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/13/S/FD/2026/2/S2B_T13SFD_20260206T174757_L2A/SCL.tif",
+        "retrieved_at_utc": "2026-09-26T23:09:44.136058Z",
+        "source_shape": [
+          5490,
+          5490
+        ],
+        "source_transform": [
+          20.0,
+          0.0,
+          600000.0,
+          0.0,
+          -20.0,
+          4400040.0
+        ],
+        "read_window": [
+          0,
+          3301,
+          656,
+          254
+        ],
+        "requested_window": [
+          -229,
+          3301,
+          885,
+          254
+        ],
+        "native_resolution_m": 20,
+        "scale": null,
+        "offset": null,
+        "nodata": 0.0,
+        "source_scales": [
+          1.0
+        ],
+        "source_offsets": [
+          0.0
+        ],
+        "source_published_multihash": "1220e13c2cc245f83aa59884c5d8c5b9cc2e7213a1b74328ed58a5362bca4a3699d2",
+        "complete_source_checksum_verified": false,
+        "sha256": "155d3dae5ad7912decbe74e62e355f4d7871704ddd7d13f39b20f7bd2b677331"
+      }
+    },
+    "S2C_T13SED_20260221T174652_L2A": {
+      "scl": {
+        "path": "post-0-0-scl.tif",
+        "scene_id": "S2C_T13SED_20260221T174652_L2A",
+        "source_url": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/13/S/ED/2026/2/S2C_T13SED_20260221T174652_L2A/SCL.tif",
+        "retrieved_at_utc": "2026-09-26T23:09:45.129914Z",
+        "source_shape": [
+          5490,
+          5490
+        ],
+        "source_transform": [
+          20.0,
+          0.0,
+          499980.0,
+          0.0,
+          -20.0,
+          4400040.0
+        ],
+        "read_window": [
+          4772,
+          3301,
+          718,
+          254
+        ],
+        "requested_window": [
+          4772,
+          3301,
+          885,
+          254
+        ],
+        "native_resolution_m": 20,
+        "scale": null,
+        "offset": null,
+        "nodata": 0.0,
+        "source_scales": [
+          1.0
+        ],
+        "source_offsets": [
+          0.0
+        ],
+        "source_published_multihash": "1220c8aca7f1e7216c7228b08510849ca897f67e93dc509e3b24dc90cde813e283c5",
+        "complete_source_checksum_verified": false,
+        "sha256": "95670053f196d7c70856666d7a0b269b0007e8f001ec417868152b971eb1cee2"
+      }
+    },
+    "S2C_T13SFD_20260221T174652_L2A": {
+      "scl": {
+        "path": "post-0-1-scl.tif",
+        "scene_id": "S2C_T13SFD_20260221T174652_L2A",
+        "source_url": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/13/S/FD/2026/2/S2C_T13SFD_20260221T174652_L2A/SCL.tif",
+        "retrieved_at_utc": "2026-09-26T23:09:46.026729Z",
+        "source_shape": [
+          5490,
+          5490
+        ],
+        "source_transform": [
+          20.0,
+          0.0,
+          600000.0,
+          0.0,
+          -20.0,
+          4400040.0
+        ],
+        "read_window": [
+          0,
+          3301,
+          656,
+          254
+        ],
+        "requested_window": [
+          -229,
+          3301,
+          885,
+          254
+        ],
+        "native_resolution_m": 20,
+        "scale": null,
+        "offset": null,
+        "nodata": 0.0,
+        "source_scales": [
+          1.0
+        ],
+        "source_offsets": [
+          0.0
+        ],
+        "source_published_multihash": "1220fdb0f303dd59c6d03a0063d5f81734f44702d7662c6eda3f335632933def0634",
+        "complete_source_checksum_verified": false,
+        "sha256": "485c157a3b9bf3e68eaec22cd53523183d2ce1717472cdb84f71829f1928bcca"
+      }
+    },
+    "S2B_T13SED_20260226T174321_L2A": {
+      "scl": {
+        "path": "post-1-0-scl.tif",
+        "scene_id": "S2B_T13SED_20260226T174321_L2A",
+        "source_url": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/13/S/ED/2026/2/S2B_T13SED_20260226T174321_L2A/SCL.tif",
+        "retrieved_at_utc": "2026-09-26T23:09:46.947333Z",
+        "source_shape": [
+          5490,
+          5490
+        ],
+        "source_transform": [
+          20.0,
+          0.0,
+          499980.0,
+          0.0,
+          -20.0,
+          4400040.0
+        ],
+        "read_window": [
+          4772,
+          3301,
+          718,
+          254
+        ],
+        "requested_window": [
+          4772,
+          3301,
+          885,
+          254
+        ],
+        "native_resolution_m": 20,
+        "scale": null,
+        "offset": null,
+        "nodata": 0.0,
+        "source_scales": [
+          1.0
+        ],
+        "source_offsets": [
+          0.0
+        ],
+        "source_published_multihash": "12203dc1a058cc939ff728443c9d6bd53094c03107ae0f88af94a9d7582445327ab3",
+        "complete_source_checksum_verified": false,
+        "sha256": "8fef1bfd168a6766870591adbbcd5e7cfd3fc60535c150d7a95a6ee9d9d9e5cc"
+      }
+    },
+    "S2B_T13SFD_20260226T174321_L2A": {
+      "scl": {
+        "path": "post-1-1-scl.tif",
+        "scene_id": "S2B_T13SFD_20260226T174321_L2A",
+        "source_url": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/13/S/FD/2026/2/S2B_T13SFD_20260226T174321_L2A/SCL.tif",
+        "retrieved_at_utc": "2026-09-26T23:09:47.871656Z",
+        "source_shape": [
+          5490,
+          5490
+        ],
+        "source_transform": [
+          20.0,
+          0.0,
+          600000.0,
+          0.0,
+          -20.0,
+          4400040.0
+        ],
+        "read_window": [
+          0,
+          3301,
+          656,
+          254
+        ],
+        "requested_window": [
+          -229,
+          3301,
+          885,
+          254
+        ],
+        "native_resolution_m": 20,
+        "scale": null,
+        "offset": null,
+        "nodata": 0.0,
+        "source_scales": [
+          1.0
+        ],
+        "source_offsets": [
+          0.0
+        ],
+        "source_published_multihash": "12207844f9c5cc43fc9cb6a7ce8a886607b416dc00fc81c90cd3c30d7ab8627db9b1",
+        "complete_source_checksum_verified": false,
+        "sha256": "d844f448f5a03dc51a8b7f92fb3a2f35345d4d9f2aff39f0e21ac0937a29c038"
+      }
+    },
+    "S2A_T13SED_20260226T175529_L2A": {
+      "scl": {
+        "path": "post-2-0-scl.tif",
+        "scene_id": "S2A_T13SED_20260226T175529_L2A",
+        "source_url": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/13/S/ED/2026/2/S2A_T13SED_20260226T175529_L2A/SCL.tif",
+        "retrieved_at_utc": "2026-09-26T23:09:48.819589Z",
+        "source_shape": [
+          5490,
+          5490
+        ],
+        "source_transform": [
+          20.0,
+          0.0,
+          499980.0,
+          0.0,
+          -20.0,
+          4400040.0
+        ],
+        "read_window": [
+          4772,
+          3301,
+          718,
+          254
+        ],
+        "requested_window": [
+          4772,
+          3301,
+          885,
+          254
+        ],
+        "native_resolution_m": 20,
+        "scale": null,
+        "offset": null,
+        "nodata": 0.0,
+        "source_scales": [
+          1.0
+        ],
+        "source_offsets": [
+          0.0
+        ],
+        "source_published_multihash": "1220b6f3aadee3b91b6760f415563c6e71e912efe44e2528db6ffa3442487d2e17f2",
+        "complete_source_checksum_verified": false,
+        "sha256": "5981ab56dd9edfee43069e344a63ebe6e74d301b715338d4b10b82688c02a81c"
+      }
+    },
+    "S2A_T13SFD_20260226T175529_L2A": {
+      "scl": {
+        "path": "post-2-1-scl.tif",
+        "scene_id": "S2A_T13SFD_20260226T175529_L2A",
+        "source_url": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/13/S/FD/2026/2/S2A_T13SFD_20260226T175529_L2A/SCL.tif",
+        "retrieved_at_utc": "2026-09-26T23:09:49.718609Z",
+        "source_shape": [
+          5490,
+          5490
+        ],
+        "source_transform": [
+          20.0,
+          0.0,
+          600000.0,
+          0.0,
+          -20.0,
+          4400040.0
+        ],
+        "read_window": [
+          0,
+          3301,
+          656,
+          254
+        ],
+        "requested_window": [
+          -229,
+          3301,
+          885,
+          254
+        ],
+        "native_resolution_m": 20,
+        "scale": null,
+        "offset": null,
+        "nodata": 0.0,
+        "source_scales": [
+          1.0
+        ],
+        "source_offsets": [
+          0.0
+        ],
+        "source_published_multihash": "1220050ddd8625cc60e28d96611bb1649f42507910bd1e4625cf3003aa17376b09b1",
+        "complete_source_checksum_verified": false,
+        "sha256": "b4cd7d2e3fa9b7d75e2601598c179da8257aa0a7719cddd79d762ac14db3bb4f"
+      }
+    },
+    "S2C_T13SED_20260303T175037_L2A": {
+      "scl": {
+        "path": "post-3-0-scl.tif",
+        "scene_id": "S2C_T13SED_20260303T175037_L2A",
+        "source_url": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/13/S/ED/2026/3/S2C_T13SED_20260303T175037_L2A/SCL.tif",
+        "retrieved_at_utc": "2026-09-26T23:09:50.628554Z",
+        "source_shape": [
+          5490,
+          5490
+        ],
+        "source_transform": [
+          20.0,
+          0.0,
+          499980.0,
+          0.0,
+          -20.0,
+          4400040.0
+        ],
+        "read_window": [
+          4772,
+          3301,
+          718,
+          254
+        ],
+        "requested_window": [
+          4772,
+          3301,
+          885,
+          254
+        ],
+        "native_resolution_m": 20,
+        "scale": null,
+        "offset": null,
+        "nodata": 0.0,
+        "source_scales": [
+          1.0
+        ],
+        "source_offsets": [
+          0.0
+        ],
+        "source_published_multihash": "1220cc6a7267dbdfdb94220d3f984542cfbfba14f0637a399fce86bd67806afc396d",
+        "complete_source_checksum_verified": false,
+        "sha256": "e95d8ccca137f8a17e2b7780e55e53c90e25ba8bab4efdc8a1b742c29999c2f5"
+      },
+      "nir": {
+        "path": "post-0-nir.tif",
+        "scene_id": "S2C_T13SED_20260303T175037_L2A",
+        "source_url": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/13/S/ED/2026/3/S2C_T13SED_20260303T175037_L2A/B08.tif",
+        "retrieved_at_utc": "2026-09-26T23:10:02.980105Z",
+        "source_shape": [
+          10980,
+          10980
+        ],
+        "source_transform": [
+          10.0,
+          0.0,
+          499980.0,
+          0.0,
+          -10.0,
+          4400040.0
+        ],
+        "read_window": [
+          9544,
+          6602,
+          1436,
+          508
+        ],
+        "requested_window": [
+          9544,
+          6602,
+          1770,
+          508
+        ],
+        "native_resolution_m": 10,
+        "scale": 0.0001,
+        "offset": -0.1,
+        "nodata": 0.0,
+        "source_scales": [
+          0.0001
+        ],
+        "source_offsets": [
+          -0.1
+        ],
+        "source_published_multihash": "12201127721f315810b4e3347ec12d441bdd5a64877a745a905d1d90a34ed9e27457",
+        "complete_source_checksum_verified": false,
+        "sha256": "98558730e2f017bf32d0c38aa1851dfa3ce724a4fd3fb920a6f861607da2f9a8"
+      },
+      "swir22": {
+        "path": "post-0-swir22.tif",
+        "scene_id": "S2C_T13SED_20260303T175037_L2A",
+        "source_url": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/13/S/ED/2026/3/S2C_T13SED_20260303T175037_L2A/B12.tif",
+        "retrieved_at_utc": "2026-09-26T23:10:04.539296Z",
+        "source_shape": [
+          5490,
+          5490
+        ],
+        "source_transform": [
+          20.0,
+          0.0,
+          499980.0,
+          0.0,
+          -20.0,
+          4400040.0
+        ],
+        "read_window": [
+          4772,
+          3301,
+          718,
+          254
+        ],
+        "requested_window": [
+          4772,
+          3301,
+          885,
+          254
+        ],
+        "native_resolution_m": 20,
+        "scale": 0.0001,
+        "offset": -0.1,
+        "nodata": 0.0,
+        "source_scales": [
+          0.0001
+        ],
+        "source_offsets": [
+          -0.1
+        ],
+        "source_published_multihash": "1220af95c0c0143afbcb3384f995bfa17c9b34d7153d37a4dd8fbad8bc4b9cce64da",
+        "complete_source_checksum_verified": false,
+        "sha256": "aa6c1dec2e3cdae638329ec47c242e22cd9626cfb7c87c5107d3ef252fbbf4e0"
+      }
+    },
+    "S2C_T13SFD_20260303T175037_L2A": {
+      "scl": {
+        "path": "post-3-1-scl.tif",
+        "scene_id": "S2C_T13SFD_20260303T175037_L2A",
+        "source_url": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/13/S/FD/2026/3/S2C_T13SFD_20260303T175037_L2A/SCL.tif",
+        "retrieved_at_utc": "2026-09-26T23:09:51.560487Z",
+        "source_shape": [
+          5490,
+          5490
+        ],
+        "source_transform": [
+          20.0,
+          0.0,
+          600000.0,
+          0.0,
+          -20.0,
+          4400040.0
+        ],
+        "read_window": [
+          0,
+          3301,
+          656,
+          254
+        ],
+        "requested_window": [
+          -229,
+          3301,
+          885,
+          254
+        ],
+        "native_resolution_m": 20,
+        "scale": null,
+        "offset": null,
+        "nodata": 0.0,
+        "source_scales": [
+          1.0
+        ],
+        "source_offsets": [
+          0.0
+        ],
+        "source_published_multihash": "1220666756d23f6e502c319ae455ec2760d9f47827e48d8a3a05638779511dc79777",
+        "complete_source_checksum_verified": false,
+        "sha256": "37745318f4232eacea40ac79c3ab9921616a26cbdaf6b13f45efaf82f626672c"
+      },
+      "nir": {
+        "path": "post-1-nir.tif",
+        "scene_id": "S2C_T13SFD_20260303T175037_L2A",
+        "source_url": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/13/S/FD/2026/3/S2C_T13SFD_20260303T175037_L2A/B08.tif",
+        "retrieved_at_utc": "2026-09-26T23:10:07.707300Z",
+        "source_shape": [
+          10980,
+          10980
+        ],
+        "source_transform": [
+          10.0,
+          0.0,
+          600000.0,
+          0.0,
+          -10.0,
+          4400040.0
+        ],
+        "read_window": [
+          0,
+          6602,
+          1312,
+          508
+        ],
+        "requested_window": [
+          -458,
+          6602,
+          1770,
+          508
+        ],
+        "native_resolution_m": 10,
+        "scale": 0.0001,
+        "offset": -0.1,
+        "nodata": 0.0,
+        "source_scales": [
+          0.0001
+        ],
+        "source_offsets": [
+          -0.1
+        ],
+        "source_published_multihash": "1220653c91c340378821cfde6a70f17e9dc53fa30bf2c241199c2e5ae278659dc827",
+        "complete_source_checksum_verified": false,
+        "sha256": "ea0dbc4ea2ec0052c4b055bcec8e3062c7e56bc6e2295099c4a95af409553458"
+      },
+      "swir22": {
+        "path": "post-1-swir22.tif",
+        "scene_id": "S2C_T13SFD_20260303T175037_L2A",
+        "source_url": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/13/S/FD/2026/3/S2C_T13SFD_20260303T175037_L2A/B12.tif",
+        "retrieved_at_utc": "2026-09-26T23:10:09.309630Z",
+        "source_shape": [
+          5490,
+          5490
+        ],
+        "source_transform": [
+          20.0,
+          0.0,
+          600000.0,
+          0.0,
+          -20.0,
+          4400040.0
+        ],
+        "read_window": [
+          0,
+          3301,
+          656,
+          254
+        ],
+        "requested_window": [
+          -229,
+          3301,
+          885,
+          254
+        ],
+        "native_resolution_m": 20,
+        "scale": 0.0001,
+        "offset": -0.1,
+        "nodata": 0.0,
+        "source_scales": [
+          0.0001
+        ],
+        "source_offsets": [
+          -0.1
+        ],
+        "source_published_multihash": "1220f5b86c17c40704bd673c68417120199ff5dd0b064f59305d0f394774dd84b2bf",
+        "complete_source_checksum_verified": false,
+        "sha256": "85a2d30a8bd786f46c3fbbec2759fd275ed4964dd8787749986c796995a5828d"
+      }
+    }
+  },
+  "failures": [],
+  "pair_coverage": [
+    {
+      "valid_pixels": 2243,
+      "pre": "pre-0",
+      "post": "post-0"
+    },
+    {
+      "valid_pixels": 108694,
+      "pre": "pre-0",
+      "post": "post-1"
+    },
+    {
+      "valid_pixels": 116443,
+      "pre": "pre-0",
+      "post": "post-2"
+    },
+    {
+      "valid_pixels": 213744,
+      "pre": "pre-0",
+      "post": "post-3"
+    },
+    {
+      "valid_pixels": 2243,
+      "pre": "pre-1",
+      "post": "post-0"
+    },
+    {
+      "valid_pixels": 109004,
+      "pre": "pre-1",
+      "post": "post-1"
+    },
+    {
+      "valid_pixels": 117140,
+      "pre": "pre-1",
+      "post": "post-2"
+    },
+    {
+      "valid_pixels": 213347,
+      "pre": "pre-1",
+      "post": "post-3"
+    },
+    {
+      "valid_pixels": 2243,
+      "pre": "pre-2",
+      "post": "post-0"
+    },
+    {
+      "valid_pixels": 113072,
+      "pre": "pre-2",
+      "post": "post-1"
+    },
+    {
+      "valid_pixels": 120974,
+      "pre": "pre-2",
+      "post": "post-2"
+    },
+    {
+      "valid_pixels": 222386,
+      "pre": "pre-2",
+      "post": "post-3"
+    },
+    {
+      "valid_pixels": 2243,
+      "pre": "pre-3",
+      "post": "post-0"
+    },
+    {
+      "valid_pixels": 113072,
+      "pre": "pre-3",
+      "post": "post-1"
+    },
+    {
+      "valid_pixels": 120974,
+      "pre": "pre-3",
+      "post": "post-2"
+    },
+    {
+      "valid_pixels": 222386,
+      "pre": "pre-3",
+      "post": "post-3"
+    }
+  ],
+  "selection_method": "maximum joint SCL-valid area, fixed temporal/group priority ties; first usable lexical tile within overpass",
+  "code_sha256": "c550421866c15c6b87091c2bc97f1ac3cfc34aea38e484d898c4ddcd551c4355",
+  "baseline_code_sha256": "59bc0a34defc525df1a6dd797c24ce89377f2bd0bc2c45dfed715bf480bad6fa"
+}

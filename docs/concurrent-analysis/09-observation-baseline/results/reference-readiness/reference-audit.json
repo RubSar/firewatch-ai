@@ -1,0 +1,505 @@
+{
+  "schema_version": "firewatch.research.ir-reference-audit.v1",
+  "created_at_utc": "2026-09-26T23:28:22.488802+00:00",
+  "incident_id": "CA-ENF-024030-2021-Caldor",
+  "source_record_id": 20279621,
+  "source_doi": "10.5281/zenodo.20279621",
+  "perimeters": [
+    {
+      "source_path": "kml/Caldor_2021_08_17T20_20_07_00.kml",
+      "source_sha256": "eeb3f48b39a70a2c573dddc3ffb2f842bc32924869ce1edbcda4895a2c8c6697",
+      "publisher_time": "2021-08-17T20:20-07:00",
+      "capture_time_utc": "2021-08-18T03:20:00Z",
+      "timestamp_basis": "Explicit timezone-bearing PERIMETER_TIMES list in pinned FireBench configuration; publisher documents extraction from Imagery Date/Time in NIROPS reports. Original reports unavailable to this run.",
+      "original_flight_report_verified": false,
+      "geometry_valid": true,
+      "source_polygon_count": 33,
+      "area_ha": 21636.591283932336,
+      "bbox_wgs84": [
+        -120.556720671721,
+        38.5642078975866,
+        -120.280784872139,
+        38.7706032549838
+      ],
+      "geometry_sha256": "63398b058a782919b19dca6f9e1e772520ec3b8b7aea1fbfb83184ade3126765"
+    },
+    {
+      "source_path": "kml/Caldor_2021_08_18T20_30_07_00.kml",
+      "source_sha256": "1d1c61f2d563a7500e148b933b013ab87aacd875852c1383907d33ff486868c5",
+      "publisher_time": "2021-08-18T20:30-07:00",
+      "capture_time_utc": "2021-08-19T03:30:00Z",
+      "timestamp_basis": "Explicit timezone-bearing PERIMETER_TIMES list in pinned FireBench configuration; publisher documents extraction from Imagery Date/Time in NIROPS reports. Original reports unavailable to this run.",
+      "original_flight_report_verified": false,
+      "geometry_valid": true,
+      "source_polygon_count": 42,
+      "area_ha": 26438.238267720422,
+      "bbox_wgs84": [
+        -120.562817236017,
+        38.5618566835264,
+        -120.274398693488,
+        38.7599704727636
+      ],
+      "geometry_sha256": "6cde2d9d9253a5cecfd9c02f4fff88b1e7cd3a80b0714ddc127f7e0427f79429"
+    },
+    {
+      "source_path": "kml/Caldor_2021_08_19T20_45_07_00.kml",
+      "source_sha256": "8524e00f05ffa6c2055fcd1afe535845c6f2ed5922b85dda9d468546ec987188",
+      "publisher_time": "2021-08-19T20:45-07:00",
+      "capture_time_utc": "2021-08-20T03:45:00Z",
+      "timestamp_basis": "Explicit timezone-bearing PERIMETER_TIMES list in pinned FireBench configuration; publisher documents extraction from Imagery Date/Time in NIROPS reports. Original reports unavailable to this run.",
+      "original_flight_report_verified": false,
+      "geometry_valid": false,
+      "geometry_error": "Invalid source polygon 38: Ring Self-intersection[-120.452085196623 38.5705369834529]; no repair"
+    },
+    {
+      "source_path": "kml/Caldor_2021_08_20T20_20_07_00.kml",
+      "source_sha256": "544df2c456cddd7aa38be188c4b2e53d3715bcd20ef39579a1d025fbff848c9a",
+      "publisher_time": "2021-08-20T20:20-07:00",
+      "capture_time_utc": "2021-08-21T03:20:00Z",
+      "timestamp_basis": "Explicit timezone-bearing PERIMETER_TIMES list in pinned FireBench configuration; publisher documents extraction from Imagery Date/Time in NIROPS reports. Original reports unavailable to this run.",
+      "original_flight_report_verified": false,
+      "geometry_valid": true,
+      "source_polygon_count": 13,
+      "area_ha": 33578.07366813395,
+      "bbox_wgs84": [
+        -120.585118467703,
+        38.5572966946441,
+        -120.259539996863,
+        38.7613787113899
+      ],
+      "geometry_sha256": "5b600c956620a482370dd8329926da71684c77c715cdb8f5960792002f5edf69"
+    },
+    {
+      "source_path": "kml/Caldor_2021_08_21T21_15_07_00.kml",
+      "source_sha256": "fb454b2813cf9d22d69c7ffc97a598c3091a2c61bafd18876c6dc93755df0e1a",
+      "publisher_time": "2021-08-21T21:15-07:00",
+      "capture_time_utc": "2021-08-22T04:15:00Z",
+      "timestamp_basis": "Explicit timezone-bearing PERIMETER_TIMES list in pinned FireBench configuration; publisher documents extraction from Imagery Date/Time in NIROPS reports. Original reports unavailable to this run.",
+      "original_flight_report_verified": false,
+      "geometry_valid": true,
+      "source_polygon_count": 19,
+      "area_ha": 39719.529916812906,
+      "bbox_wgs84": [
+        -120.599623762477,
+        38.5572966946441,
+        -120.172427550998,
+        38.7886977762225
+      ],
+      "geometry_sha256": "9f8ba8e26b434c64b5fa83ec024e409a869eff17c5883f6da4f5a994ee7379bd"
+    },
+    {
+      "source_path": "kml/Caldor_2021_08_24T22_07_07_00.kml",
+      "source_sha256": "c1ae8dcc93823833d10c274585034b09d9551399922722f07ac6be4fbe2cdd1e",
+      "publisher_time": "2021-08-24T22:07-07:00",
+      "capture_time_utc": "2021-08-25T05:07:00Z",
+      "timestamp_basis": "Explicit timezone-bearing PERIMETER_TIMES list in pinned FireBench configuration; publisher documents extraction from Imagery Date/Time in NIROPS reports. Original reports unavailable to this run.",
+      "original_flight_report_verified": false,
+      "geometry_valid": true,
+      "source_polygon_count": 30,
+      "area_ha": 47633.17739458174,
+      "bbox_wgs84": [
+        -120.624137747216,
+        38.5568423309909,
+        -120.171551237138,
+        38.7928582992218
+      ],
+      "geometry_sha256": "868a97a1cb66ef9d51f5ae9b11ab09208dc15efbbe6af3881169cad36e178d51"
+    },
+    {
+      "source_path": "kml/Caldor_2021_08_26T03_30_06_00.kml",
+      "source_sha256": "d19e7fb01fde9306c335b97813791ed87345211a6b55ad2fca6b176447dd21c5",
+      "publisher_time": "2021-08-26T03:30-06:00",
+      "capture_time_utc": "2021-08-26T09:30:00Z",
+      "timestamp_basis": "Explicit timezone-bearing PERIMETER_TIMES list in pinned FireBench configuration; publisher documents extraction from Imagery Date/Time in NIROPS reports. Original reports unavailable to this run.",
+      "original_flight_report_verified": false,
+      "geometry_valid": false,
+      "geometry_error": "Invalid source polygon 4: Ring Self-intersection[-120.152506017 38.7544985170001]; no repair"
+    },
+    {
+      "source_path": "kml/Caldor_2021_08_26T22_15_06_00.kml",
+      "source_sha256": "c67ecc386deaa3fa5f9470b75763176a1dd2ef375bd60db2d11c2feb4d7186d2",
+      "publisher_time": "2021-08-26T22:15-06:00",
+      "capture_time_utc": "2021-08-27T04:15:00Z",
+      "timestamp_basis": "Explicit timezone-bearing PERIMETER_TIMES list in pinned FireBench configuration; publisher documents extraction from Imagery Date/Time in NIROPS reports. Original reports unavailable to this run.",
+      "original_flight_report_verified": false,
+      "geometry_valid": false,
+      "geometry_error": "Invalid source polygon 4: Ring Self-intersection[-120.152506017 38.7544985170001]; no repair"
+    },
+    {
+      "source_path": "kml/Caldor_2021_08_27T00_22_06_00.kml",
+      "source_sha256": "c6f76867648729d03ea399bc652952c8d96be6bf3bafccacb29034f8da72e1da",
+      "publisher_time": "2021-08-27T00:22-06:00",
+      "capture_time_utc": "2021-08-27T06:22:00Z",
+      "timestamp_basis": "Explicit timezone-bearing PERIMETER_TIMES list in pinned FireBench configuration; publisher documents extraction from Imagery Date/Time in NIROPS reports. Original reports unavailable to this run.",
+      "original_flight_report_verified": false,
+      "geometry_valid": false,
+      "geometry_error": "Invalid source polygon 0: Ring Self-intersection[-120.610919941 38.6178961860001]; no repair"
+    },
+    {
+      "source_path": "kml/Caldor_2021_08_28T21_30_06_00.kml",
+      "source_sha256": "564c93d0d698fc254b91237baf42ba411554931a7e92068722d1fcd1fff0402d",
+      "publisher_time": "2021-08-28T21:30-06:00",
+      "capture_time_utc": "2021-08-29T03:30:00Z",
+      "timestamp_basis": "Explicit timezone-bearing PERIMETER_TIMES list in pinned FireBench configuration; publisher documents extraction from Imagery Date/Time in NIROPS reports. Original reports unavailable to this run.",
+      "original_flight_report_verified": false,
+      "geometry_valid": false,
+      "geometry_error": "Invalid source polygon 0: Ring Self-intersection[-120.610919941 38.6178961860001]; no repair"
+    },
+    {
+      "source_path": "kml/Caldor_2021_08_29T22_32_07_00.kml",
+      "source_sha256": "bfd2fce80db22f0d1571673793552b18766f203ccc6d4366121944e87f1e0327",
+      "publisher_time": "2021-08-29T22:32-07:00",
+      "capture_time_utc": "2021-08-30T05:32:00Z",
+      "timestamp_basis": "Explicit timezone-bearing PERIMETER_TIMES list in pinned FireBench configuration; publisher documents extraction from Imagery Date/Time in NIROPS reports. Original reports unavailable to this run.",
+      "original_flight_report_verified": false,
+      "geometry_valid": true,
+      "source_polygon_count": 50,
+      "area_ha": 71806.462670836,
+      "bbox_wgs84": [
+        -120.656352451814,
+        38.5568371749414,
+        -120.042317832774,
+        38.8417572996336
+      ],
+      "geometry_sha256": "1d0dec5f56f06f3dc546640988d21a7c6d9406a20051d89e9e268b60aeddda32"
+    },
+    {
+      "source_path": "kml/Caldor_2021_08_30T21_09_07_00.kml",
+      "source_sha256": "77ddd8e0e647ab9a475e0c6b5ba8a9eacece7270a5e25023dd82fed843bf5547",
+      "publisher_time": "2021-08-30T21:09-07:00",
+      "capture_time_utc": "2021-08-31T04:09:00Z",
+      "timestamp_basis": "Explicit timezone-bearing PERIMETER_TIMES list in pinned FireBench configuration; publisher documents extraction from Imagery Date/Time in NIROPS reports. Original reports unavailable to this run.",
+      "original_flight_report_verified": false,
+      "geometry_valid": true,
+      "source_polygon_count": 61,
+      "area_ha": 77268.63882427647,
+      "bbox_wgs84": [
+        -120.668559066803,
+        38.5568220727492,
+        -119.976568526189,
+        38.8548727793429
+      ],
+      "geometry_sha256": "c8ef2c23516976f836be97f2a52328f39d386b4adadfe246856b6c2c8138fd03"
+    },
+    {
+      "source_path": "kml/Caldor_2021_08_31T21_08_07_00.kml",
+      "source_sha256": "1b115d95390148ced392761a53647f9d25898e6095aab6e4cd62942917c3a509",
+      "publisher_time": "2021-08-31T21:08-07:00",
+      "capture_time_utc": "2021-09-01T04:08:00Z",
+      "timestamp_basis": "Explicit timezone-bearing PERIMETER_TIMES list in pinned FireBench configuration; publisher documents extraction from Imagery Date/Time in NIROPS reports. Original reports unavailable to this run.",
+      "original_flight_report_verified": false,
+      "geometry_valid": true,
+      "source_polygon_count": 73,
+      "area_ha": 82713.36777655546,
+      "bbox_wgs84": [
+        -120.668571096466,
+        38.5568371749414,
+        -119.90935759489,
+        38.8846116338738
+      ],
+      "geometry_sha256": "07f92c38eb4cd83b9769a88aa2a5459ef02d8d2ce06af1eb5acf1a93e182f53e"
+    },
+    {
+      "source_path": "kml/Caldor_2021_09_01T21_12_07_00.kml",
+      "source_sha256": "fbd92682faf590187dee799f453de2bb3cd090bca238629d3c6b1c1a953b60ad",
+      "publisher_time": "2021-09-01T21:12-07:00",
+      "capture_time_utc": "2021-09-02T04:12:00Z",
+      "timestamp_basis": "Explicit timezone-bearing PERIMETER_TIMES list in pinned FireBench configuration; publisher documents extraction from Imagery Date/Time in NIROPS reports. Original reports unavailable to this run.",
+      "original_flight_report_verified": false,
+      "geometry_valid": true,
+      "source_polygon_count": 68,
+      "area_ha": 85088.98682844308,
+      "bbox_wgs84": [
+        -120.668584149,
+        38.556842331,
+        -119.909084788,
+        38.8888366630001
+      ],
+      "geometry_sha256": "78024a01e7f89c39e5b598de0b6232ee4af691f5041434bb1d76c8c807f6b8ae"
+    },
+    {
+      "source_path": "kml/Caldor_2021_09_03T00_40_07_00.kml",
+      "source_sha256": "0a0fca95732b3371d4e704209c58bae5a4a06b78a63da1d9e1b671963e9c164b",
+      "publisher_time": "2021-09-03T00:40-07:00",
+      "capture_time_utc": "2021-09-03T07:40:00Z",
+      "timestamp_basis": "Explicit timezone-bearing PERIMETER_TIMES list in pinned FireBench configuration; publisher documents extraction from Imagery Date/Time in NIROPS reports. Original reports unavailable to this run.",
+      "original_flight_report_verified": false,
+      "geometry_valid": true,
+      "source_polygon_count": 54,
+      "area_ha": 86160.35996675445,
+      "bbox_wgs84": [
+        -120.668571096466,
+        38.5568371749414,
+        -119.908811185836,
+        38.8901141545141
+      ],
+      "geometry_sha256": "6e9bb8b76db517d5ba16a09884d15304965bcafc1119d86f7d5316aa1a6bba64"
+    },
+    {
+      "source_path": "kml/Caldor_2021_09_04T23_29_07_00.kml",
+      "source_sha256": "2700b51fa647ffe4b19a1b07dd3246b754c544d3fc303a64ce4f7d98904ddfa3",
+      "publisher_time": "2021-09-04T23:29-07:00",
+      "capture_time_utc": "2021-09-05T06:29:00Z",
+      "timestamp_basis": "Explicit timezone-bearing PERIMETER_TIMES list in pinned FireBench configuration; publisher documents extraction from Imagery Date/Time in NIROPS reports. Original reports unavailable to this run.",
+      "original_flight_report_verified": false,
+      "geometry_valid": true,
+      "source_polygon_count": 7,
+      "area_ha": 86646.16136763633,
+      "bbox_wgs84": [
+        -120.655714025969,
+        38.5568371749414,
+        -119.909399001625,
+        38.8904921625275
+      ],
+      "geometry_sha256": "fbacd98333da141882b80a660a3f3b4c5062c3c94c322f94d0809ed8f3a74484"
+    },
+    {
+      "source_path": "kml/Caldor_2021_09_05T23_41_07_00.kml",
+      "source_sha256": "58aca6c446d115e23e64d69b91afbfad7665ae9f23829acaca659f2cc6782ed1",
+      "publisher_time": "2021-09-05T23:41-07:00",
+      "capture_time_utc": "2021-09-06T06:41:00Z",
+      "timestamp_basis": "Explicit timezone-bearing PERIMETER_TIMES list in pinned FireBench configuration; publisher documents extraction from Imagery Date/Time in NIROPS reports. Original reports unavailable to this run.",
+      "original_flight_report_verified": false,
+      "geometry_valid": true,
+      "source_polygon_count": 33,
+      "area_ha": 87169.2192551794,
+      "bbox_wgs84": [
+        -120.668571096466,
+        38.5568371749414,
+        -119.919458349183,
+        38.8904512786367
+      ],
+      "geometry_sha256": "236d232d5051566c2c7b52545c10cafb141cb512fba784f7da722fc3ba3ebecd"
+    },
+    {
+      "source_path": "kml/Caldor_2021_09_06T23_09_07_00.kml",
+      "source_sha256": "b88ed3624b2148c7aa29fcd49d3615f084119c4ee7874617c592f9a091a86fa6",
+      "publisher_time": "2021-09-06T23:09-07:00",
+      "capture_time_utc": "2021-09-07T06:09:00Z",
+      "timestamp_basis": "Explicit timezone-bearing PERIMETER_TIMES list in pinned FireBench configuration; publisher documents extraction from Imagery Date/Time in NIROPS reports. Original reports unavailable to this run.",
+      "original_flight_report_verified": false,
+      "geometry_valid": true,
+      "source_polygon_count": 38,
+      "area_ha": 87812.47485360308,
+      "bbox_wgs84": [
+        -120.668571096466,
+        38.5568371749414,
+        -119.919458349183,
+        38.8904512786367
+      ],
+      "geometry_sha256": "2c2b5194783f1d310222978f485d469214155874667b166b5cce7099a639c4d1"
+    },
+    {
+      "source_path": "kml/Caldor_2021_09_07T22_40_07_00.kml",
+      "source_sha256": "43ce5d0ce15d7e2d028f4bb2be973c8934e86ac68457d43d1227471802ca7dda",
+      "publisher_time": "2021-09-07T22:40-07:00",
+      "capture_time_utc": "2021-09-08T05:40:00Z",
+      "timestamp_basis": "Explicit timezone-bearing PERIMETER_TIMES list in pinned FireBench configuration; publisher documents extraction from Imagery Date/Time in NIROPS reports. Original reports unavailable to this run.",
+      "original_flight_report_verified": false,
+      "geometry_valid": true,
+      "source_polygon_count": 49,
+      "area_ha": 88561.35458599607,
+      "bbox_wgs84": [
+        -120.668571096466,
+        38.5568371749414,
+        -119.919458349183,
+        38.8904512786367
+      ],
+      "geometry_sha256": "9ca2de72dac2f270b2eb6d0201a392df2fc6105911d482520333bc088597068b"
+    },
+    {
+      "source_path": "kml/Caldor_2021_09_08T22_33_07_00.kml",
+      "source_sha256": "7eaaa8f64995f90111ec361a3574c18623a12d7ce8c17d827788fcdd2e722ad2",
+      "publisher_time": "2021-09-08T22:33-07:00",
+      "capture_time_utc": "2021-09-09T05:33:00Z",
+      "timestamp_basis": "Explicit timezone-bearing PERIMETER_TIMES list in pinned FireBench configuration; publisher documents extraction from Imagery Date/Time in NIROPS reports. Original reports unavailable to this run.",
+      "original_flight_report_verified": false,
+      "geometry_valid": true,
+      "source_polygon_count": 48,
+      "area_ha": 88786.26606250936,
+      "bbox_wgs84": [
+        -120.668571096466,
+        38.5568371749414,
+        -119.919458349183,
+        38.8908203586041
+      ],
+      "geometry_sha256": "3755aad7517ef7de71df73cc5bd0657d71522519fed3f8dc599571c98fdb2a2c"
+    },
+    {
+      "source_path": "kml/Caldor_2021_09_10T23_34_07_00.kml",
+      "source_sha256": "7816f607dd7f39f416b39e3442b7143fabc2ba27a44f9a17a945d47fc3852fba",
+      "publisher_time": "2021-09-10T23:34-07:00",
+      "capture_time_utc": "2021-09-11T06:34:00Z",
+      "timestamp_basis": "Explicit timezone-bearing PERIMETER_TIMES list in pinned FireBench configuration; publisher documents extraction from Imagery Date/Time in NIROPS reports. Original reports unavailable to this run.",
+      "original_flight_report_verified": false,
+      "geometry_valid": true,
+      "source_polygon_count": 51,
+      "area_ha": 88918.31909586386,
+      "bbox_wgs84": [
+        -120.668571096466,
+        38.5568371749414,
+        -119.919458349183,
+        38.8904512786367
+      ],
+      "geometry_sha256": "7f74ffd9878af79506f0664f5edd1ae0e0c664520d2f3c986efea375da6e53ad"
+    }
+  ],
+  "endpoint_changes": [
+    {
+      "from_utc": "2021-08-18T03:20:00Z",
+      "to_utc": "2021-08-19T03:30:00Z",
+      "elapsed_hours": 24.166666666666668,
+      "added_ha": 4833.20685945691,
+      "removed_ha": 31.559875668849394,
+      "stable_intersection_ha": 21605.031408263465,
+      "interpretation": "Endpoint geometry differences; neither fire spread rate nor intermediate-time ground truth."
+    },
+    {
+      "from_utc": "2021-08-19T03:30:00Z",
+      "to_utc": "2021-08-21T03:20:00Z",
+      "elapsed_hours": 47.833333333333336,
+      "added_ha": 7144.087199467997,
+      "removed_ha": 4.251799054378524,
+      "stable_intersection_ha": 26433.986468666004,
+      "interpretation": "Endpoint geometry differences; neither fire spread rate nor intermediate-time ground truth."
+    },
+    {
+      "from_utc": "2021-08-21T03:20:00Z",
+      "to_utc": "2021-08-22T04:15:00Z",
+      "elapsed_hours": 24.916666666666668,
+      "added_ha": 6143.743309264514,
+      "removed_ha": 2.287060585674815,
+      "stable_intersection_ha": 33575.78660754831,
+      "interpretation": "Endpoint geometry differences; neither fire spread rate nor intermediate-time ground truth."
+    },
+    {
+      "from_utc": "2021-08-22T04:15:00Z",
+      "to_utc": "2021-08-25T05:07:00Z",
+      "elapsed_hours": 72.86666666666666,
+      "added_ha": 7915.158720599429,
+      "removed_ha": 1.511242830452121,
+      "stable_intersection_ha": 39718.01867398244,
+      "interpretation": "Endpoint geometry differences; neither fire spread rate nor intermediate-time ground truth."
+    },
+    {
+      "from_utc": "2021-08-25T05:07:00Z",
+      "to_utc": "2021-08-30T05:32:00Z",
+      "elapsed_hours": 120.41666666666667,
+      "added_ha": 24185.40888966985,
+      "removed_ha": 12.123613415876783,
+      "stable_intersection_ha": 47621.05378116597,
+      "interpretation": "Endpoint geometry differences; neither fire spread rate nor intermediate-time ground truth."
+    },
+    {
+      "from_utc": "2021-08-30T05:32:00Z",
+      "to_utc": "2021-08-31T04:09:00Z",
+      "elapsed_hours": 22.616666666666667,
+      "added_ha": 5505.853548052033,
+      "removed_ha": 43.67739461112412,
+      "stable_intersection_ha": 71762.78527622462,
+      "interpretation": "Endpoint geometry differences; neither fire spread rate nor intermediate-time ground truth."
+    },
+    {
+      "from_utc": "2021-08-31T04:09:00Z",
+      "to_utc": "2021-09-01T04:08:00Z",
+      "elapsed_hours": 23.983333333333334,
+      "added_ha": 5478.312517370623,
+      "removed_ha": 33.583565092121816,
+      "stable_intersection_ha": 77235.05525918477,
+      "interpretation": "Endpoint geometry differences; neither fire spread rate nor intermediate-time ground truth."
+    },
+    {
+      "from_utc": "2021-09-01T04:08:00Z",
+      "to_utc": "2021-09-02T04:12:00Z",
+      "elapsed_hours": 24.066666666666666,
+      "added_ha": 2473.344626929131,
+      "removed_ha": 97.72557504102645,
+      "stable_intersection_ha": 82615.64220151427,
+      "interpretation": "Endpoint geometry differences; neither fire spread rate nor intermediate-time ground truth."
+    },
+    {
+      "from_utc": "2021-09-02T04:12:00Z",
+      "to_utc": "2021-09-03T07:40:00Z",
+      "elapsed_hours": 27.466666666666665,
+      "added_ha": 1166.272575399995,
+      "removed_ha": 94.89943708901593,
+      "stable_intersection_ha": 84994.08739135398,
+      "interpretation": "Endpoint geometry differences; neither fire spread rate nor intermediate-time ground truth."
+    },
+    {
+      "from_utc": "2021-09-03T07:40:00Z",
+      "to_utc": "2021-09-05T06:29:00Z",
+      "elapsed_hours": 46.81666666666667,
+      "added_ha": 614.4484049290917,
+      "removed_ha": 128.6470040468473,
+      "stable_intersection_ha": 86031.71296270716,
+      "interpretation": "Endpoint geometry differences; neither fire spread rate nor intermediate-time ground truth."
+    },
+    {
+      "from_utc": "2021-09-05T06:29:00Z",
+      "to_utc": "2021-09-06T06:41:00Z",
+      "elapsed_hours": 24.2,
+      "added_ha": 606.8491194377328,
+      "removed_ha": 83.79123189513379,
+      "stable_intersection_ha": 86562.3701357414,
+      "interpretation": "Endpoint geometry differences; neither fire spread rate nor intermediate-time ground truth."
+    },
+    {
+      "from_utc": "2021-09-06T06:41:00Z",
+      "to_utc": "2021-09-07T06:09:00Z",
+      "elapsed_hours": 23.466666666666665,
+      "added_ha": 665.11385493233,
+      "removed_ha": 21.85825650863071,
+      "stable_intersection_ha": 87147.36099867038,
+      "interpretation": "Endpoint geometry differences; neither fire spread rate nor intermediate-time ground truth."
+    },
+    {
+      "from_utc": "2021-09-07T06:09:00Z",
+      "to_utc": "2021-09-08T05:40:00Z",
+      "elapsed_hours": 23.516666666666666,
+      "added_ha": 782.1830256797704,
+      "removed_ha": 33.30329328631057,
+      "stable_intersection_ha": 87779.17156031627,
+      "interpretation": "Endpoint geometry differences; neither fire spread rate nor intermediate-time ground truth."
+    },
+    {
+      "from_utc": "2021-09-08T05:40:00Z",
+      "to_utc": "2021-09-09T05:33:00Z",
+      "elapsed_hours": 23.883333333333333,
+      "added_ha": 311.96095973196054,
+      "removed_ha": 87.04948321878956,
+      "stable_intersection_ha": 88474.30510277758,
+      "interpretation": "Endpoint geometry differences; neither fire spread rate nor intermediate-time ground truth."
+    },
+    {
+      "from_utc": "2021-09-09T05:33:00Z",
+      "to_utc": "2021-09-11T06:34:00Z",
+      "elapsed_hours": 49.016666666666666,
+      "added_ha": 163.58231962292479,
+      "removed_ha": 31.52928626840969,
+      "stable_intersection_ha": 88754.73677624113,
+      "interpretation": "Endpoint geometry differences; neither fire spread rate nor intermediate-time ground truth."
+    }
+  ],
+  "counts": {
+    "source_perimeters": 21,
+    "valid_geometries": 16,
+    "original_flight_reports_verified": 0,
+    "independent_incidents": 1
+  },
+  "reference_sensor_lineage": "Publisher states NIROPS aerial infrared interpreted by humans; independent sensor modality from Sentinel-2 NBR.",
+  "time_matched_validation_allowed": false,
+  "validation_metrics": null,
+  "remaining_gaps": [
+    "Original flight reports not acquired; UTCs are publisher-curated.",
+    "IR extent is not an exhaustive burned/unburned pixel label or an active-flame mask.",
+    "No satellite capture/visibility match accepted by this audit.",
+    "One incident cannot establish cross-incident generalization."
+  ],
+  "input_sha256": {
+    "manifest": "6f480cab43c119bba29086879c2428b8f9df284f5a46be5ff67354314b172399",
+    "registry": "3f14b844c48459fe0e8a1da69b4bad007dd2dc731f9faa1ba4a67cab25b91a61",
+    "code": "bbdd7dee65fbca95500f376b3e30ebf0780699c6885af6127689302d08c968c5"
+  },
+  "geometry_output_sha256": "35e3357293b99fe74371eecccb34c58b803fc4e872af87c19095aabd046655a5"
+}

@@ -1,0 +1,126 @@
+{
+  "schema_version": "firewatch.research.perimeter-audit.v1",
+  "incident_id": "8432b888-2a01-4825-8eb6-c74589de24fc",
+  "created_at_utc": "2026-09-26T23:10:06.185891Z",
+  "records": [
+    {
+      "burn_period": 1,
+      "object_id": 51197,
+      "polygon_datetime_utc": null,
+      "date_current_utc": "2026-02-25T18:20:08Z",
+      "create_date_utc": "2026-02-25T18:19:16Z",
+      "reported_gis_acres": 1141.6231108140269,
+      "map_method": "Mixed Methods",
+      "geometry_sha256_normalized_wgs84_wkb": "5283a083c04195bbbad6ef4cb7f90a8bfa3a2470172d6ac91a5a2f2ef160df17",
+      "source_rings_sha256": "cd36b15bd748486266330f864eab30fc6c116e95d2cec5df9f2341a1169dde3e",
+      "geometry_error": null,
+      "equals_original_geometry": false
+    },
+    {
+      "burn_period": 2,
+      "object_id": 51199,
+      "polygon_datetime_utc": null,
+      "date_current_utc": "2026-02-26T00:07:51Z",
+      "create_date_utc": "2026-02-25T23:20:37Z",
+      "reported_gis_acres": 6827.870355953321,
+      "map_method": "Mixed Methods",
+      "geometry_sha256_normalized_wgs84_wkb": null,
+      "source_rings_sha256": "91fa359ed89ea7197840402ed3f12e7699d388cf417876be2bd3698201f85176",
+      "geometry_error": "Invalid perimeter ring; no silent repair",
+      "equals_original_geometry": null
+    },
+    {
+      "burn_period": 3,
+      "object_id": 51226,
+      "polygon_datetime_utc": null,
+      "date_current_utc": "2026-02-27T00:36:55Z",
+      "create_date_utc": "2026-02-25T18:19:16Z",
+      "reported_gis_acres": 2787.767753381938,
+      "map_method": "Mixed Methods",
+      "geometry_sha256_normalized_wgs84_wkb": "6a56a1191301138ad9eb3e262321bd65152f73e72afce10d367b0ae3a356492e",
+      "source_rings_sha256": "d441d9ef1fd71589951c43b1549cb8e72a14def9aa3295e944aa8d055ba17a3f",
+      "geometry_error": null,
+      "equals_original_geometry": false
+    },
+    {
+      "burn_period": 4,
+      "object_id": 51230,
+      "polygon_datetime_utc": null,
+      "date_current_utc": "2026-02-27T01:49:54Z",
+      "create_date_utc": "2026-02-27T01:45:11Z",
+      "reported_gis_acres": 4366.441625343816,
+      "map_method": "Mixed Methods",
+      "geometry_sha256_normalized_wgs84_wkb": "fb5bfc858a3c31b2c667ce7b8fa07a93ee210d1191fb96e5f11ae31ce44f28a6",
+      "source_rings_sha256": "5654c2b92864014e043e7d2a8f3920201f781fde2e1e2a13484d718c6f7b94cd",
+      "geometry_error": null,
+      "equals_original_geometry": false
+    },
+    {
+      "burn_period": 5,
+      "object_id": 51243,
+      "polygon_datetime_utc": "2026-02-27T11:20:00Z",
+      "date_current_utc": "2026-02-27T19:03:17Z",
+      "create_date_utc": "2026-02-27T01:45:11Z",
+      "reported_gis_acres": 6102.602070174513,
+      "map_method": "Mixed Methods",
+      "geometry_sha256_normalized_wgs84_wkb": "50c87ca3a47cdd343001bde0ecbd02f9d41cf6b9de776221fad70079f2dd23c3",
+      "source_rings_sha256": "ed5607088a574469fee39792a621a30debc4f1250903c2443e6ff7cba2f45e7f",
+      "geometry_error": null,
+      "equals_original_geometry": false
+    },
+    {
+      "burn_period": 6,
+      "object_id": 51262,
+      "polygon_datetime_utc": "2026-02-27T11:20:00Z",
+      "date_current_utc": "2026-02-28T21:58:41Z",
+      "create_date_utc": "2026-02-27T01:45:11Z",
+      "reported_gis_acres": 6542.822047587995,
+      "map_method": "Mixed Methods",
+      "geometry_sha256_normalized_wgs84_wkb": "f4148c89ba6b962034fabb26d7f52638dbe529c41b2f8a456a12bf4b374f6bdc",
+      "source_rings_sha256": "11f30916d401121ce58e6bdf86705e64e23ca792cf535e9a0dbcc0f1a25c1e8c",
+      "geometry_error": null,
+      "equals_original_geometry": false
+    },
+    {
+      "burn_period": 7,
+      "object_id": 51274,
+      "polygon_datetime_utc": "2026-02-27T11:20:00Z",
+      "date_current_utc": "2026-03-01T22:20:53Z",
+      "create_date_utc": "2026-02-27T01:45:11Z",
+      "reported_gis_acres": 6753.942094358525,
+      "map_method": "Mixed Methods",
+      "geometry_sha256_normalized_wgs84_wkb": "b89bf3dc9e76f7dba6951024e6c43fb88a1e0c31e8d18950cfa78c18b357a847",
+      "source_rings_sha256": "3ee79646265f60b274e1b1267680570dbc9f4113d3696cc6f48fcf7a2bae2f29",
+      "geometry_error": null,
+      "equals_original_geometry": true
+    }
+  ],
+  "missing_polygon_times": 4,
+  "reused_timestamps_for_distinct_geometries": [
+    {
+      "polygon_datetime_utc": "2026-02-27T11:20:00Z",
+      "burn_periods": [
+        5,
+        6,
+        7
+      ],
+      "distinct_valid_geometries": 3
+    }
+  ],
+  "area_decreases": [
+    {
+      "from_burn_period": 2,
+      "to_burn_period": 3,
+      "change_acres": -4040.1026025713836
+    }
+  ],
+  "invalid_geometry_records": 1,
+  "reference_time_verified": false,
+  "official_progression": false,
+  "interpretation": "BurnPeriod orders captured geometry changes, not elapsed time. Missing/reused timestamps and mapping revisions must not be turned into observed spread rates.",
+  "input_sha256": {
+    "daily_response": "b95fa6bc33fa583dc40bb7e59b8d02ff414fca5fcd8c75ebf289a68d11d91113",
+    "original_response": "fbdfb6d085fed0f8082798a2a91bbf99a3c690b97274e77ca534781b573f48d8",
+    "audit_code": "72d8a6d9638ecaab1af088ac0a9b4100fa2567aa786c69fe1539ea44201a9ebb"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "verified_at_utc": "2026-09-26T23:35:52.524934+00:00",
+  "python_tests": {
+    "passed": 110,
+    "failed": 0,
+    "command": "python -B -m unittest discover -s tests -v",
+    "cwd": "backend/vision"
+  },
+  "offline_replay_identical": [
+    "perimeters",
+    "endpoint_changes",
+    "counts",
+    "geometry_output_sha256",
+    "matches",
+    "reference_count_by_gap_hours"
+  ],
+  "native_files_verified": 25,
+  "fresh_reacquisition_files_verified": 25,
+  "reacquisition_manifest_sha256": "fcbaacb663fb81c706e2fb42c0d68efae205dfa711130b0ba54ec410548d3612",
+  "local_document_links_checked": 43,
+  "previous_baseline_code_and_transfer_report_hashes_unchanged": true,
+  "git_diff_check": "passed",
+  "main_worktree": "clean",
+  "scientific_accuracy_validated": false,
+  "reference_geometry_count": 16,
+  "six_hour_screen_passes": 0,
+  "code_sha256": {
+    "audit_ir_reference.py": "bbdd7dee65fbca95500f376b3e30ebf0780699c6885af6127689302d08c968c5",
+    "match_ir_scenes.py": "98faced6597082b433ddc930377700d921750e042b60900def40d0a0c33457a6",
+    "fetch_ir_reference.py": "5ae174499f84b131cfac82534c81ce48b03a8119e999a0779228e8f066b87a3d",
+    "ir_archive.py": "9b7e21eb8b26981a87fa7c759d233bb6c13a08da62fc9c75b572dd396903b7ef"
+  }
+}
