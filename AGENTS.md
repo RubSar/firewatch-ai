@@ -83,3 +83,16 @@ cross-component integration tests before introducing a new test layout.
 - Automatic push notifications require a separately configured workflow. Until
   verified, do not claim the team was notified or that monitoring is active.
 
+
+## Research and product decisions
+
+Record future decisions here with date, status, rationale and supporting research. Keep competitor and related feasibility research categorized under the existing `docs/concurrent-analysis/` directory.
+
+| ID | Date | Status | Decision and rationale |
+| --- | --- | --- | --- |
+| DR001 | 2026-09-26 | User direction | Investigate near-realtime Firewatch AI using drone position/orientation, RGB/infrared video, a temperature sensor, and weather API data. |
+| DR002 | 2026-09-26 | Superseded for initial scope by DR005 | Separate detection, geolocation, physical spread forecasting and optional LLM explanation; each has different inputs and validation requirements. See [pipeline research](docs/concurrent-analysis/08-drone-realtime/pipeline.md). |
+| DR003 | 2026-09-26 | Output scope resolved by DR005; hardware unresolved | Confirm whether final prediction means existing-fire detection, future spread, or pre-ignition risk. Camera hardware, geography, horizon and latency requirements remain open. |
+| DR004 | 2026-09-26 | Research organization | Extend the existing `docs/concurrent-analysis/` location rather than create a duplicate root folder. No application stack or processing implementation selected. |
+| DR005 | 2026-09-26 | Accepted — user clarification | Focus on detecting existing fire extent and tracking its observed spread over time. Future spread forecasting and pre-ignition prediction are outside the initial scope. Update [pipeline research](docs/concurrent-analysis/08-drone-realtime/pipeline.md) accordingly. |
+| DR006 | 2026-09-26 | Proposed processing approach | Use synchronized RGB/infrared segmentation, ground geolocation and temporal comparison with coverage/uncertainty checks. Weather and temperature are supporting context; species classification and an LLM are optional. Metric spread requires adequate pose, calibration and terrain/depth. |
