@@ -389,3 +389,62 @@ input[type="range"]:disabled::-webkit-slider-thumb { background: var(--muted); c
   line-height: 1.35;
   color: #6f7d92;
 }
+
+/* --- tool palette, on the map ---------------------------------------- */
+.hud-tl { top: 12px; left: 12px; }
+.maptools {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 4px;
+  border-radius: 10px;
+  background: rgba(13, 18, 26, 0.92);
+  border: 1px solid #2b3648;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(6px);
+}
+.mt-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  color: #b9c6d6;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 550;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.mt-btn:hover:not(:disabled) { background: #1b2432; color: #e6edf3; }
+.mt-btn[aria-pressed='true'] {
+  background: rgba(255, 107, 26, 0.16);
+  border-color: var(--ember);
+  color: #ffd9c0;
+}
+.mt-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.mt-btn .ico { font-size: 14px; line-height: 1; }
+/* Pan is not a fourth brush — the divider says so. */
+.mt-divider {
+  width: 1px;
+  align-self: stretch;
+  margin: 2px 4px;
+  background: #2b3648;
+}
+.mt-pan[aria-pressed='true'] {
+  background: rgba(120, 170, 255, 0.16);
+  border-color: #6f9fe0;
+  color: #d7e6ff;
+}
+@media (max-width: 1280px) {
+  .mt-label { display: none; }
+  .mt-btn { padding: 7px 9px; }
+}
+/* A view mode reads differently from a drawing tool. */
+.mt-thermal[aria-pressed='true'] {
+  background: rgba(252, 206, 88, 0.16);
+  border-color: #e0a94a;
+  color: #ffeec2;
+}

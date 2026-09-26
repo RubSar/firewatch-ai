@@ -195,6 +195,31 @@ domain is drawn as a dashed rectangle so it stays findable.
 - **The global CSV is ~6 MB and refreshes hourly**, so it is cached for 15 minutes and concurrent
   misses are collapsed onto one in-flight request. A map pan must not cost 6 MB.
 
+### Map controls live on the map
+
+`MapTools.tsx` sits over the map (`.hud-tl`), not in the sidebar, and it is the **only**
+home for those controls — `ControlPanel` no longer holds them. Two controls in two places
+is how they drift.
+
+The grouping carries meaning and the dividers are not decoration: Ignite / Dozer /
+Retardant are drawing tools; **Pan is the absence of one**; Thermal is a view mode. Pan
+was originally the fourth cell of a 2x2 grid styled identically to the three brushes,
+which is precisely why it was unfindable.
+
+### Canvas must follow Leaflet's zoom animation
+
+`MapView` mirrors `zoomanim` onto the fire canvas with a CSS transform, then clears it on
+`zoomend`/`viewreset`. This is required, not polish: the canvas is positioned *over* the
+map rather than inside Leaflet's transformed panes, and `latLngToContainerPoint` reports
+pre-animation geometry for the whole animation. Without the mirror the tiles glide and
+the fire sits still, then snaps.
+
+The transform is `translate(size/2 - s·p0) scale(s)` where `p0` is the incoming centre's
+current container point, and the transition matches Leaflet's own 250 ms
+`cubic-bezier(0,0,0.25,1)` — a different easing is more visible than no animation.
+The per-frame redraw during the animation is harmless: it keeps painting the pre-zoom
+geometry, which is exactly what the transform expects.
+
 ### Thermal view
 
 `render/thermal.ts` renders apparent temperature as a raster, not contours — temperature

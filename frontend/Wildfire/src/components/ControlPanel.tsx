@@ -24,12 +24,8 @@ interface Props {
   onParams: (p: Partial<Params>) => void
   preset: string
   onPreset: (id: string) => void
-  tool: Tool
-  onTool: (t: Tool) => void
   layers: Layers
   onLayers: (l: Partial<Layers>) => void
-  onClearLines: () => void
-  hasLines: boolean
 }
 
 function Slider({
@@ -70,7 +66,7 @@ function Slider({
 
 export function ControlPanel({
   canShowActiveFires,
-  params, onParams, preset, onPreset, tool, onTool, layers, onLayers, onClearLines, hasLines,
+  params, onParams, preset, onPreset, layers, onLayers,
 }: Props) {
   const fc = params.followForecast
 
@@ -154,27 +150,6 @@ export function ControlPanel({
       </section>
 
       <section className="section">
-        <h2>Map tools</h2>
-        <div className="tools">
-          <button className="tool" aria-pressed={tool === 'ignite'} onClick={() => onTool('ignite')}>
-            <span className="ico">🔥</span> Ignite
-          </button>
-          <button className="tool" aria-pressed={tool === 'dozer'} onClick={() => onTool('dozer')}>
-            <span className="ico">🚜</span> Dozer line
-          </button>
-          <button className="tool" aria-pressed={tool === 'retardant'} onClick={() => onTool('retardant')}>
-            <span className="ico">🛩️</span> Retardant
-          </button>
-          <button className="tool" aria-pressed={tool === 'pan'} onClick={() => onTool('pan')}>
-            <span className="ico">✋</span> Pan map
-          </button>
-        </div>
-        <button className="btn ghost" style={{ marginTop: 9, width: '100%' }} onClick={onClearLines} disabled={!hasLines}>
-          Clear lines &amp; drops
-        </button>
-      </section>
-
-      <section className="section">
         <h2>Layers</h2>
         <div className="seg" style={{ marginBottom: 9 }}>
           <button aria-pressed={layers.base === 'fuel'} onClick={() => onLayers({ base: 'fuel' })}>Fuel</button>
@@ -200,17 +175,6 @@ export function ControlPanel({
         <label className="check">
           <input type="checkbox" checked={layers.isochrones} onChange={(e) => onLayers({ isochrones: e.target.checked })} />
           Arrival-time isochrones
-        </label>
-        <label
-          className="check"
-          title="Render apparent temperature the way a thermal camera would. Shows smouldering and cooling ground that the visible view cannot, and puts the model on the same kelvin scale as FIRMS."
-        >
-          <input
-            type="checkbox"
-            checked={layers.thermal}
-            onChange={(e) => onLayers({ thermal: e.target.checked })}
-          />
-          Thermal (infrared) view
         </label>
         <label
           className={`check${canShowActiveFires ? '' : ' disabled'}`}
