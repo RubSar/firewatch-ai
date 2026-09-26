@@ -14,8 +14,9 @@
  * a LANDFIRE FBFM40 fuel raster; the classification below is a visible-band
  * stand-in for real fuel-model data, not a substitute for it.
  */
-import { Fuel } from '../sim/fuels.ts'
-import { computeShade, localSlope, type Bounds, type Terrain } from '../sim/terrain.ts'
+import { Fuel } from '@firewatch/sim/fuels'
+import { cellBands, classifyFuel, NO_DATA, type CellBands } from '@firewatch/sim/classify'
+import { computeShade, localSlope, type Bounds, type Terrain } from '@firewatch/sim/terrain'
 
 const DEM_URL = (z: number, x: number, y: number) =>
   `https://s3.amazonaws.com/elevation-tiles-prod/terrarium/${z}/${x}/${y}.png`
@@ -204,7 +205,7 @@ export async function loadRealTerrain(base: Terrain, signal?: AbortSignal): Prom
         const p = toPixel(imagery, lat, lng)
         const i = r * cols + c
         const slopeDeg = (localSlope(elevation, cols, rows, c, r, cellSize) * 180) / Math.PI
-        const f = classify(imagery, p.x, p.y, half, elevation[i], slopeDeg)
+        const f = classifyFuel(imagery, p.x, p.y, half, elevation[i], slopeDeg)
         // Where the imagery has a hole, keep the topography-driven guess.
         fuel[i] = f === NO_DATA ? base.fuel[i] : f
       }
@@ -309,85 +310,8 @@ export async function debugImagery(base: Terrain, signal?: AbortSignal): Promise
 }
 
 /**
- * Classifies one cell of satellite imagery into a fuel model.
- *
- * Visible-band only, so this is a proxy, not a measurement: greenness stands in
- * for NDVI, and local texture separates the hard geometric edges of development
- * from the smooth tone of bare ground.
+ * Band statistics and the classifier itself live in @firewatch/sim/classify, so
+ * the server classifies tiles the same way the browser does. Re-exported here
+ * because calibrate.ts reads them through this module.
  */
-export interface CellBands {
-  /** Green-red vegetation index, a visible-band stand-in for NDVI. */
-  grvi: number
-  bright: number
-  /** Local standard deviation of brightness: development has hard edges. */
-  texture: number
-  blueness: number
-  /** Blue minus green. Water is the only cover where this goes positive. */
-  bg: number
-}
-
-/** The three numbers the classifier keys on, for one cell. */
-export function cellBands(m: Mosaic, px: number, py: number, half: number): CellBands {
-  let r = 0, g = 0, b = 0, sum = 0, sumSq = 0, n = 0
-  const x0 = Math.max(0, Math.round(px) - half)
-  const x1 = Math.min(m.w - 1, Math.round(px) + half)
-  const y0 = Math.max(0, Math.round(py) - half)
-  const y1 = Math.min(m.h - 1, Math.round(py) + half)
-  for (let y = y0; y <= y1; y++) {
-    for (let x = x0; x <= x1; x++) {
-      const o = (y * m.w + x) * 4
-      const pr = m.px[o], pg = m.px[o + 1], pb = m.px[o + 2]
-      r += pr; g += pg; b += pb
-      const lum = (pr + pg + pb) / 3
-      sum += lum; sumSq += lum * lum; n++
-    }
-  }
-  if (!n) return { grvi: 0, bright: 0, texture: 0, blueness: 0, bg: 0 }
-  r /= n; g /= n; b /= n
-  const bright = sum / n
-  return {
-    grvi: (g - r) / (g + r + 1),
-    bright,
-    texture: Math.sqrt(Math.max(0, sumSq / n - bright * bright)),
-    blueness: b - (r + g) / 2,
-    bg: b - g,
-  }
-}
-
-/** Sentinel: imagery is missing here, so the caller should keep its fallback. */
-export const NO_DATA = -1
-
-function classify(
-  m: Mosaic, px: number, py: number, half: number, elev: number, slopeDeg: number
-): number {
-  const { grvi, bright, texture, blueness } = cellBands(m, px, py, half)
-
-  // A hole in the imagery mosaic reads as pure black; say so rather than
-  // inventing a fuel for it.
-  if (bright < 6) return NO_DATA
-
-  // Water is the only cover here where blue is not the weakest band: across all
-  // four regions vegetated ground never gets above about -12, while open water
-  // runs positive. Greenness is useless for this — Sevan is turquoise, so green
-  // sits far above red and a vegetation index calls the lake dense forest.
-  // Texture rejects the other bluish-grey surface, concrete.
-  if (elev <= 0) return Fuel.Water
-  if (blueness > -6 && texture < 14) return Fuel.Water
-
-  // Development: hard geometric edges give a local variance neither canopy nor
-  // bare ground produces.
-  if (texture > 24 && bright > 80 && grvi < 0.1) return Fuel.Urban
-
-  // Closed canopy is green *and* dark; open juniper or scrub is green and
-  // bright. Brightness is what separates Dilijan's forest from Khosrov's steppe.
-  // Dark green on flat ground is irrigated cropland or orchard, not forest —
-  // Armenia's woodland is on the slopes, and the distinction matters because
-  // timber carries four times the fuel load of a field.
-  if (grvi > 0.115) {
-    if (bright >= 72) return Fuel.Shrub
-    return slopeDeg > 4 ? Fuel.Timber : Fuel.Agriculture
-  }
-  if (grvi > 0.02) return bright < 105 ? Fuel.Shrub : Fuel.Agriculture
-  if (bright > 140 && Math.abs(grvi) < 0.03) return Fuel.Barren
-  return Fuel.Grass
-}
+export { cellBands, NO_DATA, type CellBands }

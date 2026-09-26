@@ -25,8 +25,20 @@ const step = (n) => console.log(`\n▸ ${n}`)
 const readStat = async (label) =>
   page.locator('.stat', { hasText: label }).first().locator('.v').innerText()
 
-await page.goto(URL, { waitUntil: 'networkidle' })
-await page.waitForTimeout(1200)
+// NOT networkidle: in server mode the page holds a WebSocket streaming at
+// 10 Hz for as long as it is open, so the network is never idle and the wait
+// can only pass by luck of timing. Wait for the app's own ready signal instead,
+// which is deterministic in both transports.
+await page.goto(URL, { waitUntil: 'load' })
+await page.locator('.map-wrap canvas.fire-canvas').waitFor({ state: 'visible', timeout: 30000 })
+// The header chip reads "Loading…"/"Connecting…" until a terrain source settles.
+await page
+  .locator('.data-chip')
+  .filter({ hasNotText: /Loading|Connecting/ })
+  .first()
+  .waitFor({ timeout: 30000 })
+  .catch(() => console.log('  (chip still provisional — continuing on procedural terrain)'))
+await page.waitForTimeout(800)
 await shot('01-initial')
 
 step('ignite + run at 30 min/s')
@@ -101,15 +113,53 @@ await page.getByLabel('Drive from hourly forecast feed').check()
 await page.waitForTimeout(1200)
 await shot('09-forecast')
 
-step('switch scenario -> Dilijan')
-await page.selectOption('.scenario-select', 'dilijan')
+const settled = () =>
+  page.locator('.data-chip').filter({ hasNotText: /Loading|Connecting/ }).first().waitFor({ timeout: 40000 })
+
+step('switch scenario -> Dilijan (bookmark)')
+await page.locator('.location-current').click()
+await page.locator('.location-item', { hasText: 'Dilijan National Park' }).click()
+await settled()
 await page.getByLabel('Drive from hourly forecast feed').uncheck()
 await page.getByRole('button', { name: /Ignite/ }).click()
-await page.waitForTimeout(1200)
+await page.waitForTimeout(600)
 await page.mouse.click(map.x + map.width * 0.5, map.y + map.height * 0.45)
 await page.waitForTimeout(5000)
 await shot('10-sierra')
 console.log(`  area=${await readStat('Area burnt')} flame=${await readStat('Flame length')}`)
+
+step('search anywhere on earth -> Yosemite Valley')
+await page.locator('.location-input').click()
+await page.locator('.location-input').fill('Yosemite Valley')
+await page.locator('.location-menu').waitFor({ timeout: 20000 })
+await page.locator('.location-item', { hasText: 'Yosemite' }).first().click({ timeout: 20000 })
+await settled()
+console.log(`  now simulating: ${(await page.locator('.lc-name').innerText()).trim()} · ${(await page.locator('.lc-span').innerText()).trim()}`)
+await page.mouse.click(map.x + map.width * 0.5, map.y + map.height * 0.5)
+await page.waitForTimeout(4000)
+await shot('11-worldwide')
+console.log(`  area=${await readStat('Area burnt')} ros=${await readStat('Head-fire spread')}`)
+
+step('show current fires (NASA FIRMS)')
+const firesBox = page.getByLabel('Show current fires')
+if (await firesBox.isDisabled()) {
+  console.log('  layer disabled in browser-only mode (FIRMS has no CORS) — as designed')
+} else {
+  await firesBox.check()
+  await page.locator('.fires-note').waitFor({ timeout: 20000 })
+  // The first pull is a 6 MB global file; wait for it to resolve, not just appear.
+  await page.locator('.fires-note').filter({ hasNotText: 'Loading' }).waitFor({ timeout: 90000 })
+  console.log(`  ${(await page.locator('.fires-note').innerText()).replace(/\n/g, ' · ')}`)
+  await shot('11b-active-fires')
+  await firesBox.uncheck()
+}
+
+step('resize the area of interest -> 40 km')
+await page.locator('.location-current').click()
+await page.locator('.span-seg button', { hasText: '40 km' }).click()
+await settled()
+console.log(`  ${(await page.locator('.lc-span').innerText()).trim()} across`)
+await shot('12-wide-area')
 
 step('reset')
 await page.getByRole('button', { name: 'Reset' }).click()

@@ -1,5 +1,5 @@
 import { useCallback, useRef } from 'react'
-import { compassLabel } from '../sim/weather.ts'
+import { compassLabel } from '@firewatch/sim/weather'
 
 interface Props {
   /** Direction the wind blows FROM, degrees. */

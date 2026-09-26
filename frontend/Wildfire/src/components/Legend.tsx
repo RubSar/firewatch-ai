@@ -1,4 +1,4 @@
-import { FUELS, FUEL_LEGEND } from '../sim/fuels.ts'
+import { FUELS, FUEL_LEGEND } from '@firewatch/sim/fuels'
 import type { BaseLayer } from '../render/paint.ts'
 
 const rgb = (c: [number, number, number]) => `rgb(${c[0]},${c[1]},${c[2]})`

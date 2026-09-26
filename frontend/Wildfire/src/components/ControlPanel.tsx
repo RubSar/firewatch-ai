@@ -1,4 +1,4 @@
-import { PRESETS, compassLabel, type Params } from '../sim/weather.ts'
+import { PRESETS, compassLabel, type Params } from '@firewatch/sim/weather'
 import type { BaseLayer } from '../render/paint.ts'
 import { WindDial } from './WindDial.tsx'
 
@@ -10,9 +10,14 @@ export interface Layers {
   fuelOverlay: boolean
   contours: boolean
   isochrones: boolean
+  /** NASA FIRMS satellite detections from the last 24 h. Needs the server. */
+  activeFires: boolean
 }
 
 interface Props {
+  /** Unset in browser-only mode: FIRMS sends no CORS headers, so the fire
+   *  detection layer can only be fetched through the API. */
+  canShowActiveFires?: boolean
   params: Params
   onParams: (p: Partial<Params>) => void
   preset: string
@@ -62,6 +67,7 @@ function Slider({
 }
 
 export function ControlPanel({
+  canShowActiveFires,
   params, onParams, preset, onPreset, tool, onTool, layers, onLayers, onClearLines, hasLines,
 }: Props) {
   const fc = params.followForecast
@@ -192,6 +198,22 @@ export function ControlPanel({
         <label className="check">
           <input type="checkbox" checked={layers.isochrones} onChange={(e) => onLayers({ isochrones: e.target.checked })} />
           Arrival-time isochrones
+        </label>
+        <label
+          className={`check${canShowActiveFires ? '' : ' disabled'}`}
+          title={
+            canShowActiveFires
+              ? 'NASA FIRMS VIIRS + MODIS detections from the last 24 h. Click one to ignite there.'
+              : 'Needs the server: FIRMS sends no CORS headers, so the browser cannot read it directly.'
+          }
+        >
+          <input
+            type="checkbox"
+            checked={layers.activeFires}
+            disabled={!canShowActiveFires}
+            onChange={(e) => onLayers({ activeFires: e.target.checked })}
+          />
+          Show current fires
         </label>
         <p className="note">
           Elevation comes from a real DEM and the fuel grid is classified from satellite imagery, so

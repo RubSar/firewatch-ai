@@ -1,0 +1,17 @@
+{
+  "name": "@firewatch/sim",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Fire spread simulation core. DOM-free: runs identically in the browser and in Node.",
+  "exports": {
+    ".": "./src/index.ts",
+    "./model": "./src/model.ts",
+    "./fuels": "./src/fuels.ts",
+    "./terrain": "./src/terrain.ts",
+    "./weather": "./src/weather.ts",
+    "./classify": "./src/classify.ts",
+    "./noise": "./src/noise.ts",
+    "./geo": "./src/geo.ts"
+  }
+}

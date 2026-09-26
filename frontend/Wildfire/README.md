@@ -4,14 +4,17 @@ An interactive wildfire simulator on a terrain map. Change the weather, the fuel
 dryness and the wind, then watch how the fire behaves — where it runs, how fast,
 what it threatens, and whether you can hold it.
 
-Built as a hackathon demo, on four regions of Armenia. **Terrain and land cover
-are real data pulled at runtime**; only the weather is simulated, behind an
-interface designed to be swapped for a live feed (see
-[Data](#data)).
+**Simulate anywhere on earth.** Search a place name, or pan the map and press
+“use this view”. Terrain, land cover and weather are real data pulled at
+runtime for wherever you point it; three Armenian regions ship as bookmarks.
+Real satellite fire detections can be overlaid on top (see [Data](#data)).
+
+The fire runs either in the browser or on a server, and the UI cannot tell the
+difference — see [Where the fire runs](#where-the-fire-runs).
 
 ```bash
-npm install
-npm run dev
+npm install          # at the repo root: this is an npm workspace
+npm run dev:web      # in-browser simulation, no server needed
 ```
 
 ## What you can do
@@ -25,15 +28,18 @@ npm run dev
 | **Dozer line / retardant** | drag on the map to build control lines and watch containment climb |
 | **Suppression effort** | commit crews — effective on a slow flank, near-useless on a wind-driven head |
 | **Layers** | real satellite or topographic tiles, or the fuel / elevation rasters; contours, arrival-time isochrones |
-| **Scenarios** | Khosrov Forest Reserve, Dilijan National Park, Kapan & Shikahogh |
+| **Anywhere on earth** | search a place, or “use this view”; pick an 8–40 km area |
+| **Current fires** | NASA FIRMS satellite detections from the last 24 h — click one to ignite there |
+| **Bookmarks** | Khosrov Forest Reserve, Dilijan National Park, Kapan & Shikahogh |
 
 Space bar plays/pauses, `R` resets.
 
 ## The model
 
-A cellular automaton on a ~70 m grid (roughly 40,000 cells), stepped at 10
-simulated seconds. It is not Rothermel, but every term is the simplified form of
-something real, so the numbers it reports land in plausible ranges.
+A cellular automaton on a ~38 m grid — 400 columns, so roughly 130,000 cells for
+a typical scenario — stepped at 10 simulated seconds. It is not Rothermel, but
+every term is the simplified form of something real, so the numbers it reports
+land in plausible ranges.
 
 **Spread.** For each burning cell and each of its 8 neighbours, a rate of spread
 is computed for the fuel being *entered*:
@@ -69,8 +75,14 @@ an NFDRS 1-hour timelag calculation. Rain puts it straight back.
 `L = 0.0775 · I^0.46`; area, perimeter and containment from the burn-scar
 outline; Chandler Burning Index for the danger rating.
 
-Every one of these is in `src/sim/` and is a few lines long — easy to point at,
-easy to defend, easy to replace.
+Every one of these is in `frontend/sim/` and is a few lines long — easy to point
+at, easy to defend, easy to replace. That package is deliberately free of DOM and
+Node APIs, so the identical stepping code runs in the browser and on the server.
+
+`ARCHITECTURE.md` describes a different and much larger design — a 10 m energy-
+accumulator kernel with crown fire and an ensemble. It is labelled as proposed
+and is **not** what this code does; §4 there argues against exactly the
+probabilistic formulation used here, and quantifies its `1+√2` front-speed error.
 
 ## Data
 
@@ -81,13 +93,99 @@ shows what the current scenario is running on.
 | Layer | Source | Notes |
 |---|---|---|
 | Elevation | AWS Terrarium terrain tiles | RGB-encoded height, public, no key |
-| Land cover → fuel model | Esri World Imagery | classified in-browser, see below |
-| Weather | **mocked** — `src/sim/weather.ts` | swap `mockForecast()` for the NWS gridpoint API or a RAWS station pull |
-| Ignition point | you click the map | in production, VIIRS / GOES active-fire detections |
+| Water & snow | **Sentinel-2 L2A Scene Classification**, AWS Open Data | keyless; measured, not inferred from colour |
+| Land cover → fuel model | Esri World Imagery | visible-band proxy for the vegetation split, see below |
+| Weather | real in server mode (Open-Meteo); mocked in browser mode — `frontend/sim/src/weather.ts` | `mockForecast()` and the live feed return the same shape |
+| Active fires | **NASA FIRMS** VIIRS (375 m) + MODIS (1 km), last 24 h | keyless; server-side only — FIRMS sends no CORS headers |
+| Place search | Open-Meteo geocoding | keyless |
+| Ignition point | you click the map, or a FIRMS detection | — |
 
 Both tile services send `Access-Control-Allow-Origin: *`, so the pixels can be
 read back out of a canvas. If either is unreachable the app falls back to
 procedurally generated terrain and keeps running with no network at all.
+
+### Current fires
+
+`Show current fires` overlays NASA FIRMS active fire detections from the last
+24 hours, refreshed as you pan. Marker size follows fire radiative power and
+opacity follows the detection's own confidence. Clicking one ignites the model
+at that point, which is the §9 `IgnitionSource` port doing its real job rather
+than the click-to-ignite stand-in.
+
+Two honest caveats, both surfaced in the UI:
+
+- These are **thermal anomalies, not confirmed fires**. A gas flare, a furnace
+  and a burning landfill all register; a cloudy overpass registers nothing.
+- The layer needs the server. FIRMS serves no CORS headers, so the browser
+  cannot read it directly and the checkbox is disabled in browser-only mode.
+
+The global CSV is ~6 MB and updates about hourly, so the API fetches it once
+and caches it for 15 minutes rather than pulling it per pan.
+
+### Where the fire runs
+
+Two transports, one renderer. `src/transport/` decides which:
+
+| | Browser | Server |
+|---|---|---|
+| Start | `npm run dev:web` | `npm run dev:api`, then `VITE_API_URL=http://127.0.0.1:8787 npm run dev:web` |
+| Kernel | steps in a `requestAnimationFrame` loop | steps in the API, 10 Hz |
+| Wire | — | one terrain frame, then ~2.5 kB delta frames |
+| Weather | mock forecast | Open-Meteo |
+| Offline | always works | falls back to browser mode if the server is down |
+
+The remote transport mirrors the wire deltas into a real `Sim` object, so
+`MapView`, `fireGeometry` and `paint` are untouched and cannot tell which
+transport they were handed. The header chip names what is real and what is
+mocked — "live elevation + fuel + weather · 4 mocked" — because a provider that
+returns data without saying where it came from is the failure mode worth
+designing against.
+
+Server-side the data sources are formal provider ports (`ARCHITECTURE.md` §9) in
+`frontend/api/src/providers/`. Real today: Terrarium DEM, Esri imagery fuel,
+Open-Meteo weather. Mocked: canopy, barriers, burn history, wind field, perimeter
+observer, values-at-risk. Swapping any one is a line in `registry.ts`.
+
+### Why water needs the near-infrared
+
+Water cannot be identified reliably from RGB. It is turquoise at Lake Sevan,
+deep blue at Tahoe, pink at the Great Salt Lake, black at the Rio Negro and
+brown wherever there is silt. A threshold tuned on one of those is wrong on the
+others, and the failure mode is bad: an unrecognised lake is classified as fuel
+and **burns**.
+
+Measured, on 15 km squares centred on open water:
+
+| | visible-band only | with Sentinel-2 SCL |
+|---|---|---|
+| Great Salt Lake | 38.6% water, 56.6% called *cropland* | **99.9%** |
+| Rio Negro | 8.3% water, 44% called *urban* | **22.9%** |
+| Lake Sevan | 96.0% | **100.0%** |
+| Lake Geneva | 63.1% | 68.6% |
+
+The fix is not another threshold — it is the near-infrared, where water is dark
+regardless of what colour it looks to a human eye. ESA already runs a
+classifier over the full 13-band stack and publishes it as the **Scene
+Classification Layer**, so the server reads that instead of re-deriving a worse
+version from three visible bands. No key and no Earth Engine account: the L2A
+COGs are on AWS Open Data and searchable through a public STAC API.
+
+SCL is treated as **authoritative for water and snow** — the classes it is
+unambiguous about — and ignored elsewhere, because it cannot separate timber
+from scrub from grass, which is what the fuel model actually needs. Cloud,
+shadow and coverage gaps fall through to the visible-band rules, so it can
+never make the map worse than it was.
+
+Two limits worth stating. Reading a COG window takes 10–30 seconds cold, so the
+lookup runs against a 6-second budget and the area loads on the RGB proxy if it
+misses — the result is cached, so the next visit to the same place gets the
+measured version. And this only runs server-side; browser-only mode keeps the
+proxy, which is fine in Armenia and unreliable elsewhere. The header chip says
+which one produced the map.
+
+```bash
+npm run watercheck   # classifier accuracy over six hard water bodies
+```
 
 ### Classifying fuel from imagery
 
@@ -112,8 +210,8 @@ against measured band statistics for these specific regions rather than guessed:
 hillshade side by side with band percentiles, for retuning those thresholds:
 
 ```bash
-npm run dev
-node scripts/calibrate.mjs      # writes shots/calibrate.png
+npm run dev:web                 # from frontend/
+npm run calibrate               # from frontend/Wildfire, writes shots/calibrate.png
 ```
 
 Known simplifications worth naming before anyone asks: no crown fire or
@@ -124,27 +222,47 @@ over the terrain.
 
 ## Layout
 
+Everything lives under `frontend/`, which is the npm workspace root. The repo's
+`backend/` and top-level `contracts/` directories are untouched team scaffolds.
+
 ```
-src/
-  sim/
-    noise.ts      seeded value noise, fBm, ridged multifractal
-    terrain.ts    scenarios, elevation, hillshade, fuel classification
-    fuels.ts      fuel models
-    weather.ts    weather, fuel moisture, fire danger, mock forecast
-    model.ts      the fire spread automaton and incident statistics
-  data/
-    realData.ts   DEM + imagery tile fetch, and the fuel classifier
-  render/
-    paint.ts      base raster layers, one pixel per cell
-    contour.ts    marching squares (d3-contour) + field blur + corner rounding
-    fireGeometry.ts  the fire as fillable paths in grid space
-  components/
-    MapView.tsx   Leaflet map + canvas overlay
-    ControlPanel.tsx  WindDial.tsx  StatsPanel.tsx  Legend.tsx
-    GrowthChart.tsx   ForecastStrip.tsx
-scripts/
-  smoke.mjs       headless browser test that drives every control
-  calibrate.mjs   renders the fuel-classifier calibration sheet
+frontend/                     workspace root — run every script from here
+  sim/src/                    @firewatch/sim · DOM-free, runs in browser and Node
+    noise.ts                  seeded value noise, fBm, ridged multifractal
+    terrain.ts                scenarios, elevation, hillshade, procedural fuel
+    fuels.ts                  fuel models
+    classify.ts               visible-band fuel classifier (shared both sides)
+    geo.ts                    web-Mercator tile math (shared both sides)
+    weather.ts                weather, fuel moisture, fire danger, mock forecast
+    model.ts                  the spread automaton and incident statistics
+
+  contracts/src/              @firewatch/contracts · types and codec only
+    providers.ts              the §9 provider ports, Provenance / Provided<T>
+    wire.ts                   REST DTOs, commands, server events
+    codec.ts                  binary encode/decode for the state channel
+
+  api/src/                    @firewatch/api · Fastify, kernel runs server-side
+    server.ts                 REST + WebSocket
+    incident.ts               one fire: sim, clock, delta vs what clients saw
+    providers/                registry.ts is the only file naming implementations
+    smoke.ts                  boots the server and decodes the stream
+
+  Wildfire/                   this app
+    src/data/realData.ts      DEM + imagery tile fetch in the browser
+    src/transport/
+      local.ts                steps the kernel in the browser
+      remote.ts               mirrors server deltas into a Sim
+    src/render/
+      paint.ts                base raster layers, one pixel per cell
+      contour.ts              marching squares + field blur + corner rounding
+      fireGeometry.ts         the fire as fillable paths in grid space
+    src/components/
+      MapView.tsx             Leaflet map + canvas overlay
+      ControlPanel.tsx  WindDial.tsx  StatsPanel.tsx  Legend.tsx
+      GrowthChart.tsx   ForecastStrip.tsx
+    scripts/
+      smoke.mjs               headless browser test driving every control
+      calibrate.mjs           renders the fuel-classifier calibration sheet
 ```
 
 The map is Leaflet. The fire is **not** drawn as a raster: scaling up a grid of
@@ -167,10 +285,23 @@ for the read-outs only.
 
 ## Tests
 
+Two smoke suites, no unit tests and no linter.
+
 ```bash
-npm run dev            # in one shell
-npm run smoke          # headless Chromium: drives every control, fails on any console error
+npm run dev:web                     # in one shell, then:
+npm run smoke                       # headless Chromium: drives every control,
+                                    # fails on any console error
+
+npm run smoke:api                   # boots the API, drives an incident, decodes
+                                    # the binary stream. Offline, deterministic
+FIREWATCH_MODE=live npm run smoke:api
 ```
+
+The UI suite honours `APP_URL`, so pointing it at a `VITE_API_URL`-configured
+dev server exercises server mode. **Both modes must pass before a transport
+change lands** — the two that caught real bugs here were a frozen read-out and a
+reset that cleared the statistics while leaving the burn scar on screen, neither
+of which the type checker could see.
 
 ## Attribution
 
