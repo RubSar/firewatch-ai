@@ -202,9 +202,16 @@ home for those controls — `ControlPanel` no longer holds them. Two controls in
 is how they drift.
 
 The grouping carries meaning and the dividers are not decoration: Ignite / Dozer /
-Retardant are drawing tools; **Pan is the absence of one**; Thermal is a view mode. Pan
-was originally the fourth cell of a 2x2 grid styled identically to the three brushes,
-which is precisely why it was unfindable.
+Retardant are drawing tools; **Pan is the absence of one**; Thermal, Isochrones and Fires
+are view toggles. Pan was originally the fourth cell of a 2x2 grid styled identically to
+the three brushes, which is precisely why it was unfindable. The sidebar keeps only
+basemap *configuration* (which raster, which tile style, contours) — things you set once
+— while anything toggled while looking at the map lives on the map.
+
+**Every button needs an explicit `aria-label`.** `.mt-label` is hidden below 1600px, so
+the visible text cannot serve as the accessible name; without the label the buttons
+become unnamed icons for screen readers, and the smoke test's `getByRole(name:)` lookups
+break. That regression happened once already — the test caught it.
 
 ### Canvas must follow Leaflet's zoom animation
 
