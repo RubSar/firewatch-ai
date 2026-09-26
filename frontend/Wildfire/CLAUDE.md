@@ -66,7 +66,25 @@ FIREWATCH_MODE=offline npm run barriercheck   # geometry and kernel only, no Ove
 From inside `frontend/Wildfire/`: `npm run calibrate` renders `calibrate.html` to
 `shots/calibrate.png` with band percentiles (needs a dev server).
 
-There is **no linter and no unit-test runner**. Two smoke tests are the whole suite, both linear
+### Kernel tests
+
+`frontend/sim/test/` holds the physics checks ARCHITECTURE.md's Verification section
+claims exist. `npm test` from `frontend/` runs them on Node's built-in runner — no
+dependency, TypeScript stripped natively.
+
+Two things about them:
+
+- **Isotropy must be measured across seeds.** `createSim(terrain, seed?)` takes a seed
+  purely so tests can. A single run is deterministic, so its lopsidedness is frozen and
+  looks exactly like lattice bias: worst-direction deviation is 23% at one seed, 7.7% at
+  eight, 5.2% at twenty-four. Asserting on one run tests the RNG, not the kernel.
+- **One test is `todo`, deliberately.** The front advances at **4.45x** the kernel's own
+  nominal ROS — the `1+sqrt(2)` per-link overshoot of §4 with percolation compounding it.
+  The test encodes the target and reports the real number without failing the suite,
+  because the fix is a kernel redesign and failing the build on it would block every
+  unrelated change. Delete the `todo` when the energy kernel lands, not before.
+
+There is **no linter**, and no unit tests outside the kernel. Two smoke tests are the whole suite, both linear
 scripts with no filtering — to run one case, comment the others out:
 
 - `scripts/smoke.mjs` (UI) drives every control in headless Chromium and fails on any console
@@ -296,6 +314,17 @@ Rules to preserve:
 - **Never swallow the failure silently.** An earlier version returned `null` on error,
   which made a plain HTTP 400 (bare `yyyy-mm-dd` — earth-search needs full RFC3339) look
   identical to "no satellite coverage". It logs now.
+- **Band DNs carry the scale but NOT the advertised offset.** Element84's STAC lists
+  `scale: 0.0001, offset: -0.1` for the L2A bands (ESA's baseline-04.00 `BOA_ADD_OFFSET`), but the
+  pixels in `sentinel-cogs` do not have it applied. `sampleBand` therefore multiplies by `scale`
+  and deliberately ignores `offset`. Applying it looks like a bug fix and is a regression: deep
+  water on Lake Sevan reads DN ~100-130, which is ρ ≈ 0.01 with scale alone and an impossible
+  ρ ≈ −0.09 with the offset. Forest at Dilijan reads 0.336/0.096 NIR/SWIR2 — textbook. Re-check by
+  sampling open water and confirming both bands land near zero. NBR itself cannot tell you: a pure
+  scale cancels in a normalised difference, so the error would only show up in the absolute values.
+- **No-data must become NaN, never 0.** A granule-edge pixel of 0 in one band with real signal in
+  the other makes `nbr()` return exactly ±1, which clears the vegetation floor and then differences
+  into a large dNBR — a burn scar invented out of missing data.
 - `npm run watercheck` is the regression test — six water bodies chosen to break a
   colour-based classifier. Run it after touching `classify.ts` or `sentinel.ts`.
 
@@ -368,6 +397,14 @@ nothing failing loudly, which is why `npm run barriercheck` asserts the rule dir
 lying along a cell boundary must block the flux *across* it and leave the flux *along* it open.
 `osmBarriers` gets that right by testing whether the centre-to-centre flux path intersects the
 barrier segment; marking the edges a line "passes through" gets it exactly backwards.
+
+Overpass has its own network budget, `overpassTimeoutMs` (60 s), separate from `fetchTimeoutMs`
+(15 s): every building in a dense 15 km box is 20-40 s of server-side work and megabytes of JSON,
+and 15 s silently truncated Athens into the 3/ha estimate. Callers never wait that long — `osm.ts`
+races a 9 s `DEADLINE_MS`, degrades, and lets the download finish into the disk cache for the next
+incident. On an outright refusal (Overpass answers a too-heavy query with a 504 in ~10 s) the box is
+quartered and the parts merged, de-duplicated by element id. That path is a safety net and has not
+fired in testing — given the 60 s budget the whole-box query has always won.
 
 Three things to preserve when touching this path:
 
