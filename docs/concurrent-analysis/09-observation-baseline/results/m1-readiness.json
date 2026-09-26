@@ -1,0 +1,94 @@
+{
+  "schema_version": "firewatch.research.m1_readiness.v1",
+  "created_at_utc": "2026-09-26T21:58:16.780948Z",
+  "data_kind": "real",
+  "status": "preparation_complete_scientific_acceptance_pending",
+  "user_direction": "No reviewers yet: prepare the package and record the gap.",
+  "research_base_commit": "99eea09",
+  "packet_id": "bba93823e2e0797e503f1c24f25598872515560ffc754b8fc93ff8feaf424c46",
+  "local_package": "backend/vision/runs/m1-review-packet",
+  "cases": 25,
+  "targets": [
+    "visible_flame",
+    "smoke"
+  ],
+  "image_layers_per_reviewer": 50,
+  "pilot_incidents_in_packet": 1,
+  "reviewers": {
+    "A": null,
+    "B": null
+  },
+  "human_reviews_received": 0,
+  "accepted_target_masks": 0,
+  "benchmark_frozen": false,
+  "m1_scientific_acceptance": false,
+  "m2_training_started": false,
+  "boundary_tolerance_pixels": null,
+  "agreement_acceptance_threshold": null,
+  "blockers": [
+    {
+      "id": "independent_humans",
+      "status": "unassigned",
+      "needed": "Two qualified independent human reviewers; coordinator verifies identity, exposure and independence."
+    },
+    {
+      "id": "target_compatible_labels",
+      "status": "unverified",
+      "needed": "Adjudicated RGB-visible flame/smoke annotations with retained originals and revisions."
+    },
+    {
+      "id": "incident_site_splits",
+      "status": "blocked",
+      "needed": "Compatible complete incident/site groups for train, validation and untouched test; inspected pilot excluded from untouched test."
+    },
+    {
+      "id": "hard_negative_coverage",
+      "status": "unverified",
+      "needed": "Document negative contexts and incident coverage; no operational prevalence claim."
+    },
+    {
+      "id": "acceptance_policy",
+      "status": "undeclared",
+      "needed": "Research owner predeclares tolerance, coverage and agreement criteria."
+    },
+    {
+      "id": "benchmark_freeze",
+      "status": "not_frozen",
+      "needed": "Accepted labels, hashes, group assignments and leakage review."
+    }
+  ],
+  "evidence_sha256": {
+    "inventory": "ad481bc20a878e69fdd42970edff10cc193e430932d32732b79f073871a2bcfa",
+    "source_audit": "f96186a6ae07fe115cc360622185fcc7b2bece24a429ba5aac2856965a756a48",
+    "existing_split_gate": "67c05ba8976eb670f10034bb33d0f655171577d2112148db4d8d3e60679e2941"
+  },
+  "code_sha256": {
+    "review_packet.py": "990eb48f6cbe0262d9e726d2889e3c75530669ef99dfbe1ca52979e1fb7968c8",
+    "review_ui.html": "f4be2cc755cb2f4084df6e7fd5c314224e9bf3727b078b9434595e07088db61a",
+    "review_ui.js": "2ccd940b4bb1d80e577156fc0d702cbefd893aa4e4aeb7d2fa10024bcf1ee407"
+  },
+  "package_file_sha256": {
+    "coordinator.json": "ceb22b8a0c911a7080ddda4a3e4f75316bd60546051e5fdbb4f86cb65a908f73",
+    "packet.json": "21c1bd555c580b8499b23ae639d7a6aed8f8c338cde46b20a5dc30d425b5b9cf",
+    "README.txt": "7878c31f6e0ff359ebbd8c4d2df7a5202478ad0acd43ec2eba591da04ab51421",
+    "reviewer-A/index.html": "1177687badd053f943b9add01e04514e1c29fea2448677eb16e786371318deb3",
+    "reviewer-B/index.html": "ad6afc4b34f03b96c881b672f6376ff6206a693ba144089217169ca216f60d24"
+  },
+  "validation": {
+    "python_tests_passed": 58,
+    "javascript_tests_passed": 5,
+    "all_992_triplets_revalidated": true,
+    "embedded_rgb_byte_hashes_verified": true,
+    "browser_paint_undo_target_isolation_and_unknown_notes_checked": true,
+    "synthetic_browser_manual_export_import_passed": true,
+    "synthetic_browser_export_validated_by_python": true,
+    "browser_automatic_download_saved_file_verified": false,
+    "real_human_review_performed": false
+  },
+  "limitations": [
+    "Pilot diagnostic sample, not prevalence or an untouched test set.",
+    "Agreement is not accuracy; identities are declarations.",
+    "Comparison outputs never auto-accept or freeze.",
+    "No model trained or real human agreement score reported."
+  ]
+}

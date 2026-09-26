@@ -1,0 +1,217 @@
+{
+  "schema_version": "firewatch.research.review_packet.v1",
+  "data_kind": "real",
+  "targets": [
+    "visible_flame",
+    "smoke"
+  ],
+  "mask_codes": {
+    "0": "negative",
+    "1": "positive",
+    "255": "unknown"
+  },
+  "evidence": "RGB only; no source masks, thermal or predictions",
+  "cases": [
+    {
+      "case_id": "case-001",
+      "rgb_sha256": "f610fd6b396a8e6a9525abc75a8c847a0e7ee36eb2572285be0f39cec5dd5711",
+      "dimensions_hw": [
+        254,
+        254
+      ]
+    },
+    {
+      "case_id": "case-002",
+      "rgb_sha256": "282569b540f86c7585707fa54aabd7e8acfe4da3e95b37b9d06013fde0c9fcb8",
+      "dimensions_hw": [
+        254,
+        254
+      ]
+    },
+    {
+      "case_id": "case-003",
+      "rgb_sha256": "db168222e958d9c766550a6de4449eb651846a1d8e63fb4344032cd819886ac8",
+      "dimensions_hw": [
+        254,
+        254
+      ]
+    },
+    {
+      "case_id": "case-004",
+      "rgb_sha256": "590a18a66e2703e953ba096dfb8bdd0f36f05d2d2b637f801f2f87375e19983e",
+      "dimensions_hw": [
+        254,
+        254
+      ]
+    },
+    {
+      "case_id": "case-005",
+      "rgb_sha256": "03083f80eaba8dd95213145a3f4a0ca065c5845a735e6b994db06aad4e973ed2",
+      "dimensions_hw": [
+        254,
+        254
+      ]
+    },
+    {
+      "case_id": "case-006",
+      "rgb_sha256": "2fd5f3b5d084897cc4376101fe77b1b4d23220f26f38e8ba92f547305d07c80f",
+      "dimensions_hw": [
+        254,
+        254
+      ]
+    },
+    {
+      "case_id": "case-007",
+      "rgb_sha256": "1853ffac1268159d172d98e860a33d341bf87d471c935219d6925885db3b18e8",
+      "dimensions_hw": [
+        254,
+        254
+      ]
+    },
+    {
+      "case_id": "case-008",
+      "rgb_sha256": "9083a61b2fd9cfbaeefe5ff41465686f89b72af44ef7242980b6e3b5a62dca9f",
+      "dimensions_hw": [
+        254,
+        254
+      ]
+    },
+    {
+      "case_id": "case-009",
+      "rgb_sha256": "ab786c9204b0be0a1763e27f099c28d9871249596521b691ee881dff54220262",
+      "dimensions_hw": [
+        254,
+        254
+      ]
+    },
+    {
+      "case_id": "case-010",
+      "rgb_sha256": "f876d5dc75dc2bb6b328b1b8d4f6c27467957f42bb52b2d84c25aa4e381b9d4d",
+      "dimensions_hw": [
+        254,
+        254
+      ]
+    },
+    {
+      "case_id": "case-011",
+      "rgb_sha256": "fd9fae528f86cc0724e05fbdf6983343651d1611f09541df88f34c4e73b22735",
+      "dimensions_hw": [
+        254,
+        254
+      ]
+    },
+    {
+      "case_id": "case-012",
+      "rgb_sha256": "4d9f70324ec7c6d07878dfbca457bb93491042c6c737b684775d34ae7b10cf20",
+      "dimensions_hw": [
+        254,
+        254
+      ]
+    },
+    {
+      "case_id": "case-013",
+      "rgb_sha256": "2d9a00c54f04146285e21c58e40cf017d74668889561df6761671fe7c532b341",
+      "dimensions_hw": [
+        254,
+        254
+      ]
+    },
+    {
+      "case_id": "case-014",
+      "rgb_sha256": "6a270eaa4f522f93cd8a3ae7fa4cee6edeeb92b7c205919b83f216d0ff509bf6",
+      "dimensions_hw": [
+        254,
+        254
+      ]
+    },
+    {
+      "case_id": "case-015",
+      "rgb_sha256": "883e53e9fb588a4787ad1dfa70f5ac075305f083f2dfdbf52261e0c627f0f594",
+      "dimensions_hw": [
+        254,
+        254
+      ]
+    },
+    {
+      "case_id": "case-016",
+      "rgb_sha256": "e4202feaf5b1ddcfe045351fcb936915d85cbcb90426a766d234ed6bd4c3568c",
+      "dimensions_hw": [
+        254,
+        254
+      ]
+    },
+    {
+      "case_id": "case-017",
+      "rgb_sha256": "1d73ed38a8b4a26e6f0977ee5d78c4684994064275517dcffdc84014ae6a2823",
+      "dimensions_hw": [
+        254,
+        254
+      ]
+    },
+    {
+      "case_id": "case-018",
+      "rgb_sha256": "10d48fa4967a89f4e6a83a746e7c32e4665a244b33a10b0a1bb35214a7c71cde",
+      "dimensions_hw": [
+        254,
+        254
+      ]
+    },
+    {
+      "case_id": "case-019",
+      "rgb_sha256": "650fff04c3e1dce4258527679c94e5b66853fbecece5a53b8782d72bc30b7953",
+      "dimensions_hw": [
+        254,
+        254
+      ]
+    },
+    {
+      "case_id": "case-020",
+      "rgb_sha256": "60f4ac84b97e6149e0d5dc14b77d1488ae09fe08aa8885f347884e6cbbfbf1c0",
+      "dimensions_hw": [
+        254,
+        254
+      ]
+    },
+    {
+      "case_id": "case-021",
+      "rgb_sha256": "0b51925a7c2cdcf907c641a76047eec78bd53ad121fc2e5647c6f9b545a41688",
+      "dimensions_hw": [
+        254,
+        254
+      ]
+    },
+    {
+      "case_id": "case-022",
+      "rgb_sha256": "9a28a2223ebf5d28607c876d432596b3b912af75f1d962e811ea97c98f352e7b",
+      "dimensions_hw": [
+        254,
+        254
+      ]
+    },
+    {
+      "case_id": "case-023",
+      "rgb_sha256": "a10f71d6175d75c11e6668dc19dee08beff6ac97d7d189227b0e46fbd5c4764e",
+      "dimensions_hw": [
+        254,
+        254
+      ]
+    },
+    {
+      "case_id": "case-024",
+      "rgb_sha256": "e5ed9044ae3d47a2d9dde2b12af380e93d2c09d39d972c2910ccde5af72499b3",
+      "dimensions_hw": [
+        254,
+        254
+      ]
+    },
+    {
+      "case_id": "case-025",
+      "rgb_sha256": "b35df08c0768ad052e94930f220c496b5a73764f60fe5b64fdeaaaa7b76b25d3",
+      "dimensions_hw": [
+        254,
+        254
+      ]
+    }
+  ],
+  "packet_id": "bba93823e2e0797e503f1c24f25598872515560ffc754b8fc93ff8feaf424c46"
+}

@@ -1,0 +1,708 @@
+{
+  "schema_version": "firewatch.research.dataset.v1",
+  "data_kind": "real",
+  "dataset_id": "flame3-sycan-marsh-v1",
+  "dataset_version": 1,
+  "source_url": "https://www.kaggle.com/datasets/brycehopkins/flame-3-computer-vision-subset-sycan-marsh",
+  "publisher_license": "MIT",
+  "sampling": "Equal file-rank spacing within each publisher class; selected before running baselines",
+  "label_provenance": "Publisher Fire/No Fire image folders; pixel masks and independent label audit unavailable",
+  "records": [
+    {
+      "sample_id": "fire-00001",
+      "incident_id": "sycan-marsh-cv",
+      "sequence_id": null,
+      "split": "pilot",
+      "capture_time_utc": null,
+      "relative_time_s": null,
+      "presence_label": true,
+      "mask_path": null,
+      "mask_semantics": null,
+      "thermal_unit": "celsius",
+      "thermal_saturation_c": 500.0,
+      "registration": "provider_corrected_fov_unverified",
+      "source_paths": {
+        "rgb": "FLAME 3 CV Dataset (Sycan Marsh)/Fire/RGB/Corrected FOV/00001.JPG",
+        "thermal": "FLAME 3 CV Dataset (Sycan Marsh)/Fire/Thermal/Celsius TIFF/00001.TIFF"
+      },
+      "sha256": {
+        "rgb": "9d8268f61d93f1a0e196a6a07ac4cb29db9353032aa70a3e17a73658ea8f61c2",
+        "thermal": "cbb0809a6c8e1db7da58d4630337b5c01d290310ddc85cd9cb025ae9322bb43b"
+      },
+      "rgb_path": "rgb/fire-00001.jpg",
+      "thermal_path": "thermal/fire-00001.tiff",
+      "source_capture_time_raw": {
+        "datetime_original": "2022:10:26 19:00:51",
+        "offset_time_original": null,
+        "status": "unresolved_clock_and_publisher_date_discrepancy"
+      }
+    },
+    {
+      "sample_id": "fire-00057",
+      "incident_id": "sycan-marsh-cv",
+      "sequence_id": null,
+      "split": "pilot",
+      "capture_time_utc": null,
+      "relative_time_s": null,
+      "presence_label": true,
+      "mask_path": null,
+      "mask_semantics": null,
+      "thermal_unit": "celsius",
+      "thermal_saturation_c": 500.0,
+      "registration": "provider_corrected_fov_unverified",
+      "source_paths": {
+        "rgb": "FLAME 3 CV Dataset (Sycan Marsh)/Fire/RGB/Corrected FOV/00057.JPG",
+        "thermal": "FLAME 3 CV Dataset (Sycan Marsh)/Fire/Thermal/Celsius TIFF/00057.TIFF"
+      },
+      "sha256": {
+        "rgb": "ea38ccbfe881896e9d02ac3699f12b69dceb93b855c15658d3992543d633e1a5",
+        "thermal": "385cea05e1106b842ae24232c4ea599d1e3a38fe7568ca02b215e757c9cff200"
+      },
+      "rgb_path": "rgb/fire-00057.jpg",
+      "thermal_path": "thermal/fire-00057.tiff",
+      "source_capture_time_raw": {
+        "datetime_original": "2022:10:27 17:12:10",
+        "offset_time_original": null,
+        "status": "unresolved_clock_and_publisher_date_discrepancy"
+      }
+    },
+    {
+      "sample_id": "fire-00114",
+      "incident_id": "sycan-marsh-cv",
+      "sequence_id": null,
+      "split": "pilot",
+      "capture_time_utc": null,
+      "relative_time_s": null,
+      "presence_label": true,
+      "mask_path": null,
+      "mask_semantics": null,
+      "thermal_unit": "celsius",
+      "thermal_saturation_c": 500.0,
+      "registration": "provider_corrected_fov_unverified",
+      "source_paths": {
+        "rgb": "FLAME 3 CV Dataset (Sycan Marsh)/Fire/RGB/Corrected FOV/00114.JPG",
+        "thermal": "FLAME 3 CV Dataset (Sycan Marsh)/Fire/Thermal/Celsius TIFF/00114.TIFF"
+      },
+      "sha256": {
+        "rgb": "2aa14f241f9263f80744bec07eae9e8ab24476644321233ae8355e78b2a47ba3",
+        "thermal": "5c1b5d380e24439d7cd9fdafac0c474831834df0c28b73d969b59a74cd15988b"
+      },
+      "rgb_path": "rgb/fire-00114.jpg",
+      "thermal_path": "thermal/fire-00114.tiff",
+      "source_capture_time_raw": {
+        "datetime_original": "2022:10:27 19:00:34",
+        "offset_time_original": null,
+        "status": "unresolved_clock_and_publisher_date_discrepancy"
+      }
+    },
+    {
+      "sample_id": "fire-00170",
+      "incident_id": "sycan-marsh-cv",
+      "sequence_id": null,
+      "split": "pilot",
+      "capture_time_utc": null,
+      "relative_time_s": null,
+      "presence_label": true,
+      "mask_path": null,
+      "mask_semantics": null,
+      "thermal_unit": "celsius",
+      "thermal_saturation_c": 500.0,
+      "registration": "provider_corrected_fov_unverified",
+      "source_paths": {
+        "rgb": "FLAME 3 CV Dataset (Sycan Marsh)/Fire/RGB/Corrected FOV/00170.JPG",
+        "thermal": "FLAME 3 CV Dataset (Sycan Marsh)/Fire/Thermal/Celsius TIFF/00170.TIFF"
+      },
+      "sha256": {
+        "rgb": "5b39c05ec988bfe8d31fb7304c1c0d9d70448196d3fef6eeb4cd7920f75500e6",
+        "thermal": "2bbd7f9484fb98949864aaeeae5021c087f29f05e61bbfb97211cd02ef4fdd68"
+      },
+      "rgb_path": "rgb/fire-00170.jpg",
+      "thermal_path": "thermal/fire-00170.tiff",
+      "source_capture_time_raw": {
+        "datetime_original": "2022:10:27 17:47:00",
+        "offset_time_original": null,
+        "status": "unresolved_clock_and_publisher_date_discrepancy"
+      }
+    },
+    {
+      "sample_id": "fire-00227",
+      "incident_id": "sycan-marsh-cv",
+      "sequence_id": null,
+      "split": "pilot",
+      "capture_time_utc": null,
+      "relative_time_s": null,
+      "presence_label": true,
+      "mask_path": null,
+      "mask_semantics": null,
+      "thermal_unit": "celsius",
+      "thermal_saturation_c": 500.0,
+      "registration": "provider_corrected_fov_unverified",
+      "source_paths": {
+        "rgb": "FLAME 3 CV Dataset (Sycan Marsh)/Fire/RGB/Corrected FOV/00227.JPG",
+        "thermal": "FLAME 3 CV Dataset (Sycan Marsh)/Fire/Thermal/Celsius TIFF/00227.TIFF"
+      },
+      "sha256": {
+        "rgb": "1c01341fce8947fdc768ac9f79fa70e11884d3942438f0e92c16aff3f2caaa5c",
+        "thermal": "bd6a25adaddcbb8e442ae0e10c738c138bb2e7451db666a0d64052316a93ea61"
+      },
+      "rgb_path": "rgb/fire-00227.jpg",
+      "thermal_path": "thermal/fire-00227.tiff",
+      "source_capture_time_raw": {
+        "datetime_original": "2022:10:26 18:38:21",
+        "offset_time_original": null,
+        "status": "unresolved_clock_and_publisher_date_discrepancy"
+      }
+    },
+    {
+      "sample_id": "fire-00283",
+      "incident_id": "sycan-marsh-cv",
+      "sequence_id": null,
+      "split": "pilot",
+      "capture_time_utc": null,
+      "relative_time_s": null,
+      "presence_label": true,
+      "mask_path": null,
+      "mask_semantics": null,
+      "thermal_unit": "celsius",
+      "thermal_saturation_c": 500.0,
+      "registration": "provider_corrected_fov_unverified",
+      "source_paths": {
+        "rgb": "FLAME 3 CV Dataset (Sycan Marsh)/Fire/RGB/Corrected FOV/00283.JPG",
+        "thermal": "FLAME 3 CV Dataset (Sycan Marsh)/Fire/Thermal/Celsius TIFF/00283.TIFF"
+      },
+      "sha256": {
+        "rgb": "e083004359df6bb572daa604764b6e8b2b50151741629dafaebed87ed1864561",
+        "thermal": "4f5cee2156ddfb86665474964b936a0c6552449630cd2a254716543aecbf161a"
+      },
+      "rgb_path": "rgb/fire-00283.jpg",
+      "thermal_path": "thermal/fire-00283.tiff",
+      "source_capture_time_raw": {
+        "datetime_original": "2022:10:27 19:16:53",
+        "offset_time_original": null,
+        "status": "unresolved_clock_and_publisher_date_discrepancy"
+      }
+    },
+    {
+      "sample_id": "fire-00340",
+      "incident_id": "sycan-marsh-cv",
+      "sequence_id": null,
+      "split": "pilot",
+      "capture_time_utc": null,
+      "relative_time_s": null,
+      "presence_label": true,
+      "mask_path": null,
+      "mask_semantics": null,
+      "thermal_unit": "celsius",
+      "thermal_saturation_c": 500.0,
+      "registration": "provider_corrected_fov_unverified",
+      "source_paths": {
+        "rgb": "FLAME 3 CV Dataset (Sycan Marsh)/Fire/RGB/Corrected FOV/00340.JPG",
+        "thermal": "FLAME 3 CV Dataset (Sycan Marsh)/Fire/Thermal/Celsius TIFF/00340.TIFF"
+      },
+      "sha256": {
+        "rgb": "aebf63428795ad3db0c82fd75828d76a92f19a91cb5eac57476b099504512cc5",
+        "thermal": "f548a0d9c9b07a9ca7ff81be88373de85d20aa735210394c1799e278758ec3af"
+      },
+      "rgb_path": "rgb/fire-00340.jpg",
+      "thermal_path": "thermal/fire-00340.tiff",
+      "source_capture_time_raw": {
+        "datetime_original": "2022:10:26 19:11:45",
+        "offset_time_original": null,
+        "status": "unresolved_clock_and_publisher_date_discrepancy"
+      }
+    },
+    {
+      "sample_id": "fire-00396",
+      "incident_id": "sycan-marsh-cv",
+      "sequence_id": null,
+      "split": "pilot",
+      "capture_time_utc": null,
+      "relative_time_s": null,
+      "presence_label": true,
+      "mask_path": null,
+      "mask_semantics": null,
+      "thermal_unit": "celsius",
+      "thermal_saturation_c": 500.0,
+      "registration": "provider_corrected_fov_unverified",
+      "source_paths": {
+        "rgb": "FLAME 3 CV Dataset (Sycan Marsh)/Fire/RGB/Corrected FOV/00396.JPG",
+        "thermal": "FLAME 3 CV Dataset (Sycan Marsh)/Fire/Thermal/Celsius TIFF/00396.TIFF"
+      },
+      "sha256": {
+        "rgb": "a4e050d6298be53fed49f880e930c169309d8ef4cd12124b108c67892b80bfe0",
+        "thermal": "0e2054000e8bc24291c2b27b8f880f42dfe3219c2ae205696dc48863e58f232b"
+      },
+      "rgb_path": "rgb/fire-00396.jpg",
+      "thermal_path": "thermal/fire-00396.tiff",
+      "source_capture_time_raw": {
+        "datetime_original": "2022:10:26 18:59:18",
+        "offset_time_original": null,
+        "status": "unresolved_clock_and_publisher_date_discrepancy"
+      }
+    },
+    {
+      "sample_id": "fire-00453",
+      "incident_id": "sycan-marsh-cv",
+      "sequence_id": null,
+      "split": "pilot",
+      "capture_time_utc": null,
+      "relative_time_s": null,
+      "presence_label": true,
+      "mask_path": null,
+      "mask_semantics": null,
+      "thermal_unit": "celsius",
+      "thermal_saturation_c": 500.0,
+      "registration": "provider_corrected_fov_unverified",
+      "source_paths": {
+        "rgb": "FLAME 3 CV Dataset (Sycan Marsh)/Fire/RGB/Corrected FOV/00453.JPG",
+        "thermal": "FLAME 3 CV Dataset (Sycan Marsh)/Fire/Thermal/Celsius TIFF/00453.TIFF"
+      },
+      "sha256": {
+        "rgb": "a976a05c4be5e27b478655d70b2aae5372f860ef924953491cbc18cb40a535ee",
+        "thermal": "c1bc87f232c98ecd2e9a1ec93a8954735438e7a930e1dd5c00679e07a2910f45"
+      },
+      "rgb_path": "rgb/fire-00453.jpg",
+      "thermal_path": "thermal/fire-00453.tiff",
+      "source_capture_time_raw": {
+        "datetime_original": "2022:10:27 15:26:56",
+        "offset_time_original": null,
+        "status": "unresolved_clock_and_publisher_date_discrepancy"
+      }
+    },
+    {
+      "sample_id": "fire-00509",
+      "incident_id": "sycan-marsh-cv",
+      "sequence_id": null,
+      "split": "pilot",
+      "capture_time_utc": null,
+      "relative_time_s": null,
+      "presence_label": true,
+      "mask_path": null,
+      "mask_semantics": null,
+      "thermal_unit": "celsius",
+      "thermal_saturation_c": 500.0,
+      "registration": "provider_corrected_fov_unverified",
+      "source_paths": {
+        "rgb": "FLAME 3 CV Dataset (Sycan Marsh)/Fire/RGB/Corrected FOV/00509.JPG",
+        "thermal": "FLAME 3 CV Dataset (Sycan Marsh)/Fire/Thermal/Celsius TIFF/00509.TIFF"
+      },
+      "sha256": {
+        "rgb": "107a6c1e2d7543969501de879fef0d7fee0f12973a00bde99ddbc2a76c4d619c",
+        "thermal": "57f07148b4bd5bffdbbbda39c825fe1948d211d588163f548fa5f07aedaa93d7"
+      },
+      "rgb_path": "rgb/fire-00509.jpg",
+      "thermal_path": "thermal/fire-00509.tiff",
+      "source_capture_time_raw": {
+        "datetime_original": "2022:10:27 17:49:35",
+        "offset_time_original": null,
+        "status": "unresolved_clock_and_publisher_date_discrepancy"
+      }
+    },
+    {
+      "sample_id": "fire-00566",
+      "incident_id": "sycan-marsh-cv",
+      "sequence_id": null,
+      "split": "pilot",
+      "capture_time_utc": null,
+      "relative_time_s": null,
+      "presence_label": true,
+      "mask_path": null,
+      "mask_semantics": null,
+      "thermal_unit": "celsius",
+      "thermal_saturation_c": 500.0,
+      "registration": "provider_corrected_fov_unverified",
+      "source_paths": {
+        "rgb": "FLAME 3 CV Dataset (Sycan Marsh)/Fire/RGB/Corrected FOV/00566.JPG",
+        "thermal": "FLAME 3 CV Dataset (Sycan Marsh)/Fire/Thermal/Celsius TIFF/00566.TIFF"
+      },
+      "sha256": {
+        "rgb": "cc80980fd3c63b3847b9a8f0eef29094289e78141096ce46f06757883151e12a",
+        "thermal": "0d48e3853709269b63334651281ca650fd2e03e7bf390723fa1e8f555b47fb8f"
+      },
+      "rgb_path": "rgb/fire-00566.jpg",
+      "thermal_path": "thermal/fire-00566.tiff",
+      "source_capture_time_raw": {
+        "datetime_original": "2022:10:26 18:59:21",
+        "offset_time_original": null,
+        "status": "unresolved_clock_and_publisher_date_discrepancy"
+      }
+    },
+    {
+      "sample_id": "fire-00622",
+      "incident_id": "sycan-marsh-cv",
+      "sequence_id": null,
+      "split": "pilot",
+      "capture_time_utc": null,
+      "relative_time_s": null,
+      "presence_label": true,
+      "mask_path": null,
+      "mask_semantics": null,
+      "thermal_unit": "celsius",
+      "thermal_saturation_c": 500.0,
+      "registration": "provider_corrected_fov_unverified",
+      "source_paths": {
+        "rgb": "FLAME 3 CV Dataset (Sycan Marsh)/Fire/RGB/Corrected FOV/00622.JPG",
+        "thermal": "FLAME 3 CV Dataset (Sycan Marsh)/Fire/Thermal/Celsius TIFF/00622.TIFF"
+      },
+      "sha256": {
+        "rgb": "03836603d9ec98dce4efb7cf036414d679dc9c43a0c8e31a339f23621c5f9f01",
+        "thermal": "f6d19d5aaa8238932c8591d9788f52669f40f3567559cce1a9fc04ad64e7eb7a"
+      },
+      "rgb_path": "rgb/fire-00622.jpg",
+      "thermal_path": "thermal/fire-00622.tiff",
+      "source_capture_time_raw": {
+        "datetime_original": "2022:10:26 18:44:21",
+        "offset_time_original": null,
+        "status": "unresolved_clock_and_publisher_date_discrepancy"
+      }
+    },
+    {
+      "sample_id": "no-fire-00001",
+      "incident_id": "sycan-marsh-cv",
+      "sequence_id": null,
+      "split": "pilot",
+      "capture_time_utc": null,
+      "relative_time_s": null,
+      "presence_label": false,
+      "mask_path": null,
+      "mask_semantics": null,
+      "thermal_unit": "celsius",
+      "thermal_saturation_c": 500.0,
+      "registration": "provider_corrected_fov_unverified",
+      "source_paths": {
+        "rgb": "FLAME 3 CV Dataset (Sycan Marsh)/No Fire/RGB/Corrected FOV/00001.JPG",
+        "thermal": "FLAME 3 CV Dataset (Sycan Marsh)/No Fire/Thermal/Celsius TIFF/00001.TIFF"
+      },
+      "sha256": {
+        "rgb": "3bf52fcf7e67673a7b625808f1b74b85d46c3dd4170281dffe872ba189b4b41b",
+        "thermal": "481fa9701053b793f653e0ca25a36dcffe2729f187866d749de2361f44b60efb"
+      },
+      "rgb_path": "rgb/no-fire-00001.jpg",
+      "thermal_path": "thermal/no-fire-00001.tiff",
+      "source_capture_time_raw": {
+        "datetime_original": "2022:10:25 17:03:48",
+        "offset_time_original": null,
+        "status": "unresolved_clock_and_publisher_date_discrepancy"
+      }
+    },
+    {
+      "sample_id": "no-fire-00011",
+      "incident_id": "sycan-marsh-cv",
+      "sequence_id": null,
+      "split": "pilot",
+      "capture_time_utc": null,
+      "relative_time_s": null,
+      "presence_label": false,
+      "mask_path": null,
+      "mask_semantics": null,
+      "thermal_unit": "celsius",
+      "thermal_saturation_c": 500.0,
+      "registration": "provider_corrected_fov_unverified",
+      "source_paths": {
+        "rgb": "FLAME 3 CV Dataset (Sycan Marsh)/No Fire/RGB/Corrected FOV/00011.JPG",
+        "thermal": "FLAME 3 CV Dataset (Sycan Marsh)/No Fire/Thermal/Celsius TIFF/00011.TIFF"
+      },
+      "sha256": {
+        "rgb": "78132261dc06750162a87e94730f14355d554c0226b8e4f873cff17c39c5aa54",
+        "thermal": "931b89a7b066d5bb40283eddd3dfff3b19c2325a9c0812968b15e25b143fc5d3"
+      },
+      "rgb_path": "rgb/no-fire-00011.jpg",
+      "thermal_path": "thermal/no-fire-00011.tiff",
+      "source_capture_time_raw": {
+        "datetime_original": "2022:10:25 17:05:15",
+        "offset_time_original": null,
+        "status": "unresolved_clock_and_publisher_date_discrepancy"
+      }
+    },
+    {
+      "sample_id": "no-fire-00022",
+      "incident_id": "sycan-marsh-cv",
+      "sequence_id": null,
+      "split": "pilot",
+      "capture_time_utc": null,
+      "relative_time_s": null,
+      "presence_label": false,
+      "mask_path": null,
+      "mask_semantics": null,
+      "thermal_unit": "celsius",
+      "thermal_saturation_c": 500.0,
+      "registration": "provider_corrected_fov_unverified",
+      "source_paths": {
+        "rgb": "FLAME 3 CV Dataset (Sycan Marsh)/No Fire/RGB/Corrected FOV/00022.JPG",
+        "thermal": "FLAME 3 CV Dataset (Sycan Marsh)/No Fire/Thermal/Celsius TIFF/00022.TIFF"
+      },
+      "sha256": {
+        "rgb": "6611711c7837be0291a8bc80994dde30eef066f38d7099fb00e29c76ace8c389",
+        "thermal": "441beeea8b95a16189977809b9c2dece057896b18393614a680245e39454de90"
+      },
+      "rgb_path": "rgb/no-fire-00022.jpg",
+      "thermal_path": "thermal/no-fire-00022.tiff",
+      "source_capture_time_raw": {
+        "datetime_original": "2022:10:25 16:58:17",
+        "offset_time_original": null,
+        "status": "unresolved_clock_and_publisher_date_discrepancy"
+      }
+    },
+    {
+      "sample_id": "no-fire-00032",
+      "incident_id": "sycan-marsh-cv",
+      "sequence_id": null,
+      "split": "pilot",
+      "capture_time_utc": null,
+      "relative_time_s": null,
+      "presence_label": false,
+      "mask_path": null,
+      "mask_semantics": null,
+      "thermal_unit": "celsius",
+      "thermal_saturation_c": 500.0,
+      "registration": "provider_corrected_fov_unverified",
+      "source_paths": {
+        "rgb": "FLAME 3 CV Dataset (Sycan Marsh)/No Fire/RGB/Corrected FOV/00032.JPG",
+        "thermal": "FLAME 3 CV Dataset (Sycan Marsh)/No Fire/Thermal/Celsius TIFF/00032.TIFF"
+      },
+      "sha256": {
+        "rgb": "8800bbee4c68ebfd8af2fc3e79d1499b4165c6d5692414723166fc83dee62ec1",
+        "thermal": "6134b6ea059f5d30501daa4b4b0bb1b80fcf3e2092041a3e6357eccc93d82a4b"
+      },
+      "rgb_path": "rgb/no-fire-00032.jpg",
+      "thermal_path": "thermal/no-fire-00032.tiff",
+      "source_capture_time_raw": {
+        "datetime_original": "2022:10:25 16:58:32",
+        "offset_time_original": null,
+        "status": "unresolved_clock_and_publisher_date_discrepancy"
+      }
+    },
+    {
+      "sample_id": "no-fire-00043",
+      "incident_id": "sycan-marsh-cv",
+      "sequence_id": null,
+      "split": "pilot",
+      "capture_time_utc": null,
+      "relative_time_s": null,
+      "presence_label": false,
+      "mask_path": null,
+      "mask_semantics": null,
+      "thermal_unit": "celsius",
+      "thermal_saturation_c": 500.0,
+      "registration": "provider_corrected_fov_unverified",
+      "source_paths": {
+        "rgb": "FLAME 3 CV Dataset (Sycan Marsh)/No Fire/RGB/Corrected FOV/00043.JPG",
+        "thermal": "FLAME 3 CV Dataset (Sycan Marsh)/No Fire/Thermal/Celsius TIFF/00043.TIFF"
+      },
+      "sha256": {
+        "rgb": "e01103129ab5cf95ad33c454727e4232aea4ecd95fc89dcb25f8fcfd70e859b0",
+        "thermal": "78997e28a447902d88bafa4febc781e8cb4eb9f55733b8f1d6e1d18be8670ad9"
+      },
+      "rgb_path": "rgb/no-fire-00043.jpg",
+      "thermal_path": "thermal/no-fire-00043.tiff",
+      "source_capture_time_raw": {
+        "datetime_original": "2022:10:25 16:58:05",
+        "offset_time_original": null,
+        "status": "unresolved_clock_and_publisher_date_discrepancy"
+      }
+    },
+    {
+      "sample_id": "no-fire-00053",
+      "incident_id": "sycan-marsh-cv",
+      "sequence_id": null,
+      "split": "pilot",
+      "capture_time_utc": null,
+      "relative_time_s": null,
+      "presence_label": false,
+      "mask_path": null,
+      "mask_semantics": null,
+      "thermal_unit": "celsius",
+      "thermal_saturation_c": 500.0,
+      "registration": "provider_corrected_fov_unverified",
+      "source_paths": {
+        "rgb": "FLAME 3 CV Dataset (Sycan Marsh)/No Fire/RGB/Corrected FOV/00053.JPG",
+        "thermal": "FLAME 3 CV Dataset (Sycan Marsh)/No Fire/Thermal/Celsius TIFF/00053.TIFF"
+      },
+      "sha256": {
+        "rgb": "f7c9a4862c903cc4215f7914c51ef21ab67e3f17dc51d510fd9e8880681549a6",
+        "thermal": "9c9e9062a2d6569b6ade3a2032754544b7d053708f57279b927f0d512edcd338"
+      },
+      "rgb_path": "rgb/no-fire-00053.jpg",
+      "thermal_path": "thermal/no-fire-00053.tiff",
+      "source_capture_time_raw": {
+        "datetime_original": "2022:10:25 17:05:50",
+        "offset_time_original": null,
+        "status": "unresolved_clock_and_publisher_date_discrepancy"
+      }
+    },
+    {
+      "sample_id": "no-fire-00064",
+      "incident_id": "sycan-marsh-cv",
+      "sequence_id": null,
+      "split": "pilot",
+      "capture_time_utc": null,
+      "relative_time_s": null,
+      "presence_label": false,
+      "mask_path": null,
+      "mask_semantics": null,
+      "thermal_unit": "celsius",
+      "thermal_saturation_c": 500.0,
+      "registration": "provider_corrected_fov_unverified",
+      "source_paths": {
+        "rgb": "FLAME 3 CV Dataset (Sycan Marsh)/No Fire/RGB/Corrected FOV/00064.JPG",
+        "thermal": "FLAME 3 CV Dataset (Sycan Marsh)/No Fire/Thermal/Celsius TIFF/00064.TIFF"
+      },
+      "sha256": {
+        "rgb": "4584d181921d1697fd025a04aa22b7efa4c63349bfb4215af85b8ed9986d78e6",
+        "thermal": "af7b8612d6e7dd6b8cfb1409a048f0df72efc53a7cfc3db62ee0e1ccaba16ef7"
+      },
+      "rgb_path": "rgb/no-fire-00064.jpg",
+      "thermal_path": "thermal/no-fire-00064.tiff",
+      "source_capture_time_raw": {
+        "datetime_original": "2022:10:26 19:13:10",
+        "offset_time_original": null,
+        "status": "unresolved_clock_and_publisher_date_discrepancy"
+      }
+    },
+    {
+      "sample_id": "no-fire-00074",
+      "incident_id": "sycan-marsh-cv",
+      "sequence_id": null,
+      "split": "pilot",
+      "capture_time_utc": null,
+      "relative_time_s": null,
+      "presence_label": false,
+      "mask_path": null,
+      "mask_semantics": null,
+      "thermal_unit": "celsius",
+      "thermal_saturation_c": 500.0,
+      "registration": "provider_corrected_fov_unverified",
+      "source_paths": {
+        "rgb": "FLAME 3 CV Dataset (Sycan Marsh)/No Fire/RGB/Corrected FOV/00074.JPG",
+        "thermal": "FLAME 3 CV Dataset (Sycan Marsh)/No Fire/Thermal/Celsius TIFF/00074.TIFF"
+      },
+      "sha256": {
+        "rgb": "aac61cfb2129dbb7fc479822ed5a47374c1fe97935110d1c1b6676062507064d",
+        "thermal": "c2b5e61b0db8e6be5777c58decaffa25e16582e38e9cfa0c508285cb0776adf6"
+      },
+      "rgb_path": "rgb/no-fire-00074.jpg",
+      "thermal_path": "thermal/no-fire-00074.tiff",
+      "source_capture_time_raw": {
+        "datetime_original": "2022:10:25 17:01:09",
+        "offset_time_original": null,
+        "status": "unresolved_clock_and_publisher_date_discrepancy"
+      }
+    },
+    {
+      "sample_id": "no-fire-00085",
+      "incident_id": "sycan-marsh-cv",
+      "sequence_id": null,
+      "split": "pilot",
+      "capture_time_utc": null,
+      "relative_time_s": null,
+      "presence_label": false,
+      "mask_path": null,
+      "mask_semantics": null,
+      "thermal_unit": "celsius",
+      "thermal_saturation_c": 500.0,
+      "registration": "provider_corrected_fov_unverified",
+      "source_paths": {
+        "rgb": "FLAME 3 CV Dataset (Sycan Marsh)/No Fire/RGB/Corrected FOV/00085.JPG",
+        "thermal": "FLAME 3 CV Dataset (Sycan Marsh)/No Fire/Thermal/Celsius TIFF/00085.TIFF"
+      },
+      "sha256": {
+        "rgb": "889c6c81cf05829ee0c6164114258df64227b25ba03998729822ef0429c7d826",
+        "thermal": "26bad40cf2a19aabf29bcff919ffa0912b8b2ea045ec833bc3a0ca4033d53d04"
+      },
+      "rgb_path": "rgb/no-fire-00085.jpg",
+      "thermal_path": "thermal/no-fire-00085.tiff",
+      "source_capture_time_raw": {
+        "datetime_original": "2022:10:25 16:58:48",
+        "offset_time_original": null,
+        "status": "unresolved_clock_and_publisher_date_discrepancy"
+      }
+    },
+    {
+      "sample_id": "no-fire-00095",
+      "incident_id": "sycan-marsh-cv",
+      "sequence_id": null,
+      "split": "pilot",
+      "capture_time_utc": null,
+      "relative_time_s": null,
+      "presence_label": false,
+      "mask_path": null,
+      "mask_semantics": null,
+      "thermal_unit": "celsius",
+      "thermal_saturation_c": 500.0,
+      "registration": "provider_corrected_fov_unverified",
+      "source_paths": {
+        "rgb": "FLAME 3 CV Dataset (Sycan Marsh)/No Fire/RGB/Corrected FOV/00095.JPG",
+        "thermal": "FLAME 3 CV Dataset (Sycan Marsh)/No Fire/Thermal/Celsius TIFF/00095.TIFF"
+      },
+      "sha256": {
+        "rgb": "05ef4c37851933b92836847d64df90efae0c9288bf1d73ee3cd3aac4f623564f",
+        "thermal": "96307a6e27163e582dd6181594e64d2d9cf8aad7617e4d5ec23652f58db42cfb"
+      },
+      "rgb_path": "rgb/no-fire-00095.jpg",
+      "thermal_path": "thermal/no-fire-00095.tiff",
+      "source_capture_time_raw": {
+        "datetime_original": "2022:10:25 17:03:50",
+        "offset_time_original": null,
+        "status": "unresolved_clock_and_publisher_date_discrepancy"
+      }
+    },
+    {
+      "sample_id": "no-fire-00106",
+      "incident_id": "sycan-marsh-cv",
+      "sequence_id": null,
+      "split": "pilot",
+      "capture_time_utc": null,
+      "relative_time_s": null,
+      "presence_label": false,
+      "mask_path": null,
+      "mask_semantics": null,
+      "thermal_unit": "celsius",
+      "thermal_saturation_c": 500.0,
+      "registration": "provider_corrected_fov_unverified",
+      "source_paths": {
+        "rgb": "FLAME 3 CV Dataset (Sycan Marsh)/No Fire/RGB/Corrected FOV/00106.JPG",
+        "thermal": "FLAME 3 CV Dataset (Sycan Marsh)/No Fire/Thermal/Celsius TIFF/00106.TIFF"
+      },
+      "sha256": {
+        "rgb": "6da01fbd9b5cd0a0b1edd769ee2666719c77e222ace9b6d86d8076f168c077c9",
+        "thermal": "043b91084ced9807fa3b6ea3270ad897161d81c2f03022a9865b65c516f5f913"
+      },
+      "rgb_path": "rgb/no-fire-00106.jpg",
+      "thermal_path": "thermal/no-fire-00106.tiff",
+      "source_capture_time_raw": {
+        "datetime_original": "2022:10:25 17:05:17",
+        "offset_time_original": null,
+        "status": "unresolved_clock_and_publisher_date_discrepancy"
+      }
+    },
+    {
+      "sample_id": "no-fire-00116",
+      "incident_id": "sycan-marsh-cv",
+      "sequence_id": null,
+      "split": "pilot",
+      "capture_time_utc": null,
+      "relative_time_s": null,
+      "presence_label": false,
+      "mask_path": null,
+      "mask_semantics": null,
+      "thermal_unit": "celsius",
+      "thermal_saturation_c": 500.0,
+      "registration": "provider_corrected_fov_unverified",
+      "source_paths": {
+        "rgb": "FLAME 3 CV Dataset (Sycan Marsh)/No Fire/RGB/Corrected FOV/00116.JPG",
+        "thermal": "FLAME 3 CV Dataset (Sycan Marsh)/No Fire/Thermal/Celsius TIFF/00116.TIFF"
+      },
+      "sha256": {
+        "rgb": "6c088e22b7e45ced51d602dd08ba53dae1c45a2c7166b19149f9b311dccd3554",
+        "thermal": "ce3f52002e9aa607c792084746e14580f34212cdfbc806632a8a1bb0657e7af2"
+      },
+      "rgb_path": "rgb/no-fire-00116.jpg",
+      "thermal_path": "thermal/no-fire-00116.tiff",
+      "source_capture_time_raw": {
+        "datetime_original": "2022:10:25 16:57:50",
+        "offset_time_original": null,
+        "status": "unresolved_clock_and_publisher_date_discrepancy"
+      }
+    }
+  ]
+}

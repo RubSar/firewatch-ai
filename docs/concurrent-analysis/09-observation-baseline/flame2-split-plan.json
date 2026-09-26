@@ -1,0 +1,9 @@
+{
+  "schema_version": "firewatch.research.split_plan.v1",
+  "target": "visible_flame",
+  "status": "draft_not_frozen",
+  "incident_assignments": {
+    "flame2-northern-arizona-2021-11": "pilot"
+  },
+  "rationale": "This burn has been inspected. Preserve it as development data; do not divide frame IDs into supposedly independent incidents. Training, validation and untouched test groups remain unassigned until compatible annotations and distinct incidents are available."
+}
