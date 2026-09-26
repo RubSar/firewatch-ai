@@ -153,6 +153,7 @@ export default function App() {
     contours: true,
     isochrones: false,
     activeFires: false,
+    thermal: false,
   })
   const [fireLayer, setFireLayer] = useState<
     { count: number; note: string; truncated: boolean; loading?: boolean } | null
@@ -369,6 +370,7 @@ export default function App() {
               registerGetView={registerGetView}
               apiUrl={API_URL}
               onFiresLoaded={setFireLayer}
+              ambientC={effective.temperature}
             />
           )}
 
@@ -387,7 +389,12 @@ export default function App() {
           )}
 
           <div className="hud hud-bl">
-            <Legend base={layers.base} fuelOverlay={layers.fuelOverlay} />
+            <Legend
+              base={layers.base}
+              fuelOverlay={layers.fuelOverlay}
+              thermal={layers.thermal}
+              ambientC={effective.temperature}
+            />
             {layers.activeFires && fireLayer && (
               <div className="fires-note" title={fireLayer.note}>
                 {fireLayer.loading ? (

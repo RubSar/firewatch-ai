@@ -30,6 +30,7 @@ npm run dev:web      # in-browser simulation, no server needed
 | **Layers** | real satellite or topographic tiles, or the fuel / elevation rasters; contours, arrival-time isochrones |
 | **Anywhere on earth** | search a place, or “use this view”; pick an 8–40 km area |
 | **Current fires** | NASA FIRMS satellite detections from the last 24 h — click one to ignite there |
+| **Thermal view** | the scene as an infrared camera sees it, on the same kelvin scale FIRMS reports |
 | **Bookmarks** | Khosrov Forest Reserve, Dilijan National Park, Kapan & Shikahogh |
 
 Space bar plays/pauses, `R` resets.
@@ -145,6 +146,36 @@ Server-side the data sources are formal provider ports (`ARCHITECTURE.md` §9) i
 `frontend/api/src/providers/`. Real today: Terrarium DEM, Esri imagery fuel,
 Open-Meteo weather. Mocked: canopy, barriers, burn history, wind field, perimeter
 observer, values-at-risk. Swapping any one is a line in `registry.ts`.
+
+### Thermal (infrared) view
+
+`Thermal (infrared) view` renders apparent temperature instead of the fire's own
+colours. It is not a filter over the flame graphics — those are switched off and
+the temperature field replaces them, because a thermal image is a measurement
+and blending it with stylised colours would make it decoration.
+
+Apparent temperature follows the saturating map in `ARCHITECTURE.md` §4:
+`T = T_ambient + 1050 K · tanh(I / I_ref)`, where `I` is Byram fireline
+intensity. Flame temperature is buffered by radiative loss and entrainment, so
+it saturates rather than climbing with intensity. Cells that are burning but
+past their flaming window run at a third of that, and burnt ground cools
+exponentially back toward ambient with a 30-minute time constant.
+
+Two things the visible view cannot show at all: **smouldering**, and **how long
+ago** ground burnt. In infrared a four-hour-old scar is simply cold, which is
+what a real IR frame looks like.
+
+The field is blurred once before colouring. That models the sensor's
+point-spread function — a real thermal camera never produces single-pixel
+speckle — and it is one pass only, because the flanks are barely a cell wide
+and a second pass erases them.
+
+With `Show current fires` on at the same time, FIRMS detections are coloured by
+their **measured** brightness temperature on the identical scale, so modelled
+and observed heat can be compared directly. That comparison is the validation
+idea in §6, where `maxTemp` is scored against radiometric IR rather than used
+as a driver. The legend says *modelled, not measured* because the raster is the
+model's opinion and only the markers are data.
 
 ### Why water needs the near-infrared
 
