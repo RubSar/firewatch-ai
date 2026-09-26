@@ -117,7 +117,7 @@ export async function buildServer(cfg: Config): Promise<FastifyInstance> {
     // An offline request gets the procedural chain regardless of server mode,
     // so tests are deterministic and need no network.
     const useReg = body.offline ? buildRegistry({ ...cfg, mode: 'offline' }) : reg
-    const incident = await Incident.create(scenario, useReg)
+    const incident = await Incident.create(scenario, useReg, cfg)
     const session: Session = {
       incident,
       sockets: new Set(),

@@ -9,7 +9,8 @@
     "start": "node src/index.ts",
     "typecheck": "tsc -b",
     "smoke": "node src/smoke.ts",
-    "watercheck": "node src/watercheck.ts"
+    "watercheck": "node src/watercheck.ts",
+    "barriercheck": "node src/barriercheck.ts"
   },
   "dependencies": {
     "@fastify/websocket": "^11.0.2",

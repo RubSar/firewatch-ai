@@ -67,6 +67,9 @@ export interface FireDetection {
   confidence: number
   satellite: string
   day: boolean
+  /** Nominal sensor footprint in metres — 375 for VIIRS, 1000 for MODIS. A
+   *  detection is a pixel that size, not the point it is drawn as. */
+  resolutionM: number
 }
 
 export interface FiresDto {

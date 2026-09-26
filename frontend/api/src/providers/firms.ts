@@ -12,9 +12,10 @@
  * The provenance note says so, because a dot on a map reads as certainty.
  */
 import https from 'node:https'
-import type { Provenance } from '@firewatch/contracts/providers'
+import type { GridSpec, PerimeterObserver, Provenance } from '@firewatch/contracts/providers'
 import type { FireDetection } from '@firewatch/contracts/wire'
 import { prov } from './provenance.ts'
+import { noObservations } from './tier1.ts'
 import type { Config } from '../config.ts'
 
 /**
@@ -144,6 +145,7 @@ function parseCsv(text: string, src: Source): FireDetection[] {
       confidence: normaliseConfidence(f[iConf] ?? '', src.confidenceKind),
       satellite: f[iSat] ?? src.id,
       day: (f[iDn] ?? '').trim().toUpperCase() === 'D',
+      resolutionM: src.resolutionM,
     })
   }
   return out
@@ -240,5 +242,83 @@ export async function activeFires(
         (ageMin !== null ? ` · file ${ageMin} min old` : '') +
         ' · thermal anomalies, not confirmed fires',
     }),
+  }
+}
+
+/**
+ * The same detections as the map layer, rasterised onto the incident grid —
+ * the real `PerimeterObserver` of §9, replacing `NoObservations`.
+ *
+ * Two things this is not. It is not a perimeter: VIIRS pixels are 375 m and
+ * MODIS 1 km, so each detection is painted as the square it actually is, and a
+ * 40 ha fire is one blob either way. And it is not continuous: two overpasses a
+ * day means the fire is unobserved for hours at a time. §6's assimilation loop
+ * needs better than this to do anything useful — what it buys today is that the
+ * port is wired, so a drone IR feed is one line in `registry.ts`.
+ *
+ * Zero detections is a *measured* result, not a missing one, and the note says
+ * so. Confusing the two is how a quiet day starts looking like a broken feed.
+ */
+const OBSERVER_DEADLINE_MS = 6000
+
+export function firmsPerimeter(cfg: Config): PerimeterObserver {
+  return {
+    id: 'firms-perimeter',
+    fallbacks: [noObservations],
+    async fetch(q: { grid: GridSpec; at: string }) {
+      const { cols, rows, bounds, cellSize } = q.grid
+
+      // The global CSV is ~6 MB on a cold cache and incident creation must not
+      // block on it. Losing the race falls back to no-observations while the
+      // download keeps going in the background, so the next incident has it.
+      const pending = activeFires(bounds, cfg)
+      pending.catch(() => undefined)
+      let timer: ReturnType<typeof setTimeout> | undefined
+      const got = await Promise.race([
+        pending,
+        new Promise<never>((_, reject) => {
+          timer = setTimeout(() => reject(new Error('FIRMS not cached yet')), OBSERVER_DEADLINE_MS)
+        }),
+      ]).finally(() => clearTimeout(timer))
+
+      const burning = new Uint8Array(cols * rows)
+      const maxTemp = new Float32Array(cols * rows)
+      let lit = 0
+      let footprint = 0
+
+      for (const d of got.detections) {
+        // A detection is a pixel, not a point: paint the square the sensor
+        // actually integrated over, or a 375 m anomaly lands on one 38 m cell.
+        const half = Math.max(0, Math.round(d.resolutionM / 2 / cellSize))
+        footprint = Math.max(footprint, d.resolutionM)
+        const cx = Math.floor(((d.lng - bounds.west) / (bounds.east - bounds.west)) * cols)
+        const cy = Math.floor(((bounds.north - d.lat) / (bounds.north - bounds.south)) * rows)
+        for (let r = cy - half; r <= cy + half; r++) {
+          for (let c = cx - half; c <= cx + half; c++) {
+            if (c < 0 || r < 0 || c >= cols || r >= rows) continue
+            const i = r * cols + c
+            if (!burning[i]) { burning[i] = 1; lit++ }
+            if (d.brightness > maxTemp[i]) maxTemp[i] = d.brightness
+          }
+        }
+      }
+
+      return {
+        // No detections means no radiometry either; null says "not observed"
+        // where an all-zero array would read as "observed to be 0 K".
+        data: { burning, maxTemp: lit ? maxTemp : null },
+        provenance: prov({
+          source: got.provenance.source,
+          kind: 'measured',
+          nativeResolution: footprint || got.provenance.nativeResolution,
+          observedAt: got.provenance.observedAt,
+          coverage: 1,
+          note: got.detections.length
+            ? `${got.detections.length} FIRMS detection(s) here in the last 24 h, painted as ` +
+              `${footprint} m pixels over ${lit} cells — thermal anomalies, not a mapped perimeter`
+            : 'No FIRMS detections here in the last 24 h — an observation of nothing, not a missing feed',
+        }),
+      }
+    },
   }
 }

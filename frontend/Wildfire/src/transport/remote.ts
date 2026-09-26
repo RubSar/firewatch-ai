@@ -222,11 +222,22 @@ export class RemoteTransport implements FireTransport {
   }
 }
 
-/** Header chip text: names what is real and what is mocked, never just "live". */
+/**
+ * Header chip text: names what is real and what is mocked, never just "live".
+ *
+ * Past a handful of real ports the names stop fitting in a header, so the chip
+ * falls back to counts and the ⓘ modal carries the list. The count is never
+ * dropped: "live" on its own is the thing this is designed to prevent.
+ */
+const MAX_NAMED = 4
+
 function summarise(inc: IncidentDto): string {
   const p = inc.provenance
   const real = Object.entries(p).filter(([, v]) => v.kind !== 'synthetic').map(([k]) => k)
   const mocked = Object.entries(p).filter(([, v]) => v.kind === 'synthetic').length
   if (!real.length) return `Server · all ${mocked} sources mocked`
+  if (real.length > MAX_NAMED) {
+    return `Server · ${real.length} of ${real.length + mocked} sources live · ${mocked} mocked`
+  }
   return `Server · live ${real.join(' + ')} · ${mocked} mocked`
 }
