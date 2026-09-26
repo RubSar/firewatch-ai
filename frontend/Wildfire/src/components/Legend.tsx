@@ -1,10 +1,55 @@
 import { FUELS, FUEL_LEGEND } from '@firewatch/sim/fuels'
 import type { BaseLayer } from '../render/paint.ts'
+import { THERMAL_CSS_GRADIENT } from '../render/thermal.ts'
 
 const rgb = (c: [number, number, number]) => `rgb(${c[0]},${c[1]},${c[2]})`
 
-export function Legend({ base, fuelOverlay }: { base: BaseLayer; fuelOverlay: boolean }) {
+export function Legend({
+  base,
+  fuelOverlay,
+  thermal,
+  ambientC,
+}: {
+  base: BaseLayer
+  fuelOverlay: boolean
+  thermal?: boolean
+  ambientC?: number
+}) {
   const showFuel = base === 'fuel' || fuelOverlay
+
+  // In infrared the fire colours mean nothing; a temperature scale does.
+  if (thermal) {
+    const lo = Math.round(ambientC ?? 20)
+    const hi = lo + 1050
+    const mid = Math.round(lo + (hi - lo) / 2)
+    return (
+      <div className="legend">
+        <h4>Apparent temperature</h4>
+        <div className="thermal-bar" style={{ background: `linear-gradient(90deg, ${THERMAL_CSS_GRADIENT})` }} />
+        <div className="thermal-ticks">
+          <span>{lo}&deg;C</span>
+          <span>{mid}&deg;C</span>
+          <span>{hi}&deg;C</span>
+        </div>
+        <div className="legend-row" style={{ marginTop: 6 }}>
+          <i style={{ background: 'rgb(122,24,104)' }} />
+          <span>smouldering &amp; cooling scar</span>
+        </div>
+        <div className="legend-row">
+          <i style={{ background: 'rgb(252,206,88)' }} />
+          <span>flaming front</span>
+        </div>
+        <div className="legend-row">
+          <i style={{ background: 'rgb(4,10,34)' }} />
+          <span>water &mdash; coldest</span>
+        </div>
+        <p className="legend-note">
+          Modelled, not measured. Scale matches the brightness temperature FIRMS reports.
+        </p>
+      </div>
+    )
+  }
+
   return (
     <div className="legend">
       {(showFuel || base === 'elevation') && <h4>{base === 'elevation' ? 'Elevation' : 'Fuel model'}</h4>}

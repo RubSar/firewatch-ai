@@ -368,3 +368,24 @@ input[type="range"]:disabled::-webkit-slider-thumb { background: var(--muted); c
   0%, 100% { opacity: 0.35; }
   50% { opacity: 1; }
 }
+
+/* --- thermal legend --------------------------------------------------- */
+.thermal-bar {
+  height: 10px;
+  border-radius: 3px;
+  border: 1px solid #2b3648;
+  margin: 2px 0 3px;
+}
+.thermal-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9.5px;
+  color: #8b98a9;
+  font-variant-numeric: tabular-nums;
+}
+.legend-note {
+  margin: 6px 0 0;
+  font-size: 9.5px;
+  line-height: 1.35;
+  color: #6f7d92;
+}

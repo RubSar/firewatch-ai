@@ -70,6 +70,13 @@ await page.mouse.up()
 await page.waitForTimeout(800)
 await shot('04-retardant')
 
+step('thermal (infrared) view')
+await page.getByLabel('Thermal (infrared) view').check()
+await page.waitForTimeout(900)
+console.log(`  scale: ${(await page.locator('.thermal-ticks').innerText()).replace(/\n/g, ' .. ')}`)
+await shot('04b-thermal')
+await page.getByLabel('Thermal (infrared) view').uncheck()
+
 step('arrival-time isochrones')
 await page.getByLabel('Arrival-time isochrones').check()
 await page.waitForTimeout(600)
