@@ -20,6 +20,7 @@
     "watercheck": "npm run watercheck --workspace=@firewatch/api",
     "scarcheck": "npm run scarcheck --workspace=@firewatch/api",
     "test": "npm run test --workspaces --if-present",
-    "bench": "npm run bench --workspace=@firewatch/sim"
+    "bench": "npm run bench --workspace=@firewatch/sim",
+    "hindcast": "npm run hindcast --workspace=@firewatch/api"
   }
 }

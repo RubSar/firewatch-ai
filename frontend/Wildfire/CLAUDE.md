@@ -85,6 +85,38 @@ mainly because it throws embers.
   the §4 energy kernel removes it. A test asserts realistic canopy does NOT crown actively,
   so that when the spread rate is fixed the test fails loudly and gets deleted.
 
+### Hindcast — the first real accuracy numbers
+
+`npm run hindcast` replays real fires against their mapped perimeters. Ground truth is
+the **WFIGS interagency perimeter** — an authoritative polygon for one named incident,
+with a discovery time — plus Open-Meteo's archive for the weather as it actually was.
+
+First results, on the three of four that passed self-validation:
+
+| fire | truth | modelled | Dice | area ratio |
+|---|---|---|---|---|
+| Cypress Creek | 2,723 ha | 4,274 ha | **0.388** | 1.57x |
+| 113 Incident | 2,062 ha | 4,771 ha | **0.398** | 2.31x |
+| County Rd 169 | 2,247 ha | 30,492 ha | 0.092 | 13.6x |
+
+**It over-predicts, consistently.** Partly expected — the replay models no suppression
+and every one of these fires was fought — but the 4.45x arrival-draw overshoot is now
+unmasked rather than cancelling against the old weak wind term.
+
+Three things that must stay:
+
+- **Ground truth is a perimeter, not dNBR.** An earlier version differenced two
+  Sentinel-2 scenes, but revisit and cloud force the pair tens of days apart, so the
+  "scar" was every fire in the region that season scored against a simulation of one.
+- **The rasterisation self-check.** The polygon's rasterised area must land within
+  0.8-1.25x of the acreage WFIGS reports, or the run is skipped. Two of the first four
+  disagreed by 100x, and a wrong rasterisation yields a Dice score that looks exactly
+  like a measurement.
+- **The caveats are not decoration.** Ignition is the perimeter centroid, which is
+  generous — a real forecast starts from a detection at the edge of a young fire. No
+  suppression is modelled. These numbers are not operational accuracy and must not be
+  quoted as such.
+
 ### Benchmark against Rothermel
 
 `npm run bench` compares this kernel against Rothermel (1972) — the model underneath
