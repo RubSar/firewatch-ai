@@ -1,6 +1,6 @@
 // Dev-only harness: compares real imagery against what the classifier makes of it.
-import { SCENARIOS, buildTerrain } from './sim/terrain.ts'
-import { FUELS } from './sim/fuels.ts'
+import { SCENARIOS, buildTerrain } from '@firewatch/sim/terrain'
+import { FUELS } from '@firewatch/sim/fuels'
 import { loadRealTerrain, debugImagery, debugBands } from './data/realData.ts'
 
 const out = document.getElementById('out')!

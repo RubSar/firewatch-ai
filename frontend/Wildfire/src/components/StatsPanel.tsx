@@ -1,5 +1,5 @@
-import type { Stats } from '../sim/model.ts'
-import { STRUCTURES_PER_HA } from '../sim/model.ts'
+import type { Stats } from '@firewatch/sim/model'
+import { STRUCTURES_PER_HA } from '@firewatch/sim/model'
 
 interface Props {
   stats: Stats

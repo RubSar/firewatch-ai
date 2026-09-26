@@ -1,5 +1,5 @@
-import { FUELS } from '../sim/fuels.ts'
-import { Cell, Treatment, type Sim } from '../sim/model.ts'
+import { flamingTime } from '@firewatch/sim/fuels'
+import { Cell, Treatment, type Sim } from '@firewatch/sim/model'
 import { contourPath, smoothField } from './contour.ts'
 
 export interface Band {
@@ -138,12 +138,6 @@ export function buildFireGeometry(
     retardant: treatmentPath(sim, Treatment.Retardant, 1.05),
   }
 }
-
-/**
- * How long a cell actually carries flame, seconds — a small fraction of its
- * total burnout time. Heavier fuels flame for longer.
- */
-const flamingTime = (fuel: number) => 60 + FUELS[fuel].load * 60
 
 /** Control lines as overlapping discs, which stay smooth at any zoom. */
 function treatmentPath(sim: Sim, kind: number, radius: number): Path2D | null {

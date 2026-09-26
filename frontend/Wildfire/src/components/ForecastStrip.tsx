@@ -1,5 +1,5 @@
-import type { ForecastHour } from '../sim/weather.ts'
-import { compassLabel } from '../sim/weather.ts'
+import type { ForecastHour } from '@firewatch/sim/weather'
+import { compassLabel } from '@firewatch/sim/weather'
 
 interface Props {
   forecast: ForecastHour[]

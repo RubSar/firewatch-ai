@@ -89,6 +89,35 @@ export function createSim(terrain: Terrain): Sim {
   }
 }
 
+/**
+ * Moves a running fire onto a sim built over a different terrain of the same
+ * size — used when real DEM/fuel arrives a second after the procedural grid and
+ * must not wipe what the user lit.
+ *
+ * Copies every mutable field. Leaving any out is a silent bug: omitting
+ * `fuelLeft` makes burnt cells burn again, omitting `intensity` blanks the
+ * flame bands until the next step recomputes them.
+ */
+export function transferSimState(from: Sim, to: Sim): boolean {
+  if (from.state.length !== to.state.length) return false
+  to.state.set(from.state)
+  to.fuelLeft.set(from.fuelLeft)
+  to.intensity.set(from.intensity)
+  to.ignitedAt.set(from.ignitedAt)
+  to.treatment.set(from.treatment)
+  to.active = [...from.active]
+  to.time = from.time
+  to.revision = from.revision + 1
+  to.burnedCells = from.burnedCells
+  to.peakRos = from.peakRos
+  to.peakIntensity = from.peakIntensity
+  to.wuiCells = from.wuiCells
+  to.spotFires = from.spotFires
+  to.history = from.history.map((h) => ({ ...h }))
+  recomputeStats(to)
+  return true
+}
+
 export function ignite(sim: Sim, col: number, row: number, radius = 1): number {
   const { cols, rows, fuel } = sim.terrain
   let lit = 0
