@@ -20,9 +20,11 @@
  * how a model ends up plausible and wrong at once.
  */
 import { FUELS, Fuel } from '../src/fuels.ts'
+import { windMultiplier } from '../src/model.ts'
 import { fuelMoisture } from '../src/weather.ts'
 import { MIDFLAME_WIND_FACTOR, rothermelSpread } from '../src/rothermel.ts'
-import { calm, equivalentRadius, flatTerrain, nominalRos, runFrom } from '../test/harness.ts'
+import { createSim, ignite, step } from '../src/model.ts'
+import { calm, equivalentRadius, flatTerrain, nominalRos, reach } from '../test/harness.ts'
 
 interface Case {
   fuel: number
@@ -42,8 +44,20 @@ for (const slopeDeg of [15, 30]) {
   CASES.push({ fuel: Fuel.Grass, windKmh: 0, slopeDeg, tempC: 25, rh: 25 })
 }
 
-const STEPS = 500
 const DT = 10
+/**
+ * Domain and duration are chosen so the head never reaches the boundary.
+ *
+ * `reach` saturates at the grid edge, and a saturated measurement looks like
+ * a plausible number rather than an error — an early run of this reported a
+ * suspiciously uniform 28.80 m/min across unrelated cases, which was the fire
+ * hitting the wall. The run stops once the head passes a fraction of the
+ * half-width, and the elapsed time at that point gives the rate.
+ */
+const COLS = 401
+const CELL = 30
+const STOP_FRACTION = 0.7
+const MAX_STEPS = 4000
 
 function measure(c: Case) {
   const f = FUELS[c.fuel]
@@ -64,25 +78,54 @@ function measure(c: Case) {
     slopeTan,
   })
 
-  // The kernel's own head-fire rate, in the same units.
+  // The kernel's own head-fire rate, in the same units. Calls the kernel's
+  // wind function rather than restating it — a benchmark that keeps its own
+  // copy of the formula stops measuring the thing it is benchmarking, which
+  // is exactly what happened on the first run of this after the wind fix.
   const nominal = nominalRos(c.fuel, params, fmc) * 60 *
-    (c.windKmh > 0 ? Math.min(40, Math.exp(0.115 * (c.windKmh / 3.6))) : 1) *
+    windMultiplier(c.fuel, c.windKmh / 3.6, 1) *
     (c.slopeDeg > 0 ? Math.min(8, Math.exp(0.0693 * c.slopeDeg)) : 1)
 
-  // Measured front advance. Slope runs are uphill-only, so equal-area radius
-  // understates the head; wind runs likewise. Reported anyway, flagged below.
-  const terrain = flatTerrain({ fuel: c.fuel, slope: slopeTan || undefined })
-  const sim = runFrom(terrain, params, { steps: STEPS, dt: DT, seed: 7 })
-  const emergent = (equivalentRadius(sim) / (STEPS * DT)) * 60
+  // Measured front advance.
+  //
+  // Equal-area radius is only meaningful for a round fire. Under wind or on
+  // slope the fire is elongated, and an equal-area radius averages the fast
+  // head with the crawling flanks and back — which understated the head badly
+  // enough to distort the first run of this benchmark. Measure the HEAD
+  // directly whenever there is a preferred direction.
+  const terrain = flatTerrain({ cols: COLS, rows: COLS, cellSize: CELL, fuel: c.fuel, slope: slopeTan || undefined })
+  const limit = ((COLS - 1) / 2) * CELL * STOP_FRACTION
+  const directed = c.windKmh > 0 || c.slopeDeg > 0
+  // Wind blows FROM the north in `calm()`, so the head runs south (+row);
+  // the harness slopes uphill toward the north (-row).
+  const dir: [number, number] = c.windKmh > 0 ? [0, 1] : [0, -1]
 
-  return { reference: reference.rosMMin, nominal, emergent, extinguished: reference.extinguished }
+  const sim = createSim(terrain, 7)
+  ignite(sim, ((COLS - 1) / 2) | 0, ((COLS - 1) / 2) | 0, 0)
+  let elapsed = 0
+  let front = 0
+  for (let i = 0; i < MAX_STEPS; i++) {
+    step(sim, { params, weather: params, dt: DT })
+    elapsed += DT
+    if (i % 10 !== 0) continue
+    front = directed ? reach(sim, dir[0], dir[1]) : equivalentRadius(sim)
+    if (front >= limit) break
+    if (sim.active.length === 0) break
+  }
+  const emergent = elapsed > 0 ? (front / elapsed) * 60 : 0
+  // Reaching the limit is the intended stop. Running out of steps without
+  // reaching it means the fire was still short of the measurement distance,
+  // so the rate may be understated — that is the case worth flagging.
+  const saturated = front < limit * 0.999
+
+  return { reference: reference.rosMMin, nominal, emergent, saturated, extinguished: reference.extinguished }
 }
 
 const name = (id: number) => FUELS[id].name.split(' ')[0]
 const ratio = (a: number, b: number) => (b > 1e-9 ? (a / b).toFixed(2) + 'x' : '--')
 
 console.log('Kernel vs Rothermel — head-fire rate of spread, m/min')
-console.log('(equal-area emergent rate understates the head when wind or slope is on)')
+console.log('(emergent = head reach / time when directed, equal-area radius when calm)')
 console.log()
 console.log('fuel        wind  slope  rothermel   nominal  emergent   nom/roth  emrg/nom')
 const gaps: number[] = []
@@ -97,7 +140,8 @@ for (const c of CASES) {
       m.nominal.toFixed(2).padStart(10) +
       m.emergent.toFixed(2).padStart(10) +
       ratio(m.nominal, m.reference).padStart(11) +
-      ratio(m.emergent, m.nominal).padStart(10)
+      ratio(m.emergent, m.nominal).padStart(10) +
+      (m.saturated ? '  (short run)' : '')
   )
 }
 const lo = Math.min(...gaps)

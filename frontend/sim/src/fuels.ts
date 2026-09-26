@@ -57,6 +57,39 @@ export const FUELS: FuelModel[] = [
 export const isBurnable = (f: number) => FUELS[f].load > 0
 
 /**
+ * Rothermel's wind coefficients, precomputed per fuel.
+ *
+ * The wind response is a property of the fuel bed — a sparse, fine bed is far
+ * more wind-sensitive than a compact one — so C, B and E depend on the
+ * surface-area-to-volume ratio and the packing ratio, not on the weather.
+ * They never change, so they are computed once here rather than per cell per
+ * step.
+ */
+export interface WindCoefficients {
+  c: number
+  b: number
+  /** Already raised to the power and inverted: (beta/betaOpt)^-E. */
+  packing: number
+}
+
+/** Oven-dry particle density, lb/ft³ — Rothermel's constant. */
+const PARTICLE_DENSITY_LB_FT3 = 32
+const KG_M2_TO_LB_FT2 = 0.204816
+const M_TO_FT = 3.28084
+
+export const WIND_COEFFICIENTS: WindCoefficients[] = FUELS.map((f) => {
+  if (f.load <= 0 || f.depth <= 0 || f.sav <= 0) return { c: 0, b: 0, packing: 0 }
+  const rhoB = (f.load * KG_M2_TO_LB_FT2) / (f.depth * M_TO_FT)
+  const beta = rhoB / PARTICLE_DENSITY_LB_FT3
+  const betaOpt = 3.348 * Math.pow(f.sav, -0.8189)
+  return {
+    c: 7.47 * Math.exp(-0.133 * Math.pow(f.sav, 0.55)),
+    b: 0.02526 * Math.pow(f.sav, 0.54),
+    packing: Math.pow(beta / betaOpt, -0.715 * Math.exp(-3.59e-4 * f.sav)),
+  }
+})
+
+/**
  * How long a cell actually carries flame, seconds — a small fraction of its
  * total burnout time. Heavier fuels flame for longer.
  *

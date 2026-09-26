@@ -101,11 +101,20 @@ is how a model stays plausible and wrong:
 | nominal / Rothermel | 0.96-1.14x (grass) | **0.03-0.06x** |
 | emergent / nominal | 4.45x | 1.8x |
 
-**The wind term is the larger error, and it under-predicts.** The kernel's
-`exp(0.115·U)` reaches 3.6x at 40 km/h where Rothermel reaches 65x. So the fire is far
-too fast in calm air and far too slow in wind — the arrival-draw overshoot partially
-masks the weak wind response, and fixing either alone makes the other worse. The
-dangerous case, wind-driven spread, is the one under-predicted.
+**The wind term was the larger error and has been fixed.** `exp(0.115·U)` reached 3.6x
+at 40 km/h where Rothermel reaches 65x, so wind-driven spread — the dangerous case — was
+badly under-predicted. `windMultiplier` now uses Rothermel's own `1 + phi_w` with
+per-fuel coefficients precomputed in `fuels.ts` from SAV and packing ratio.
+
+The result is that `nominal / rothermel` became **constant per fuel across every wind
+speed** (grass 1.14x at 0, 15 and 40 km/h, previously 1.14 / 0.20 / 0.06). That is the
+signature of a correct wind response: what remains is a per-fuel offset in the base-rate
+table, which is a separate and much simpler problem.
+
+Those offsets are NOT being "fixed" by matching Rothermel, because this kernel's `depth`,
+`sav` and `bulkDensity` were invented rather than measured — aligning to
+Rothermel-applied-to-guesses would be false precision. Real Anderson or Scott & Burgan
+bed parameters are the honest fix, and they need multi-size-class Rothermel first.
 
 Two limitations to keep in mind: the Rothermel implementation is single-fuel-particle,
 which is exact for this kernel's single-load FUELS but invalid against real multi-class
