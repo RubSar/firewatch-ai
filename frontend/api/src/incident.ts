@@ -9,8 +9,8 @@
  */
 import { randomUUID } from 'node:crypto'
 import {
-  EMPTY_STATS, buildTerrain, computeShade, createSim, flamingTime, forecastAt, getPreset,
-  ignite, mockForecast, paintTreatment, recomputeStats, step,
+  EMPTY_STATS, attachCanopy, buildTerrain, computeShade, createSim, flamingTime, forecastAt,
+  getPreset, ignite, mockForecast, paintTreatment, recomputeStats, step,
 } from '@firewatch/sim'
 import type { ForecastHour, Params, Scenario, Sim, Stats, Terrain, Weather } from '@firewatch/sim'
 import type {
@@ -43,6 +43,8 @@ export class Incident {
   blockFrac: Float32Array | null = null
   /** Real wind shape for this area; null falls back to the single vector. */
   windAnomaly: WindAnomaly | null = null
+  /** Kept so a reset can re-attach it to the new sim. */
+  canopyLayer: { load: Float32Array; cbh: Float32Array; cbd: Float32Array } | null = null
   private windField: { u: Float32Array; v: Float32Array } | null = null
   private moistureField: Float32Array | null = null
   /** Weather the fields were built for, so they rebuild only when it moves. */
@@ -146,6 +148,14 @@ export class Incident {
     inc.provenance.elevation = elev.provenance
     inc.provenance.fuel = fuel.provenance
     inc.provenance.canopy = canopy.provenance
+    // The canopy port was resolved for provenance alone until crown fire
+    // existed; now it feeds the kernel.
+    inc.canopyLayer = {
+      load: canopy.data.canopyLoad,
+      cbh: canopy.data.cbh,
+      cbd: canopy.data.cbd,
+    }
+    attachCanopy(inc.sim, inc.canopyLayer)
     inc.provenance.barriers = barriers.provenance
     // Length is checked rather than trusted: a provider that rasterised onto a
     // different grid would block edges belonging to other cells, which reads as
@@ -307,6 +317,8 @@ export class Incident {
         break
       case 'reset':
         this.sim = createSim(this.terrain)
+        // A fresh sim has no canopy; without this, crown fire works once.
+        if (this.canopyLayer) attachCanopy(this.sim, this.canopyLayer)
         this.playing = false
         this.carry = 0
         // The shadows are deliberately NOT cleared. They record what clients

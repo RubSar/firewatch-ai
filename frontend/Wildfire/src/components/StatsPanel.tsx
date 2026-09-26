@@ -71,6 +71,15 @@ export function StatsPanel({ stats, fmc, structuresCounted }: Props) {
         <span className="v">{fmt(stats.spotFires)}</span>
       </div>
       <div className="stat">
+        <span
+          className="k"
+          title="Cells where the fire left the surface and entered the canopy (Van Wagner). Crowning multiplies fireline intensity and throws embers much further."
+        >
+          Crown fire
+        </span>
+        <span className={`v${stats.crownCells > 0 ? ' alarm' : ''}`}>{fmt(stats.crownCells)}</span>
+      </div>
+      <div className="stat">
         <span className="k" title={structuresNote}>
           Structures lost*
         </span>

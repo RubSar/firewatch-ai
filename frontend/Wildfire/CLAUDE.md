@@ -66,6 +66,25 @@ FIREWATCH_MODE=offline npm run barriercheck   # geometry and kernel only, no Ove
 From inside `frontend/Wildfire/`: `npm run calibrate` renders `calibrate.html` to
 `shots/calibrate.png` with band percentiles (needs a dev server).
 
+### Crown fire
+
+Van Wagner's two criteria, in `sim/src/model.ts`: initiation
+`I_0 = [0.010·CBH·(460+25.9·M_f)]^1.5` and active crowning `R >= 3.0/CBD`. Both must hold
+for `Crown.Active`; initiation alone gives `Crown.Passive` (torching), which matters
+mainly because it throws embers.
+
+- **Canopy is attached, not constructed.** `attachCanopy(sim, layer)` is separate from
+  `createSim` so browser-only mode allocates nothing and behaves exactly as it did before
+  crown fire existed. A sim with no canopy can only burn on the surface — a test asserts it.
+- **Re-attach after `reset`.** A fresh sim has no canopy; without the re-attach, crowning
+  works exactly once per incident.
+- **Active crowning is under-triggered on purpose.** Van Wagner's `R` is the real spread
+  rate, and the kernel's nominal ROS sits ~4.45x below its emergent rate (1.9-6.9 m/min
+  against 9-31, versus `R_0` = 15 for a realistic CBD of 0.2). Feeding emergent would fire
+  at plausible winds by multiplying in a defect's magnitude, and would break silently when
+  the §4 energy kernel removes it. A test asserts realistic canopy does NOT crown actively,
+  so that when the spread rate is fixed the test fails loudly and gets deleted.
+
 ### Kernel tests
 
 `frontend/sim/test/` holds the physics checks ARCHITECTURE.md's Verification section

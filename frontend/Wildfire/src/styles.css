@@ -520,3 +520,5 @@ input[type="range"]:disabled::-webkit-slider-thumb { background: var(--muted); c
 .kind.measured { color: #7fd4a0; border-color: #2b5740; background: rgba(74, 222, 128, .09); }
 .kind.derived { color: #e8c473; border-color: #5c4a22; background: rgba(255, 210, 77, .09); }
 .kind.synthetic { color: #93a1b5; border-color: #38455a; background: rgba(147, 161, 181, .08); }
+/* Crowning is a step change in fire behaviour, not just a bigger number. */
+.stat .v.alarm { color: #ffb454; }
