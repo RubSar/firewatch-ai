@@ -11,7 +11,8 @@
     "smoke": "node src/smoke.ts",
     "watercheck": "node src/watercheck.ts",
     "barriercheck": "node src/barriercheck.ts",
-    "scarcheck": "node src/scarcheck.ts"
+    "scarcheck": "node src/scarcheck.ts",
+    "hindcast": "node src/hindcast.ts"
   },
   "dependencies": {
     "@fastify/websocket": "^11.0.2",
