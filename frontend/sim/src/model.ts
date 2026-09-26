@@ -31,10 +31,31 @@ export interface Stats {
   /** Structures destroyed, estimated at STRUCTURES_PER_HA on burnt WUI ground. */
   structuresLost: number
   spotFires: number
+  /** Cells that have crowned — the fire left the surface and entered the canopy. */
+  crownCells: number
 }
 
 /** Assumed dwelling density on developed cells — stated, not measured. */
 export const STRUCTURES_PER_HA = 3
+
+/**
+ * The canopy, as the kernel needs it.
+ *
+ * Structural rather than imported from contracts: the sim package stays free
+ * of anything above it, which is what lets the identical kernel run in a
+ * browser with no server.
+ */
+export interface CanopyLayer {
+  /** Available canopy fuel load, kg/m². */
+  load: Float32Array
+  /** Canopy base height, m — the gap a surface flame must bridge. */
+  cbh: Float32Array
+  /** Canopy bulk density, kg/m³ — decides whether crowning can sustain itself. */
+  cbd: Float32Array
+}
+
+export const Crown = { None: 0, Passive: 1, Active: 2 } as const
+export type Crown = (typeof Crown)[keyof typeof Crown]
 
 export interface Sim {
   terrain: Terrain
@@ -45,6 +66,12 @@ export interface Sim {
   /** Sim seconds at which each cell ignited, -1 if never. */
   ignitedAt: Float32Array
   treatment: Uint8Array
+  /** Null until attachCanopy; browser-only runs never allocate it. */
+  canopy: CanopyLayer | null
+  /** Remaining canopy fuel, kg/m². */
+  canopyLeft: Float32Array | null
+  /** Per cell: Crown.None | Passive | Active. */
+  crown: Uint8Array | null
   active: number[]
   time: number
   /** Bumped whenever the grid changes outside of a step, so the renderer can
@@ -56,6 +83,8 @@ export interface Sim {
   peakIntensity: number
   wuiCells: number
   spotFires: number
+  /** Cells that have crowned, passive or active. */
+  crownCells: number
   stats: Stats
   history: { t: number; area: number; perimeter: number }[]
   rng: () => number
@@ -64,6 +93,7 @@ export interface Sim {
 export const EMPTY_STATS: Stats = {
   burnedCells: 0, activeCells: 0, area: 0, perimeter: 0, containment: 0,
   maxRos: 0, maxIntensity: 0, flameLength: 0, wuiCells: 0, structuresLost: 0, spotFires: 0,
+  crownCells: 0,
 }
 
 /**
@@ -85,6 +115,9 @@ export function createSim(terrain: Terrain, seed = 0xf13e5): Sim {
     intensity: new Float32Array(n),
     ignitedAt: new Float32Array(n).fill(-1),
     treatment: new Uint8Array(n),
+    canopy: null,
+    canopyLeft: null,
+    crown: null,
     active: [],
     time: 0,
     revision: 0,
@@ -93,6 +126,7 @@ export function createSim(terrain: Terrain, seed = 0xf13e5): Sim {
     peakIntensity: 0,
     wuiCells: 0,
     spotFires: 0,
+    crownCells: 0,
     stats: { ...EMPTY_STATS },
     history: [],
     rng: makeRng(seed),
@@ -125,6 +159,22 @@ export function transferSimState(from: Sim, to: Sim): boolean {
   to.spotFires = from.spotFires
   to.history = from.history.map((h) => ({ ...h }))
   recomputeStats(to)
+  return true
+}
+
+/**
+ * Gives a sim a canopy to burn.
+ *
+ * Separate from `createSim` so the browser-only path, which has no canopy
+ * provider, allocates nothing and behaves exactly as it did before crown fire
+ * existed. A sim with no canopy attached can only ever burn on the surface.
+ */
+export function attachCanopy(sim: Sim, canopy: CanopyLayer): boolean {
+  const n = sim.state.length
+  if (canopy.load.length !== n || canopy.cbh.length !== n || canopy.cbd.length !== n) return false
+  sim.canopy = canopy
+  sim.canopyLeft = Float32Array.from(canopy.load)
+  sim.crown = new Uint8Array(n)
   return true
 }
 
@@ -170,6 +220,69 @@ export function paintTreatment(sim: Sim, col: number, row: number, radius: numbe
   if (knocked) sim.active = sim.active.filter((i) => sim.state[i] === Cell.Burning)
   sim.revision++
 }
+
+/**
+ * Foliar moisture content, %.
+ *
+ * A constant because nothing in the model tracks it: live crown foliage dries
+ * on a seasonal cycle driven by plant physiology, not by the days-since-rain
+ * the surface fuels use. 100% is mid-range for conifer in fire season. It
+ * enters Van Wagner's initiation threshold, so it matters — and it is the
+ * assumption to replace first if crown behaviour ever needs defending.
+ */
+const FOLIAR_MOISTURE = 100
+
+/**
+ * Critical mass flow rate for sustained crowning, kg·m⁻²·min⁻¹ (Van Wagner).
+ * Divided by canopy bulk density it gives the spread rate below which a crown
+ * fire cannot feed itself and drops back to torching.
+ */
+const CRITICAL_MASS_FLOW = 3.0
+
+/**
+ * Van Wagner's critical surface intensity for crown combustion, kW/m.
+ *
+ *   I_0 = [0.010 · CBH · (460 + 25.9·M_f)]^1.5
+ *
+ * The bracket is the heat needed to ignite crown foliage across the gap: a
+ * high canopy base takes more, damp foliage takes more. A 5 m base at 100%
+ * foliar moisture gives ~1880 kW/m, which is the right order — a creeping
+ * grass fire is tens, a running timber fire tens of thousands.
+ */
+export function crownInitiationIntensity(cbh: number, foliarMoisture = FOLIAR_MOISTURE): number {
+  if (cbh <= 0) return Infinity
+  return Math.pow(0.010 * cbh * (460 + 25.9 * foliarMoisture), 1.5)
+}
+
+/**
+ * Spread rate, m/min, above which crowning sustains itself rather than merely
+ * torching. Sparse canopy needs the fire to move faster to keep the crown
+ * alight, which is why `cbd` is in the denominator.
+ */
+export function activeCrownThreshold(cbd: number): number {
+  return cbd > 0 ? CRITICAL_MASS_FLOW / cbd : Infinity
+}
+
+/*
+ * ACTIVE CROWNING IS CURRENTLY UNDER-TRIGGERED, and deliberately so.
+ *
+ * Van Wagner's `R` is the fire's actual spread rate. The kernel has two
+ * candidates and they disagree by the factor this model has not yet fixed:
+ *
+ *   nominal  (what a cell computes)   1.9 - 6.9 m/min at 40-80 km/h in timber
+ *   emergent (what the front does)      9 -  31 m/min, the same run
+ *   R_0 for a realistic CBD of 0.2                  15 m/min
+ *
+ * So feeding nominal means realistic canopy rarely crowns actively, while
+ * feeding emergent would fire at plausible winds — by multiplying in a bug's
+ * magnitude. The second is worse: it couples a published physics threshold to
+ * the size of a defect, and would silently break when the §4 energy kernel
+ * removes that defect.
+ *
+ * Nominal it is. Passive crowning (torching) is unaffected and does most of
+ * the visible work anyway through spotting. This resolves itself when emergent
+ * and nominal converge — the `todo` in kernel.test.ts is the same defect.
+ */
 
 /**
  * WHY THE SPREAD RATE IS NOT CALIBRATED — read before trying.
@@ -261,7 +374,7 @@ function moistureDamping(f: FuelModel, fmc: number): number {
 }
 
 export function step(sim: Sim, input: StepInput) {
-  const { terrain, state, fuelLeft, intensity, treatment, rng } = sim
+  const { terrain, state, fuelLeft, intensity, treatment, rng, canopy, canopyLeft, crown } = sim
   const { cols, rows, cellSize, elevation, fuel } = terrain
   const { weather, params, dt, blockFrac, windField, moisture } = input
 
@@ -372,16 +485,46 @@ export function step(sim: Sim, input: StepInput) {
     }
 
     // Byram: I = H * w * ROS.
-    const byram = HEAT_YIELD * fm.load * cellMaxRos
+    let byram = HEAT_YIELD * fm.load * cellMaxRos
+
+    // --- crown fire (Van Wagner) ---
+    // A surface fire enters the canopy when it is intense enough to bridge the
+    // gap to the crown base, and SUSTAINS there only if it is also moving fast
+    // enough to keep the crown alight. Two criteria, not one: the first alone
+    // gives torching, which mostly matters because it throws embers.
+    let crowning: Crown = Crown.None
+    if (canopy && canopyLeft && crown && canopyLeft[i] > 0) {
+      const i0 = crownInitiationIntensity(canopy.cbh[i])
+      if (byram >= i0) {
+        crowning = cellMaxRos * 60 >= activeCrownThreshold(canopy.cbd[i]) ? Crown.Active : Crown.Passive
+        if (crown[i] === Crown.None) sim.crownCells++
+        if (crowning > crown[i]) crown[i] = crowning
+
+        // Canopy load joins the heat release. Torching consumes a fraction of
+        // the crown; an active crown fire takes essentially all of it.
+        const share = crowning === Crown.Active ? 1 : 0.3
+        byram = HEAT_YIELD * (fm.load + canopyLeft[i] * share) * cellMaxRos
+
+        // Crown fuel is fine and burns out fast — a minute in an active crown
+        // run, longer when it is only torching.
+        const residence = crowning === Crown.Active ? 60 : 180
+        canopyLeft[i] = Math.max(0, canopyLeft[i] - (canopy.load[i] / residence) * dt)
+      }
+    }
+
     intensity[i] = byram
     if (cellMaxRos > maxRos) maxRos = cellMaxRos
     if (byram > maxIntensity) maxIntensity = byram
 
     // --- spotting: embers lofted from high-intensity fuel ---
+    // Crowning is the main long-range ember source: burning foliage is lofted
+    // from the top of the canopy rather than from ground level, so it both
+    // starts higher and travels further.
+    const spotBoost = crowning === Crown.Active ? 3 : crowning === Crown.Passive ? 2 : 1
     if (params.spotting > 0 && cellWindMs > 3 && byram > 1500) {
-      const pSpot = fm.spotting * params.spotting * (cellWindMs / 60) * (dt / 60) * 0.06
+      const pSpot = fm.spotting * spotBoost * params.spotting * (cellWindMs / 60) * (dt / 60) * 0.06
       if (rng() < pSpot) {
-        const maxCells = (cellWindMs * 90) / cellSize
+        const maxCells = (cellWindMs * 90 * (crowning === Crown.Active ? 1.8 : 1)) / cellSize
         const range = 2 + rng() * maxCells
         const jitter = ((rng() - 0.5) * 34 * Math.PI) / 180
         const th = ((cellWindToBearing * Math.PI) / 180) + jitter
@@ -486,6 +629,7 @@ export function recomputeStats(sim: Sim, structures?: Float32Array) {
       ? Math.round(structuresLost)
       : Math.round(((sim.wuiCells * cellArea) / 10000) * STRUCTURES_PER_HA),
     spotFires: sim.spotFires,
+    crownCells: sim.crownCells,
   }
 
   const last = sim.history[sim.history.length - 1]

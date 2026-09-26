@@ -9,7 +9,8 @@ import type { ForecastHour, Params, Stats } from '@firewatch/sim'
 import type { Provenance } from './providers.ts'
 
 // 2: state frames carry per-cell flame intensity for the hot bands.
-export const PROTOCOL_VERSION = 2
+// 3: stats carry crownCells.
+export const PROTOCOL_VERSION = 3
 
 // --- REST ---------------------------------------------------------------
 
