@@ -1,0 +1,461 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:firewatch:grid.updated:v1",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "event_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "event_type": {
+      "const": "grid.updated"
+    },
+    "tenant_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "mission_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "session_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "analysis_run_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "region_epoch": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "owner_epoch": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "occurred_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "received_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "produced_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source_sequence": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "trace_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "causation_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "grid_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "grid_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "tile_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "base_revision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "coordinate_system": {
+          "enum": [
+            "image_pixels",
+            "projected_ground"
+          ]
+        },
+        "crs": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "geolocation_status": {
+          "enum": [
+            "valid",
+            "unavailable",
+            "uncertain"
+          ]
+        },
+        "geometry_ref": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "object_key": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4096
+                },
+                "object_version": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4096
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "byte_length": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "content_type": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4096
+                },
+                "encoding": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4096
+                }
+              },
+              "required": [
+                "object_key",
+                "object_version",
+                "sha256",
+                "byte_length",
+                "content_type",
+                "encoding"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "cells": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "cell_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 4096
+              },
+              "observed_at": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time"
+              },
+              "temperature_c": {
+                "type": "object",
+                "properties": {
+                  "min": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "mean": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "p95": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "max": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "accuracy_c": {
+                    "type": [
+                      "number",
+                      "null"
+                    ],
+                    "minimum": 0
+                  },
+                  "valid_fraction": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "saturated": {
+                    "type": "boolean"
+                  },
+                  "calibration_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "minLength": 1,
+                    "maxLength": 4096
+                  },
+                  "status": {
+                    "enum": [
+                      "source_values",
+                      "calibrated",
+                      "unavailable",
+                      "saturated"
+                    ]
+                  }
+                },
+                "required": [
+                  "min",
+                  "mean",
+                  "p95",
+                  "max",
+                  "accuracy_c",
+                  "valid_fraction",
+                  "saturated",
+                  "calibration_id",
+                  "status"
+                ],
+                "additionalProperties": false
+              },
+              "material_fractions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 4096
+                    },
+                    "fraction": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    },
+                    "model_score": {
+                      "type": [
+                        "number",
+                        "null"
+                      ],
+                      "minimum": 0,
+                      "maximum": 1
+                    },
+                    "score_semantics": {
+                      "enum": [
+                        "raw_score",
+                        "calibrated_probability",
+                        "not_available"
+                      ]
+                    },
+                    "model_deployment_id": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "minLength": 1,
+                      "maxLength": 4096
+                    }
+                  },
+                  "required": [
+                    "label",
+                    "fraction",
+                    "model_score",
+                    "score_semantics",
+                    "model_deployment_id"
+                  ],
+                  "additionalProperties": false
+                },
+                "maxItems": 64
+              },
+              "tree_species": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "maxLength": 4096
+              },
+              "coverage_fraction": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "stale": {
+                "type": "boolean"
+              },
+              "evidence_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4096
+                },
+                "maxItems": 256
+              }
+            },
+            "required": [
+              "cell_id",
+              "observed_at",
+              "temperature_c",
+              "material_fractions",
+              "tree_species",
+              "coverage_fraction",
+              "stale",
+              "evidence_ids"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 256
+        },
+        "cells_ref": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "object_key": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4096
+                },
+                "object_version": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4096
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "byte_length": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "content_type": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4096
+                },
+                "encoding": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4096
+                }
+              },
+              "required": [
+                "object_key",
+                "object_version",
+                "sha256",
+                "byte_length",
+                "content_type",
+                "encoding"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "weather_snapshot_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "projection_version": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 4096
+        }
+      },
+      "required": [
+        "grid_id",
+        "grid_version",
+        "tile_id",
+        "revision",
+        "base_revision",
+        "coordinate_system",
+        "crs",
+        "geolocation_status",
+        "geometry_ref",
+        "cells",
+        "cells_ref",
+        "weather_snapshot_id",
+        "projection_version"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schema_version",
+    "event_id",
+    "event_type",
+    "tenant_id",
+    "mission_id",
+    "session_id",
+    "analysis_run_id",
+    "region_epoch",
+    "owner_epoch",
+    "occurred_at",
+    "received_at",
+    "produced_at",
+    "source_sequence",
+    "trace_id",
+    "causation_id",
+    "payload"
+  ],
+  "additionalProperties": false
+}

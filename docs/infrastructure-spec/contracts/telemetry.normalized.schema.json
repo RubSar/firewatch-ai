@@ -1,0 +1,226 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:firewatch:telemetry.normalized:v1",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "event_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "event_type": {
+      "const": "telemetry.normalized"
+    },
+    "tenant_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "mission_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "session_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "analysis_run_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "region_epoch": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "owner_epoch": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "occurred_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "received_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "produced_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source_sequence": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "trace_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "causation_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "sensor_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "measurement_kind": {
+          "enum": [
+            "pose",
+            "wind",
+            "air_temperature",
+            "humidity"
+          ]
+        },
+        "measurement_basis": {
+          "enum": [
+            "measured",
+            "estimated"
+          ]
+        },
+        "coordinate_frame": {
+          "enum": [
+            "NED",
+            "ENU",
+            "BODY",
+            "not_applicable"
+          ]
+        },
+        "source_clock": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "enum": [
+                "utc",
+                "device_boot",
+                "gateway_estimated"
+              ]
+            },
+            "raw_ticks": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "ticks_per_second": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "mapping_id": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1,
+              "maxLength": 4096
+            },
+            "uncertainty_ms": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "minimum": 0
+            }
+          },
+          "required": [
+            "domain",
+            "raw_ticks",
+            "ticks_per_second",
+            "mapping_id",
+            "uncertainty_ms"
+          ],
+          "additionalProperties": false
+        },
+        "value": {
+          "type": "array",
+          "items": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "maxItems": 16
+        },
+        "unit": {
+          "enum": [
+            "m/s",
+            "degC",
+            "percent",
+            "pose_v1"
+          ]
+        },
+        "quality": {
+          "enum": [
+            "valid",
+            "invalid",
+            "unknown"
+          ]
+        },
+        "location_ref": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "height_reference": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 4096
+        }
+      },
+      "required": [
+        "sensor_id",
+        "measurement_kind",
+        "measurement_basis",
+        "coordinate_frame",
+        "source_clock",
+        "value",
+        "unit",
+        "quality",
+        "location_ref",
+        "height_reference"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schema_version",
+    "event_id",
+    "event_type",
+    "tenant_id",
+    "mission_id",
+    "session_id",
+    "analysis_run_id",
+    "region_epoch",
+    "owner_epoch",
+    "occurred_at",
+    "received_at",
+    "produced_at",
+    "source_sequence",
+    "trace_id",
+    "causation_id",
+    "payload"
+  ],
+  "additionalProperties": false
+}

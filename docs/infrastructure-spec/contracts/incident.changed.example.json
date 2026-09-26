@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "event_id": "example-incident.changed-001",
+  "event_type": "incident.changed",
+  "tenant_id": "tenant-01",
+  "mission_id": "mission-001",
+  "session_id": null,
+  "analysis_run_id": "live-run-001",
+  "region_epoch": 1,
+  "owner_epoch": 1,
+  "occurred_at": "2026-09-26T12:00:00.000Z",
+  "received_at": "2026-09-26T12:00:00.100Z",
+  "produced_at": "2026-09-26T12:00:00.200Z",
+  "source_sequence": null,
+  "trace_id": "example-trace-001",
+  "causation_id": null,
+  "payload": {
+    "incident_id": "incident-example-001",
+    "revision": 1,
+    "state": "CANDIDATE",
+    "first_seen_at": "2026-09-26T12:00:00.000Z",
+    "last_seen_at": "2026-09-26T12:00:00.000Z",
+    "severity": "unclassified",
+    "rationale": "Illustrative candidate; not a live detection.",
+    "evidence_ids": [
+      "thermal-1842"
+    ],
+    "evidence_status": "pending",
+    "observed_boundary_ref": null,
+    "rule_version": "example-rule-01",
+    "supersedes_event_id": null,
+    "review": null
+  }
+}

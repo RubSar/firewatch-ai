@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "event_id": "example-frame.ready-001",
+  "event_type": "frame.ready",
+  "tenant_id": "tenant-01",
+  "mission_id": "mission-001",
+  "session_id": "session-001",
+  "analysis_run_id": "live-run-001",
+  "region_epoch": 1,
+  "owner_epoch": 1,
+  "occurred_at": "2026-09-26T12:00:00.000Z",
+  "received_at": "2026-09-26T12:00:00.100Z",
+  "produced_at": "2026-09-26T12:00:00.200Z",
+  "source_sequence": 1842,
+  "trace_id": "example-trace-001",
+  "causation_id": null,
+  "payload": {
+    "frame_id": "rgb-1842",
+    "sensor_id": "rgb-01",
+    "capture_clock_status": "synchronized",
+    "clock_uncertainty_ms": 10,
+    "width": 1920,
+    "height": 1080,
+    "source_ref": {
+      "object_key": "tenant-01/mission-001/session-001/example-chunk.bin",
+      "object_version": "example-version-1",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "byte_length": 1048576,
+      "content_type": "application/octet-stream",
+      "encoding": "h264"
+    },
+    "decode_dependencies": [],
+    "source_frame_index": 0,
+    "codec": "h264",
+    "calibration_id": "calibration-01",
+    "paired_thermal_frame_id": null,
+    "pairing_skew_ms": null,
+    "pose_snapshot_id": null,
+    "analysis_profile": "strict-fire-30fps-vegetation-1fps",
+    "deadline_at": "2026-09-26T12:00:02.000Z"
+  }
+}
