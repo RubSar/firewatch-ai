@@ -141,10 +141,17 @@ Three conclusions, each of which overturned a guess:
   but Dice moved only 0.524 to 0.529 and the other two fires were flat. The fuel map is
   now right because being right is the point, not because it closed the gap.
 
-So none of the obvious candidates — rate, duration, reachability, fuel classification —
-is the dominant error on its own. What remains untested: **suppression**, which the
-replay models none of while all three fires were fought, and **barriers**, because the
-hindcast replay passes no `blockFrac` at all. Test those before building anything large.
+**Barriers are now wired into the replay and change almost nothing** — 30,000-46,000
+blocked edges move Dice by under 0.003 on all three fires. That is a consequence of the
+sub-cell design: `blockFrac` peaks around 0.6 because a 4-10 m road inside a 30-50 m
+cell obstructs part of an edge rather than severing it, so the flux is reduced and the
+stochastic draw still gets through. Correct per §5, and it means roads do not act as
+firebreaks at this resolution.
+
+So five candidates have now been tested and none is the dominant error: rate, duration,
+reachability, fuel classification, barriers. The one left untested is **suppression**,
+which the replay models none of while all three fires were actively fought — Cypress
+Creek took thirteen days to contain. Test that before building anything large.
 
 ### Benchmark against Rothermel
 

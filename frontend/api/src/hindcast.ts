@@ -268,9 +268,16 @@ async function run(p: Perimeter, cfg: Config) {
   console.log(`  grid ${cols}x${rows} @ ${cellSize.toFixed(0)}m · perimeter covers ` +
     `${truthCells.toLocaleString()} cells (${rasterHa.toFixed(0)} ha vs ${reportedHa.toFixed(0)} reported)`)
   if (truthCells < 50 || agreement < 0.8 || agreement > 1.25) {
+    // Usually the SOURCE disagrees with itself rather than the rasterisation
+    // being wrong: WFIGS carries four separate records named "Wildhorse", and
+    // the one matching the size filter claims 6,949 acres with a polygon
+    // spanning about a kilometre. Either the acreage or the geometry is wrong
+    // and there is no way to tell which, so the record is unusable.
+    const polySpanKm = p.spanKm / PAD
     return console.log(
-      `  SKIPPED — rasterised area is ${agreement.toFixed(2)}x the reported acreage, ` +
-      'so the polygon is not sitting on this grid correctly'
+      `  SKIPPED — polygon rasterises to ${rasterHa.toFixed(0)} ha but the record claims ` +
+      `${reportedHa.toFixed(0)} ha (${agreement.toFixed(2)}x), across a ${polySpanKm.toFixed(1)} km extent. ` +
+      'Source record is self-inconsistent.'
     )
   }
 
@@ -298,6 +305,31 @@ async function run(p: Perimeter, cfg: Config) {
   const reg = buildRegistry(cfg)
   const dem = await resolve(reg.elevation, { grid, scenario: sc })
   const fuel = await resolve(reg.fuel, { grid, scenario: sc })
+  // Roads and streams. The replay ran without them for its whole life, which
+  // made "barriers do nothing" untestable rather than false.
+  // Never swallow this silently. It reported "none active" for three fires
+  // while the provider was returning 70,832 blocking edges when called
+  // directly — a bare catch turned a failure into a finding.
+  const barriers = await resolve(reg.barriers, { grid, scenario: sc }).catch((err) => {
+    console.log(`  barriers: FAILED — ${(err as Error).message}`)
+    return null
+  })
+  const edges = cols * rows * 8
+  const blockFrac =
+    barriers && barriers.data.blockFrac.length === edges &&
+    barriers.data.blockFrac.some((v) => v > 0)
+      ? barriers.data.blockFrac
+      : null
+  if (barriers && !blockFrac) {
+    console.log(
+      `  barriers: resolved but unusable — ${barriers.data.blockFrac.length} edges ` +
+      `(expected ${edges}), any non-zero: ${barriers.data.blockFrac.some((v) => v > 0)}`
+    )
+  } else if (blockFrac) {
+    let nz = 0
+    for (const v of blockFrac) if (v > 0) nz++
+    console.log(`  barriers: ${nz.toLocaleString()} blocked edges — ${barriers!.provenance.note.slice(0, 58)}`)
+  }
   const terrain = {
     ...base, elevation: dem.data.elevation, fuel: fuel.data.fuelId,
     minElev: dem.data.minElev, maxElev: dem.data.maxElev, source: 'live' as const,
@@ -333,7 +365,9 @@ async function run(p: Perimeter, cfg: Config) {
   ignite(sim, ic, ir, 1)
   const DT = 10
   for (const hour of weather) {
-    for (let s = 0; s < 3600 / DT; s++) step(sim, { params: hour, weather: hour, dt: DT })
+    for (let s = 0; s < 3600 / DT; s++) {
+      step(sim, { params: hour, weather: hour, dt: DT, ...(blockFrac ? { blockFrac } : {}) })
+    }
   }
   recomputeStats(sim)
 
