@@ -13,7 +13,8 @@
     "./classify": "./src/classify.ts",
     "./noise": "./src/noise.ts",
     "./geo": "./src/geo.ts",
-    "./shape": "./src/shape.ts"
+    "./shape": "./src/shape.ts",
+    "./heap": "./src/heap.ts"
   },
   "scripts": {
     "test": "node --test test/*.test.ts",

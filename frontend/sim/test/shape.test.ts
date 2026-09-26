@@ -200,7 +200,7 @@ test('calm air is a circle, and eccentricity is capped in extreme wind', () => {
  * Both are what MTT fixes, by computing minimum arrival time over the network
  * with the elliptical template instead of drawing per-link Bernoulli arrivals.
  */
-test('emergent L/B reaches Anderson (1983)', { todo: true }, () => {
+test('emergent L/B reaches Anderson (1983)', () => {
   for (const kmh of [15, 25]) {
     const got = burnShape(kmh, [1, 2]).lb
     const want = Math.min(8, andersonLB(((kmh / 3.6) * 3.6 * 0.4)))

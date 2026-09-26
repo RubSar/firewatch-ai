@@ -96,16 +96,24 @@ the only number that says the physics is worth anything. All at 0% suppression:
 
 | fire | strategy | window | area ratio | Dice | circle | gap | model L/B (truth) |
 |---|---|---|---|---|---|---|---|
-| Anderson Bridge | **100% monitored** | 191 h | 0.34x | **0.502** | 0.120 | **+0.382** | 3.68@143 (2.17@140) |
-| Pineland Rd | 100% suppressed | 100 h | 0.12x | 0.209 | 0.208 | +0.002 | 1.75 (2.42) |
-| Hwy 82 | 100% suppressed | 239 h | 0.05x | 0.099 | 0.098 | +0.001 | 1.24 (2.45) |
-| Ballard | 100% suppressed | 41 h | 6.39x | 0.258 | 0.286 | -0.028 | 1.11 (2.56) |
-| 113 Incident | 100% suppressed | 22 h | 1.58x | 0.379 | 0.759 | -0.380 | 1.27 (1.32) |
+| Anderson Bridge | **100% monitored** | 191 h | 4.67x | 0.351 | 0.318 | **+0.032** | 1.32 (2.17) |
+| Pineland Rd | 100% suppressed | 100 h | **1.07x** | 0.493 | 0.685 | -0.191 | 1.31 (2.42) |
+| Hwy 82 | 100% suppressed | 239 h | **0.84x** | **0.642** | 0.688 | -0.046 | 1.20 (2.45) |
+| Ballard | 100% suppressed | 41 h | 3.70x | 0.376 | 0.418 | -0.043 | 1.38 (2.56) |
+| 113 Incident | 100% suppressed | 22 h | **1.13x** | 0.305 | 0.853 | -0.549 | 1.45 (1.32) |
 
-**It does not over-predict consistently — that was an artifact of three fires and a
-wrong replay window.** The ratio spans 0.05x to 6.39x. Treat the error as dispersion,
-not bias. Since the elliptical rewrite four of five under-predict and one (Ballard)
-still floods everything reachable, so there remain at least two distinct defects.
+**Area is now roughly calibrated and shape is the whole remaining error.** Three of
+five land within 16% of the true area, and mean Dice went 0.289 -> 0.433 when MTT landed.
+It does not over-predict consistently; the spread is dispersion, not bias.
+
+**But the model still does not beat a circle on a fought fire, and the reason has
+changed.** An equal-area disc gets much stronger as the model's area gets closer to
+truth — Hwy 82's null went 0.098 to 0.688 on the same fire — so closing the area error
+raised the bar rather than clearing it. The honest reading is that area is largely
+solved and shape is not: modelled L/B sits at 1.20-1.45 against real perimeters of
+2.2-2.6, because these fires grow until they fill their fuel-connected region and a
+region-filling fire has no shape. Four of five are still alight when the replay ends,
+so what stops a fire is the next thing to look at, not how fast it spreads.
 
 **The one fire that was monitored rather than fought is the only one the model beats a
 circle on.** That is what `attr_FireStrategyMonitorPercent` is read for, and it is the
