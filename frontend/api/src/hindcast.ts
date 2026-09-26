@@ -36,8 +36,22 @@ const WFIGS =
 
 /** Acres to hectares. */
 const AC_HA = 0.404686
-/** How long to replay after discovery, hours. */
-const REPLAY_HOURS = 96
+/**
+ * Replay runs discovery -> containment, not a fixed window.
+ *
+ * A fixed 96 h was scoring a four-day simulation against a FINAL perimeter.
+ * Cypress Creek burned for thirteen days, so the model was being asked to
+ * reproduce thirteen days of growth in four — which biases toward
+ * under-prediction, and it still over-predicted by 2x. Any area error
+ * measured that way understates itself.
+ */
+const FALLBACK_HOURS = 96
+/**
+ * Ceiling on a replay. Each simulated hour is 360 kernel steps over the whole
+ * grid, so a two-month containment would dominate the run for no extra
+ * insight — by then suppression, not weather, is deciding the outcome.
+ */
+const MAX_REPLAY_HOURS = 14 * 24
 /** Domain padding around the perimeter, so the fire is not clipped by the grid. */
 const PAD = 1.6
 
@@ -45,6 +59,8 @@ interface Perimeter {
   name: string
   acres: number
   discovered: number
+  /** Null when the record has no containment time. */
+  contained: number | null
   rings: number[][][]
   lat: number
   lng: number
@@ -57,8 +73,8 @@ interface Perimeter {
 async function fetchPerimeters(minAcres: number, maxAcres: number, cfg: Config): Promise<Perimeter[]> {
   const url =
     `${WFIGS}?where=poly_GISAcres%3E${minAcres}+AND+poly_GISAcres%3C${maxAcres}` +
-    `&outFields=poly_IncidentName,attr_FireDiscoveryDateTime,poly_GISAcres,` +
-    `attr_InitialLatitude,attr_InitialLongitude` +
+    `&outFields=poly_IncidentName,attr_FireDiscoveryDateTime,attr_ContainmentDateTime,` +
+    `poly_GISAcres,attr_InitialLatitude,attr_InitialLongitude` +
     `&returnGeometry=true&outSR=4326&resultRecordCount=12&f=json`
   const ac = new AbortController()
   const timer = setTimeout(() => ac.abort(), Math.max(cfg.fetchTimeoutMs, 45000))
@@ -85,6 +101,7 @@ async function fetchPerimeters(minAcres: number, maxAcres: number, cfg: Config):
         name: String(f.attributes.poly_IncidentName ?? 'unnamed'),
         acres: Number(f.attributes.poly_GISAcres ?? 0),
         discovered,
+        contained: (f.attributes.attr_ContainmentDateTime as number | null) ?? null,
         rings,
         lat,
         lng: (lo + hi) / 2,
@@ -217,11 +234,23 @@ async function run(p: Perimeter, cfg: Config) {
     )
   }
 
-  const weather = await archiveWeather(p.lat, p.lng, p.discovered, REPLAY_HOURS, cfg)
+  // Discovery to containment, so the simulated period matches the period the
+  // perimeter actually describes.
+  const burnedHours = p.contained
+    ? Math.round((p.contained - p.discovered) / 3600_000)
+    : null
+  const wantHours = Math.min(MAX_REPLAY_HOURS, Math.max(6, burnedHours ?? FALLBACK_HOURS))
+  const truncated = burnedHours != null && burnedHours > MAX_REPLAY_HOURS
+
+  const weather = await archiveWeather(p.lat, p.lng, p.discovered, wantHours, cfg)
   if (!weather?.length) return console.log('  no archive weather — skipped')
   const peak = weather.reduce((m, w) => Math.max(m, w.windSpeed), 0)
   const rain = weather.reduce((m, w) => m + w.precipitation, 0)
-  console.log(`  weather: ${weather.length} h, peak wind ${peak.toFixed(0)} km/h, ${rain.toFixed(1)} mm rain`)
+  const span = burnedHours
+    ? `discovery to containment (${(burnedHours / 24).toFixed(1)} d)${truncated ? `, capped at ${MAX_REPLAY_HOURS / 24} d` : ''}`
+    : `no containment time — fixed ${FALLBACK_HOURS} h window`
+  console.log(`  replay: ${weather.length} h — ${span}`)
+  console.log(`  weather: peak wind ${peak.toFixed(0)} km/h, ${rain.toFixed(1)} mm rain`)
 
   const dem = await resolve(terrariumDem(cfg), { grid, scenario: sc })
   const fuel = await resolve(imageryFuel(cfg), { grid, scenario: sc })
@@ -266,6 +295,14 @@ async function run(p: Perimeter, cfg: Config) {
 
   const modelled = new Uint8Array(sim.state.length)
   for (let i = 0; i < modelled.length; i++) modelled[i] = sim.state[i] !== Cell.Unburned ? 1 : 0
+
+  // When did it stop growing? Lengthening the replay from 96 h to 313 h did
+  // not change Cypress Creek's area at all, and 113 Incident reached its
+  // final size in 6 h — the model floods everything fuel-connected and then
+  // stops, so duration barely enters into it. That is a different defect from
+  // "burns too long", and it is the one to chase.
+  console.log(`  growth: ${sim.active.length === 0 ? 'burnt out' : `${sim.active.length} cells still alight`}` +
+    ` at the end of the replay`)
   const d = dice(truth, modelled)
 
   /**
