@@ -19,6 +19,7 @@
     "smoke:api": "npm run smoke --workspace=@firewatch/api",
     "watercheck": "npm run watercheck --workspace=@firewatch/api",
     "scarcheck": "npm run scarcheck --workspace=@firewatch/api",
-    "test": "npm run test --workspaces --if-present"
+    "test": "npm run test --workspaces --if-present",
+    "bench": "npm run bench --workspace=@firewatch/sim"
   }
 }

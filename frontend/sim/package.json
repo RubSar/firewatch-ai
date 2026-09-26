@@ -16,6 +16,7 @@
   },
   "scripts": {
     "test": "node --test test/*.test.ts",
-    "typecheck": "tsc -b"
+    "typecheck": "tsc -b",
+    "bench": "node bench/rothermel.ts"
   }
 }
