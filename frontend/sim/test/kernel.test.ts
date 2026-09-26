@@ -15,7 +15,7 @@
 import { describe, it, todo } from 'node:test'
 import assert from 'node:assert/strict'
 import { Fuel, FUELS } from '../src/fuels.ts'
-import { Cell, createSim, ignite, step } from '../src/model.ts'
+import { Cell, Crown, attachCanopy, createSim, ignite, recomputeStats, step } from '../src/model.ts'
 import { fuelMoisture } from '../src/weather.ts'
 import {
   DIRECTIONS, calm, equivalentRadius, flatTerrain, meanReachByDirection, nominalRos, reach, runFrom,
@@ -252,5 +252,115 @@ describe('ignition', () => {
     const params = calm({ windSpeed: 60 })
     for (let i = 0; i < 100; i++) step(sim, { params, weather: params, dt: 10 })
     assert.equal(sim.burnedCells, 0, 'a fire started on its own')
+  })
+})
+
+describe('crown fire', () => {
+  const canopyOf = (n: number, cbh: number, cbd: number, load = 1.2) => ({
+    load: new Float32Array(n).fill(load),
+    cbh: new Float32Array(n).fill(cbh),
+    cbd: new Float32Array(n).fill(cbd),
+  })
+
+  const runCrown = (o: { wind: number; cbh: number; cbd: number; steps?: number }) => {
+    const t = flatTerrain({ fuel: Fuel.Timber })
+    const n = t.cols * t.rows
+    const params = { ...calm({ windSpeed: o.wind }), spotting: 1 }
+    const sim = createSim(t, 7)
+    attachCanopy(sim, canopyOf(n, o.cbh, o.cbd))
+    ignite(sim, ((t.cols - 1) / 2) | 0, ((t.rows - 1) / 2) | 0, 0)
+    for (let i = 0; i < (o.steps ?? 400); i++) step(sim, { params, weather: params, dt: 10 })
+    recomputeStats(sim)
+    return sim
+  }
+
+  it('leaves the surface fire untouched when no canopy is attached', () => {
+    // The browser-only path never attaches one, and must behave exactly as it
+    // did before crown fire existed.
+    const t = flatTerrain({ fuel: Fuel.Timber })
+    const params = { ...calm({ windSpeed: 60 }), spotting: 1 }
+    const bare = runFrom(t, params, { steps: 400, seed: 7 })
+    assert.equal(bare.canopy, null)
+    assert.equal(bare.crownCells, 0)
+    assert.equal(bare.stats.crownCells, 0)
+  })
+
+  it('does not crown below the initiation intensity', () => {
+    // Calm timber tops out around 900 kW/m against an I_0 of ~1880.
+    const sim = runCrown({ wind: 0, cbh: 5, cbd: 0.1 })
+    assert.equal(sim.crownCells, 0, `crowned at ${sim.stats.maxIntensity.toFixed(0)} kW/m`)
+  })
+
+  it('crowns once the surface fire is intense enough', () => {
+    const sim = runCrown({ wind: 60, cbh: 5, cbd: 0.1 })
+    assert.ok(sim.crownCells > 0, 'never crowned despite a running timber fire')
+  })
+
+  it('is blocked by a high canopy base, at identical fire intensity', () => {
+    const low = runCrown({ wind: 60, cbh: 5, cbd: 0.1 })
+    const high = runCrown({ wind: 60, cbh: 15, cbd: 0.1 })
+    assert.ok(low.crownCells > 0)
+    assert.equal(high.crownCells, 0, 'a 15 m crown base should be out of reach')
+  })
+
+  it('transitions sharply at I_0 rather than gradually', () => {
+    // Van Wagner's criterion is a threshold, not a ramp: a small change in
+    // canopy base height either side of the fire's intensity should flip it.
+    const below = runCrown({ wind: 45, cbh: 11, cbd: 0.1 })
+    const above = runCrown({ wind: 45, cbh: 4, cbd: 0.1 })
+    assert.equal(below.crownCells, 0)
+    assert.ok(above.crownCells > 50, `only ${above.crownCells} cells crowned below the threshold`)
+  })
+
+  const countActive = (s: { crown: Uint8Array | null }) =>
+    s.crown ? Array.from(s.crown).filter((v) => v === Crown.Active).length : 0
+
+  it('needs bulk density as well as intensity to crown actively', () => {
+    // Same fire, same canopy base — only bulk density differs. R_0 = 3.0/CBD,
+    // so 1.0 demands 3 m/min and 0.02 demands 150. CBD 1.0 is dense, chosen
+    // because nominal ROS tops out near 4 m/min; see the note in model.ts.
+    const dense = runCrown({ wind: 60, cbh: 5, cbd: 1.0 })
+    const sparse = runCrown({ wind: 60, cbh: 5, cbd: 0.02 })
+    assert.ok(countActive(dense) > 0, 'a canopy dense enough to sustain crowning never did')
+    assert.equal(countActive(sparse), 0, 'sparse canopy should torch, not crown actively')
+  })
+
+  it('records that realistic canopy does not yet crown actively', () => {
+    // Not a desired behaviour — a consequence of nominal ROS sitting ~4.45x
+    // below the emergent rate. Asserted so that when the energy kernel closes
+    // that gap this test fails loudly and gets deleted, rather than the change
+    // going unnoticed.
+    const realistic = runCrown({ wind: 60, cbh: 5, cbd: 0.2 })
+    assert.equal(
+      countActive(realistic),
+      0,
+      'realistic canopy now crowns actively — the spread rate was fixed; delete this test'
+    )
+    assert.ok(realistic.crownCells > 0, 'it should still be torching')
+  })
+
+  it('consumes canopy fuel only where it crowned', () => {
+    const sim = runCrown({ wind: 60, cbh: 5, cbd: 0.1 })
+    assert.ok(sim.canopyLeft && sim.crown)
+    for (let i = 0; i < sim.canopyLeft!.length; i++) {
+      if (sim.crown![i] === Crown.None) {
+        // Float32, so compare with tolerance rather than for equality.
+        assert.ok(
+          Math.abs(sim.canopyLeft![i] - 1.2) < 1e-6,
+          `untouched cell ${i} lost canopy fuel (${sim.canopyLeft![i]})`
+        )
+      }
+      assert.ok(sim.canopyLeft![i] >= 0, 'canopy load went negative')
+    }
+  })
+
+  it('raises fireline intensity and long-range spotting when it crowns', () => {
+    const surface = runCrown({ wind: 60, cbh: 15, cbd: 0.1 })
+    const crowned = runCrown({ wind: 60, cbh: 5, cbd: 0.1 })
+    assert.ok(
+      crowned.stats.maxIntensity > surface.stats.maxIntensity,
+      'crowning did not add the canopy to the heat release'
+    )
+    assert.ok(crowned.stats.spotFires >= surface.stats.spotFires, 'crowning did not increase spotting')
   })
 })

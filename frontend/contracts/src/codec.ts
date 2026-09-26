@@ -26,7 +26,9 @@ const TREATMENT_STRIDE = 5
  * would be ~5x the traffic for bands that are never drawn.
  */
 const FLAMING_STRIDE = 5
-const STATE_HEADER = 1 + 1 + 8 + 4 + 4 + 4 + 4 + 44
+/** 12 stat fields at 4 bytes each. Bump both this and the reads below together. */
+const STATS_BYTES = 48
+const STATE_HEADER = 1 + 1 + 8 + 4 + 4 + 4 + 4 + STATS_BYTES
 
 // --- terrain (sent once per incident) -----------------------------------
 
@@ -143,6 +145,7 @@ export function encodeState(s: StateFrameInput): ArrayBuffer {
   v.setUint32(o, st.wuiCells, true); o += 4
   v.setUint32(o, st.structuresLost, true); o += 4
   v.setUint32(o, st.spotFires, true); o += 4
+  v.setUint32(o, st.crownCells, true); o += 4
 
   v.setUint32(o, s.changedCount, true); o += 4
   for (let k = 0; k < s.changedCount; k++) {
@@ -194,8 +197,9 @@ export function decodeState(buf: ArrayBuffer): StateFrame {
     wuiCells: v.getUint32(o + 32, true),
     structuresLost: v.getUint32(o + 36, true),
     spotFires: v.getUint32(o + 40, true),
+    crownCells: v.getUint32(o + 44, true),
   }
-  o += 44
+  o += STATS_BYTES
 
   const changedCount = v.getUint32(o, true); o += 4
   const changed = new Array<{ index: number; state: number; ignitedAt: number }>(changedCount)
