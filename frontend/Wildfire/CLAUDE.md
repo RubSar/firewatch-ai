@@ -134,14 +134,17 @@ Three conclusions, each of which overturned a guess:
   putting it out. So saturating the fuel-connected region is not the mechanism.
 - **Not duration-limited.** Extending the replay from 96 h to 313 h changed Cypress
   Creek's area not at all; two of three burn out before the old window ended.
-- **The fuel map is the suspect.** Only 7% of the Cypress Creek landscape is
-  unburnable, and 52% of it is classified `Agriculture` — in a national forest. The
-  visible-band proxy is putting burnable fuel almost everywhere, which inflates the
-  reachable area far beyond what a real landscape offers.
+- **The fuel map was badly wrong, and fixing it barely moved the score.** The
+  visible-band proxy called Angelina National Forest 52% Cropland and 8% Tree cover;
+  ESA WorldCover calls it 90% Timber, which is what a national forest is. Replacing it
+  improved Cypress Creek's area ratio from 2.05x to 1.48x and precision from 39% to 44%,
+  but Dice moved only 0.524 to 0.529 and the other two fires were flat. The fuel map is
+  now right because being right is the point, not because it closed the gap.
 
-So the area over-prediction is more likely fuel classification and missing barriers than
-spread rate. Note also that **the hindcast replay passes no `blockFrac`**, so OSM
-barriers are not active in it at all — that is a gap, not a finding.
+So none of the obvious candidates — rate, duration, reachability, fuel classification —
+is the dominant error on its own. What remains untested: **suppression**, which the
+replay models none of while all three fires were fought, and **barriers**, because the
+hindcast replay passes no `blockFrac` at all. Test those before building anything large.
 
 ### Benchmark against Rothermel
 
