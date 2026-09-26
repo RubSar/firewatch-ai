@@ -1,3 +1,4 @@
+import { andersonLB } from './shape.ts'
 import { FUELS, Fuel, WIND_COEFFICIENTS, type FuelModel } from './fuels.ts'
 import type { Terrain } from './terrain.ts'
 import type { Params, Weather } from './weather.ts'
@@ -352,9 +353,17 @@ const MAX_WIND_FACTOR = 1000
  * Wind response belongs to the fuel bed, so the coefficients are per fuel and
  * precomputed in fuels.ts.
  *
- * Backing keeps an exponential decay rather than an inverted phi_w: a fire
- * backing into 65 km/h does not creep at 1/177 of its calm rate, it creeps a
- * little below it, and inverting an unbounded term would be nonsense.
+ * THIS IS A HEADING-FIRE TERM and the kernel now only ever calls it with
+ * `align` = 1. Passing a reduced wind to get a flank rate was the single
+ * largest error in the model: it returns the head rate of a CALMER fire, not
+ * the flank rate of this one. At 40 km/h the 45-degree direction came out at
+ * 0.59 of full phi_w where the ellipse says 0.065, so off-axis spread ran ~9x
+ * too fast, every fire came out round (L/B 1.0-1.5 against real perimeters of
+ * 2.2-2.6) and inflated, and Dice could not beat an equal-area circle because
+ * the model was one. Directional variation now comes from `ellipseShape`.
+ *
+ * `align` is kept in the signature because the bench and the wind-response test
+ * both pass 1 and read it as "the head-fire gain", which is exactly what it is.
  */
 export function windMultiplier(fuelId: number, windMs: number, align: number): number {
   const w = WIND_COEFFICIENTS[fuelId]
@@ -363,6 +372,46 @@ export function windMultiplier(fuelId: number, windMs: number, align: number): n
   if (alongKmh <= 0) return Math.max(0.15, Math.exp(0.115 * windMs * align))
   const phiW = w.c * Math.pow(alongKmh * KMH_TO_FT_MIN, w.b) * w.packing
   return 1 + Math.min(MAX_WIND_FACTOR, phiW)
+}
+
+/**
+ * Cap on length-to-breadth. Anderson's fit is calibrated to roughly 10 mi/h
+ * midflame and grows without bound above it — at 65 km/h it reaches L/B 56,
+ * which puts the backing rate at 1/12,500 of the head. Real wind-driven fires
+ * sit nearer L/B 2-3 (the five hindcast perimeters measure 1.3-2.6, implying
+ * head:back of about 15-25), and FARSITE caps the ratio for the same reason.
+ * 8 is above anything observed here and still bounds the extrapolation.
+ */
+const MAX_LB = 8
+
+/**
+ * Eccentricity of the spread ellipse for a given wind, via Anderson (1983).
+ *
+ * L/B = a/b, and e = sqrt(1 - (b/a)^2), so e = sqrt(1 - 1/(L/B)^2). Calm air
+ * gives L/B = 1 exactly, hence e = 0 and a circle — which is why the calm-wind
+ * behaviour and its tests are untouched by the elliptical rewrite.
+ */
+export function ellipseEccentricity(windMs: number): number {
+  const lb = Math.min(MAX_LB, andersonLB(windMs * 3.6 * MIDFLAME_FACTOR))
+  return Math.sqrt(Math.max(0, 1 - 1 / (lb * lb)))
+}
+
+/**
+ * Richards (1990) elliptical spread: the fraction of the head-fire rate that
+ * applies at angle theta off the wind.
+ *
+ *   R(theta) = R_head * (1 - e) / (1 - e * cos theta)
+ *
+ * The ignition point sits at the rear focus, so theta = 0 returns 1 (the head),
+ * theta = 180 returns (1-e)/(1+e) (the backing edge) and theta = 90 returns
+ * (1-e) (the flank, the semi-latus rectum). Integrating it recovers L/B by
+ * construction, which is the property the old cosine-fed phi_w lacked.
+ *
+ * This is the formulation under FARSITE, FlamMap, Prometheus and Cell2Fire.
+ * Takes cos(theta) rather than theta because the caller already has it.
+ */
+export function ellipseShape(ecc: number, cosTheta: number): number {
+  return (1 - ecc) / (1 - ecc * cosTheta)
 }
 
 export const NEIGHBOURS: [number, number, number, number][] = [
@@ -443,6 +492,12 @@ export function step(sim: Sim, input: StepInput) {
   const dampingAt = (f: FuelModel, cell: number) =>
     moisture ? moistureDamping(f, moisture[cell]) : moistOf[f.id]
 
+  // Head-fire wind gain is per fuel and, without a wind field, per grid. This
+  // also removes eight windMultiplier calls per active cell per step.
+  const uniformWind = !windField
+  const headMultOf = FUELS.map((f) => windMultiplier(f.id, windMs, 1))
+  const eccUniform = ellipseEccentricity(windMs)
+
   const ignitions: number[] = []
   const stillActive: number[] = []
   let maxRos = 0
@@ -486,7 +541,20 @@ export function step(sim: Sim, input: StepInput) {
       cellWindToBearing = (((Math.atan2(u, v) * 180) / Math.PI) + gustVeer + 360) % 360
     }
 
+    const ecc = uniformWind ? eccUniform : ellipseEccentricity(cellWindMs)
+
+    /**
+     * `cellMaxRos` is the fastest edge actually leaving this cell, which is
+     * what a crew holding a line faces. `cellHeadRos` is the head-fire rate
+     * before the ellipse, which is what Byram's intensity and Van Wagner's
+     * crown criteria are defined on. They used to be the same number; with an
+     * ellipse they must not be, because the eight lattice directions can sit up
+     * to 22.5 deg off the wind and `ellipseShape` there is as low as 0.6 — so
+     * reading intensity off the lattice maximum would make a fire's reported
+     * intensity depend on the wind's bearing relative to the grid.
+     */
     let cellMaxRos = 0
+    let cellHeadRos = 0
     for (let d = 0; d < NEIGHBOURS.length; d++) {
       const [dc, dr, distMul, bearing] = NEIGHBOURS[d]
       const nc = c + dc
@@ -510,17 +578,23 @@ export function step(sim: Sim, input: StepInput) {
       const slopeDeg = (Math.atan((elevation[j] - elevation[i]) / dist) * 180) / Math.PI
       const slopeMult = Math.min(8, Math.exp(0.0693 * Math.max(-25, Math.min(25, slopeDeg))))
 
-      // Wind: exponential in the component of wind along the spread direction,
-      // so the head races and the backing edge crawls.
-      const align = Math.cos(((bearing - cellWindToBearing) * Math.PI) / 180)
-      const windMult = windMultiplier(fuel[j], cellWindMs, align)
-
       // Spread is governed by the fuel being entered, damped by its own
       // moisture of extinction — grass carries where damp timber will not.
       const nMoist = dampingAt(nf, j)
       if (nMoist <= 0) continue
 
-      let ros = nf.baseRos * nMoist * heatMult * slopeMult * windMult * (1 - block)
+      // Head-fire rate for this fuel, on this slope: phi_w at full alignment.
+      const headMult = uniformWind ? headMultOf[fuel[j]] : windMultiplier(fuel[j], cellWindMs, 1)
+      const headRos = nf.baseRos * nMoist * heatMult * slopeMult * headMult
+      if (headRos > cellHeadRos) cellHeadRos = headRos
+
+      // Richards (1990): the head rate scaled onto the spread ellipse. Slope
+      // stays per-direction rather than being folded into a combined
+      // wind-slope vector as FARSITE does — a simplification, and the one
+      // place this departs from the reference formulation.
+      const cosTheta = Math.cos(((bearing - cellWindToBearing) * Math.PI) / 180)
+
+      let ros = headRos * ellipseShape(ecc, cosTheta) * (1 - block)
       if (treatment[j] === Treatment.Retardant) ros *= 0.12
 
       if (ros > cellMaxRos) cellMaxRos = ros
@@ -530,7 +604,7 @@ export function step(sim: Sim, input: StepInput) {
     }
 
     // Byram: I = H * w * ROS.
-    let byram = HEAT_YIELD * fm.load * cellMaxRos
+    let byram = HEAT_YIELD * fm.load * cellHeadRos
 
     // --- crown fire (Van Wagner) ---
     // A surface fire enters the canopy when it is intense enough to bridge the
@@ -541,14 +615,14 @@ export function step(sim: Sim, input: StepInput) {
     if (canopy && canopyLeft && crown && canopyLeft[i] > 0) {
       const i0 = crownInitiationIntensity(canopy.cbh[i])
       if (byram >= i0) {
-        crowning = cellMaxRos * 60 >= activeCrownThreshold(canopy.cbd[i]) ? Crown.Active : Crown.Passive
+        crowning = cellHeadRos * 60 >= activeCrownThreshold(canopy.cbd[i]) ? Crown.Active : Crown.Passive
         if (crown[i] === Crown.None) sim.crownCells++
         if (crowning > crown[i]) crown[i] = crowning
 
         // Canopy load joins the heat release. Torching consumes a fraction of
         // the crown; an active crown fire takes essentially all of it.
         const share = crowning === Crown.Active ? 1 : 0.3
-        byram = HEAT_YIELD * (fm.load + canopyLeft[i] * share) * cellMaxRos
+        byram = HEAT_YIELD * (fm.load + canopyLeft[i] * share) * cellHeadRos
 
         // Crown fuel is fine and burns out fast — a minute in an active crown
         // run, longer when it is only torching.
@@ -558,7 +632,8 @@ export function step(sim: Sim, input: StepInput) {
     }
 
     intensity[i] = byram
-    if (cellMaxRos > maxRos) maxRos = cellMaxRos
+    // `peakRos` surfaces as "Head-fire spread", so it reads the head rate.
+    if (cellHeadRos > maxRos) maxRos = cellHeadRos
     if (byram > maxIntensity) maxIntensity = byram
 
     // --- spotting: embers lofted from high-intensity fuel ---
@@ -587,6 +662,8 @@ export function step(sim: Sim, input: StepInput) {
 
     // --- suppression: effective only on a slow-moving edge ---
     if (suppressionEffort > 0) {
+      // cellMaxRos, not cellHeadRos: a crew holds the edge in front of them,
+      // which on a flank is far slower than the head.
       const holdable = Math.max(0, 1 - cellMaxRos / 0.4)
       const pOut = 1 - Math.exp(-suppressionEffort * holdable * (dt / 1800))
       if (rng() < pOut) {

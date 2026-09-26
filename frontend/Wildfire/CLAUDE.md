@@ -94,19 +94,18 @@ with a discovery time — plus Open-Meteo's archive for the weather as it actual
 Current results. `gap` is Dice minus an equal-area disc at the same ignition point —
 the only number that says the physics is worth anything. All at 0% suppression:
 
-| fire | strategy | window | area ratio | Dice | circle | gap |
-|---|---|---|---|---|---|---|
-| Anderson Bridge | **100% monitored** | 191 h | 3.68x | **0.422** | 0.288 | **+0.134** |
-| Pineland Rd | 100% suppressed | 100 h | 0.29x | 0.370 | 0.422 | -0.052 |
-| Hwy 82 | 100% suppressed | 239 h | 0.10x | 0.174 | 0.177 | -0.003 |
-| Ballard | 100% suppressed | 41 h | 7.02x | 0.244 | 0.273 | -0.029 |
-| 113 Incident | 100% suppressed | 22 h | 2.46x | 0.389 | 0.578 | -0.189 |
+| fire | strategy | window | area ratio | Dice | circle | gap | model L/B (truth) |
+|---|---|---|---|---|---|---|---|
+| Anderson Bridge | **100% monitored** | 191 h | 0.34x | **0.502** | 0.120 | **+0.382** | 3.68@143 (2.17@140) |
+| Pineland Rd | 100% suppressed | 100 h | 0.12x | 0.209 | 0.208 | +0.002 | 1.75 (2.42) |
+| Hwy 82 | 100% suppressed | 239 h | 0.05x | 0.099 | 0.098 | +0.001 | 1.24 (2.45) |
+| Ballard | 100% suppressed | 41 h | 6.39x | 0.258 | 0.286 | -0.028 | 1.11 (2.56) |
+| 113 Incident | 100% suppressed | 22 h | 1.58x | 0.379 | 0.759 | -0.380 | 1.27 (1.32) |
 
 **It does not over-predict consistently — that was an artifact of three fires and a
-wrong replay window.** The ratio now spans 0.10x to 7.02x, a factor of 70. Treat the
-error as dispersion, not bias, and expect at least two distinct defects: fires that
-flood everything reachable within 1-2 h (3.68x, 7.02x, 2.46x) and fires that die out
-early in wet or low-wind conditions (0.10x, 0.29x).
+wrong replay window.** The ratio spans 0.05x to 6.39x. Treat the error as dispersion,
+not bias. Since the elliptical rewrite four of five under-predict and one (Ballard)
+still floods everything reachable, so there remain at least two distinct defects.
 
 **The one fire that was monitored rather than fought is the only one the model beats a
 circle on.** That is what `attr_FireStrategyMonitorPercent` is read for, and it is the
@@ -178,45 +177,61 @@ cell obstructs part of an edge rather than severing it, so the flux is reduced a
 stochastic draw still gets through. Correct per §5, and it means roads do not act as
 firebreaks at this resolution.
 
-### The dominant error is off-axis spread
+### Off-axis spread: fixed, and what it left behind
 
 Six candidates were tested and eliminated: rate, duration, reachability, fuel
 classification, barriers, and **suppression** — swept 0-100% flat from hour zero, which
-bounds what it could ever explain, and it moves area by 4-25% while making Dice *worse*
-on most fires. Every level loses recall faster than it gains precision, the signature of
+bounds what it could ever explain, and it moved area by 4-25% while making Dice *worse*
+on most fires. Every level lost recall faster than it gained precision, the signature of
 a fire in the wrong place rather than one of the wrong size.
 
-That pointed at shape, and `sim/src/shape.ts` (L/B plus major-axis bearing) found it:
+That pointed at shape, and `sim/src/shape.ts` (L/B plus major-axis bearing) found the
+cause: `step()` fed Rothermel's `phi_w` the wind *component* along each of the 8 spread
+directions. `phi_w` is a **heading** term — a reduced wind returns the head rate of a
+calmer fire, not the flank rate of this one. At 40 km/h the 45-degree direction got 0.59
+of full `phi_w` where the ellipse says 0.065, so off-axis spread ran ~9x too fast and
+every fire came out round (L/B 1.27 at 25 km/h, 1.38 at 65) and inflated.
 
-| | truth L/B | model L/B | Anderson L/B for its wind |
-|---|---|---|---|
-| Anderson Bridge | 2.17 | 1.32 | 2.67 |
-| Pineland Rd | 2.42 | 1.55 | 1.69 |
-| Hwy 82 | 2.45 | 1.08 | 1.53 |
-| Ballard | 2.56 | 1.01 | 1.77 |
+**Replaced with Richards (1990) elliptical propagation**, the formulation under FARSITE,
+FlamMap, Prometheus and Cell2Fire. `windMultiplier` is now called only with `align` = 1
+and all directional variation comes from `ellipseShape(e, cos theta)` =
+`(1 - e) / (1 - e cos theta)`, with `e` from `ellipseEccentricity` via Anderson (1983).
+Calm air gives L/B 1 exactly, hence e = 0 and a circle, which is why every calm-wind
+test is untouched.
 
-**The model produces a near-circular fire at every wind speed**, and reaches near-final
-size in the first 1-2 hours — a shape-through-time trace shows it is already round at
-that point, so the anisotropy is never there rather than being eroded later.
+Emergent L/B now responds to wind — 1.24 / 1.33 / 1.93 at 0 / 15 / 25 km/h where it used
+to be flat — and on Anderson Bridge the modelled bearing lands within 3 degrees of the
+real perimeter's with precision at 98%. Three things to know:
 
-The cause is that `step()` feeds Rothermel's `phi_w` the wind *component* along each of
-the 8 spread directions (`align = cos(bearing - windBearing)`). `phi_w` is a **heading**
-term: a reduced wind gives the head rate of a calmer fire, not the flank rate of this
-one. At 40 km/h the 45-degree direction gets 0.59 of full `phi_w` where the L/B 5 ellipse
-says 0.065 — off-axis spread is ~9x too fast, so the fire goes sideways nearly as fast as
-downwind. That one defect accounts for the whole signature: inflated area, recall 97-98%
-with precision 13-27%, and a Dice that cannot beat an equal-area circle because the model
-is one. It also explains why an earlier attempt at this "broke isotropy" and was reverted;
-isotropy was never correct to preserve.
+- **`cellMaxRos` and `cellHeadRos` are now different numbers and the distinction
+  matters.** Byram intensity, Van Wagner crowning and the `peakRos` read-out use
+  `cellHeadRos`, the pre-ellipse head rate. Suppression uses `cellMaxRos`, the fastest
+  edge actually leaving the cell, because a crew holds the edge in front of them. Reading
+  intensity off the lattice maximum would make a fire's reported intensity depend on the
+  wind's bearing relative to the grid, since the eight directions can sit 22.5 deg off
+  the wind where `ellipseShape` is only 0.6.
+- **`MAX_LB` = 8 caps the ellipse.** Anderson's fit is calibrated to about 10 mi/h
+  midflame and diverges above it — 65 km/h gives L/B 56 and a backing rate of 1/12,500
+  of the head. Real perimeters here measure L/B 1.3-2.6.
+- **Elongation reaches only about half of Anderson's L/B, and the cause is the lattice,
+  not the ellipse.** Measured: the flank runs 4-10x its nominal rate while the head runs
+  0.5-1.0x. Two effects compose — an isotropic arrival-draw overshoot (~2.8x, visible in
+  calm air where the shape stays round) and lateral leakage through the diagonals, where
+  reaching a cell off to the side via 45-degree steps uses `ellipseShape(45 deg)` = 0.084
+  instead of the flank's 0.026, 3.2x faster, and first-passage percolation always finds
+  that path. 3.2 x 2.2 = 7.0 against a measured 6.9.
 
-**The fix is Richards (1990) elliptical propagation, not the §4 energy accumulator** —
-head ROS from Rothermel, L/B from Anderson (1983), then
-`R(theta) = R_head * (1 - e) / (1 - e * cos theta)`. Behind it, Finney (2002) Minimum
-Travel Time replaces the stochastic arrival draw with a deterministic shortest-path
-formulation and removes both `todo` tests structurally instead of calibrating around
-them. Both are what FARSITE, FlamMap and Cell2Fire run. No usable JS/TS library exists,
-so port rather than depend; `pyretechnics` (Python) and `firelib`/BehavePlus (USFS,
-public domain) are readable references.
+**The head is also capped at `cellSize / dt`.** Emergent head rate is about
+`p * cellSize / dt` for `p = 1 - exp(-ROS dt / cellSize)`, which saturates at 3 m/s on a
+30 m grid at DT = 10. Nominal head exceeds that above ~30 km/h, so `emrg/nom` in
+`npm run bench` falls from 5.04x calm to 0.83x at 40 km/h. That is why four of five
+hindcasts now under-predict extent.
+
+Both remaining errors are what **Finney (2002) Minimum Travel Time** fixes, by computing
+minimum arrival time over the node network with the elliptical template instead of
+drawing per-link Bernoulli arrivals. That is the next kernel change, not the §4 energy
+accumulator. No usable JS/TS library exists, so port rather than depend; `pyretechnics`
+(Python) and `firelib`/BehavePlus (USFS, public domain) are readable references.
 
 ### Benchmark against Rothermel
 
