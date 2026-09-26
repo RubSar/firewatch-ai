@@ -306,9 +306,15 @@ export default function App() {
   const danger = dangerRating(cbi)
 
   const hours = simTime / 3600
+  /** Time of day the forecast is at, so this reads against the forecast strip. */
   const clock = `${String((FORECAST_START_HOUR + Math.floor(hours)) % 24).padStart(2, '0')}:${String(
     Math.floor((simTime % 3600) / 60)
   ).padStart(2, '0')}`
+  /**
+   * Time since ignition, carrying its units. Bare `00:00` next to a bare
+   * `13:00` was two clocks with nothing to tell them apart.
+   */
+  const elapsed = `${Math.floor(hours)}h ${String(Math.floor((simTime % 3600) / 60)).padStart(2, '0')}m`
 
   const chipNote = status.error ?? status.note
   const chipLive = !status.error && /live|server/i.test(status.note)
@@ -449,9 +455,9 @@ export default function App() {
             <button className="play" onClick={() => setPlaying((v) => !v)} title="Play/pause (space)">
               {playing ? '❚❚' : '▶'}
             </button>
-            <div className="clock">
-              {String(Math.floor(hours)).padStart(2, '0')}:{String(Math.floor((simTime % 3600) / 60)).padStart(2, '0')}
-              <small>elapsed · {clock}</small>
+            <div className="clock" title={`${elapsed} since ignition · local time ${clock}`}>
+              {elapsed}
+              <small>elapsed · {clock} local</small>
             </div>
             <div className="seg" style={{ flex: '0 0 auto' }}>
               {SPEEDS.map((s) => (
