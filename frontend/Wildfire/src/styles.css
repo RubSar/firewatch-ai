@@ -438,12 +438,13 @@ input[type="range"]:disabled::-webkit-slider-thumb { background: var(--muted); c
   border-color: #6f9fe0;
   color: #d7e6ff;
 }
-@media (max-width: 1280px) {
+/* Six controls plus dividers: shed the labels before the bar crowds the map. */
+@media (max-width: 1600px) {
   .mt-label { display: none; }
   .mt-btn { padding: 7px 9px; }
 }
 /* A view mode reads differently from a drawing tool. */
-.mt-thermal[aria-pressed='true'] {
+.mt-view[aria-pressed='true'] {
   background: rgba(252, 206, 88, 0.16);
   border-color: #e0a94a;
   color: #ffeec2;
