@@ -27,7 +27,7 @@ import { Cell, createSim, ignite, recomputeStats, step } from '@firewatch/sim/mo
 import { FUELS } from '@firewatch/sim/fuels'
 import type { Params } from '@firewatch/sim/weather'
 import { loadConfig } from './config.ts'
-import { imageryFuel, terrariumDem } from './providers/tier1.ts'
+import { buildRegistry } from './providers/registry.ts'
 import { resolve } from './providers/provenance.ts'
 import type { Config } from './config.ts'
 
@@ -292,8 +292,12 @@ async function run(p: Perimeter, cfg: Config) {
   console.log(`  replay: ${weather.length} h — ${span}`)
   console.log(`  weather: peak wind ${peak.toFixed(0)} km/h, ${rain.toFixed(1)} mm rain`)
 
-  const dem = await resolve(terrariumDem(cfg), { grid, scenario: sc })
-  const fuel = await resolve(imageryFuel(cfg), { grid, scenario: sc })
+  // Through the registry, so the hindcast scores whatever the product would
+  // actually run. Calling a provider directly meant this kept measuring the
+  // visible-band classifier for a whole session after WorldCover replaced it.
+  const reg = buildRegistry(cfg)
+  const dem = await resolve(reg.elevation, { grid, scenario: sc })
+  const fuel = await resolve(reg.fuel, { grid, scenario: sc })
   const terrain = {
     ...base, elevation: dem.data.elevation, fuel: fuel.data.fuelId,
     minElev: dem.data.minElev, maxElev: dem.data.maxElev, source: 'live' as const,

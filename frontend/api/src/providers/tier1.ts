@@ -16,6 +16,7 @@ import type {
 } from '@firewatch/contracts/providers'
 import { DEM_URL, IMAGERY_URL, fetchMosaic, toPixel, type Mosaic } from './tiles.ts'
 import { SCL, sentinelLandCover } from './sentinel.ts'
+import { WC_NAMES, worldCoverFor } from './worldcover.ts'
 import { prov, synthetic } from './provenance.ts'
 import type { Config } from '../config.ts'
 
@@ -155,6 +156,59 @@ export const topographyFuel: FuelProvider = {
       provenance: synthetic('procedural', 'Procedural fuel from topography — synthetic'),
     }
   },
+}
+
+/**
+ * Fuel from ESA WorldCover, with Sentinel-2 SCL still authoritative for water
+ * and snow.
+ *
+ * WorldCover is a classified product; SCL is current. WorldCover is from 2021
+ * and a lake that has dried or a reservoir that has filled since then should
+ * follow the recent observation, so SCL keeps its override.
+ *
+ * Falls back to the visible-band classifier, which remains the only option
+ * where a tile is missing or the read times out.
+ */
+export function worldCoverFuel(cfg: Config): FuelProvider {
+  return {
+    id: 'esa-worldcover',
+    fallbacks: [imageryFuel(cfg)],
+    async fetch(q: TerrainQuery, signal?: AbortSignal) {
+      const { cols, rows, bounds } = q.grid
+      const wc = await worldCoverFor(bounds, cols, rows, cfg)
+      if (!wc || wc.coverage < 0.9) throw new Error('WorldCover unavailable for this area')
+
+      const fuelId = Uint8Array.from(wc.fuelId)
+      const land = await sentinelLandCover(bounds, cols, rows, cfg).catch(() => null)
+      let overridden = 0
+      if (land) {
+        for (let i = 0; i < fuelId.length; i++) {
+          const k = land.scl[i]
+          if (k === SCL.Water && fuelId[i] !== Fuel.Water) { fuelId[i] = Fuel.Water; overridden++ }
+          else if (k === SCL.Snow && fuelId[i] !== Fuel.Barren) { fuelId[i] = Fuel.Barren; overridden++ }
+        }
+      }
+      void signal
+
+      const top = [...wc.classes].sort((a, b) => b[1] - a[1]).slice(0, 3)
+        .map(([c, n]) => `${WC_NAMES[c] ?? c} ${((n / fuelId.length) * 100).toFixed(0)}%`)
+        .join(', ')
+      return {
+        data: expand(fuelId),
+        provenance: prov({
+          source: 'esa-worldcover-v200',
+          kind: 'measured',
+          nativeResolution: 10,
+          observedAt: '2021-12-31T00:00:00Z',
+          coverage: wc.coverage,
+          note:
+            `ESA WorldCover 2021 · ${top}` +
+            (land ? ` · ${overridden} cells corrected by current Sentinel-2 SCL` : '') +
+            ' · land cover is from 2021, recent change comes from the burn-scar layer',
+        }),
+      }
+    },
+  }
 }
 
 export function imageryFuel(cfg: Config): FuelProvider {

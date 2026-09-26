@@ -11,8 +11,8 @@ import type {
 } from '@firewatch/contracts/providers'
 import type { Config } from '../config.ts'
 import {
-  assumedCanopy, densityValuesAtRisk, imageryFuel, noBarriers, noBurnHistory,
-  noObservations, proceduralDem, terrariumDem, topographyFuel,
+  assumedCanopy, densityValuesAtRisk, noBarriers, noBurnHistory,
+  noObservations, proceduralDem, terrariumDem, topographyFuel, worldCoverFuel,
 } from './tier1.ts'
 import { mockWeather, nfdrs1hMoisture, openMeteo, openMeteoWind, rhFuelMoisture, uniformWind } from './tier2.ts'
 import { sentinelBurnHistory } from './burnhistory.ts'
@@ -36,7 +36,7 @@ export function buildRegistry(cfg: Config): Registry {
   const live = cfg.mode === 'live'
   return {
     elevation: live ? terrariumDem(cfg) : proceduralDem,
-    fuel: live ? imageryFuel(cfg) : topographyFuel,
+    fuel: live ? worldCoverFuel(cfg) : topographyFuel,
     canopy: assumedCanopy,
     barriers: live ? osmBarriers(cfg) : noBarriers,
     burnHistory: live ? sentinelBurnHistory(cfg) : noBurnHistory,
@@ -64,7 +64,7 @@ export function describe(r: Registry) {
   } as const
 }
 
-const MEASURED = new Set(['terrarium-dem', 'open-meteo', 'firms-perimeter'])
+const MEASURED = new Set(['terrarium-dem', 'open-meteo', 'firms-perimeter', 'esa-worldcover'])
 /** Real input, assumed parameters on top of it: imagery colours, OSM tag widths. */
 const DERIVED = new Set([
   'esri-imagery-fuel', 'osm-barriers', 'osm-buildings',
