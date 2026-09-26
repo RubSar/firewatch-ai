@@ -12,22 +12,11 @@ import type {
 import type { Config } from '../config.ts'
 import {
   assumedCanopy, densityValuesAtRisk, imageryFuel, noBarriers, noBurnHistory,
-  proceduralDem, terrariumDem, topographyFuel,
+  noObservations, proceduralDem, terrariumDem, topographyFuel,
 } from './tier1.ts'
-import { mockWeather, openMeteo, rhFuelMoisture, uniformWind } from './tier2.ts'
-import { synthetic } from './provenance.ts'
-
-/** No observations — the assimilation loop of §6 has nothing to assimilate yet. */
-export const noObservations: PerimeterObserver = {
-  id: 'no-observations',
-  fallbacks: [],
-  async fetch() {
-    return {
-      data: { burning: new Uint8Array(0), maxTemp: null },
-      provenance: synthetic('none', 'No IR or VIIRS feed — assimilation loop inactive (§6)'),
-    }
-  },
-}
+import { mockWeather, nfdrs1hMoisture, openMeteo, openMeteoWind, rhFuelMoisture, uniformWind } from './tier2.ts'
+import { osmBarriers, osmValuesAtRisk } from './osm.ts'
+import { firmsPerimeter } from './firms.ts'
 
 export interface Registry {
   elevation: ElevationProvider
@@ -48,13 +37,13 @@ export function buildRegistry(cfg: Config): Registry {
     elevation: live ? terrariumDem(cfg) : proceduralDem,
     fuel: live ? imageryFuel(cfg) : topographyFuel,
     canopy: assumedCanopy,
-    barriers: noBarriers,
+    barriers: live ? osmBarriers(cfg) : noBarriers,
     burnHistory: noBurnHistory,
     weather: (presetId) => (live ? openMeteo(cfg, presetId) : mockWeather(presetId)),
-    wind: uniformWind,
-    moisture: rhFuelMoisture,
-    observer: noObservations,
-    valuesAtRisk: densityValuesAtRisk,
+    wind: live ? openMeteoWind(cfg) : uniformWind,
+    moisture: live ? nfdrs1hMoisture(cfg) : rhFuelMoisture,
+    observer: live ? firmsPerimeter(cfg) : noObservations,
+    valuesAtRisk: live ? osmValuesAtRisk(cfg) : densityValuesAtRisk,
   }
 }
 
@@ -74,6 +63,11 @@ export function describe(r: Registry) {
   } as const
 }
 
-const REAL = new Set(['terrarium-dem', 'esri-imagery-fuel', 'open-meteo'])
+const MEASURED = new Set(['terrarium-dem', 'open-meteo', 'firms-perimeter'])
+/** Real input, assumed parameters on top of it: imagery colours, OSM tag widths. */
+const DERIVED = new Set([
+  'esri-imagery-fuel', 'osm-barriers', 'osm-buildings',
+  'open-meteo-windfield', 'nfdrs-1h-timelag',
+])
 const kindOf = (id: string): 'measured' | 'derived' | 'synthetic' =>
-  id === 'esri-imagery-fuel' ? 'derived' : REAL.has(id) ? 'measured' : 'synthetic'
+  DERIVED.has(id) ? 'derived' : MEASURED.has(id) ? 'measured' : 'synthetic'

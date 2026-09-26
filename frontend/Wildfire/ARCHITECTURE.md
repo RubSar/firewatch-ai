@@ -767,6 +767,9 @@ export interface SuppressionPlan {
 }
 
 /** Observed fire position, for §6. NoObservations is a valid implementation. */
+// NOTE: as implemented this takes `{ grid: GridSpec; at: string }` — `burning`
+// is a raster, and a raster without the grid it was sampled onto cannot be
+// compared to anything.
 export interface PerimeterObserver extends Provider<{ bounds: Bounds; at: Date }, {
   burning: Uint8Array
   /** Radiometric max temp where available — scores the kernel's maxTemp diagnostic. */
@@ -824,20 +827,25 @@ Each row is the same interface, three times over. The middle column is what exis
 | `ElevationProvider` | `buildTerrain()` ridged-noise field | `src/sim/terrain.ts` | `TerrariumDem` (exists, `loadRealTerrain`) → `CopernicusDem` via GEE |
 | `FuelProvider` | topography rules in `buildTerrain()` | `src/sim/terrain.ts` | `classify()` visible-band (exists) → `WorldCoverCrosswalk` → `SegFormerFuel` |
 | `CanopyProvider` | **missing** — `assumed` all 1, per-`Fuel` constants | — | `GediCanopy` gap-filled against Sentinel-2 |
-| `BarrierProvider` | `NoBarriers` (all zeros) | — | `OsmBarriers` — roads, streams |
+| `BarrierProvider` | `NoBarriers` (all zeros) — offline only | `api/src/providers/osm.ts` | **`OsmBarriers` exists** — Overpass roads + watercourses, per-edge, widths assumed per tag |
 | `BurnHistoryProvider` | `NoBurnHistory` | — | `GeeDnbr` (§3) |
-| `WeatherProvider` | `mockForecast()` + `PRESETS` | `src/sim/weather.ts` | `NwsGridpoint` / `OpenMeteo` / `RawsStation` |
+| `WeatherProvider` | `mockForecast()` + `PRESETS` | `api/src/providers/tier2.ts` | **`OpenMeteo` exists** — hourly forecast plus 61 days of daily precipitation for days-since-rain |
 | `WindFieldProvider` | `UniformWind` + `gustAt()` | `src/sim/model.ts` | `WindNinjaField` at 100 m |
 | `FuelMoistureModel` | `fuelMoisture()` — RH formula, scalar | `src/sim/weather.ts` | `Nfdrs1hTimelag`, per-cell, stateful |
 | `IgnitionSource` | `UserClickIgnition` | `App.tsx` `onIgnite` | `ViirsFeed` / `GoesFeed` |
 | `SuppressionPlan` | user-drawn dozer / retardant | `paintTreatment()` | incident action plan import |
-| `PerimeterObserver` | `NoObservations` | — | `DroneIrPerimeter` (flirimageextractor), `ViirsPerimeter` |
+| `PerimeterObserver` | `NoObservations` — offline only | `api/src/providers/firms.ts` | **`FirmsPerimeter` exists** — VIIRS/MODIS detections painted at their real footprint. `DroneIrPerimeter` is the upgrade |
 | `SpreadKernel` | `ProbabilisticCaKernel` — **has the `1+√2` bug** | `src/sim/model.ts` | `EnergyKernel` (§4); `Cell2FireAdapter` as the step-1 gate |
-| `ValuesAtRisk` | `STRUCTURES_PER_HA = 3` × burnt WUI area | `src/sim/model.ts` | `OsmBuildings`, `YoloDetections` |
+| `ValuesAtRisk` | `STRUCTURES_PER_HA = 3` × burnt WUI area | `api/src/providers/osm.ts` | **`OsmBuildings` exists** — mapped footprints counted per cell. `YoloDetections` for what OSM is missing |
 
 Five rows have no mock at all today. Those are the gaps, and writing the trivial null implementation
 (`NoBarriers`, `NoObservations`, `NoBurnHistory`) is worth doing immediately: it forces the call sites
 to exist, so adding the real provider later touches one line of composition instead of the kernel.
+
+That claim has since been tested on `BarrierProvider`: with `NoBarriers` and its call site already
+in place, the real Overpass provider was one line in `registry.ts` plus two in the kernel — the
+kernel lines only because the probabilistic CA had no per-edge term at all. `blockFrac` scales the
+spread rate through each edge, which is the §5 sub-cell treatment and not the accumulator of §4.
 
 ### Composition
 

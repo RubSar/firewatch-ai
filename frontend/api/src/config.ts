@@ -20,6 +20,8 @@ export interface Config {
   fetchTimeoutMs: number
   /** Drop an incident this long after its last socket detaches. */
   idleTimeoutMs: number
+  /** Overpass endpoint for OSM barriers. The public instance is rate-limited. */
+  overpassUrl: string
 }
 
 export function loadConfig(env = process.env): Config {
@@ -33,5 +35,6 @@ export function loadConfig(env = process.env): Config {
     maxIncidents: Number(env.MAX_INCIDENTS ?? 32),
     fetchTimeoutMs: Number(env.FETCH_TIMEOUT_MS ?? 15000),
     idleTimeoutMs: Number(env.IDLE_TIMEOUT_MS ?? 60000),
+    overpassUrl: env.OVERPASS_URL ?? 'https://overpass-api.de/api/interpreter',
   }
 }

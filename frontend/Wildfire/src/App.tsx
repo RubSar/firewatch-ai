@@ -14,6 +14,7 @@ import { StatsPanel } from './components/StatsPanel.tsx'
 import { Legend } from './components/Legend.tsx'
 import { GrowthChart } from './components/GrowthChart.tsx'
 import { ForecastStrip } from './components/ForecastStrip.tsx'
+import { DataSources } from './components/DataSources.tsx'
 import { LocalTransport } from './transport/local.ts'
 import { RemoteTransport } from './transport/remote.ts'
 import type { FireTransport, TransportStatus } from './transport/types.ts'
@@ -168,6 +169,7 @@ export default function App() {
   const [stats, setStats] = useState<Stats>(EMPTY_STATS)
   const [simTime, setSimTime] = useState(0)
   const [hasLines, setHasLines] = useState(false)
+  const [showSources, setShowSources] = useState(false)
   const [peakArea, setPeakArea] = useState(1)
 
   // MapView reads simRef.current every frame; keep it pointing at whichever
@@ -310,9 +312,6 @@ export default function App() {
 
   const chipNote = status.error ?? status.note
   const chipLive = !status.error && /live|server/i.test(status.note)
-  const provTitle = Object.keys(status.provenance).length
-    ? Object.entries(status.provenance).map(([k, v]) => `${k}: ${v.note}`).join('\n')
-    : 'Source of the elevation and fuel grids'
 
   return (
     <div className={`app cursor-${tool}`}>
@@ -328,10 +327,16 @@ export default function App() {
           getView={() => getViewRef.current()}
           apiUrl={API_URL}
         />
-        <span className={`data-chip${chipLive ? ' live' : ''}`} title={provTitle}>
+        <button
+          type="button"
+          className={`data-chip${chipLive ? ' live' : ''}`}
+          onClick={() => setShowSources(true)}
+          title="What the model is running on, port by port"
+        >
           {transport?.kind === 'remote' ? '☁ ' : ''}
           {chipNote}
-        </span>
+          <span className="chip-info" aria-hidden="true">i</span>
+        </button>
         <div className="spacer" />
         <div className="danger-badge" title={`Chandler Burning Index ${cbi.toFixed(0)}`}>
           <span className="dot" style={{ background: danger.color, color: danger.color }} />
@@ -344,6 +349,10 @@ export default function App() {
           Reset
         </button>
       </header>
+
+      {showSources && (
+        <DataSources status={status} kind={transport?.kind} onClose={() => setShowSources(false)} />
+      )}
 
       <div className="body">
         <aside className="panel-left">
@@ -397,7 +406,11 @@ export default function App() {
           )}
 
           <div className="hud hud-tr">
-            <StatsPanel stats={stats} fmc={fmc} />
+            <StatsPanel
+              stats={stats}
+              fmc={fmc}
+              structuresCounted={(status.provenance.valuesAtRisk?.kind ?? 'synthetic') !== 'synthetic'}
+            />
           </div>
 
           {stats.burnedCells === 0 && tool === 'ignite' && (

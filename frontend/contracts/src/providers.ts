@@ -109,7 +109,11 @@ export type CanopyProvider = Provider<TerrainQuery, CanopyGrid>
 
 /** Vector barriers → the sub-cell blocking fractions of §5. Per-edge, not per-cell. */
 export interface BarrierField {
-  /** blockFrac[i * 8 + d] = 0..1 obstruction on the flux from cell i toward neighbour d. */
+  /**
+   * blockFrac[i * 8 + d] = 0..1 obstruction on the flux from cell i toward
+   * neighbour d, where d indexes `NEIGHBOURS` in `@firewatch/sim/model`.
+   * Providers must use that order; the kernel reads it directly.
+   */
   blockFrac: Float32Array
 }
 export type BarrierProvider = Provider<TerrainQuery, BarrierField>
@@ -138,7 +142,13 @@ export interface WeatherBundle {
 export type WeatherProvider = Provider<{ bounds: Bounds; hours: number }, WeatherBundle>
 
 export interface WindField {
+  /**
+   * Eastward component, m/s. Meteorological convention, as ECMWF and
+   * Open-Meteo use — NOT grid-aligned. `v` is northward even though grid rows
+   * increase southward; mixing the two silently rotates the fire.
+   */
   u: Float32Array
+  /** Northward component, m/s. */
   v: Float32Array
   /** Metres — the resolution the field was actually solved at, before interpolation. */
   resolution: number
@@ -185,11 +195,16 @@ export interface SuppressionPlan {
 }
 
 export interface ObservedPerimeter {
+  /** 1 where the sensor saw fire, on the query's grid. Empty when unobserved. */
   burning: Uint8Array
   /** Radiometric max temp where available — scores the kernel's maxTemp diagnostic. */
   maxTemp: Float32Array | null
 }
-export type PerimeterObserver = Provider<{ bounds: Bounds; at: string }, ObservedPerimeter>
+/**
+ * Takes the grid, not just the bounds: `burning` is a raster, and a raster
+ * without the spec it was sampled onto cannot be compared to anything.
+ */
+export type PerimeterObserver = Provider<{ grid: GridSpec; at: string }, ObservedPerimeter>
 
 export interface ValuesAtRiskGrid {
   /** Count per cell. */

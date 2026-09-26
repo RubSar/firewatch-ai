@@ -97,6 +97,10 @@ shows what the current scenario is running on.
 | Water & snow | **Sentinel-2 L2A Scene Classification**, AWS Open Data | keyless; measured, not inferred from colour |
 | Land cover → fuel model | Esri World Imagery | visible-band proxy for the vegetation split, see below |
 | Weather | real in server mode (Open-Meteo); mocked in browser mode — `frontend/sim/src/weather.ts` | `mockForecast()` and the live feed return the same shape |
+| Days since rain | **Open-Meteo** daily precipitation, 61 days back | measured, not carried from the preset; ≥2 mm counts as a wetting rain |
+| Barriers | **OpenStreetMap** roads and watercourses, via Overpass | keyless; server-side only. Geometry measured, widths assumed per tag |
+| Structures at risk | **OpenStreetMap** building footprints, via Overpass | keyless; server-side only. A count of mapped buildings, not of buildings |
+| Observed fire | **NASA FIRMS** detections rasterised onto the grid | the §6 `PerimeterObserver` port — 375 m pixels, two overpasses a day |
 | Active fires | **NASA FIRMS** VIIRS (375 m) + MODIS (1 km), last 24 h | keyless; server-side only — FIRMS sends no CORS headers |
 | Place search | Open-Meteo geocoding | keyless |
 | Ignition point | you click the map, or a FIRMS detection | — |
@@ -138,14 +142,52 @@ Two transports, one renderer. `src/transport/` decides which:
 The remote transport mirrors the wire deltas into a real `Sim` object, so
 `MapView`, `fireGeometry` and `paint` are untouched and cannot tell which
 transport they were handed. The header chip names what is real and what is
-mocked — "live elevation + fuel + weather · 4 mocked" — because a provider that
-returns data without saying where it came from is the failure mode worth
-designing against.
+mocked — "6 of 10 sources live · 4 mocked" — because a provider that returns data
+without saying where it came from is the failure mode worth designing against.
+The chip names the real ports while they fit in a header and falls back to counts
+past four; the ⓘ opens the full per-port breakdown, provenance note and all.
 
 Server-side the data sources are formal provider ports (`ARCHITECTURE.md` §9) in
 `frontend/api/src/providers/`. Real today: Terrarium DEM, Esri imagery fuel,
-Open-Meteo weather. Mocked: canopy, barriers, burn history, wind field, perimeter
-observer, values-at-risk. Swapping any one is a line in `registry.ts`.
+Open-Meteo weather, OSM barriers, OSM buildings, FIRMS observations. Mocked:
+canopy, burn history, wind field, fuel moisture. Swapping any one is a line in
+`registry.ts`.
+
+### Barriers
+
+Roads and watercourses are the one real input that is *geometry* rather than a
+raster, and §5 is the reason they are not simply unburnable cells: a 30 m
+motorway on a 38 m grid would either vanish into a cell average or eat the whole
+cell. Instead each barrier obstructs a fraction of the specific cell-to-cell
+edges it crosses — `blockFrac[i * 8 + d]` — and the kernel scales the spread
+rate through that edge by what is left open.
+
+Two honest caveats:
+
+- **The block is capped at 0.95.** Embers cross every road ever built, and
+  spotting is deliberately unaffected.
+- **Widths are assumed per OSM tag** (`width` and `lanes` are used where they
+  exist), so the provenance says `derived`, not `measured`. A motorway is taken
+  as 30 m including verges, a residential street as 7 m, a stream as 5 m.
+
+Overpass is a shared community endpoint: responses are cached on disk beside the
+tiles, a 429 or 504 is retried once, and `OVERPASS_URL` points at a private
+instance. If it stays unreachable the port degrades to `no-barriers` and the chip
+says so.
+
+### Structures at risk
+
+The same Overpass round trip also counts **building footprints** per cell
+(`out center` — one point per building rather than its outline), so "structures
+lost" is a count of mapped buildings inside the burn scar instead of
+`STRUCTURES_PER_HA = 3` times the burnt area the imagery called developed. Over
+Dilijan the two differ by an order of magnitude, mostly because the visible-band
+classifier under-detects town.
+
+It can only ever under-count: a building nobody has mapped is not there, and
+occupancy is assumed at 2.5 people per structure, which is why the port reports
+`derived` rather than `measured`. The stats panel footnote changes with the
+source, so the number on screen always says which of the two it is.
 
 ### Thermal (infrared) view
 

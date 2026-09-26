@@ -56,6 +56,11 @@ npm run typecheck           # every workspace
 npm run smoke               # UI: Playwright drives every control (needs dev:web running)
 npm run smoke:api           # API: boots the server, decodes the binary stream
 FIREWATCH_MODE=live npm run smoke:api
+
+# provider diagnostics, from frontend/api/ or with --workspace=@firewatch/api
+npm run watercheck          # fuel classifier vs. six hard water bodies
+npm run barriercheck        # OSM barrier geometry + whether the kernel honours it
+FIREWATCH_MODE=offline npm run barriercheck   # geometry and kernel only, no Overpass
 ```
 
 From inside `frontend/Wildfire/`: `npm run calibrate` renders `calibrate.html` to
@@ -246,6 +251,30 @@ so the fire's apparent brightness tracks its actual temperature. FIRMS markers r
 same ramp via `thermalColour()` keyed on measured brightness temperature, which is what
 makes modelled and observed heat comparable (§6).
 
+### Per-cell wind and moisture
+
+`StepInput` takes optional `windField` and `moisture` alongside `blockFrac`. All three follow
+the same rule: **omitted means the scalar path**, which is what browser-only mode passes, so
+the kernel stays usable without a server.
+
+- **Wind vectors are `u` east, `v` north** — the meteorological convention, pinned in
+  `contracts/src/providers.ts`. Grid rows increase *southward*, so the two disagree by a sign.
+  They did disagree, silently, and a uniform field produced a 26% larger fire than the
+  identical scalar wind. The invariant worth keeping: a uniform field must reproduce the
+  scalar path **bit for bit**.
+- **Wind is fetched as an anomaly, not absolute** — `speedRatio` and `veerDeg` against the
+  domain mean. The data supplies spatial shape; the wind slider still sets strength and
+  bearing. A real field that overrode the slider would break the control the sandbox is
+  built around.
+- **Gusting rides on top of the field**, scaled by `gustScale` and veered by `gustVeer`:
+  gusting is a time signal, not a place signal.
+- **Moisture is an NFDRS 1-h timelag** integrated over 7 days of Open-Meteo history, so rain
+  yesterday matters — the formula it replaced was memoryless. `FuelMoistureModel.compute`
+  stays synchronous and kicks off its own history refresh; `warmMoistureHistory` is awaited at
+  incident creation so the first field already has real data.
+- `Incident.rebuildFields()` runs before each step batch but early-returns on an unchanged
+  weather signature, so it costs nothing while the weather is still.
+
 ### Water comes from Sentinel-2, not from colour
 
 `frontend/api/src/providers/sentinel.ts` reads the Sentinel-2 L2A **Scene
@@ -302,6 +331,54 @@ map and fills those paths. So:
 - arrival-time bands are frozen and cached once the clock passes their cutoff (`isoCache`),
   because re-tracing every band per rebuild halved the frame rate.
 
+### A real port has to reach the kernel, or it is decoration
+
+Three ports were fetched and thrown away before they were made real: `barriers`, `valuesAtRisk`
+and `observer`. Wiring the provider is the easy half — check the data actually arrives somewhere
+that changes what the user sees, and that the UI stops claiming the old estimate:
+
+- `blockFrac` scales the spread rate through each cell edge in `step()`.
+- `structures` is summed over burnt cells in `recomputeStats(sim, structures?)`, replacing
+  `STRUCTURES_PER_HA` — and `StatsPanel`'s footnote switches wording on
+  `provenance.valuesAtRisk.kind`, because "3 per hectare" under a counted number is a lie.
+- `observer` genuinely has no consumer yet: §6's assimilation loop does not exist. It is wired and
+  labelled so a drone IR feed is one line in `registry.ts`, and the note says a FIRMS pixel is
+  375 m, not a perimeter. Do not let it grow a consumer that pretends otherwise.
+
+Ports whose data the kernel ignores are still recorded in `Incident.provenance` — all ten of them.
+A port missing from that record is a mocked source the UI never mentions.
+
+### Incident creation is one Promise.all, deliberately
+
+Every port that needs only the grid is resolved concurrently in `Incident.create`. Adding an
+`await` in front of one instead of a slot in that array puts its latency on the critical path:
+FIRMS alone is a 6 s deadline (`OBSERVER_DEADLINE_MS`) on a cold cache, which costs nothing behind
+the tile fetches and 6 s in front of them. Incident creation is ~7 s; keep it there.
+
+The FIRMS observer degrades to `no-observations` when it loses that race and the global 24 h CSV is
+still downloading, then reports `measured` on the next incident. That is the cache warming, not a
+bug — but it does mean the first incident after a server start shows one more mocked port.
+
+### Barriers are per-edge, and the edge order is a contract
+
+`BarrierField.blockFrac` is `cols * rows * 8` floats, indexed `blockFrac[i * 8 + d]` where `d`
+indexes **`NEIGHBOURS` in `frontend/sim/src/model.ts`** — that array is exported for exactly this
+reason. Rasterise onto a different ordering and the fire is slowed in the wrong directions with
+nothing failing loudly, which is why `npm run barriercheck` asserts the rule directly: a barrier
+lying along a cell boundary must block the flux *across* it and leave the flux *along* it open.
+`osmBarriers` gets that right by testing whether the centre-to-centre flux path intersects the
+barrier segment; marking the edges a line "passes through" gets it exactly backwards.
+
+Three things to preserve when touching this path:
+
+- **`blockFrac` lives on `Incident`, not on `Sim`.** `reset` builds a fresh sim over the same
+  terrain, so a field held on the sim would silently vanish on the first reset. It is
+  terrain-derived and immutable for the incident's life, like `terrain` itself.
+- **Browser-only mode has no barriers.** Overpass is fetched server-side and `StepInput.blockFrac`
+  is optional; local mode simply omits it. Do not make the kernel require it.
+- **The block is capped below 1 and spotting ignores it.** A road stops a creeping flank, not an
+  ember, and `barriercheck` disables spotting precisely because spotting is meant to cross.
+
 ### Deliberate mock seams
 
 These are the interfaces designed to be swapped for real feeds, each marked `MOCK:` in source:
@@ -315,8 +392,8 @@ These are the interfaces designed to be swapped for real feeds, each marked `MOC
 
 Server-side the same seams are formal §9 ports in `frontend/api/src/providers/`. `registry.ts` is
 the **only** file that names concrete implementations. Real today: Terrarium DEM, Esri imagery
-fuel, Open-Meteo weather. Mocked: canopy, barriers, burn history, wind field, perimeter observer,
-values-at-risk. Every provider returns `Provided<T>` carrying `Provenance`, and the UI header chip
+fuel, Open-Meteo weather, OSM barriers, OSM buildings, FIRMS observations. Mocked: canopy, burn
+history, wind field, fuel moisture. Every provider returns `Provided<T>` carrying `Provenance`, and the UI header chip
 lists which is which — "mock data presented as live" is meant to be a type error, so do not add a
 provider that returns bare data.
 

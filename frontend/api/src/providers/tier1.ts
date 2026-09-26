@@ -11,7 +11,7 @@ import {
 } from '@firewatch/sim'
 import type {
   BarrierField, BarrierProvider, BurnHistoryProvider, CanopyGrid, CanopyProvider,
-  ElevationProvider, FuelGrid, FuelProvider, SeverityGrid,
+  ElevationProvider, FuelGrid, FuelProvider, PerimeterObserver, SeverityGrid,
   TerrainQuery, ValuesAtRisk, ValuesAtRiskGrid,
 } from '@firewatch/contracts/providers'
 import { DEM_URL, IMAGERY_URL, fetchMosaic, toPixel, type Mosaic } from './tiles.ts'
@@ -278,6 +278,18 @@ export const assumedCanopy: CanopyProvider = {
         'per-class-assumption',
         'Canopy assumed per fuel class — no CBH/CBD measurement (§4 names this the weakest input)'
       ),
+    }
+  },
+}
+
+/** No observations — the assimilation loop of §6 has nothing to assimilate yet. */
+export const noObservations: PerimeterObserver = {
+  id: 'no-observations',
+  fallbacks: [],
+  async fetch() {
+    return {
+      data: { burning: new Uint8Array(0), maxTemp: null },
+      provenance: synthetic('none', 'No IR or VIIRS feed — assimilation loop inactive (§6)'),
     }
   },
 }

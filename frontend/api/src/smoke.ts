@@ -118,6 +118,17 @@ check(events.some((e) => e.type === 'hello'), 'hello event received')
 check(rx.frames > 0, `${rx.frames} state frames`)
 
 step('ignite + run')
+// Pin the fire weather first. In live mode the incident starts on the real
+// forecast, and a damp evening in Armenia is a legitimate reason for a fire not
+// to spread — which would make every assertion below a weather report. The
+// sliders are the same port the UI drives, so this stays an end-to-end test.
+await json(`/api/incidents/${inc.incidentId}/command`, {
+  method: 'POST',
+  body: JSON.stringify({
+    type: 'params',
+    patch: { temperature: 33, humidity: 14, windSpeed: 32, gustiness: 0.5, daysSinceRain: 48, precipitation: 0 },
+  }),
+})
 const mid = { col: Math.floor(inc.grid.cols * 0.45), row: Math.floor(inc.grid.rows * 0.4) }
 await json(`/api/incidents/${inc.incidentId}/command`, {
   method: 'POST', body: JSON.stringify({ type: 'ignite', ...mid }),
