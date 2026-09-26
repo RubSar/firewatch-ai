@@ -12,6 +12,24 @@ Additional sources: [ELMFIRE, Cell2Fire, Sentinel-2 and the verified Cypress Cre
 case](external-models-cypress-creek.md). These support separate satellite/spread
 evaluation work; they do not replace M1's independent drone mask review.
 
+Executed next step: [dated Cypress Creek satellite experiment](cypress-creek-experiment.md).
+Real February 16 / March 13 Sentinel-2 crops, fixed NBR/dNBR rules, cloud exclusions,
+and an offline reproducible report. Exploratory Dice 0.766 and 97.89% valid AOI
+coverage do not establish time-matched accuracy: reference timing/target uncertainty
+remains. This separate development case does not close M1 or start M2 training.
+
+Next step executed: [perimeter audit and two-incident satellite transfer pilot](satellite-transfer.md).
+Daily Cypress geometries do not establish observed spread times. Rawlins fails the
+coverage gate; County Rd 169 passes coverage but the unchanged pre-NBR floor reduces
+exploratory Dice to 0.007. Preserve both attempts as development evidence and obtain
+independent dated references before claiming accuracy or tuning a new benchmark.
+
+Reference acquisition executed: [Caldor infrared reference readiness](reference-readiness.md).
+Acquired 21 independently sourced NIROPS perimeter KMLs from the pinned FireBench
+release; 16 pass geometry validation. A metadata-only Sentinel screen finds zero
+covering matches within six hours. Original survey verification, target semantics
+and temporal uncertainty remain open; no thresholds were tuned or models trained.
+
 [M1 findings and remaining acceptance criteria](milestone-1.md): acquired
 992 FLAME2 image/mask triplets, checked label encoding and similarity, and executed
 the incident split gate. One incident and unresolved target/review evidence prevent

@@ -1,0 +1,1130 @@
+{
+  "schema_version": "firewatch.research.transfer-selection.v1",
+  "created_at_utc": "2026-09-26T22:51:49.297406Z",
+  "policy": {
+    "schema_version": "firewatch.research.transfer-policy.v1",
+    "purpose": "Two geographically separated incident transfer cases, without threshold tuning; reference audit precedes scoring.",
+    "amends": "cohort-policy.json",
+    "amendment_reason": "The original UTM 15N 2026 search returned only Cypress Creek and Flanders. Flanders has no containment or polygon timestamp, leaving zero eligible new cases. Broaden geography before any new satellite catalogue/pixel inspection; preserve the original search and policy.",
+    "candidate_window_utc": [
+      "2026-01-01T00:00:00Z",
+      "2026-06-30T23:59:59Z"
+    ],
+    "candidate_geography": {
+      "west": -125,
+      "east": -66,
+      "south": 24,
+      "north": 50
+    },
+    "geography_reason": "CONUS bounding rectangle; native UTM zone derived from each reported origin. Geographic selection is a convenience pilot, not a national probability sample.",
+    "min_reported_polygon_acres": 1200,
+    "max_reported_polygon_acres": 10000,
+    "case_count": 2,
+    "min_origin_separation_km": 100,
+    "selection_order": [
+      "discovery time ascending",
+      "incident UUID ascending"
+    ],
+    "eligibility": "WF only, unique UUID, not Cypress Creek or a complex child, valid closed-ring polygon, positive discovery and containment times in order, non-null polygon timestamp after discovery and not beyond containment plus 15 days, origin present, full 20 m grid <=400000 cells. Select first two with >=100 km origin separation from Cypress and each earlier selected case. No replacement after imagery/quality results.",
+    "pre_days": 14,
+    "post_days": 15,
+    "algorithm": {
+      "dnbr_threshold": 0.1,
+      "pre_nbr_floor": 0.1,
+      "resolution_m": 20,
+      "buffer_m": 1000,
+      "max_scene_cloud_percent": 60,
+      "max_candidates_per_window": 4,
+      "valid_scl_classes": [
+        4,
+        5,
+        6
+      ],
+      "cloud_buffer_pixels": 1,
+      "min_joint_valid_fraction": 0.95
+    },
+    "reference_policy": "Preserve dated source evidence but do not promote WFIGS daily snapshots or attribute timestamps to independent observation times. Scores remain exploratory until target/time evidence is resolved.",
+    "independence_limit": "Distinct incident UUIDs, separation and non-overlapping geometries are structural screening, not proof of independent fire regimes or reference creation. This is a transfer pilot, not a frozen ML test set."
+  },
+  "selected": [
+    {
+      "incident_id": "d05cf942-a3e3-425d-bfe1-0c994ec8956a",
+      "name": "Rawlins Co TP",
+      "state": "US-KS",
+      "folder": "d05cf942-a3e3-425d-bfe1-0c994ec8956a",
+      "config_sha256": "f2adf784b01c4c2173f351ab8e6b3407e3e2b0a17ee4dc2e05256f76b4565194",
+      "snapshot_sha256": "acd196d89c08578ae24887830677e06075becaca35cce3916213759f03a12ac0",
+      "origin_distances_km": [
+        1152.7690633042837
+      ],
+      "grid_pixels": 108142,
+      "epsg": 32614
+    },
+    {
+      "incident_id": "84284851-f0f8-4253-b5bc-da7771e0150d",
+      "name": "County Rd 169",
+      "state": "US-CO",
+      "folder": "84284851-f0f8-4253-b5bc-da7771e0150d",
+      "config_sha256": "89927311295dbe7fa652e4c4c5563014203a1c5b29fe502cc5c4f98cf130af6a",
+      "snapshot_sha256": "3a88ae91910f1bfcb90c37c959306fe0020dd529673471f80b8d5c9e9792b773",
+      "origin_distances_km": [
+        1244.6559943736017,
+        271.0796580295228
+      ],
+      "grid_pixels": 224790,
+      "epsg": 32613
+    }
+  ],
+  "candidate_count": 130,
+  "audit": [
+    {
+      "incident_id": null,
+      "name": "Silver Lake",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": null,
+      "name": "Havasu",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": null,
+      "name": "Leche",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": "4c2bb68b-061a-4c3e-b615-31727ee94b7b",
+      "name": "Wildhorse",
+      "status": "excluded",
+      "reasons": [
+        "geometry_invalid: Invalid perimeter ring; no silent repair"
+      ]
+    },
+    {
+      "incident_id": null,
+      "name": "Smith",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": "000df40c-307f-4973-9171-bb269168b9f3",
+      "name": "Andrew Lane",
+      "status": "excluded",
+      "reasons": [
+        "missing_polygon_timestamp"
+      ]
+    },
+    {
+      "incident_id": "d05cf942-a3e3-425d-bfe1-0c994ec8956a",
+      "name": "Rawlins Co TP",
+      "status": "selected",
+      "reasons": []
+    },
+    {
+      "incident_id": "84284851-f0f8-4253-b5bc-da7771e0150d",
+      "name": "County Rd 169",
+      "status": "selected",
+      "reasons": []
+    },
+    {
+      "incident_id": "33de588d-41b4-4372-abfb-7a629bc5bb73",
+      "name": "Canadian Bridge",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": null,
+      "name": "Tiger Tank",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": null,
+      "name": "Range 6",
+      "status": "excluded",
+      "reasons": [
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": "8432b888-2a01-4825-8eb6-c74589de24fc",
+      "name": "Cypress Creek",
+      "status": "excluded",
+      "reasons": [
+        "inspected_cypress_pilot"
+      ]
+    },
+    {
+      "incident_id": "932ca533-3cd2-4c42-beb2-d1cfd5afff50",
+      "name": "113 Incident",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": null,
+      "name": "Rehder Creek",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": null,
+      "name": "Savannah",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": "9084d250-ecc5-4b8d-9360-b26c73efbbec",
+      "name": "Dolly",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": "e08030e9-0ce3-4654-a783-d21cb77b1e80",
+      "name": "Porcupine creek ",
+      "status": "excluded",
+      "reasons": [
+        "missing_or_invalid_incident_times"
+      ]
+    },
+    {
+      "incident_id": "7ab6021d-6fc2-420f-bfc5-43752f86749f",
+      "name": "Qury",
+      "status": "excluded",
+      "reasons": [
+        "missing_or_invalid_incident_times"
+      ]
+    },
+    {
+      "incident_id": "45ad39dc-281e-4094-a31f-08dba65710dc",
+      "name": "YEARLING PASTURE",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": null,
+      "name": "FIVE",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": "b488b88c-b981-442e-b3f0-e7357c06f405",
+      "name": "Lakeview",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": "a554e12e-5685-457c-9155-8a48461e0aad",
+      "name": "Nineteen",
+      "status": "excluded",
+      "reasons": [
+        "insufficient_origin_separation"
+      ]
+    },
+    {
+      "incident_id": null,
+      "name": "139",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": "bbcc3ae1-9964-46a0-a7fe-2d2d65f47ff3",
+      "name": "24",
+      "status": "excluded",
+      "reasons": [
+        "missing_or_invalid_incident_times"
+      ]
+    },
+    {
+      "incident_id": "2f4d8f6d-f38a-47fb-b4e4-fa449b276a7a",
+      "name": "DRUMMOND",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": null,
+      "name": "Mill Pond",
+      "status": "excluded",
+      "reasons": [
+        "missing_or_invalid_incident_times",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": null,
+      "name": "March",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": "ed69fc26-6c54-4587-b0ff-864f37c08349",
+      "name": "Oklahoma Flat",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": null,
+      "name": "SAND CREEK",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": null,
+      "name": "Sandpiper",
+      "status": "excluded",
+      "reasons": [
+        "missing_or_invalid_incident_times",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": "875f6b72-2a99-4f8c-9807-346aff142fea",
+      "name": "Grey Road",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": "ee734c3d-0490-4d94-89c4-603997953ad6",
+      "name": "BISON LOOP",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": "2bf89b3a-13f6-4d42-ac28-5fc49cc363bd",
+      "name": "KANE",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": null,
+      "name": "WARE",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": "caf38716-4b9d-45fa-a830-8f7ae15720d9",
+      "name": "Q8",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": "9ebcd480-2a35-4b35-928c-2421a6117893",
+      "name": "Crazy Calf",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": null,
+      "name": "JOY",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": "983c6e5c-4983-4dc7-8c68-34efe9eeae11",
+      "name": "BOX",
+      "status": "excluded",
+      "reasons": [
+        "geometry_invalid: Invalid perimeter ring; no silent repair"
+      ]
+    },
+    {
+      "incident_id": "ae24f076-6918-458d-ac31-5c0cbb7d708d",
+      "name": "Bronson",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": "d472d0c1-879e-48f3-a5c4-7af820fd5085",
+      "name": "Lone Barn",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": "3d7820bd-5c2c-4e4e-8e77-61d306e698cb",
+      "name": "BOMAN",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": "4bb8e472-163c-4448-8dfc-c364d2708507",
+      "name": "Sargent",
+      "status": "excluded",
+      "reasons": [
+        "missing_polygon_timestamp"
+      ]
+    },
+    {
+      "incident_id": null,
+      "name": "HUGHLEY",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": "2b5fa2c5-8665-4986-8da6-103a1698e6ad",
+      "name": "SUNNY",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": null,
+      "name": "HC 1",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": null,
+      "name": "Horn",
+      "status": "excluded",
+      "reasons": [
+        "missing_or_invalid_incident_times",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": "ecf97dc7-65a9-4a29-b498-46f02b6780d3",
+      "name": "79",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": "66cfaace-3c03-4ce7-8df6-4fd6f7a5bb2c",
+      "name": "Schwachheim",
+      "status": "excluded",
+      "reasons": [
+        "missing_or_invalid_incident_times"
+      ]
+    },
+    {
+      "incident_id": "fbcab7f0-50f5-4277-ae98-4878b3a93171",
+      "name": "311 Konza",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window"
+      ]
+    },
+    {
+      "incident_id": "042efb66-ed03-4baa-a34c-28192bc152c9",
+      "name": "Thomas",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": "fa80604e-ca8e-4f79-bdde-f0bf4cda4d64",
+      "name": "O30",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": "8c865688-a4fe-42bc-846e-6a8680192bcf",
+      "name": "East Side",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": "36bd8a5a-bfce-4593-9cb5-93ded1504e67",
+      "name": "Hummingbird",
+      "status": "excluded",
+      "reasons": [
+        "missing_or_invalid_incident_times",
+        "missing_polygon_timestamp"
+      ]
+    },
+    {
+      "incident_id": "3ea9c9f6-9ab8-40c4-b8ac-a1401caa8e12",
+      "name": "Pressey",
+      "status": "excluded",
+      "reasons": [
+        "missing_or_invalid_incident_times"
+      ]
+    },
+    {
+      "incident_id": "27f08278-cfd2-4404-b308-dc1946dc2b7f",
+      "name": "Taber Rec",
+      "status": "excluded",
+      "reasons": [
+        "missing_or_invalid_incident_times"
+      ]
+    },
+    {
+      "incident_id": "fbe73d7d-53fc-406c-808f-4de9578c5208",
+      "name": "Arthur County Complex",
+      "status": "excluded",
+      "reasons": [
+        "unsupported_grid: Grid exceeds pixel budget"
+      ]
+    },
+    {
+      "incident_id": "da2ba63f-024d-4596-aced-b434ad067b6f",
+      "name": "Hammer",
+      "status": "excluded",
+      "reasons": [
+        "insufficient_origin_separation"
+      ]
+    },
+    {
+      "incident_id": "d4d324cc-6208-4ef4-a24c-1fcd8ff79664",
+      "name": "Poitrey Canyon",
+      "status": "excluded",
+      "reasons": [
+        "missing_or_invalid_incident_times"
+      ]
+    },
+    {
+      "incident_id": "23403af4-c827-4f95-a8e5-6d92ae5bbd4e",
+      "name": "HWY 41",
+      "status": "excluded",
+      "reasons": [
+        "missing_polygon_timestamp"
+      ]
+    },
+    {
+      "incident_id": null,
+      "name": "Sparks",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": "64eabb0f-3ea8-47f3-bc7f-19750df7e579",
+      "name": "CANYON",
+      "status": "excluded",
+      "reasons": [
+        "missing_or_invalid_incident_times"
+      ]
+    },
+    {
+      "incident_id": "5985829d-31de-4a80-a836-25907b851057",
+      "name": "Pine Mountain",
+      "status": "excluded",
+      "reasons": [
+        "missing_or_invalid_incident_times"
+      ]
+    },
+    {
+      "incident_id": null,
+      "name": "NIKE",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": "fd427073-88d5-4cfa-95a1-7be3d3e5e00f",
+      "name": "Wild Horse",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": null,
+      "name": "Jericho Creek",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": null,
+      "name": "Pasadena Valley",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": null,
+      "name": "Rochelle 2",
+      "status": "excluded",
+      "reasons": [
+        "missing_or_invalid_incident_times",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": "3acb48ed-c3a5-49da-bb7f-22b201fb7ebe",
+      "name": "RANGE",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": "df424a1d-f6d6-4095-8786-dd329a7fb229",
+      "name": "Mimms",
+      "status": "excluded",
+      "reasons": [
+        "missing_or_invalid_incident_times"
+      ]
+    },
+    {
+      "incident_id": null,
+      "name": "RANGE",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": "79502bc1-5c23-420d-a637-83a37410215c",
+      "name": "26",
+      "status": "excluded",
+      "reasons": [
+        "missing_polygon_timestamp"
+      ]
+    },
+    {
+      "incident_id": "788ebbc9-1adf-4745-9ac8-aec77f2a5c72",
+      "name": "Shifty",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": "b168e9ab-44b1-4b83-9d20-2088593538c6",
+      "name": "McBride",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": "0c2508d8-cb18-4d6e-8275-4eeccfb5ab9f",
+      "name": "Crooked Cook",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": "7fc23d22-592b-4191-a235-2d1cca369585",
+      "name": "Line",
+      "status": "excluded",
+      "reasons": [
+        "geometry_invalid: Invalid perimeter ring; no silent repair"
+      ]
+    },
+    {
+      "incident_id": "7dabf2c6-d00c-47b0-8fc8-9390f207e958",
+      "name": "Chainey Mountain",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": "e50ce200-aedd-48c1-bbcc-d0a2a7cbf845",
+      "name": "Cherokee",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": "d8e74dfa-9e39-48e0-99be-133decffd4e1",
+      "name": "Moustache",
+      "status": "excluded",
+      "reasons": [
+        "geometry_invalid: Invalid perimeter ring; no silent repair"
+      ]
+    },
+    {
+      "incident_id": "cf5b566d-8cf3-4d05-bcc3-08ee33f276db",
+      "name": "Comanche",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": "ec401d4a-7195-4dff-9b6e-c72f2e15594e",
+      "name": "Flanders",
+      "status": "excluded",
+      "reasons": [
+        "missing_or_invalid_incident_times",
+        "missing_polygon_timestamp"
+      ]
+    },
+    {
+      "incident_id": "fcccb1cd-f00f-484f-beeb-43874cb5fd86",
+      "name": "Stinky",
+      "status": "excluded",
+      "reasons": [
+        "geometry_invalid: Invalid perimeter ring; no silent repair"
+      ]
+    },
+    {
+      "incident_id": "9b17d10e-20c4-4177-9b18-236dfae9d57d",
+      "name": "Kress",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": "73708b7d-cc4d-42d2-b139-74bfd89018f3",
+      "name": "Sailor Cap",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": null,
+      "name": "Trigg",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": "660f8e64-f1eb-41ab-aa04-7e11f89fdc6c",
+      "name": "Shell",
+      "status": "excluded",
+      "reasons": [
+        "missing_or_invalid_incident_times"
+      ]
+    },
+    {
+      "incident_id": null,
+      "name": "Quartz",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": null,
+      "name": "340",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": null,
+      "name": "MOORE",
+      "status": "excluded",
+      "reasons": [
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": null,
+      "name": "Kinyon Springs",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": "6b1c6eb1-30f7-4613-9c58-4801dc8fd822",
+      "name": "Summit Creek",
+      "status": "excluded",
+      "reasons": [
+        "missing_polygon_timestamp"
+      ]
+    },
+    {
+      "incident_id": null,
+      "name": "WOODY MULTIPLE",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": null,
+      "name": "0231",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": null,
+      "name": "Bradshaw",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": "3e0c3009-bc85-4467-abfc-01ce166716e0",
+      "name": "Anticline",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window"
+      ]
+    },
+    {
+      "incident_id": "bff9f3bf-cefe-437c-9b82-231526500ef1",
+      "name": "BORDER 6",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": null,
+      "name": "MOXEE ORCHARD",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": null,
+      "name": "Michaud Creek",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": "b8f6d725-b08f-43a6-a286-4fa1e4686926",
+      "name": "WALTZ",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": null,
+      "name": "Raven Creek",
+      "status": "excluded",
+      "reasons": [
+        "missing_or_invalid_incident_times",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": "519f195a-83d8-4465-b494-a44555a2a9e6",
+      "name": "FRONTAGE",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": "6f3a4603-8a05-428a-b65c-16b6e2d33ab3",
+      "name": "Tower",
+      "status": "excluded",
+      "reasons": [
+        "missing_or_invalid_incident_times"
+      ]
+    },
+    {
+      "incident_id": "e295504e-c30f-4258-a0f8-5ada4100b3cf",
+      "name": "South Mountain",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": "389ca949-636f-434b-b4be-25dd2d36fad6",
+      "name": "Bear",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": "40432b79-397f-4c30-8667-2dce4a76a6fe",
+      "name": "Twin Sisters",
+      "status": "excluded",
+      "reasons": [
+        "missing_or_invalid_incident_times"
+      ]
+    },
+    {
+      "incident_id": null,
+      "name": "Rookery",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": "132c618c-7786-4fbc-852a-23493bf028f9",
+      "name": "Rock Canyon",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": null,
+      "name": "Mateo",
+      "status": "excluded",
+      "reasons": [
+        "missing_or_invalid_incident_times",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": "03f662a5-8682-4222-802b-db472aa03c6a",
+      "name": "Shore",
+      "status": "excluded",
+      "reasons": [
+        "missing_polygon_timestamp"
+      ]
+    },
+    {
+      "incident_id": null,
+      "name": "CHALK",
+      "status": "excluded",
+      "reasons": [
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": "10c567ab-d92d-40ca-a142-d6a6f36c7865",
+      "name": "Sawmill",
+      "status": "excluded",
+      "reasons": [
+        "missing_polygon_timestamp"
+      ]
+    },
+    {
+      "incident_id": "7c9d552d-eb84-4cb3-8976-5873efb213a5",
+      "name": "Old Immigrant",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": "593b002b-d532-4ccc-a575-ba059333328f",
+      "name": "Tucannon Mutual Aid",
+      "status": "excluded",
+      "reasons": [
+        "missing_or_invalid_incident_times"
+      ]
+    },
+    {
+      "incident_id": null,
+      "name": "ROZA",
+      "status": "excluded",
+      "reasons": [
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": "e2443a6e-9ef4-4871-b47e-10d6d1f43268",
+      "name": "Coptic",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": null,
+      "name": "Shyster",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": null,
+      "name": "MARY",
+      "status": "excluded",
+      "reasons": [
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": "8cb41225-7f82-4680-a1d4-78ee772108df",
+      "name": "Dry Creek",
+      "status": "excluded",
+      "reasons": [
+        "geometry_invalid: Invalid perimeter ring; no silent repair"
+      ]
+    },
+    {
+      "incident_id": "aaca701c-c00f-4dd4-9935-4dfe2b1aebb2",
+      "name": "Basin ",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": "530c7fa3-1421-4f31-9ce2-bdf33340691b",
+      "name": "Sacaton",
+      "status": "excluded",
+      "reasons": [
+        "missing_or_invalid_incident_times"
+      ]
+    },
+    {
+      "incident_id": "0e08edd8-6b60-4c46-942b-9cd445d73e4e",
+      "name": "Garred Road",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": "c6a81074-7666-417e-8ffb-8db26669d3f0",
+      "name": "Lytle",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": null,
+      "name": "Wagon Wheel",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": null,
+      "name": "Parsnip Peak",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": "e1185387-9741-4d08-8a42-a9f3562411ba",
+      "name": "Beehive",
+      "status": "excluded",
+      "reasons": [
+        "geometry_invalid: Invalid perimeter ring; no silent repair"
+      ]
+    },
+    {
+      "incident_id": "cb647290-1117-4fda-b614-e26f4d0cfb5d",
+      "name": "PETERSON",
+      "status": "excluded",
+      "reasons": [
+        "missing_or_invalid_incident_times"
+      ]
+    },
+    {
+      "incident_id": null,
+      "name": "Dry Canyon",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    },
+    {
+      "incident_id": "62c101e1-1376-400f-9bd5-45a3cf2dad42",
+      "name": "Steamboat",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": "548a8d28-1a04-48ee-9011-aba023175d43",
+      "name": "Willow",
+      "status": "excluded",
+      "reasons": [
+        "missing_or_invalid_incident_times"
+      ]
+    },
+    {
+      "incident_id": "1b921197-29e1-4fc1-b259-186cc20e1597",
+      "name": "Log Road",
+      "status": "eligible_but_cohort_full",
+      "reasons": []
+    },
+    {
+      "incident_id": null,
+      "name": "Sheep Head",
+      "status": "excluded",
+      "reasons": [
+        "polygon_timestamp_outside_declared_window",
+        "missing_or_invalid_incident_uuid",
+        "duplicate_incident_uuid"
+      ]
+    }
+  ],
+  "selection_complete": true,
+  "imagery_seen_at_selection": false,
+  "input_sha256": {
+    "candidates": "4e896422947e02dadc43876cfede1a7c5c3f76c2da7ebd818f9af6b0c8db838b",
+    "policy": "6cf79a03d7f60ddac0b8e0579bdc04e09faefd0915421872c14b13fee2590ff0",
+    "base_config": "e4834cced216a77b771695646b84b2d7af76520df61f00bc59ec4ed41aaa374f",
+    "cypress_snapshot": "fbdfb6d085fed0f8082798a2a91bbf99a3c690b97274e77ca534781b573f48d8",
+    "selection_code": "72d8a6d9638ecaab1af088ac0a9b4100fa2567aa786c69fe1539ea44201a9ebb",
+    "satellite_code": "59bc0a34defc525df1a6dd797c24ce89377f2bd0bc2c45dfed715bf480bad6fa"
+  }
+}

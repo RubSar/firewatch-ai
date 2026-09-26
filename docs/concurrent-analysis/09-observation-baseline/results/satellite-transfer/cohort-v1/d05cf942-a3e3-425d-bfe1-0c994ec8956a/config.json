@@ -1,0 +1,36 @@
+{
+  "schema_version": "firewatch.research.satellite-case.v1",
+  "case_id": "d05cf942-a3e3-425d-bfe1-0c994ec8956a-transfer-v1",
+  "incident_id": "d05cf942-a3e3-425d-bfe1-0c994ec8956a",
+  "snapshot_sha256": "acd196d89c08578ae24887830677e06075becaca35cce3916213759f03a12ac0",
+  "collection": "sentinel-2-c1-l2a",
+  "pre_window": [
+    "2026-02-03T20:45:00Z",
+    "2026-02-17T20:44:59Z"
+  ],
+  "post_window": [
+    "2026-02-17T21:00:00Z",
+    "2026-03-04T21:00:00Z"
+  ],
+  "epsg": 32614,
+  "resolution_m": 20,
+  "buffer_m": 1000,
+  "max_pixels": 400000,
+  "max_scene_cloud_percent": 60,
+  "max_candidates_per_window": 4,
+  "valid_scl_classes": [
+    4,
+    5,
+    6
+  ],
+  "cloud_buffer_pixels": 1,
+  "min_joint_valid_fraction": 0.95,
+  "dnbr_threshold": 0.1,
+  "pre_nbr_floor": 0.1,
+  "reference_time_verified": false,
+  "reference_time_note": "Operational mapped extent; timestamp fields and mapping method do not independently verify observation time or burned-pixel target. Transfer overlap remains exploratory.",
+  "selection_rule": "Within each window rank by proximity to fire (latest pre, earliest post), then scene ID; shortlist four with tile cloud <=60% and full AOI footprint. Pick the pair with maximum joint SCL-valid AOI coverage, ties by shortlist order. Never use dNBR or reference overlap for selection.",
+  "threshold_rationale": "Unchanged Cypress thresholds frozen before transfer imagery. No post-result tuning or case replacement.",
+  "case_name": "Rawlins Co TP",
+  "research_role": "fixed-rule transfer pilot; not an untouched ML test set"
+}

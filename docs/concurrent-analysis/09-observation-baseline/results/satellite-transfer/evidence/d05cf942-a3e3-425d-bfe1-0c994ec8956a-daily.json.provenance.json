@@ -1,0 +1,7 @@
+{
+  "url": "https://services3.arcgis.com/T4QMspbfLg3qTGWY/arcgis/rest/services/WFIGS_Daily_Perimeters_Public/FeatureServer/0/query?f=json&where=poly_IRWINID%3D%27%7BD05CF942-A3E3-425D-BFE1-0C994EC8956A%7D%27&outFields=OBJECTID%2Cpoly_IncidentName%2Cpoly_IRWINID%2Cpoly_MapMethod%2Cpoly_GISAcres%2Cpoly_CreateDate%2Cpoly_DateCurrent%2Cpoly_PolygonDateTime%2Cpoly_Source%2Cattr_FireDiscoveryDateTime%2Cattr_ContainmentDateTime%2Cattr_FireOutDateTime%2Cattr_InitialLatitude%2Cattr_InitialLongitude%2CBurnPeriod%2CAcreageChange&returnGeometry=true&outSR=4326&resultRecordCount=1000",
+  "path": "d05cf942-a3e3-425d-bfe1-0c994ec8956a-daily.json",
+  "retrieved_at_utc": "2026-09-26T22:52:19.419634+00:00",
+  "sha256": "7b0c60029bf4423697d51d81a8712905537edbc28762eb4f75793fd32aad516b",
+  "bytes": 146504
+}

@@ -1,0 +1,407 @@
+{
+  "schema_version": "firewatch.research.satellite-acquisition.v1",
+  "created_at_utc": "2026-09-26T22:37:49.549457Z",
+  "catalog_manifest_sha256": "a7279649379275b2d532a97bdf82f4ab04a9c8a798e3379f74142e6cf71e8498",
+  "selected": {
+    "pre": "S2C_T15RUQ_20260216T170151_L2A",
+    "post": "S2B_T15RUQ_20260313T170110_L2A"
+  },
+  "crops": {
+    "S2C_T15RUQ_20260216T170151_L2A": {
+      "scl": {
+        "path": "pre-0-scl.tif",
+        "source_url": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/15/R/UQ/2026/2/S2C_T15RUQ_20260216T170151_L2A/SCL.tif",
+        "retrieved_at_utc": "2026-09-26T22:36:43.160504Z",
+        "source_published_multihash": "12208954dec733710c68a4be6f1e3a283fd4e70e1b2c6b4685f909bde04082a4c4f9",
+        "source_published_size_bytes": 3806971,
+        "complete_source_checksum_verified": false,
+        "native_resolution_m": 20,
+        "native_window": [
+          3311,
+          2908,
+          463,
+          383
+        ],
+        "source_shape": [
+          5490,
+          5490
+        ],
+        "source_transform": [
+          20.0,
+          0.0,
+          300000.0,
+          0.0,
+          -20.0,
+          3500040.0
+        ],
+        "scale": null,
+        "offset": null,
+        "nodata": 0.0,
+        "source_scales": [
+          1.0
+        ],
+        "source_offsets": [
+          0.0
+        ],
+        "checksum_scope": "local losslessly saved native pixel crop, not complete remote COG",
+        "sha256": "4449ebc3db7446cccf660c54191731c7126463840502587f7077099dd8b0475f"
+      },
+      "nir": {
+        "path": "pre-nir.tif",
+        "source_url": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/15/R/UQ/2026/2/S2C_T15RUQ_20260216T170151_L2A/B08.tif",
+        "retrieved_at_utc": "2026-09-26T22:37:09.762750Z",
+        "source_published_multihash": "12202db819922902773c088cf5a79b8c5f9e15aae0ea77bcccd17c7a5af76d4580d0",
+        "source_published_size_bytes": 237419683,
+        "complete_source_checksum_verified": false,
+        "native_resolution_m": 10,
+        "native_window": [
+          6622,
+          5816,
+          926,
+          766
+        ],
+        "source_shape": [
+          10980,
+          10980
+        ],
+        "source_transform": [
+          10.0,
+          0.0,
+          300000.0,
+          0.0,
+          -10.0,
+          3500040.0
+        ],
+        "scale": 0.0001,
+        "offset": -0.1,
+        "nodata": 0.0,
+        "source_scales": [
+          0.0001
+        ],
+        "source_offsets": [
+          -0.1
+        ],
+        "checksum_scope": "local losslessly saved native pixel crop, not complete remote COG",
+        "sha256": "101865b97b24dc59317795573b464585384e800b06380b0f7c5a651a15271848"
+      },
+      "swir22": {
+        "path": "pre-swir22.tif",
+        "source_url": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/15/R/UQ/2026/2/S2C_T15RUQ_20260216T170151_L2A/B12.tif",
+        "retrieved_at_utc": "2026-09-26T22:37:21.366440Z",
+        "source_published_multihash": "1220151495529c57dc04d6415329727553b359ee2c3f287aa7e2d03450d98aa94c61",
+        "source_published_size_bytes": 59203533,
+        "complete_source_checksum_verified": false,
+        "native_resolution_m": 20,
+        "native_window": [
+          3311,
+          2908,
+          463,
+          383
+        ],
+        "source_shape": [
+          5490,
+          5490
+        ],
+        "source_transform": [
+          20.0,
+          0.0,
+          300000.0,
+          0.0,
+          -20.0,
+          3500040.0
+        ],
+        "scale": 0.0001,
+        "offset": -0.1,
+        "nodata": 0.0,
+        "source_scales": [
+          0.0001
+        ],
+        "source_offsets": [
+          -0.1
+        ],
+        "checksum_scope": "local losslessly saved native pixel crop, not complete remote COG",
+        "sha256": "99cf15cd10f1e619781d7ad2bd14e8a08079f17237569b4ba9ed64bfbd6a9d7d"
+      }
+    },
+    "S2B_T15RUQ_20260211T170229_L2A": {
+      "scl": {
+        "path": "pre-1-scl.tif",
+        "source_url": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/15/R/UQ/2026/2/S2B_T15RUQ_20260211T170229_L2A/SCL.tif",
+        "retrieved_at_utc": "2026-09-26T22:36:44.536061Z",
+        "source_published_multihash": "1220d47a47fc64882bb6d329148eb5febebdaed24fc410ed0621f7fce9d24c7d22ea",
+        "source_published_size_bytes": 4072215,
+        "complete_source_checksum_verified": false,
+        "native_resolution_m": 20,
+        "native_window": [
+          3311,
+          2908,
+          463,
+          383
+        ],
+        "source_shape": [
+          5490,
+          5490
+        ],
+        "source_transform": [
+          20.0,
+          0.0,
+          300000.0,
+          0.0,
+          -20.0,
+          3500040.0
+        ],
+        "scale": null,
+        "offset": null,
+        "nodata": 0.0,
+        "source_scales": [
+          1.0
+        ],
+        "source_offsets": [
+          0.0
+        ],
+        "checksum_scope": "local losslessly saved native pixel crop, not complete remote COG",
+        "sha256": "3e430e3814686600a12e57411f47b0993fbb0a5554d8a2f088465fd5b655a76f"
+      }
+    },
+    "S2B_T15RUQ_20260313T170110_L2A": {
+      "scl": {
+        "path": "post-0-scl.tif",
+        "source_url": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/15/R/UQ/2026/3/S2B_T15RUQ_20260313T170110_L2A/SCL.tif",
+        "retrieved_at_utc": "2026-09-26T22:36:45.513763Z",
+        "source_published_multihash": "12200c5854b953c042d4099db473b821d9604d8dc8f72941b42d34dfc150b45de412",
+        "source_published_size_bytes": 2375580,
+        "complete_source_checksum_verified": false,
+        "native_resolution_m": 20,
+        "native_window": [
+          3311,
+          2908,
+          463,
+          383
+        ],
+        "source_shape": [
+          5490,
+          5490
+        ],
+        "source_transform": [
+          20.0,
+          0.0,
+          300000.0,
+          0.0,
+          -20.0,
+          3500040.0
+        ],
+        "scale": null,
+        "offset": null,
+        "nodata": 0.0,
+        "source_scales": [
+          1.0
+        ],
+        "source_offsets": [
+          0.0
+        ],
+        "checksum_scope": "local losslessly saved native pixel crop, not complete remote COG",
+        "sha256": "8af07b6139420c0c98e699492d708fb9c042ecc2272286076bb18dba0c7a4984"
+      },
+      "nir": {
+        "path": "post-nir.tif",
+        "source_url": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/15/R/UQ/2026/3/S2B_T15RUQ_20260313T170110_L2A/B08.tif",
+        "retrieved_at_utc": "2026-09-26T22:37:37.726839Z",
+        "source_published_multihash": "12202199ea6d9dc134b571380756967de17d0a49f6eeb8f4ee2b8fe6d2c87f75c501",
+        "source_published_size_bytes": 237463530,
+        "complete_source_checksum_verified": false,
+        "native_resolution_m": 10,
+        "native_window": [
+          6622,
+          5816,
+          926,
+          766
+        ],
+        "source_shape": [
+          10980,
+          10980
+        ],
+        "source_transform": [
+          10.0,
+          0.0,
+          300000.0,
+          0.0,
+          -10.0,
+          3500040.0
+        ],
+        "scale": 0.0001,
+        "offset": -0.1,
+        "nodata": 0.0,
+        "source_scales": [
+          0.0001
+        ],
+        "source_offsets": [
+          -0.1
+        ],
+        "checksum_scope": "local losslessly saved native pixel crop, not complete remote COG",
+        "sha256": "763ac78ad8513c346a8abddfa4d1638ea596c7da0c2abe9203f8663d8d6cb73e"
+      },
+      "swir22": {
+        "path": "post-swir22.tif",
+        "source_url": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/15/R/UQ/2026/3/S2B_T15RUQ_20260313T170110_L2A/B12.tif",
+        "retrieved_at_utc": "2026-09-26T22:37:49.518733Z",
+        "source_published_multihash": "122086ea8a3d9f29613549dbbe411831412d57a3b79bc46dfc39b10af9caa80133f3",
+        "source_published_size_bytes": 58686471,
+        "complete_source_checksum_verified": false,
+        "native_resolution_m": 20,
+        "native_window": [
+          3311,
+          2908,
+          463,
+          383
+        ],
+        "source_shape": [
+          5490,
+          5490
+        ],
+        "source_transform": [
+          20.0,
+          0.0,
+          300000.0,
+          0.0,
+          -20.0,
+          3500040.0
+        ],
+        "scale": 0.0001,
+        "offset": -0.1,
+        "nodata": 0.0,
+        "source_scales": [
+          0.0001
+        ],
+        "source_offsets": [
+          -0.1
+        ],
+        "checksum_scope": "local losslessly saved native pixel crop, not complete remote COG",
+        "sha256": "9cc3390b5943a6e1498845de571f16903870c01cdad03e2a1195d14471977576"
+      }
+    },
+    "S2C_T15RUQ_20260318T170445_L2A": {
+      "scl": {
+        "path": "post-1-scl.tif",
+        "source_url": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/15/R/UQ/2026/3/S2C_T15RUQ_20260318T170445_L2A/SCL.tif",
+        "retrieved_at_utc": "2026-09-26T22:36:46.522574Z",
+        "source_published_multihash": "1220c0fe7336431be3f0545e0cd07c496a29d4ec59e5069d0df6c9dbe86c20ee72fd",
+        "source_published_size_bytes": 2324614,
+        "complete_source_checksum_verified": false,
+        "native_resolution_m": 20,
+        "native_window": [
+          3311,
+          2908,
+          463,
+          383
+        ],
+        "source_shape": [
+          5490,
+          5490
+        ],
+        "source_transform": [
+          20.0,
+          0.0,
+          300000.0,
+          0.0,
+          -20.0,
+          3500040.0
+        ],
+        "scale": null,
+        "offset": null,
+        "nodata": 0.0,
+        "source_scales": [
+          1.0
+        ],
+        "source_offsets": [
+          0.0
+        ],
+        "checksum_scope": "local losslessly saved native pixel crop, not complete remote COG",
+        "sha256": "b9b8cd41eab6e044dd9f008101a3b501151f9aacf16cc11966f7ddb5afc42a44"
+      }
+    },
+    "S2B_T15RUQ_20260323T170202_L2A": {
+      "scl": {
+        "path": "post-2-scl.tif",
+        "source_url": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/15/R/UQ/2026/3/S2B_T15RUQ_20260323T170202_L2A/SCL.tif",
+        "retrieved_at_utc": "2026-09-26T22:36:47.564999Z",
+        "source_published_multihash": "1220150865cd4fe835eac0420c3f02501bc097656f14a3e64c5b74770b8e0d30ae37",
+        "source_published_size_bytes": 3945592,
+        "complete_source_checksum_verified": false,
+        "native_resolution_m": 20,
+        "native_window": [
+          3311,
+          2908,
+          463,
+          383
+        ],
+        "source_shape": [
+          5490,
+          5490
+        ],
+        "source_transform": [
+          20.0,
+          0.0,
+          300000.0,
+          0.0,
+          -20.0,
+          3500040.0
+        ],
+        "scale": null,
+        "offset": null,
+        "nodata": 0.0,
+        "source_scales": [
+          1.0
+        ],
+        "source_offsets": [
+          0.0
+        ],
+        "checksum_scope": "local losslessly saved native pixel crop, not complete remote COG",
+        "sha256": "fb5d2773183b06030b941c61a61bda7a72cb210306b39040a93c70be0f6fd58b"
+      }
+    }
+  },
+  "failures": [],
+  "pair_scl_coverage": [
+    {
+      "pre": "S2C_T15RUQ_20260216T170151_L2A",
+      "post": "S2B_T15RUQ_20260313T170110_L2A",
+      "valid_pixels": 173582,
+      "fraction": 0.9788697844120251
+    },
+    {
+      "pre": "S2C_T15RUQ_20260216T170151_L2A",
+      "post": "S2C_T15RUQ_20260318T170445_L2A",
+      "valid_pixels": 127197,
+      "fraction": 0.7172938436465552
+    },
+    {
+      "pre": "S2C_T15RUQ_20260216T170151_L2A",
+      "post": "S2B_T15RUQ_20260323T170202_L2A",
+      "valid_pixels": 48162,
+      "fraction": 0.27159686232934266
+    },
+    {
+      "pre": "S2B_T15RUQ_20260211T170229_L2A",
+      "post": "S2B_T15RUQ_20260313T170110_L2A",
+      "valid_pixels": 53414,
+      "fraction": 0.3012141274128879
+    },
+    {
+      "pre": "S2B_T15RUQ_20260211T170229_L2A",
+      "post": "S2C_T15RUQ_20260318T170445_L2A",
+      "valid_pixels": 43182,
+      "fraction": 0.24351346931409978
+    },
+    {
+      "pre": "S2B_T15RUQ_20260211T170229_L2A",
+      "post": "S2B_T15RUQ_20260323T170202_L2A",
+      "valid_pixels": 19510,
+      "fraction": 0.11002148548742732
+    }
+  ],
+  "item_sha256": {
+    "pre": "e06f2c6633b3a9c228373746910850a47f256403d67dfd86715da379d1fb2eec",
+    "post": "f8aea18510408e4abade25da769438385e1093370ee462c415ff0193edb50e1d"
+  },
+  "code_sha256": "7d7145d8bf0203ee57ae8d8008f20bbb7516245cb68001cb9746bd7bcf9cad99"
+}

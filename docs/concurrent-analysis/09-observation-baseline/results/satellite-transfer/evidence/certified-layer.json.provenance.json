@@ -1,0 +1,7 @@
+{
+  "url": "https://services3.arcgis.com/T4QMspbfLg3qTGWY/arcgis/rest/services/WFIGS_Interagency_Perimeters_Certified/FeatureServer/0?f=json",
+  "path": "certified-layer.json",
+  "retrieved_at_utc": "2026-09-26T22:47:36.233772+00:00",
+  "sha256": "383275d08f655a0e1bb0fc48b92cee4518caf3bbf6f0b4026b5499ae41ff1166",
+  "bytes": 30054
+}

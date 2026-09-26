@@ -1,0 +1,32 @@
+{
+  "schema_version": "firewatch.research.perimeter-audit.v1",
+  "incident_id": "d05cf942-a3e3-425d-bfe1-0c994ec8956a",
+  "created_at_utc": "2026-09-26T23:10:06.213470Z",
+  "records": [
+    {
+      "burn_period": 1,
+      "object_id": 56961,
+      "polygon_datetime_utc": "2026-03-03T16:32:50.972000Z",
+      "date_current_utc": "2026-07-03T14:35:58.579000Z",
+      "create_date_utc": "2026-03-03T16:32:28.645000Z",
+      "reported_gis_acres": 1521,
+      "map_method": "Image Interpretation",
+      "geometry_sha256_normalized_wgs84_wkb": "5cefbb491823f9466fd434e9663325ad6f3d6700ae597710722d208ea79a1bb2",
+      "source_rings_sha256": "bdb69d72829052aa3aeed8dd0138507c204a04c59f4ce7fdc17c965b157c1da2",
+      "geometry_error": null,
+      "equals_original_geometry": true
+    }
+  ],
+  "missing_polygon_times": 0,
+  "reused_timestamps_for_distinct_geometries": [],
+  "area_decreases": [],
+  "invalid_geometry_records": 0,
+  "reference_time_verified": false,
+  "official_progression": false,
+  "interpretation": "BurnPeriod orders captured geometry changes, not elapsed time. Missing/reused timestamps and mapping revisions must not be turned into observed spread rates.",
+  "input_sha256": {
+    "daily_response": "7b0c60029bf4423697d51d81a8712905537edbc28762eb4f75793fd32aad516b",
+    "original_response": "acd196d89c08578ae24887830677e06075becaca35cce3916213759f03a12ac0",
+    "audit_code": "72d8a6d9638ecaab1af088ac0a9b4100fa2567aa786c69fe1539ea44201a9ebb"
+  }
+}
