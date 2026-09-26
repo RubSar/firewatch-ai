@@ -70,6 +70,16 @@ interface Perimeter {
   lat: number
   lng: number
   spanKm: number
+  /** When the polygon was actually mapped. The replay must end HERE. */
+  mapped: number | null
+  /** When crews first engaged, when the record carries it. */
+  initialResponse: number | null
+  /** Fire size at discovery and at initial response, acres; null when absent. */
+  discoveryAcres: number | null
+  responseAcres: number | null
+  /** Per cent of the perimeter under full suppression vs monitoring. */
+  fullSuppPct: number | null
+  monitorPct: number | null
   /** Reported point of origin, when the record carries one. */
   originLat: number | null
   originLng: number | null
@@ -79,8 +89,10 @@ async function fetchPerimeters(minAcres: number, maxAcres: number, cfg: Config):
   const url =
     `${WFIGS}?where=poly_GISAcres%3E${minAcres}+AND+poly_GISAcres%3C${maxAcres}` +
     `&outFields=poly_IncidentName,attr_FireDiscoveryDateTime,attr_ContainmentDateTime,` +
-    `poly_GISAcres,attr_InitialLatitude,attr_InitialLongitude` +
-    `&returnGeometry=true&outSR=4326&resultRecordCount=12&f=json`
+    `poly_GISAcres,attr_InitialLatitude,attr_InitialLongitude,poly_PolygonDateTime,` +
+    `attr_InitialResponseDateTime,attr_InitialResponseAcres,attr_DiscoveryAcres,` +
+    `attr_FireStrategyFullSuppPrcnt,attr_FireStrategyMonitorPercent` +
+    `&returnGeometry=true&outSR=4326&resultRecordCount=24&f=json`
   const ac = new AbortController()
   const timer = setTimeout(() => ac.abort(), Math.max(cfg.fetchTimeoutMs, 45000))
   try {
@@ -111,6 +123,12 @@ async function fetchPerimeters(minAcres: number, maxAcres: number, cfg: Config):
         lat,
         lng: (lo + hi) / 2,
         spanKm: Math.max(widthKm, heightKm) * PAD,
+        mapped: (f.attributes.poly_PolygonDateTime as number | null) ?? null,
+        initialResponse: (f.attributes.attr_InitialResponseDateTime as number | null) ?? null,
+        discoveryAcres: (f.attributes.attr_DiscoveryAcres as number | null) ?? null,
+        responseAcres: (f.attributes.attr_InitialResponseAcres as number | null) ?? null,
+        fullSuppPct: (f.attributes.attr_FireStrategyFullSuppPrcnt as number | null) ?? null,
+        monitorPct: (f.attributes.attr_FireStrategyMonitorPercent as number | null) ?? null,
         originLat: (f.attributes.attr_InitialLatitude as number | null) ?? null,
         originLng: (f.attributes.attr_InitialLongitude as number | null) ?? null,
       })
@@ -286,22 +304,88 @@ async function run(p: Perimeter, cfg: Config) {
     return null
   }
 
-  // Discovery to containment, so the simulated period matches the period the
-  // perimeter actually describes.
-  const burnedHours = p.contained
-    ? Math.round((p.contained - p.discovered) / 3600_000)
-    : null
-  const wantHours = Math.min(MAX_REPLAY_HOURS, Math.max(6, burnedHours ?? FALLBACK_HOURS))
-  const truncated = burnedHours != null && burnedHours > MAX_REPLAY_HOURS
+  /**
+   * Replay discovery -> WHEN THE POLYGON WAS MAPPED.
+   *
+   * Not to containment, which is what this did for its whole life and is simply
+   * wrong: the perimeter is a snapshot carrying its own timestamp, and running
+   * past that timestamp scores a longer simulation than the ground truth
+   * describes. Every fire was affected, in both directions — Cypress Creek got
+   * 313 h against a polygon mapped at 65 h (4.8x too long), while 113 Incident
+   * reports a containment time EARLIER than its polygon date, which the old
+   * max(6, ...) floor silently turned into a 6 h run against a 21.6 h polygon.
+   *
+   * Containment remains the fallback for a record with no polygon timestamp,
+   * and is reported either way because the gap between them is the period the
+   * fire was being actively fought.
+   */
+  const hoursFrom = (t: number | null) =>
+    t ? Math.round((t - p.discovered) / 3600_000) : null
+  const mappedHours = hoursFrom(p.mapped)
+  const containHours = hoursFrom(p.contained)
+  const responseHours = hoursFrom(p.initialResponse)
+  const truthHours = mappedHours && mappedHours > 0 ? mappedHours : containHours
+  const wantHours = Math.min(MAX_REPLAY_HOURS, Math.max(2, truthHours ?? FALLBACK_HOURS))
+  const truncated = truthHours != null && truthHours > MAX_REPLAY_HOURS
+
+  /**
+   * How much of this fire's growth was free, and how much was fought.
+   *
+   * A free-growth model scored against a fought fire is measuring the fire
+   * service. WFIGS carries the strategy split, so say so rather than burying it
+   * in a caveat: attr_FireStrategyMonitorPercent = 100 is a fire that was
+   * watched, which is the only kind this replay can be fairly scored on.
+   *
+   * attr_InitialResponseDateTime/Acres would bound the free-growth window
+   * exactly. They are empty on every current-year record, so they are read
+   * and reported when present rather than relied on.
+   */
+  const strategy = p.fullSuppPct == null && p.monitorPct == null
+    ? 'strategy not reported'
+    : `${p.fullSuppPct ?? 0}% full suppression / ${p.monitorPct ?? 0}% monitored`
+  console.log(
+    `  suppression context: ${strategy}` +
+    (responseHours != null ? `, crews engaged at ${responseHours} h` : ', no initial-response time') +
+    (p.responseAcres != null ? ` at ${Math.round(p.responseAcres).toLocaleString()} ac` : '')
+  )
+  if (p.monitorPct != null && p.monitorPct >= 50) {
+    console.log('  -> mostly MONITORED: a free-growth replay is a fair comparison here')
+  } else if (p.fullSuppPct != null && p.fullSuppPct >= 50) {
+    console.log('  -> fully suppressed: the truth perimeter is a fought outcome, not free growth')
+  }
+
+  /**
+   * How much growth is actually ours to predict.
+   *
+   * attr_DiscoveryAcres says how big the fire already was when the clock
+   * starts. Igniting a single cell and asking it to reach the final perimeter
+   * is only a fair test if most of that growth happened after discovery — for
+   * Ashby it is 30,000 of 36,005 acres, so 83% of the fire predates anything
+   * this model could simulate.
+   */
+  if (p.discoveryAcres != null && p.discoveryAcres > 0) {
+    const pre = (p.discoveryAcres / p.acres) * 100
+    console.log(
+      `  at discovery it was already ${Math.round(p.discoveryAcres).toLocaleString()} ac ` +
+      `(${pre.toFixed(0)}% of final)${pre > 25 ? ' — most of this fire predates the replay' : ''}`
+    )
+  }
 
   const weather = await archiveWeather(p.lat, p.lng, p.discovered, wantHours, cfg)
   if (!weather?.length) { console.log('  no archive weather — skipped'); return null }
   const peak = weather.reduce((m, w) => Math.max(m, w.windSpeed), 0)
   const rain = weather.reduce((m, w) => m + w.precipitation, 0)
-  const span = burnedHours
-    ? `discovery to containment (${(burnedHours / 24).toFixed(1)} d)${truncated ? `, capped at ${MAX_REPLAY_HOURS / 24} d` : ''}`
-    : `no containment time — fixed ${FALLBACK_HOURS} h window`
-  console.log(`  replay: ${weather.length} h — ${span}`)
+  const span = mappedHours && mappedHours > 0
+    ? `discovery to the polygon's own timestamp (${mappedHours} h)` +
+      (containHours == null
+        ? ''
+        : containHours >= mappedHours
+          ? `; contained at ${containHours} h, so ${containHours - mappedHours} h of it was fought after the map`
+          : `; record claims containment at ${containHours} h, BEFORE the polygon was mapped — source inconsistency`)
+    : containHours
+      ? `no polygon timestamp — discovery to containment (${containHours} h)`
+      : `neither timestamp — fixed ${FALLBACK_HOURS} h window`
+  console.log(`  replay: ${weather.length} h — ${span}${truncated ? `, capped at ${MAX_REPLAY_HOURS / 24} d` : ''}`)
   console.log(`  weather: peak wind ${peak.toFixed(0)} km/h, ${rain.toFixed(1)} mm rain`)
 
   // Through the registry, so the hindcast scores whatever the product would
@@ -326,9 +410,14 @@ async function run(p: Perimeter, cfg: Config) {
       ? barriers.data.blockFrac
       : null
   if (barriers && !blockFrac) {
+    // Distinguish "OSM had nothing here" from "the array is the wrong shape".
+    // Both used to print as "unusable", which reads like a defect when an
+    // empty rural box is the ordinary case.
+    const wrongSize = barriers.data.blockFrac.length !== edges
     console.log(
-      `  barriers: resolved but unusable — ${barriers.data.blockFrac.length} edges ` +
-      `(expected ${edges}), any non-zero: ${barriers.data.blockFrac.some((v) => v > 0)}`
+      wrongSize
+        ? `  barriers: WRONG SHAPE — ${barriers.data.blockFrac.length} edges, expected ${edges}`
+        : '  barriers: none in this area — OSM returned no roads or watercourses'
     )
   } else if (blockFrac) {
     let nz = 0
@@ -489,26 +578,61 @@ async function run(p: Perimeter, cfg: Config) {
     })
   }
 
+  /**
+   * The verdict comes from the UNFITTED run, not the best of the sweep.
+   *
+   * Taking the maximum model-minus-circle gap over five suppression levels is
+   * selection, and it announced "physics BEATS a circle" on gaps of +0.000 and
+   * +0.002 — which is what picking the best of five noisy numbers produces when
+   * the true gap is zero. The swept best is still printed, labelled as fitted,
+   * because a level chosen to maximise Dice is not a forecast and must never be
+   * quoted as one.
+   *
+   * MARGIN is the smallest gap worth calling a result. Run-to-run spread across
+   * suppression levels on a fire with no real gap is a few thousandths, so
+   * 0.02 is comfortably outside it without being tuned to any particular fire.
+   */
+  const MARGIN = 0.02
+  const unfitted = sweep[0]
+  const gap0 = unfitted.dice - unfitted.disc
   const best = sweep.reduce((a, b) => (b.dice > a.dice ? b : a))
-  const bestGap = sweep.reduce((a, b) => (b.dice - b.disc > a.dice - a.disc ? b : a))
   const closest = sweep.reduce((a, b) => (Math.abs(b.ratio - 1) < Math.abs(a.ratio - 1) ? b : a))
   console.log(
-    `  -> best DICE ${best.dice.toFixed(3)} at ${best.level}% · ` +
-    `best shape gap ${(bestGap.dice - bestGap.disc >= 0 ? '+' : '')}${(bestGap.dice - bestGap.disc).toFixed(3)} at ${bestGap.level}% · ` +
-    `area matches truth (${closest.ratio.toFixed(2)}x) at ${closest.level}%`
+    `  -> unsuppressed: DICE ${unfitted.dice.toFixed(3)} vs circle ${unfitted.disc.toFixed(3)}, ` +
+    `gap ${gap0 >= 0 ? '+' : ''}${gap0.toFixed(3)} -> physics ` +
+    (gap0 > MARGIN ? 'BEATS a circle' : gap0 < -MARGIN ? 'LOSES to a circle' : 'is indistinguishable from a circle')
   )
   console.log(
-    `  -> physics ${bestGap.dice > bestGap.disc ? 'BEATS' : 'does not beat'} a circle at its best level` +
-    `${bestGap.dice > bestGap.disc ? '' : ' — suppression alone does not recover shape skill'}`
+    `  -> fitted to the answer (best of ${sweep.length} levels, NOT a forecast): ` +
+    `DICE ${best.dice.toFixed(3)} at ${best.level}%; closest area ${closest.ratio.toFixed(2)}x at ${closest.level}%`
   )
   return sweep
 }
 
 const cfg = loadConfig()
 const perims = await fetchPerimeters(5000, 60000, cfg)
-console.log(`WFIGS: ${perims.length} mapped perimeters between 5k and 60k acres`)
+
+/**
+ * Monitored fires first.
+ *
+ * A free-growth replay scored against a fully suppressed fire is partly
+ * measuring the fire service, so the fires WFIGS records as monitored rather
+ * than fought are the ones this harness can fairly be judged on. They are rare
+ * — one in fourteen in the current year — so they have to be sought out
+ * deliberately or every number here is drawn from fought fires by default.
+ *
+ * Within each group, fires that were still small at discovery come first: the
+ * replay ignites one cell, so a fire already at 30,000 acres when the clock
+ * starts is not a test of spread.
+ */
+const grown = (p: Perimeter) => (p.discoveryAcres ?? 0) / Math.max(1, p.acres)
+const ranked = [...perims].sort((a, b) =>
+  (b.monitorPct ?? 0) - (a.monitorPct ?? 0) || grown(a) - grown(b))
+const monitored = ranked.filter((p) => (p.monitorPct ?? 0) >= 50).length
+console.log(`WFIGS: ${perims.length} mapped perimeters between 5k and 60k acres, ${monitored} mostly monitored`)
 console.log('(ignition from the reported point of origin where available; suppression swept 0-100%)')
-for (const p of perims.slice(0, 4)) {
+console.log('(replay ends at the polygon\'s own timestamp, not at containment)')
+for (const p of ranked.slice(0, 5)) {
   try {
     await run(p, cfg)
   } catch (err) {

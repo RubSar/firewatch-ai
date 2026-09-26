@@ -91,17 +91,30 @@ mainly because it throws embers.
 the **WFIGS interagency perimeter** — an authoritative polygon for one named incident,
 with a discovery time — plus Open-Meteo's archive for the weather as it actually was.
 
-First results, on the three of four that passed self-validation:
+Current results. `gap` is Dice minus an equal-area disc at the same ignition point —
+the only number that says the physics is worth anything. All at 0% suppression:
 
-| fire | truth | modelled | Dice | area ratio |
-|---|---|---|---|---|
-| Cypress Creek | 2,723 ha | 4,274 ha | **0.388** | 1.57x |
-| 113 Incident | 2,062 ha | 4,771 ha | **0.398** | 2.31x |
-| County Rd 169 | 2,247 ha | 30,492 ha | 0.092 | 13.6x |
+| fire | strategy | window | area ratio | Dice | circle | gap |
+|---|---|---|---|---|---|---|
+| Anderson Bridge | **100% monitored** | 191 h | 3.68x | **0.422** | 0.288 | **+0.134** |
+| Pineland Rd | 100% suppressed | 100 h | 0.29x | 0.370 | 0.422 | -0.052 |
+| Hwy 82 | 100% suppressed | 239 h | 0.10x | 0.174 | 0.177 | -0.003 |
+| Ballard | 100% suppressed | 41 h | 7.02x | 0.244 | 0.273 | -0.029 |
+| 113 Incident | 100% suppressed | 22 h | 2.46x | 0.389 | 0.578 | -0.189 |
 
-**It over-predicts, consistently.** Partly expected — the replay models no suppression
-and every one of these fires was fought — but the 4.45x arrival-draw overshoot is now
-unmasked rather than cancelling against the old weak wind term.
+**It does not over-predict consistently — that was an artifact of three fires and a
+wrong replay window.** The ratio now spans 0.10x to 7.02x, a factor of 70. Treat the
+error as dispersion, not bias, and expect at least two distinct defects: fires that
+flood everything reachable within 1-2 h (3.68x, 7.02x, 2.46x) and fires that die out
+early in wet or low-wind conditions (0.10x, 0.29x).
+
+**The one fire that was monitored rather than fought is the only one the model beats a
+circle on.** That is what `attr_FireStrategyMonitorPercent` is read for, and it is the
+strongest evidence so far that the model carries real shape information. Do not
+over-read it: n=1, and Anderson Bridge's ignition point is 8.2 km from the perimeter
+centroid, so the null disc is badly offset while the model is a 98%-recall blob that
+covers the truth. Suggestive, not settled — more monitored fires are the way to settle
+it, and WFIGS yields about one in fourteen.
 
 Three things that must stay:
 
@@ -112,10 +125,27 @@ Three things that must stay:
   0.8-1.25x of the acreage WFIGS reports, or the run is skipped. Two of the first four
   disagreed by 100x, and a wrong rasterisation yields a Dice score that looks exactly
   like a measurement.
-- **The caveats are not decoration.** Ignition is the perimeter centroid, which is
-  generous — a real forecast starts from a detection at the edge of a young fire. No
-  suppression is modelled. These numbers are not operational accuracy and must not be
-  quoted as such.
+- **The replay ends at `poly_PolygonDateTime`, not at containment.** The perimeter is a
+  snapshot carrying its own timestamp; running past it scores a longer simulation than
+  the ground truth describes. This was wrong for the harness's whole life and affected
+  every fire in both directions — Cypress Creek got 313 h against a polygon mapped at
+  65 h, while 113 Incident reports containment *before* its polygon date, which an old
+  `max(6, ...)` floor turned into a 6 h run against a 22 h polygon.
+- **Report the suppression strategy with every score.** A free-growth replay scored
+  against a fully suppressed fire is partly measuring the fire service.
+  `attr_FireStrategyFullSuppPrcnt` / `MonitorPercent` are populated and the runner ranks
+  monitored fires first. `attr_InitialResponseDateTime`/`Acres` would bound the
+  free-growth window exactly but are empty on every current-year record — read and
+  reported when present, never relied on.
+- **Verdicts come from the unfitted run, never the best of the sweep.** Taking the
+  maximum model-minus-circle gap over five suppression levels announced "physics BEATS
+  a circle" on gaps of +0.000 and +0.002 — which is just selection over five noisy
+  numbers. The swept best is printed, labelled as fitted to the answer, and must never
+  be quoted as a forecast.
+- **The caveats are not decoration.** Ignition is the reported point of origin where
+  WFIGS has one and the perimeter centroid otherwise, which is generous — a real
+  forecast starts from a detection at the edge of a young fire. These numbers are not
+  operational accuracy and must not be quoted as such.
 
 ### What the hindcast says is actually wrong
 
@@ -148,10 +178,45 @@ cell obstructs part of an edge rather than severing it, so the flux is reduced a
 stochastic draw still gets through. Correct per §5, and it means roads do not act as
 firebreaks at this resolution.
 
-So five candidates have now been tested and none is the dominant error: rate, duration,
-reachability, fuel classification, barriers. The one left untested is **suppression**,
-which the replay models none of while all three fires were actively fought — Cypress
-Creek took thirteen days to contain. Test that before building anything large.
+### The dominant error is off-axis spread
+
+Six candidates were tested and eliminated: rate, duration, reachability, fuel
+classification, barriers, and **suppression** — swept 0-100% flat from hour zero, which
+bounds what it could ever explain, and it moves area by 4-25% while making Dice *worse*
+on most fires. Every level loses recall faster than it gains precision, the signature of
+a fire in the wrong place rather than one of the wrong size.
+
+That pointed at shape, and `sim/src/shape.ts` (L/B plus major-axis bearing) found it:
+
+| | truth L/B | model L/B | Anderson L/B for its wind |
+|---|---|---|---|
+| Anderson Bridge | 2.17 | 1.32 | 2.67 |
+| Pineland Rd | 2.42 | 1.55 | 1.69 |
+| Hwy 82 | 2.45 | 1.08 | 1.53 |
+| Ballard | 2.56 | 1.01 | 1.77 |
+
+**The model produces a near-circular fire at every wind speed**, and reaches near-final
+size in the first 1-2 hours — a shape-through-time trace shows it is already round at
+that point, so the anisotropy is never there rather than being eroded later.
+
+The cause is that `step()` feeds Rothermel's `phi_w` the wind *component* along each of
+the 8 spread directions (`align = cos(bearing - windBearing)`). `phi_w` is a **heading**
+term: a reduced wind gives the head rate of a calmer fire, not the flank rate of this
+one. At 40 km/h the 45-degree direction gets 0.59 of full `phi_w` where the L/B 5 ellipse
+says 0.065 — off-axis spread is ~9x too fast, so the fire goes sideways nearly as fast as
+downwind. That one defect accounts for the whole signature: inflated area, recall 97-98%
+with precision 13-27%, and a Dice that cannot beat an equal-area circle because the model
+is one. It also explains why an earlier attempt at this "broke isotropy" and was reverted;
+isotropy was never correct to preserve.
+
+**The fix is Richards (1990) elliptical propagation, not the §4 energy accumulator** —
+head ROS from Rothermel, L/B from Anderson (1983), then
+`R(theta) = R_head * (1 - e) / (1 - e * cos theta)`. Behind it, Finney (2002) Minimum
+Travel Time replaces the stochastic arrival draw with a deterministic shortest-path
+formulation and removes both `todo` tests structurally instead of calibrating around
+them. Both are what FARSITE, FlamMap and Cell2Fire run. No usable JS/TS library exists,
+so port rather than depend; `pyretechnics` (Python) and `firelib`/BehavePlus (USFS,
+public domain) are readable references.
 
 ### Benchmark against Rothermel
 
