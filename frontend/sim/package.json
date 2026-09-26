@@ -12,7 +12,8 @@
     "./weather": "./src/weather.ts",
     "./classify": "./src/classify.ts",
     "./noise": "./src/noise.ts",
-    "./geo": "./src/geo.ts"
+    "./geo": "./src/geo.ts",
+    "./shape": "./src/shape.ts"
   },
   "scripts": {
     "test": "node --test test/*.test.ts",

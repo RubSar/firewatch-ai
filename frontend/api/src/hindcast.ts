@@ -17,14 +17,18 @@
  * WHAT THIS STILL IS NOT. The ignition point is the polygon centroid, because
  * no ignition coordinate is wired. That is generous: a real forecast starts
  * from a detection at the edge of a young fire, not the middle of where it
- * will end up. And there is no suppression in the replay, while every one of
- * these fires was fought. So this measures whether the model grows a fire of
- * roughly the right size and shape under the real weather, unsuppressed. A
- * Dice score from it must not be quoted as operational accuracy.
+ * will end up.
+ *
+ * Suppression is SWEPT rather than fitted. Every one of these fires was
+ * fought, so a zero-suppression replay is biased toward over-prediction by
+ * construction; but a suppression level chosen to maximise Dice is fitted to
+ * the answer and is not a forecast either. The sweep reports both ends so
+ * neither can be quoted as the other. No number here is operational accuracy.
  */
 import { buildTerrain, scenarioAt } from '@firewatch/sim/terrain'
 import { Cell, createSim, ignite, recomputeStats, step } from '@firewatch/sim/model'
 import { FUELS } from '@firewatch/sim/fuels'
+import { andersonLB, lengthToBreadth } from '@firewatch/sim/shape'
 import type { Params } from '@firewatch/sim/weather'
 import { loadConfig } from './config.ts'
 import { buildRegistry } from './providers/registry.ts'
@@ -274,11 +278,12 @@ async function run(p: Perimeter, cfg: Config) {
     // spanning about a kilometre. Either the acreage or the geometry is wrong
     // and there is no way to tell which, so the record is unusable.
     const polySpanKm = p.spanKm / PAD
-    return console.log(
+    console.log(
       `  SKIPPED — polygon rasterises to ${rasterHa.toFixed(0)} ha but the record claims ` +
       `${reportedHa.toFixed(0)} ha (${agreement.toFixed(2)}x), across a ${polySpanKm.toFixed(1)} km extent. ` +
       'Source record is self-inconsistent.'
     )
+    return null
   }
 
   // Discovery to containment, so the simulated period matches the period the
@@ -290,7 +295,7 @@ async function run(p: Perimeter, cfg: Config) {
   const truncated = burnedHours != null && burnedHours > MAX_REPLAY_HOURS
 
   const weather = await archiveWeather(p.lat, p.lng, p.discovered, wantHours, cfg)
-  if (!weather?.length) return console.log('  no archive weather — skipped')
+  if (!weather?.length) { console.log('  no archive weather — skipped'); return null }
   const peak = weather.reduce((m, w) => Math.max(m, w.windSpeed), 0)
   const rain = weather.reduce((m, w) => m + w.precipitation, 0)
   const span = burnedHours
@@ -361,78 +366,148 @@ async function run(p: Perimeter, cfg: Config) {
   }
   console.log(`  ignition: ${origin}`)
 
-  const sim = createSim(terrain, 7)
-  ignite(sim, ic, ir, 1)
-  const DT = 10
-  for (const hour of weather) {
-    for (let s = 0; s < 3600 / DT; s++) {
-      step(sim, { params: hour, weather: hour, dt: DT, ...(blockFrac ? { blockFrac } : {}) })
-    }
-  }
-  recomputeStats(sim)
-
-  const modelled = new Uint8Array(sim.state.length)
-  for (let i = 0; i < modelled.length; i++) modelled[i] = sim.state[i] !== Cell.Unburned ? 1 : 0
-
-  // When did it stop growing? Lengthening the replay from 96 h to 313 h did
-  // not change Cypress Creek's area at all, and 113 Incident reached its
-  // final size in 6 h — the model floods everything fuel-connected and then
-  // stops, so duration barely enters into it. That is a different defect from
-  // "burns too long", and it is the one to chase.
-  console.log(`  growth: ${sim.active.length === 0 ? 'burnt out' : `${sim.active.length} cells still alight`}` +
-    ` at the end of the replay`)
-
-  // Is the model rate-limited or reach-limited?
+  /**
+   * Reachability is a property of the fuel, not of the run, so it is measured
+   * once outside the sweep.
+   */
   const reachable = reachableArea(terrain.fuel, cols, rows, ic, ir)
   let reachCells = 0
   for (const v of reachable) if (v) reachCells++
   let burnable = 0
   for (const f of terrain.fuel) if (FUELS[f].load > 0) burnable++
-  const modelledCells = sim.burnedCells
   console.log(
     `  reachable: ${(reachCells * haPerCell).toFixed(0)} ha fuel-connected to the origin ` +
     `(${((burnable / terrain.fuel.length) * 100).toFixed(0)}% of the grid is burnable at all)`
   )
+
+  // Shape of the thing we are trying to reproduce, and the shape the wind says
+  // it should be. MIDFLAME_WIND_FACTOR 0.4 converts the 10 m archive wind.
+  const truthShape = lengthToBreadth(truth, cols)
+  const meanWind = weather.reduce((a, w) => a + w.windSpeed, 0) / weather.length
   console.log(
-    `  the model burnt ${((modelledCells / Math.max(1, reachCells)) * 100).toFixed(0)}% of what it could reach` +
-    ` -> ${modelledCells / Math.max(1, reachCells) > 0.9 ? 'REACH-limited: rate is not the binding constraint' : 'rate-limited: it stopped short of the reachable area'}`
+    `  truth shape: L/B ${truthShape.lb.toFixed(2)} on bearing ${truthShape.bearing.toFixed(0)}deg · ` +
+    `Anderson L/B for ${meanWind.toFixed(0)} km/h mean wind (${(meanWind * 0.4).toFixed(0)} midflame) ` +
+    `= ${andersonLB(meanWind * 0.4).toFixed(2)}`
   )
-  const d = dice(truth, modelled)
 
   /**
-   * Null model: a disc at the ignition point with the same area the model
-   * produced. Dice rewards overlap, and a fire started at the centroid of the
-   * true perimeter overlaps it substantially no matter what physics runs —
-   * so the question is not "is Dice high" but "is it higher than a circle".
-   * Anything the physics is worth shows up as the gap between these two.
+   * SUPPRESSION SWEEP — the last untested explanation for area over-prediction.
    *
-   * Centred on the ignition point, whatever that is, so the disc and the
-   * model start from the same place and only their shapes differ.
+   * Rate, duration, reachability, fuel classification and barriers have each
+   * been measured against these fires and none of them is the dominant error.
+   * Suppression is what is left: the replay models none, and all of these
+   * fires were actively fought.
+   *
+   * Flat effort from hour zero is deliberately unrealistic — real initial
+   * attack arrives hours late and builds over days — and that is the point.
+   * It is an UPPER BOUND on how much suppression could explain. If the model
+   * cannot beat a circle even when suppression is applied from the first
+   * minute at full effort, suppression is not the missing piece and the
+   * remaining error is in the spread physics.
+   *
+   * The null-model disc is recomputed at every level against that level's own
+   * area. Suppression shrinks the fire, and shrinking a fire toward the right
+   * area raises Dice on its own — which is not the same as getting the shape
+   * right. Re-fitting the circle each time holds area constant between the
+   * two, so the model-minus-circle gap isolates shape skill.
    */
-  const discRadius = Math.sqrt(d.bCells / Math.PI)
-  const disc = new Uint8Array(truth.length)
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      if ((c - ic) ** 2 + (r - ir) ** 2 <= discRadius * discRadius) disc[r * cols + c] = 1
-    }
-  }
-  const nullModel = dice(truth, disc)
+  const LEVELS = [0, 10, 25, 50, 100]
+  const DT = 10
+  interface Row { level: number; ha: number; ratio: number; dice: number; disc: number; active: number }
+  const sweep: Row[] = []
 
-  const recall = d.inter / Math.max(1, d.aCells)
-  const precision = d.inter / Math.max(1, d.bCells)
-  console.log(`  modelled ${(d.bCells * haPerCell).toFixed(0)} ha in ${weather.length} h, ` +
-    `area ratio ${(d.bCells / d.aCells).toFixed(2)}x`)
-  console.log(`  DICE ${d.dice.toFixed(3)}   recall ${(recall * 100).toFixed(0)}% of the real fire caught` +
-    `   precision ${(precision * 100).toFixed(0)}% of the prediction real`)
-  console.log(`  null model (equal-area disc at the same point): DICE ${nullModel.dice.toFixed(3)}` +
-    `   -> physics ${d.dice > nullModel.dice ? 'beats' : 'DOES NOT BEAT'} a circle` +
-    ` (${(d.dice - nullModel.dice >= 0 ? '+' : '')}${(d.dice - nullModel.dice).toFixed(3)})`)
+  for (const level of LEVELS) {
+    const sim = createSim(terrain, 7)
+    ignite(sim, ic, ir, 1)
+    /**
+     * Shape through time, on the unsuppressed run only.
+     *
+     * The kernel's per-direction ROS is strongly anisotropic — head:flank is
+     * about 40:1 at County Rd 169's wind — yet the finished burn is round
+     * (L/B 1.27) against a real perimeter of 5.18. Either the anisotropy never
+     * reaches the burn pattern, or it does and is then erased as the fire fills
+     * the domain. These two want opposite fixes, and the distinction is visible
+     * in whether L/B starts high and decays.
+     */
+    const marks = level === 0
+      ? [0.05, 0.1, 0.25, 0.5, 1].map((f) => Math.max(1, Math.round(f * weather.length)))
+      : []
+    const trace: string[] = []
+    for (let h = 0; h < weather.length; h++) {
+      const hour = weather[h]
+      const hp = level === 0 ? hour : { ...hour, suppression: level }
+      for (let s = 0; s < 3600 / DT; s++) {
+        step(sim, { params: hp, weather: hour, dt: DT, ...(blockFrac ? { blockFrac } : {}) })
+      }
+      if (marks.includes(h + 1)) {
+        const snap = new Uint8Array(sim.state.length)
+        let n = 0
+        for (let i = 0; i < snap.length; i++) if (sim.state[i] !== Cell.Unburned) { snap[i] = 1; n++ }
+        const sh = lengthToBreadth(snap, cols)
+        trace.push(`${h + 1}h ${(n * haPerCell / 1000).toFixed(1)}kha L/B ${sh.lb.toFixed(2)}@${sh.bearing.toFixed(0)}`)
+      }
+    }
+    if (trace.length) console.log(`  shape through time: ${trace.join(' | ')}`)
+    recomputeStats(sim)
+
+    const modelled = new Uint8Array(sim.state.length)
+    for (let i = 0; i < modelled.length; i++) modelled[i] = sim.state[i] !== Cell.Unburned ? 1 : 0
+    const d = dice(truth, modelled)
+
+    /**
+     * Null model: a disc at the ignition point with the same area the model
+     * produced. Dice rewards overlap, and a fire started anywhere near the
+     * true perimeter overlaps it substantially no matter what physics runs —
+     * so the question is not "is Dice high" but "is it higher than a circle".
+     */
+    const discRadius = Math.sqrt(d.bCells / Math.PI)
+    const disc = new Uint8Array(truth.length)
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        if ((c - ic) ** 2 + (r - ir) ** 2 <= discRadius * discRadius) disc[r * cols + c] = 1
+      }
+    }
+    const nullModel = dice(truth, disc)
+    const shape = lengthToBreadth(modelled, cols)
+
+    const recall = d.inter / Math.max(1, d.aCells)
+    const precision = d.inter / Math.max(1, d.bCells)
+    const gap = d.dice - nullModel.dice
+    console.log(
+      `  suppression ${String(level).padStart(3)}%: ` +
+      `${(d.bCells * haPerCell).toFixed(0).padStart(6)} ha  ` +
+      `${(d.bCells / d.aCells).toFixed(2).padStart(5)}x  ` +
+      `DICE ${d.dice.toFixed(3)}  circle ${nullModel.dice.toFixed(3)}  ` +
+      `gap ${gap >= 0 ? '+' : ''}${gap.toFixed(3)}  ` +
+      `recall ${((recall * 100) | 0).toString().padStart(3)}%  precision ${((precision * 100) | 0).toString().padStart(3)}%  ` +
+      `L/B ${shape.lb.toFixed(2)}@${shape.bearing.toFixed(0)}deg  ` +
+      `${sim.active.length === 0 ? 'burnt out' : `${sim.active.length} alight`}`
+    )
+    sweep.push({
+      level, ha: d.bCells * haPerCell, ratio: d.bCells / d.aCells,
+      dice: d.dice, disc: nullModel.dice, active: sim.active.length,
+    })
+  }
+
+  const best = sweep.reduce((a, b) => (b.dice > a.dice ? b : a))
+  const bestGap = sweep.reduce((a, b) => (b.dice - b.disc > a.dice - a.disc ? b : a))
+  const closest = sweep.reduce((a, b) => (Math.abs(b.ratio - 1) < Math.abs(a.ratio - 1) ? b : a))
+  console.log(
+    `  -> best DICE ${best.dice.toFixed(3)} at ${best.level}% · ` +
+    `best shape gap ${(bestGap.dice - bestGap.disc >= 0 ? '+' : '')}${(bestGap.dice - bestGap.disc).toFixed(3)} at ${bestGap.level}% · ` +
+    `area matches truth (${closest.ratio.toFixed(2)}x) at ${closest.level}%`
+  )
+  console.log(
+    `  -> physics ${bestGap.dice > bestGap.disc ? 'BEATS' : 'does not beat'} a circle at its best level` +
+    `${bestGap.dice > bestGap.disc ? '' : ' — suppression alone does not recover shape skill'}`
+  )
+  return sweep
 }
 
 const cfg = loadConfig()
 const perims = await fetchPerimeters(5000, 60000, cfg)
 console.log(`WFIGS: ${perims.length} mapped perimeters between 5k and 60k acres`)
-console.log('(ignition from the reported point of origin where available; no suppression modelled)')
+console.log('(ignition from the reported point of origin where available; suppression swept 0-100%)')
 for (const p of perims.slice(0, 4)) {
   try {
     await run(p, cfg)
