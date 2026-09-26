@@ -77,6 +77,62 @@ export const SCENARIOS: Scenario[] = [
   },
 ]
 
+/** Default edge length of a simulated area, km. ~38 m cells at 400 columns. */
+export const DEFAULT_SPAN_KM = 15
+
+/**
+ * Builds a scenario for an arbitrary point on earth.
+ *
+ * The bookmarked SCENARIOS carry hand-tuned terrain character because their
+ * procedural fallback has to look like a specific place. An arbitrary location
+ * gets neutral defaults instead: they only shape the placeholder terrain shown
+ * for the second before the real DEM lands, and the real DEM replaces elevation
+ * and fuel outright.
+ *
+ * The seed is derived from the coordinates so the same point always produces
+ * the same placeholder — a location is reproducible, not random per visit.
+ */
+export function scenarioAt(
+  lat: number,
+  lng: number,
+  spanKm = DEFAULT_SPAN_KM,
+  opts: { id?: string; name?: string; region?: string; preset?: string } = {}
+): Scenario {
+  const halfLatDeg = (spanKm * 1000) / 2 / 110540
+  const mpdX = Math.max(1, 111320 * Math.cos((lat * Math.PI) / 180))
+  const halfLngDeg = (spanKm * 1000) / 2 / mpdX
+  // Squash the seed into 32 bits at ~10 m precision so nearby points differ.
+  const seed = Math.abs(Math.round(lat * 1e5) * 73856093 ^ Math.round(lng * 1e5) * 19349663) >>> 0
+
+  return {
+    id: opts.id ?? `at:${lat.toFixed(4)},${lng.toFixed(4)}`,
+    name: opts.name ?? `${Math.abs(lat).toFixed(3)}°${lat >= 0 ? 'N' : 'S'} ${Math.abs(lng).toFixed(3)}°${lng >= 0 ? 'E' : 'W'}`,
+    region: opts.region ?? `${spanKm} km across`,
+    blurb: 'Custom area of interest — terrain and fuel from live data.',
+    bounds: {
+      north: Math.min(85, lat + halfLatDeg),
+      south: Math.max(-85, lat - halfLatDeg),
+      east: lng + halfLngDeg,
+      west: lng - halfLngDeg,
+    },
+    seed,
+    maxElev: 2000,
+    ruggedness: 0.7,
+    coast: false,
+    urban: 0.15,
+    woodiness: 0.15,
+    preset: opts.preset ?? 'red-flag',
+  }
+}
+
+/** Centre of a scenario's domain, and how wide it is on the ground. */
+export function scenarioCentre(sc: Scenario) {
+  const lat = (sc.bounds.north + sc.bounds.south) / 2
+  const lng = (sc.bounds.east + sc.bounds.west) / 2
+  const spanKm = ((sc.bounds.east - sc.bounds.west) * 111320 * Math.cos((lat * Math.PI) / 180)) / 1000
+  return { lat, lng, spanKm }
+}
+
 export interface Terrain {
   cols: number
   rows: number

@@ -1,5 +1,5 @@
-import { FUELS } from '../sim/fuels.ts'
-import { type Sim } from '../sim/model.ts'
+import { FUELS } from '@firewatch/sim/fuels'
+import { type Sim } from '@firewatch/sim/model'
 
 export type BaseLayer = 'fuel' | 'elevation' | 'tiles'
 

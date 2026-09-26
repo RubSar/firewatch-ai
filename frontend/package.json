@@ -1,0 +1,22 @@
+{
+  "name": "firewatch-frontend",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "workspaces": [
+    "sim",
+    "contracts",
+    "api",
+    "Wildfire"
+  ],
+  "scripts": {
+    "dev": "(trap 'kill 0' INT TERM EXIT; npm run dev:api & VITE_API_URL=http://127.0.0.1:8787 npm run dev:web; wait)",
+    "dev:web": "npm run dev --workspace=wildfire-sim",
+    "dev:api": "npm run dev --workspace=@firewatch/api",
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "smoke": "npm run smoke --workspace=wildfire-sim",
+    "smoke:api": "npm run smoke --workspace=@firewatch/api",
+    "watercheck": "npm run watercheck --workspace=@firewatch/api"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "@firewatch/contracts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Shared API schemas, wire protocol and provider ports. Language-neutral shapes; no runtime logic.",
+  "exports": {
+    ".": "./src/index.ts",
+    "./wire": "./src/wire.ts",
+    "./providers": "./src/providers.ts",
+    "./codec": "./src/codec.ts"
+  },
+  "dependencies": {
+    "@firewatch/sim": "*"
+  }
+}

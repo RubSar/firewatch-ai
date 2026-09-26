@@ -1,10 +1,11 @@
 import { useEffect, useRef } from 'react'
 import L from 'leaflet'
-import type { Sim } from '../sim/model.ts'
-import type { Terrain } from '../sim/terrain.ts'
+import type { Sim } from '@firewatch/sim/model'
+import type { Terrain } from '@firewatch/sim/terrain'
 import { baseIsEmpty, paintGrid } from '../render/paint.ts'
 import { buildFireGeometry, makeBuffers, type FireGeometry, type GeometryBuffers } from '../render/fireGeometry.ts'
 import type { Layers, Tool } from './ControlPanel.tsx'
+import type { FireDetection, FiresDto } from '@firewatch/contracts/wire'
 
 interface Props {
   terrain: Terrain
@@ -15,6 +16,12 @@ interface Props {
   onTreat: (col: number, row: number, kind: number) => void
   /** Hands the parent's animation loop a draw callback. */
   registerDraw: (fn: () => void) => void
+  /** Hands the parent a way to read where the user has panned to. */
+  registerGetView?: (fn: () => { lat: number; lng: number; spanKm: number }) => void
+  /** Base URL of the incident API. Required for the FIRMS layer. */
+  apiUrl?: string
+  /** Reports what the active-fire layer found, for the status line. */
+  onFiresLoaded?: (s: { count: number; note: string; truncated: boolean; loading?: boolean } | null) => void
 }
 
 const TILES = {
@@ -38,6 +45,9 @@ export function MapView(props: Props) {
   const gridRef = useRef<HTMLCanvasElement | null>(null)
   const imgRef = useRef<ImageData | null>(null)
   const shadeRef = useRef<HTMLCanvasElement | null>(null)
+  const domainRef = useRef<L.Rectangle | null>(null)
+  const firesRef = useRef<L.LayerGroup | null>(null)
+  const toCellRef = useRef<((ll: L.LatLng) => { col: number; row: number } | null) | null>(null)
   const geomRef = useRef<FireGeometry | null>(null)
   const bufRef = useRef<GeometryBuffers | null>(null)
   const lastPaint = useRef({ key: '' })
@@ -68,18 +78,22 @@ export function MapView(props: Props) {
     if (!map) return
     const b = props.terrain.bounds
     const bounds = L.latLngBounds([b.south, b.west], [b.north, b.east])
-    // Cover, not contain: the simulated area should fill the viewport rather
-    // than sit letterboxed in a black void.
-    // ...but still let the user pull back far enough to see the whole domain.
-    const cover = () => map.setMinZoom(map.getBoundsZoom(bounds, false) - 0.5)
-    // Drop the previous scenario's constraints first: a stale maxBounds would
-    // clamp the new centre before it is ever applied.
-    map.setMinZoom(0)
+    // No maxBounds and a world-level minZoom: the simulated square is one area
+    // of interest on a global map, not the edge of the world. The user has to
+    // be able to roam away from it to choose somewhere else.
     map.setMaxBounds(null as unknown as L.LatLngBounds)
+    map.setMinZoom(2)
     map.setView(bounds.getCenter(), map.getBoundsZoom(bounds, true), { animate: false })
-    map.setMaxBounds(bounds.pad(0.25))
-    cover()
-    map.on('resize', cover)
+
+    // Outline the simulated area so it stays findable once the user pans off it.
+    domainRef.current?.remove()
+    domainRef.current = L.rectangle(bounds, {
+      color: '#ffb347',
+      weight: 1.5,
+      dashArray: '6 5',
+      fill: false,
+      interactive: false,
+    }).addTo(map)
     // Grid-resolution scratch canvas: one pixel per simulation cell.
     const g = document.createElement('canvas')
     g.width = props.terrain.cols
@@ -109,10 +123,26 @@ export function MapView(props: Props) {
     }
     sctx.putImageData(simg, 0, 0)
     shadeRef.current = sc
-    return () => {
-      map.off('resize', cover)
-    }
   }, [props.terrain])
+
+  // --- let the parent read the current view, for "simulate this view" ----
+  useEffect(() => {
+    p.current.registerGetView?.(() => {
+      const map = mapRef.current
+      if (!map) {
+        const b = p.current.terrain.bounds
+        return { lat: (b.north + b.south) / 2, lng: (b.east + b.west) / 2, spanKm: 15 }
+      }
+      const c = map.getCenter()
+      const vb = map.getBounds()
+      // Square domain from the shorter screen axis, so what is asked for is
+      // always fully visible rather than cropped by the viewport's aspect.
+      const widthKm =
+        ((vb.getEast() - vb.getWest()) * 111.32 * Math.cos((c.lat * Math.PI) / 180))
+      const heightKm = (vb.getNorth() - vb.getSouth()) * 110.54
+      return { lat: c.lat, lng: c.lng, spanKm: Math.min(widthKm, heightKm) }
+    })
+  }, [])
 
   // --- basemap tiles ----------------------------------------------------
   useEffect(() => {
@@ -146,6 +176,7 @@ export function MapView(props: Props) {
       return { col, row }
     }
 
+    toCellRef.current = toCell
     let painting = false
     let last: { col: number; row: number } | null = null
 
@@ -200,6 +231,103 @@ export function MapView(props: Props) {
       window.removeEventListener('pointerup', onUp)
     }
   }, [props.tool])
+
+  // --- NASA FIRMS active fire detections ---------------------------------
+  // Fetched for whatever is on screen and refreshed on pan, because the point
+  // of the layer is to find real fires, which means roaming the map.
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map) return
+
+    if (!props.layers.activeFires || !props.apiUrl) {
+      firesRef.current?.remove()
+      firesRef.current = null
+      p.current.onFiresLoaded?.(null)
+      return
+    }
+
+    let disposed = false
+    let timer: ReturnType<typeof setTimeout> | undefined
+    const ac = new AbortController()
+
+    const load = async () => {
+      // The first request pulls a 6 MB global file and can take ~15 s. Say so
+      // immediately rather than leaving the map silent and looking broken.
+      p.current.onFiresLoaded?.({ count: 0, note: 'Loading NASA FIRMS detections…', truncated: false, loading: true })
+      const b = map.getBounds()
+      const q = new URLSearchParams({
+        north: String(Math.min(85, b.getNorth())),
+        south: String(Math.max(-85, b.getSouth())),
+        east: String(Math.min(180, b.getEast())),
+        west: String(Math.max(-180, b.getWest())),
+      })
+      try {
+        const res = await fetch(`${p.current.apiUrl}/api/fires?${q}`, { signal: ac.signal })
+        if (!res.ok) throw new Error(`${res.status}`)
+        const dto = (await res.json()) as FiresDto
+        if (disposed) return
+        draw(dto.detections)
+        p.current.onFiresLoaded?.({
+          count: dto.detections.length,
+          note: dto.provenance.note,
+          truncated: dto.truncated,
+        })
+      } catch (err) {
+        if (!disposed && (err as Error).name !== 'AbortError') {
+          p.current.onFiresLoaded?.({ count: 0, note: `Fire detections unavailable: ${(err as Error).message}`, truncated: false })
+        }
+      }
+    }
+
+    const draw = (detections: FireDetection[]) => {
+      firesRef.current?.remove()
+      const group = L.layerGroup()
+      for (const d of detections) {
+        // Radius by fire radiative power, the closest proxy for "how big".
+        // sqrt so a 400 MW detection reads as bigger than a 4 MW one without
+        // swamping the map.
+        const r = Math.max(3, Math.min(14, 3 + Math.sqrt(d.frp) * 0.7))
+        const hot = Math.min(1, d.frp / 120)
+        L.circleMarker([d.lat, d.lng], {
+          radius: r,
+          color: '#ffd7a1',
+          weight: 1,
+          opacity: 0.55 + 0.35 * d.confidence,
+          fillColor: hot > 0.6 ? '#ffe8a3' : hot > 0.25 ? '#ff8c25' : '#e0452a',
+          fillOpacity: 0.35 + 0.45 * d.confidence,
+        })
+          .bindTooltip(
+            `<b>${d.frp.toFixed(1)} MW</b> · ${d.satellite} ${d.day ? 'day' : 'night'}<br/>` +
+              `${new Date(d.at).toUTCString().replace('GMT', 'UTC')}<br/>` +
+              `confidence ${(d.confidence * 100).toFixed(0)}% · ${d.brightness.toFixed(0)} K<br/>` +
+              `<i>click to ignite here</i>`,
+            { direction: 'top', opacity: 0.95 }
+          )
+          .on('click', () => {
+            const cell = toCellRef.current?.(L.latLng(d.lat, d.lng))
+            if (cell) p.current.onIgnite(cell.col, cell.row)
+          })
+          .addTo(group)
+      }
+      group.addTo(map)
+      firesRef.current = group
+    }
+
+    const debounced = () => {
+      clearTimeout(timer)
+      timer = setTimeout(load, 500)
+    }
+    void load()
+    map.on('moveend', debounced)
+    return () => {
+      disposed = true
+      ac.abort()
+      clearTimeout(timer)
+      map.off('moveend', debounced)
+      firesRef.current?.remove()
+      firesRef.current = null
+    }
+  }, [props.layers.activeFires, props.apiUrl, props.terrain])
 
   // --- render loop hook --------------------------------------------------
   useEffect(() => {
