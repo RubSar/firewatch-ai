@@ -1,0 +1,73 @@
+{
+  "status": "planning_only_no_hardware_benchmark",
+  "units": "decimal MB/GB/TB; Mbps and Gbps are bits per second",
+  "excluded": [
+    "Storage redundancy/erasure overhead, indexes, snapshots and backups",
+    "Object request overhead, metadata not included in per-frame approximation, masks and grid exports",
+    "Network retransmission beyond generic allowance and cross-zone replication traffic",
+    "GPU decoder/encoder allocation, model memory constraints and hardware heterogeneity",
+    "Ingress-node/zone survival capacity, not just inference capacity"
+  ],
+  "scenarios": [
+    {
+      "drones": 10,
+      "rgb_frames_per_second": 300,
+      "thermal_frames_per_second": 50,
+      "thermal_payload_mbps_per_drone": 26.2144,
+      "ingress_gbps_with_overhead": 0.41155584,
+      "original_data_tb_per_active_hour": 0.15433344,
+      "original_data_tb_per_day": 0.61733376,
+      "original_data_tb_for_retention": 4.32133632,
+      "metadata_events_per_second": 2400,
+      "metadata_ingest_mb_per_second": 4.9152,
+      "kafka_metadata_tb_replicated_retention": 0.63700992,
+      "decoded_rgb_transfer_gbps_one_copy": 14.92992,
+      "fire_inference_requests_per_second": 300,
+      "vegetation_inference_requests_per_second": 10,
+      "hypothetical_gpus_without_zone_failure_reserve": 6,
+      "hypothetical_fire_gpus_per_zone_with_failure_reserve": 3,
+      "hypothetical_vegetation_gpus_per_zone_with_failure_reserve": 1,
+      "hypothetical_gpus_with_one_zone_failure_reserve": 12
+    },
+    {
+      "drones": 100,
+      "rgb_frames_per_second": 3000,
+      "thermal_frames_per_second": 500,
+      "thermal_payload_mbps_per_drone": 26.2144,
+      "ingress_gbps_with_overhead": 4.115558399999999,
+      "original_data_tb_per_active_hour": 1.5433344,
+      "original_data_tb_per_day": 6.1733376,
+      "original_data_tb_for_retention": 43.2133632,
+      "metadata_events_per_second": 24000,
+      "metadata_ingest_mb_per_second": 49.152,
+      "kafka_metadata_tb_replicated_retention": 6.3700992,
+      "decoded_rgb_transfer_gbps_one_copy": 149.2992,
+      "fire_inference_requests_per_second": 3000,
+      "vegetation_inference_requests_per_second": 100,
+      "hypothetical_gpus_without_zone_failure_reserve": 55,
+      "hypothetical_fire_gpus_per_zone_with_failure_reserve": 24,
+      "hypothetical_vegetation_gpus_per_zone_with_failure_reserve": 4,
+      "hypothetical_gpus_with_one_zone_failure_reserve": 84
+    },
+    {
+      "drones": 1000,
+      "rgb_frames_per_second": 30000,
+      "thermal_frames_per_second": 5000,
+      "thermal_payload_mbps_per_drone": 26.2144,
+      "ingress_gbps_with_overhead": 41.155584,
+      "original_data_tb_per_active_hour": 15.433344,
+      "original_data_tb_per_day": 61.733376,
+      "original_data_tb_for_retention": 432.133632,
+      "metadata_events_per_second": 240000,
+      "metadata_ingest_mb_per_second": 491.52,
+      "kafka_metadata_tb_replicated_retention": 63.700992,
+      "decoded_rgb_transfer_gbps_one_copy": 1492.992,
+      "fire_inference_requests_per_second": 30000,
+      "vegetation_inference_requests_per_second": 1000,
+      "hypothetical_gpus_without_zone_failure_reserve": 539,
+      "hypothetical_fire_gpus_per_zone_with_failure_reserve": 231,
+      "hypothetical_vegetation_gpus_per_zone_with_failure_reserve": 39,
+      "hypothetical_gpus_with_one_zone_failure_reserve": 810
+    }
+  ]
+}

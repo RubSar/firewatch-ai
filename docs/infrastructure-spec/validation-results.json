@@ -1,0 +1,8 @@
+{
+  "scope": "design_package_only_not_runtime_infrastructure",
+  "tests_run": 13,
+  "failures": 0,
+  "errors": 0,
+  "schema_validation": "bundled_keyword_subset; not a full standards conformance test",
+  "passed": true
+}

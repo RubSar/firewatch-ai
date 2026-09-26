@@ -1,0 +1,373 @@
+[
+  {
+    "name": "fw.live.session.command.v1",
+    "logical_name": "session.command",
+    "producer": "C02",
+    "consumers": [
+      "C02"
+    ],
+    "partition_key": "tenant/mission",
+    "initial_partitions": 24,
+    "retention_days": 7,
+    "delivery": "at_least_once",
+    "max_event_bytes": 262144
+  },
+  {
+    "name": "fw.live.session.changed.v1",
+    "logical_name": "session.changed",
+    "producer": "C02",
+    "consumers": [
+      "I01"
+    ],
+    "partition_key": "tenant/mission",
+    "initial_partitions": 24,
+    "retention_days": 7,
+    "delivery": "at_least_once",
+    "max_event_bytes": 262144
+  },
+  {
+    "name": "fw.live.calibration.changed.v1",
+    "logical_name": "calibration.changed",
+    "producer": "C03",
+    "consumers": [],
+    "partition_key": "tenant/sensor",
+    "initial_partitions": 12,
+    "retention_days": 30,
+    "delivery": "at_least_once",
+    "max_event_bytes": 262144
+  },
+  {
+    "name": "fw.live.deployment.changed.v1",
+    "logical_name": "deployment.changed",
+    "producer": "C04",
+    "consumers": [],
+    "partition_key": "model/deployment",
+    "initial_partitions": 12,
+    "retention_days": 30,
+    "delivery": "at_least_once",
+    "max_event_bytes": 262144
+  },
+  {
+    "name": "fw.live.media.segment.ready.v1",
+    "logical_name": "media.segment.ready",
+    "producer": "I01",
+    "consumers": [
+      "P01"
+    ],
+    "partition_key": "tenant/mission/session/sensor",
+    "initial_partitions": 96,
+    "retention_days": 3,
+    "delivery": "at_least_once",
+    "max_event_bytes": 262144
+  },
+  {
+    "name": "fw.live.thermal.ready.v1",
+    "logical_name": "thermal.ready",
+    "producer": "I03",
+    "consumers": [
+      "P01"
+    ],
+    "partition_key": "tenant/mission/session/sensor",
+    "initial_partitions": 96,
+    "retention_days": 3,
+    "delivery": "at_least_once",
+    "max_event_bytes": 262144
+  },
+  {
+    "name": "fw.live.telemetry.normalized.v1",
+    "logical_name": "telemetry.normalized",
+    "producer": "I02",
+    "consumers": [
+      "P01"
+    ],
+    "partition_key": "tenant/mission/session/sensor",
+    "initial_partitions": 96,
+    "retention_days": 3,
+    "delivery": "at_least_once",
+    "max_event_bytes": 262144
+  },
+  {
+    "name": "fw.live.input.gap.v1",
+    "logical_name": "input.gap",
+    "producer": "I02,I03,P01",
+    "consumers": [
+      "P01",
+      "P05"
+    ],
+    "partition_key": "tenant/mission/session",
+    "initial_partitions": 96,
+    "retention_days": 7,
+    "delivery": "at_least_once",
+    "max_event_bytes": 262144
+  },
+  {
+    "name": "fw.live.stream.health.v1",
+    "logical_name": "stream.health",
+    "producer": "I01,I02,I03,I04",
+    "consumers": [
+      "D01",
+      "D04",
+      "O02"
+    ],
+    "partition_key": "tenant/mission/session",
+    "initial_partitions": 48,
+    "retention_days": 7,
+    "delivery": "at_least_once",
+    "max_event_bytes": 262144
+  },
+  {
+    "name": "fw.live.archive.request.v1",
+    "logical_name": "archive.request",
+    "producer": "I01,I03,P01",
+    "consumers": [
+      "I04"
+    ],
+    "partition_key": "tenant/mission/session",
+    "initial_partitions": 96,
+    "retention_days": 3,
+    "delivery": "at_least_once",
+    "max_event_bytes": 262144
+  },
+  {
+    "name": "fw.live.evidence.ready.v1",
+    "logical_name": "evidence.ready",
+    "producer": "I04",
+    "consumers": [],
+    "partition_key": "tenant/mission/session",
+    "initial_partitions": 96,
+    "retention_days": 7,
+    "delivery": "at_least_once",
+    "max_event_bytes": 262144
+  },
+  {
+    "name": "fw.live.frame.ready.v1",
+    "logical_name": "frame.ready",
+    "producer": "P01",
+    "consumers": [
+      "P02",
+      "P03"
+    ],
+    "partition_key": "tenant/mission/session",
+    "initial_partitions": 96,
+    "retention_days": 3,
+    "delivery": "at_least_once",
+    "max_event_bytes": 262144
+  },
+  {
+    "name": "fw.live.frame.accounted.v1",
+    "logical_name": "frame.accounted",
+    "producer": "P01,P03",
+    "consumers": [
+      "O02"
+    ],
+    "partition_key": "tenant/mission/session",
+    "initial_partitions": 96,
+    "retention_days": 7,
+    "delivery": "at_least_once",
+    "max_event_bytes": 262144
+  },
+  {
+    "name": "fw.live.thermal.observation.v1",
+    "logical_name": "thermal.observation",
+    "producer": "P02",
+    "consumers": [
+      "P05"
+    ],
+    "partition_key": "tenant/mission/session",
+    "initial_partitions": 96,
+    "retention_days": 3,
+    "delivery": "at_least_once",
+    "max_event_bytes": 262144
+  },
+  {
+    "name": "fw.live.vision.observation.v1",
+    "logical_name": "vision.observation",
+    "producer": "P03",
+    "consumers": [
+      "P05"
+    ],
+    "partition_key": "tenant/mission/session",
+    "initial_partitions": 96,
+    "retention_days": 3,
+    "delivery": "at_least_once",
+    "max_event_bytes": 262144
+  },
+  {
+    "name": "fw.live.fused.observation.v1",
+    "logical_name": "fused.observation",
+    "producer": "P05",
+    "consumers": [
+      "P06",
+      "D01"
+    ],
+    "partition_key": "tenant/mission/session/run",
+    "initial_partitions": 96,
+    "retention_days": 3,
+    "delivery": "at_least_once",
+    "max_event_bytes": 262144
+  },
+  {
+    "name": "fw.live.track.reset.v1",
+    "logical_name": "track.reset",
+    "producer": "P05",
+    "consumers": [],
+    "partition_key": "tenant/mission/session/run",
+    "initial_partitions": 48,
+    "retention_days": 7,
+    "delivery": "at_least_once",
+    "max_event_bytes": 262144
+  },
+  {
+    "name": "fw.live.geo.observation.v1",
+    "logical_name": "geo.observation",
+    "producer": "P06",
+    "consumers": [
+      "P07"
+    ],
+    "partition_key": "tenant/mission/grid/tile/run",
+    "initial_partitions": 192,
+    "retention_days": 3,
+    "delivery": "at_least_once",
+    "max_event_bytes": 262144
+  },
+  {
+    "name": "fw.live.grid.updated.v1",
+    "logical_name": "grid.updated",
+    "producer": "P07",
+    "consumers": [
+      "D01",
+      "D04"
+    ],
+    "partition_key": "tenant/mission/grid/tile/run",
+    "initial_partitions": 192,
+    "retention_days": 7,
+    "delivery": "at_least_once",
+    "max_event_bytes": 262144
+  },
+  {
+    "name": "fw.live.grid.stale.v1",
+    "logical_name": "grid.stale",
+    "producer": "P07",
+    "consumers": [
+      "D01"
+    ],
+    "partition_key": "tenant/mission/grid/tile/run",
+    "initial_partitions": 192,
+    "retention_days": 7,
+    "delivery": "at_least_once",
+    "max_event_bytes": 262144
+  },
+  {
+    "name": "fw.live.weather.snapshot.v1",
+    "logical_name": "weather.snapshot",
+    "producer": "X01",
+    "consumers": [
+      "P07"
+    ],
+    "partition_key": "provider/cell/run/valid-time",
+    "initial_partitions": 24,
+    "retention_days": 30,
+    "delivery": "at_least_once",
+    "max_event_bytes": 262144
+  },
+  {
+    "name": "fw.live.context.changed.v1",
+    "logical_name": "context.changed",
+    "producer": "X02",
+    "consumers": [
+      "P07"
+    ],
+    "partition_key": "dataset/tile",
+    "initial_partitions": 24,
+    "retention_days": 30,
+    "delivery": "at_least_once",
+    "max_event_bytes": 262144
+  },
+  {
+    "name": "fw.live.incident.changed.v1",
+    "logical_name": "incident.changed",
+    "producer": "D01",
+    "consumers": [
+      "D04"
+    ],
+    "partition_key": "tenant/mission/run",
+    "initial_partitions": 96,
+    "retention_days": 30,
+    "delivery": "at_least_once",
+    "max_event_bytes": 262144
+  },
+  {
+    "name": "fw.live.notification.requested.v1",
+    "logical_name": "notification.requested",
+    "producer": "D01",
+    "consumers": [
+      "D02"
+    ],
+    "partition_key": "tenant/incident",
+    "initial_partitions": 48,
+    "retention_days": 7,
+    "delivery": "at_least_once",
+    "max_event_bytes": 262144
+  },
+  {
+    "name": "fw.live.notification.delivery.v1",
+    "logical_name": "notification.delivery",
+    "producer": "D02",
+    "consumers": [
+      "O02"
+    ],
+    "partition_key": "tenant/incident",
+    "initial_partitions": 48,
+    "retention_days": 30,
+    "delivery": "at_least_once",
+    "max_event_bytes": 262144
+  },
+  {
+    "name": "fw.live.replay.request.v1",
+    "logical_name": "replay.request",
+    "producer": "O01",
+    "consumers": [
+      "O01"
+    ],
+    "partition_key": "tenant/replay-run",
+    "initial_partitions": 24,
+    "retention_days": 7,
+    "delivery": "at_least_once",
+    "max_event_bytes": 262144
+  },
+  {
+    "name": "fw.live.replay.completed.v1",
+    "logical_name": "replay.completed",
+    "producer": "O01",
+    "consumers": [],
+    "partition_key": "tenant/replay-run",
+    "initial_partitions": 24,
+    "retention_days": 30,
+    "delivery": "at_least_once",
+    "max_event_bytes": 262144
+  },
+  {
+    "name": "fw.live.audit.event.v1",
+    "logical_name": "audit.event",
+    "producer": "ALL",
+    "consumers": [
+      "O02"
+    ],
+    "partition_key": "tenant/mission",
+    "initial_partitions": 48,
+    "retention_days": 30,
+    "delivery": "at_least_once",
+    "max_event_bytes": 262144
+  },
+  {
+    "name": "fw.live.health.changed.v1",
+    "logical_name": "health.changed",
+    "producer": "O02",
+    "consumers": [],
+    "partition_key": "tenant/mission",
+    "initial_partitions": 48,
+    "retention_days": 7,
+    "delivery": "at_least_once",
+    "max_event_bytes": 262144
+  }
+]
