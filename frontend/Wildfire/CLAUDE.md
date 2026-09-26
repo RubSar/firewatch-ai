@@ -85,6 +85,33 @@ mainly because it throws embers.
   the §4 energy kernel removes it. A test asserts realistic canopy does NOT crown actively,
   so that when the spread rate is fixed the test fails loudly and gets deleted.
 
+### Benchmark against Rothermel
+
+`npm run bench` compares this kernel against Rothermel (1972) — the model underneath
+BehavePlus, FARSITE and ELMFIRE — on identical inputs. Cell2Fire and ELMFIRE were the
+intended references and neither builds here (no cmake, Boost, Eigen, gfortran), so the
+reference is implemented directly in `sim/src/rothermel.ts` and validated to 4% against
+published BehavePlus output for FM1.
+
+It reports three numbers because there are two independent errors, and conflating them
+is how a model stays plausible and wrong:
+
+| | calm | 40 km/h |
+|---|---|---|
+| nominal / Rothermel | 0.96-1.14x (grass) | **0.03-0.06x** |
+| emergent / nominal | 4.45x | 1.8x |
+
+**The wind term is the larger error, and it under-predicts.** The kernel's
+`exp(0.115·U)` reaches 3.6x at 40 km/h where Rothermel reaches 65x. So the fire is far
+too fast in calm air and far too slow in wind — the arrival-draw overshoot partially
+masks the weak wind response, and fixing either alone makes the other worse. The
+dangerous case, wind-driven spread, is the one under-predicted.
+
+Two limitations to keep in mind: the Rothermel implementation is single-fuel-particle,
+which is exact for this kernel's single-load FUELS but invalid against real multi-class
+Anderson models; and it needs midflame wind, so `MIDFLAME_WIND_FACTOR` (0.4) converts
+from the 10 m wind the weather feed reports.
+
 ### Kernel tests
 
 `frontend/sim/test/` holds the physics checks ARCHITECTURE.md's Verification section
