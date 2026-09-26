@@ -49,12 +49,16 @@ interface Perimeter {
   lat: number
   lng: number
   spanKm: number
+  /** Reported point of origin, when the record carries one. */
+  originLat: number | null
+  originLng: number | null
 }
 
 async function fetchPerimeters(minAcres: number, maxAcres: number, cfg: Config): Promise<Perimeter[]> {
   const url =
     `${WFIGS}?where=poly_GISAcres%3E${minAcres}+AND+poly_GISAcres%3C${maxAcres}` +
-    `&outFields=poly_IncidentName,attr_FireDiscoveryDateTime,poly_GISAcres` +
+    `&outFields=poly_IncidentName,attr_FireDiscoveryDateTime,poly_GISAcres,` +
+    `attr_InitialLatitude,attr_InitialLongitude` +
     `&returnGeometry=true&outSR=4326&resultRecordCount=12&f=json`
   const ac = new AbortController()
   const timer = setTimeout(() => ac.abort(), Math.max(cfg.fetchTimeoutMs, 45000))
@@ -85,6 +89,8 @@ async function fetchPerimeters(minAcres: number, maxAcres: number, cfg: Config):
         lat,
         lng: (lo + hi) / 2,
         spanKm: Math.max(widthKm, heightKm) * PAD,
+        originLat: (f.attributes.attr_InitialLatitude as number | null) ?? null,
+        originLng: (f.attributes.attr_InitialLongitude as number | null) ?? null,
       })
     }
     return out
@@ -224,8 +230,34 @@ async function run(p: Perimeter, cfg: Config) {
     minElev: dem.data.minElev, maxElev: dem.data.maxElev, source: 'live' as const,
   }
 
+  /**
+   * Ignite at the REPORTED point of origin where the record has one.
+   *
+   * Using the perimeter centroid instead quietly rigged the comparison: it
+   * starts the fire in the middle of where it ended up, which suits a
+   * symmetric model and penalises a directional one for running downwind past
+   * the far edge. An equal-area circle scored 0.758 against the model's 0.388
+   * under that setup — a result about the experiment, not the physics.
+   */
+  const centroidCol = Math.round(sx / truthCells)
+  const centroidRow = Math.round(sy / truthCells)
+  let ic = centroidCol
+  let ir = centroidRow
+  let origin = 'perimeter centroid (assumed)'
+  if (p.originLat != null && p.originLng != null) {
+    const c = Math.round(((p.originLng - bounds.west) / (bounds.east - bounds.west)) * cols)
+    const r = Math.round(((bounds.north - p.originLat) / (bounds.north - bounds.south)) * rows)
+    if (c >= 0 && r >= 0 && c < cols && r < rows) {
+      ic = c
+      ir = r
+      const offset = Math.hypot(c - centroidCol, r - centroidRow) * cellSize / 1000
+      origin = `reported point of origin (${offset.toFixed(1)} km from the centroid)`
+    }
+  }
+  console.log(`  ignition: ${origin}`)
+
   const sim = createSim(terrain, 7)
-  ignite(sim, Math.round(sx / truthCells), Math.round(sy / truthCells), 1)
+  ignite(sim, ic, ir, 1)
   const DT = 10
   for (const hour of weather) {
     for (let s = 0; s < 3600 / DT; s++) step(sim, { params: hour, weather: hour, dt: DT })
@@ -235,14 +267,41 @@ async function run(p: Perimeter, cfg: Config) {
   const modelled = new Uint8Array(sim.state.length)
   for (let i = 0; i < modelled.length; i++) modelled[i] = sim.state[i] !== Cell.Unburned ? 1 : 0
   const d = dice(truth, modelled)
-  console.log(`  modelled ${(d.bCells * haPerCell).toFixed(0)} ha in ${weather.length} h  ` +
-    `|  DICE ${d.dice.toFixed(3)}  area ratio ${(d.bCells / d.aCells).toFixed(2)}x`)
+
+  /**
+   * Null model: a disc at the ignition point with the same area the model
+   * produced. Dice rewards overlap, and a fire started at the centroid of the
+   * true perimeter overlaps it substantially no matter what physics runs —
+   * so the question is not "is Dice high" but "is it higher than a circle".
+   * Anything the physics is worth shows up as the gap between these two.
+   *
+   * Centred on the ignition point, whatever that is, so the disc and the
+   * model start from the same place and only their shapes differ.
+   */
+  const discRadius = Math.sqrt(d.bCells / Math.PI)
+  const disc = new Uint8Array(truth.length)
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if ((c - ic) ** 2 + (r - ir) ** 2 <= discRadius * discRadius) disc[r * cols + c] = 1
+    }
+  }
+  const nullModel = dice(truth, disc)
+
+  const recall = d.inter / Math.max(1, d.aCells)
+  const precision = d.inter / Math.max(1, d.bCells)
+  console.log(`  modelled ${(d.bCells * haPerCell).toFixed(0)} ha in ${weather.length} h, ` +
+    `area ratio ${(d.bCells / d.aCells).toFixed(2)}x`)
+  console.log(`  DICE ${d.dice.toFixed(3)}   recall ${(recall * 100).toFixed(0)}% of the real fire caught` +
+    `   precision ${(precision * 100).toFixed(0)}% of the prediction real`)
+  console.log(`  null model (equal-area disc at the same point): DICE ${nullModel.dice.toFixed(3)}` +
+    `   -> physics ${d.dice > nullModel.dice ? 'beats' : 'DOES NOT BEAT'} a circle` +
+    ` (${(d.dice - nullModel.dice >= 0 ? '+' : '')}${(d.dice - nullModel.dice).toFixed(3)})`)
 }
 
 const cfg = loadConfig()
 const perims = await fetchPerimeters(5000, 60000, cfg)
 console.log(`WFIGS: ${perims.length} mapped perimeters between 5k and 60k acres`)
-console.log('(ignition assumed at the perimeter centroid; no suppression modelled)')
+console.log('(ignition from the reported point of origin where available; no suppression modelled)')
 for (const p of perims.slice(0, 4)) {
   try {
     await run(p, cfg)
