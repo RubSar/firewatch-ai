@@ -13,11 +13,15 @@ import {
   ignite, mockForecast, paintTreatment, recomputeStats, step,
 } from '@firewatch/sim'
 import type { ForecastHour, Params, Scenario, Sim, Stats, Terrain, Weather } from '@firewatch/sim'
-import type { GridSpec, Provenance, TerrainQuery } from '@firewatch/contracts/providers'
+import type {
+  ElevationGrid, FuelMoistureModel, GridSpec, Provenance, TerrainQuery,
+} from '@firewatch/contracts/providers'
+import { warmMoistureHistory, windAnomalyFor, windFieldFrom, type WindAnomaly } from './providers/tier2.ts'
 import { encodeState, encodeTerrain, type StateFrameInput } from '@firewatch/contracts/codec'
 import type { IncidentCommand, IncidentDto } from '@firewatch/contracts/wire'
 import { resolve } from './providers/provenance.ts'
 import type { Registry } from './providers/registry.ts'
+import type { Config } from './config.ts'
 
 /** Simulation seconds per integration step — must match the browser's DT. */
 const DT = 10
@@ -28,6 +32,25 @@ const FORECAST_START_HOUR = 13
 export class Incident {
   readonly id = randomUUID()
   readonly provenance: Record<string, Provenance> = {}
+  /**
+   * Per-edge barrier obstruction, or null when the field is all zeros.
+   *
+   * Lives on the incident rather than on `Sim` so that `reset` — which builds a
+   * fresh sim over the same terrain — cannot drop it. Terrain-derived and
+   * immutable for the incident's life, exactly like `terrain` itself.
+   */
+  blockFrac: Float32Array | null = null
+  /** Real wind shape for this area; null falls back to the single vector. */
+  windAnomaly: WindAnomaly | null = null
+  private windField: { u: Float32Array; v: Float32Array } | null = null
+  private moistureField: Float32Array | null = null
+  /** Weather the fields were built for, so they rebuild only when it moves. */
+  private fieldSig = ''
+  private moistureModel: FuelMoistureModel | null = null
+  private elevationGrid: ElevationGrid | null = null
+  private gridSpec: GridSpec | null = null
+  /** Real per-cell building counts when OSM supplied them; null keeps the estimate. */
+  structures: Float32Array | null = null
   sim: Sim
   playing = false
   /** Matches the UI's DEFAULT_SPEED; the client pushes its own on connect. */
@@ -72,7 +95,12 @@ export class Incident {
    * fetched concurrently and each degrades independently — a live DEM with
    * procedural fuel is a valid, and clearly labelled, outcome.
    */
-  static async create(scenario: Scenario, reg: Registry, signal?: AbortSignal): Promise<Incident> {
+  static async create(
+    scenario: Scenario,
+    reg: Registry,
+    cfg: Config,
+    signal?: AbortSignal
+  ): Promise<Incident> {
     const base = buildTerrain(scenario)
     const grid: GridSpec = {
       bounds: base.bounds,
@@ -83,11 +111,21 @@ export class Incident {
     }
     const q: TerrainQuery = { grid, scenario }
 
-    const [elev, fuel, canopy, barriers] = await Promise.all([
+    // Everything that only needs the grid goes out at once. Weather waits on
+    // nothing either, but it feeds `params`, so it is read below. Keeping the
+    // slow ones concurrent is what holds incident creation at the cost of the
+    // slowest fetch rather than the sum of them — the FIRMS observer's cold
+    // cache alone is 6 seconds of deadline it can spend behind the tiles.
+    const now = new Date().toISOString()
+    const [elev, fuel, canopy, barriers, values, observer, burnHistory, weather] = await Promise.all([
       resolve(reg.elevation, q, signal),
       resolve(reg.fuel, q, signal),
       resolve(reg.canopy, q, signal),
       resolve(reg.barriers, q, signal),
+      resolve(reg.valuesAtRisk, q, signal),
+      resolve(reg.observer, { grid, at: now }, signal),
+      resolve(reg.burnHistory, q, signal),
+      resolve(reg.weather(scenario.preset), { bounds: base.bounds, hours: 24 }, signal).catch(() => null),
     ])
 
     const shade = new Float32Array(base.cols * base.rows)
@@ -108,9 +146,19 @@ export class Incident {
     inc.provenance.fuel = fuel.provenance
     inc.provenance.canopy = canopy.provenance
     inc.provenance.barriers = barriers.provenance
+    // Length is checked rather than trusted: a provider that rasterised onto a
+    // different grid would block edges belonging to other cells, which reads as
+    // a physics bug rather than a data bug.
+    const edges = base.cols * base.rows * 8
+    if (barriers.data.blockFrac.length === edges && barriers.data.blockFrac.some((v) => v > 0)) {
+      inc.blockFrac = barriers.data.blockFrac
+    }
 
-    const weather = await resolve(reg.weather(scenario.preset), { bounds: base.bounds, hours: 24 }, signal)
-      .catch(() => null)
+    inc.provenance.valuesAtRisk = values.provenance
+    if (values.data.structures.length === base.cols * base.rows) inc.structures = values.data.structures
+    inc.provenance.observer = observer.provenance
+    inc.provenance.burnHistory = burnHistory.provenance
+
     if (weather) {
       inc.provenance.weather = weather.provenance
       inc.forecast = weather.data.forecast.map(({ at: _at, ...w }) => w)
@@ -133,12 +181,62 @@ export class Incident {
     inc.provenance.wind = (await resolve(reg.wind, {
       grid,
       elevation: elev.data,
-      at: { ...inc.params, hour: 0, clock: '00:00', at: new Date().toISOString() },
+      at: { ...inc.params, hour: 0, clock: '00:00', at: now },
     }, signal)).provenance
-    inc.provenance.observer = (await resolve(reg.observer, { bounds: base.bounds, at: new Date().toISOString() }, signal)).provenance
 
-    recomputeStats(inc.sim)
+    // Keep what the kernel needs: the anomaly is the expensive part and is
+    // reused, while the absolute field is rebuilt whenever the weather moves.
+    inc.gridSpec = grid
+    inc.elevationGrid = elev.data
+    inc.moistureModel = reg.moisture
+    inc.windAnomaly = await windAnomalyFor(base.bounds, base.cols, base.rows, cfg, signal)
+      .catch(() => null)
+    await warmMoistureHistory(base.bounds, cfg).catch(() => null)
+    inc.rebuildFields()
+
+    // Moisture is recorded even though it is evaluated per step rather than
+    // fetched: a port missing from this record is a mocked source the UI never
+    // mentions, which is the opposite of what §9's provenance rule is for.
+    inc.provenance.moisture = reg.moisture
+      .compute(grid, { ...inc.params, hour: 0, clock: '00:00', at: now }, elev.data)
+      .provenance
+
+    recomputeStats(inc.sim, inc.structures ?? undefined)
     return inc
+  }
+
+  /**
+   * Rebuilds the per-cell wind and moisture fields for the current weather.
+   *
+   * Cheap — a multiply and rotate per cell — so it runs whenever the weather
+   * actually changes rather than on a timer. The expensive parts (the wind
+   * lattice, the weather history) are cached by their providers.
+   */
+  rebuildFields() {
+    const w = this.effectivePublic()
+    const sig = [w.windSpeed, w.windDir, w.temperature, w.humidity, w.precipitation]
+      .map((v) => Math.round(v * 10))
+      .join('|')
+    if (sig === this.fieldSig) return
+    this.fieldSig = sig
+
+    const n = this.terrain.cols * this.terrain.rows
+    this.windField = windFieldFrom(this.windAnomaly, w, n)
+
+    if (this.moistureModel && this.elevationGrid && this.gridSpec) {
+      const got = this.moistureModel.compute(
+        this.gridSpec,
+        { ...w, hour: 0, clock: '00:00', at: new Date().toISOString() },
+        this.elevationGrid
+      )
+      this.moistureField = got.data
+      this.provenance.moisture = got.provenance
+    }
+  }
+
+  /** The weather currently driving the model — also used to key the fields. */
+  effectivePublic(): Weather {
+    return this.effective()
   }
 
   get stats(): Stats {
@@ -181,7 +279,7 @@ export class Incident {
         // is what makes the diff emit every burnt cell as unburned.
         break
     }
-    recomputeStats(this.sim)
+    recomputeStats(this.sim, this.structures ?? undefined)
   }
 
   /** Advance the clock. Returns true if the grid changed. */
@@ -196,9 +294,19 @@ export class Incident {
     if (steps <= 0) return false
 
     while (steps-- > 0) {
-      step(this.sim, { params: this.params, weather: this.effective(), dt: DT })
+      // Weather can move under a running clock (forecast feed, slider), so
+      // check before each batch rather than only when a command arrives.
+      this.rebuildFields()
+      step(this.sim, {
+        params: this.params,
+        weather: this.effective(),
+        dt: DT,
+        ...(this.blockFrac ? { blockFrac: this.blockFrac } : {}),
+        ...(this.windField ? { windField: this.windField } : {}),
+        ...(this.moistureField ? { moisture: this.moistureField } : {}),
+      })
     }
-    recomputeStats(this.sim)
+    recomputeStats(this.sim, this.structures ?? undefined)
     return true
   }
 

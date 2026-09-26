@@ -1,4 +1,4 @@
-import { FUELS, Fuel } from './fuels.ts'
+import { FUELS, Fuel, type FuelModel } from './fuels.ts'
 import type { Terrain } from './terrain.ts'
 import type { Params, Weather } from './weather.ts'
 import { fuelMoisture } from './weather.ts'
@@ -164,8 +164,14 @@ export function paintTreatment(sim: Sim, col: number, row: number, radius: numbe
 /** How long a cell stays alight, seconds — heavy fuels smoulder far longer. */
 const burnDuration = (load: number) => 360 + load * 900
 
-/** Neighbour offsets: [dc, dr, distance multiplier, bearing degrees]. */
-const NEIGHBOURS: [number, number, number, number][] = [
+/**
+ * Neighbour offsets: [dc, dr, distance multiplier, bearing degrees].
+ *
+ * Exported because the index into this array is the `d` of
+ * `blockFrac[i * 8 + d]`: a barrier provider that rasterises onto a different
+ * ordering blocks the wrong edges, and nothing would fail loudly.
+ */
+export const NEIGHBOURS: [number, number, number, number][] = [
   [0, -1, 1, 0], [1, -1, Math.SQRT2, 45], [1, 0, 1, 90], [1, 1, Math.SQRT2, 135],
   [0, 1, 1, 180], [-1, 1, Math.SQRT2, 225], [-1, 0, 1, 270], [-1, -1, Math.SQRT2, 315],
 ]
@@ -184,26 +190,64 @@ export interface StepInput {
   weather: Weather
   /** Seconds of simulated time to advance. */
   dt: number
+  /**
+   * Per-edge barrier obstruction, `blockFrac[i * 8 + d]` for the flux from cell
+   * `i` toward `NEIGHBOURS[d]` — roads, streams, anything narrower than a cell
+   * (ARCHITECTURE.md §5 handles those as vectors, not as unburnable cells).
+   * Omitted means no barriers, which is what the browser-only path passes.
+   */
+  blockFrac?: Float32Array
+  /**
+   * Per-cell wind vector in m/s, u eastward and v northward. Omitted means the
+   * single vector in `weather`, which is what the browser-only path passes.
+   *
+   * Wind dominates total error (ARCHITECTURE.md §7), and a 15 km domain spans
+   * several cells of any real forecast grid, so one vector for the whole fire
+   * is the largest avoidable simplification in the model.
+   */
+  windField?: { u: Float32Array; v: Float32Array }
+  /**
+   * Per-cell dead fine fuel moisture, %. Omitted means the scalar derived from
+   * `weather`. A field lets aspect and shading matter: a south slope at noon is
+   * drier than the gully beside it, and that is where a fire turns.
+   */
+  moisture?: Float32Array
+}
+
+/**
+ * How strongly a fuel's own moisture damps its spread, 0 = will not carry.
+ *
+ * Extracted so the per-cell path can evaluate it against local moisture while
+ * the scalar path keeps precomputing it once per fuel per step.
+ */
+function moistureDamping(f: FuelModel, fmc: number): number {
+  return f.load <= 0 || fmc >= f.mx ? 0 : Math.pow((f.mx - fmc) / (f.mx - 1.5), 1.5)
 }
 
 export function step(sim: Sim, input: StepInput) {
   const { terrain, state, fuelLeft, intensity, treatment, rng } = sim
   const { cols, rows, cellSize, elevation, fuel } = terrain
-  const { weather, params, dt } = input
+  const { weather, params, dt, blockFrac, windField, moisture } = input
 
   const fmc = fuelMoisture(weather)
   const gust = gustAt(weather, sim.time)
   const windMs = gust.speed / 3.6
   const windToBearing = (gust.dir + 180) % 360
+  // Gusting is a time signal, not a place signal, so it rides on top of a
+  // spatial field rather than replacing it: scale the local vector by the same
+  // factor the scalar gust applies, and carry the same direction wobble.
+  const gustScale = weather.windSpeed > 0.1 ? gust.speed / weather.windSpeed : 1
+  const gustVeer = gust.dir - weather.windDir
   const tempMult = 1 + 0.018 * (weather.temperature - 20)
   // Crews and aircraft only hold a line while the fire is slow enough to work.
   const suppressionEffort = params.suppression / 100
   const rainQuench = weather.precipitation * 0.0004
 
-  // Moisture damping is a per-fuel constant this step, so precompute it once.
-  const moistOf = FUELS.map((f) =>
-    f.load <= 0 || fmc >= f.mx ? 0 : Math.pow((f.mx - fmc) / (f.mx - 1.5), 1.5)
-  )
+  // With one moisture value for the whole grid the damping is a per-fuel
+  // constant, so precompute it. A moisture field forces the per-cell path.
+  const moistOf = FUELS.map((f) => moistureDamping(f, fmc))
+  const dampingAt = (f: FuelModel, cell: number) =>
+    moisture ? moistureDamping(f, moisture[cell]) : moistOf[f.id]
 
   const ignitions: number[] = []
   const stillActive: number[] = []
@@ -228,12 +272,24 @@ export function step(sim: Sim, input: StepInput) {
     // --- head-fire rate of spread for this cell ---
     const heatMult = Math.max(0.2, tempMult)
 
-    if (moistOf[fuel[i]] <= 0) {
+    if (dampingAt(fm, i) <= 0) {
       // Too wet to carry — the cell burns out where it stands.
       fuelLeft[i] -= (fm.load / burnDuration(fm.load)) * dt * 2
       intensity[i] = Math.min(intensity[i], 250)
       stillActive.push(i)
       continue
+    }
+
+    // Local wind where a field is supplied, otherwise the single vector.
+    let cellWindMs = windMs
+    let cellWindToBearing = windToBearing
+    if (windField) {
+      const u = windField.u[i]
+      const v = windField.v[i]
+      cellWindMs = Math.hypot(u, v) * gustScale
+      // atan2(u, v) gives the bearing the wind blows TOWARD, clockwise from
+      // north — which is already the convention the spread term wants.
+      cellWindToBearing = (((Math.atan2(u, v) * 180) / Math.PI) + gustVeer + 360) % 360
     }
 
     let cellMaxRos = 0
@@ -248,6 +304,12 @@ export function step(sim: Sim, input: StepInput) {
       if (nf.load <= 0) continue
       if (treatment[j] === Treatment.Dozer) continue
 
+      // A barrier narrower than a cell obstructs part of the shared edge, so
+      // only the open fraction of the flux crosses it. Never quite 1 in
+      // practice — a road stops a creeping flank, not a spotting head fire.
+      const block = blockFrac ? blockFrac[i * 8 + d] : 0
+      if (block >= 1) continue
+
       const dist = cellSize * distMul
 
       // Slope: rate of spread roughly doubles per 10 deg of upslope.
@@ -256,15 +318,15 @@ export function step(sim: Sim, input: StepInput) {
 
       // Wind: exponential in the component of wind along the spread direction,
       // so the head races and the backing edge crawls.
-      const align = Math.cos(((bearing - windToBearing) * Math.PI) / 180)
-      const windMult = Math.min(40, Math.exp(0.115 * windMs * align))
+      const align = Math.cos(((bearing - cellWindToBearing) * Math.PI) / 180)
+      const windMult = Math.min(40, Math.exp(0.115 * cellWindMs * align))
 
       // Spread is governed by the fuel being entered, damped by its own
       // moisture of extinction — grass carries where damp timber will not.
-      const nMoist = moistOf[fuel[j]]
+      const nMoist = dampingAt(nf, j)
       if (nMoist <= 0) continue
 
-      let ros = nf.baseRos * nMoist * heatMult * slopeMult * windMult
+      let ros = nf.baseRos * nMoist * heatMult * slopeMult * windMult * (1 - block)
       if (treatment[j] === Treatment.Retardant) ros *= 0.12
 
       if (ros > cellMaxRos) cellMaxRos = ros
@@ -280,13 +342,13 @@ export function step(sim: Sim, input: StepInput) {
     if (byram > maxIntensity) maxIntensity = byram
 
     // --- spotting: embers lofted from high-intensity fuel ---
-    if (params.spotting > 0 && windMs > 3 && byram > 1500) {
-      const pSpot = fm.spotting * params.spotting * (windMs / 60) * (dt / 60) * 0.06
+    if (params.spotting > 0 && cellWindMs > 3 && byram > 1500) {
+      const pSpot = fm.spotting * params.spotting * (cellWindMs / 60) * (dt / 60) * 0.06
       if (rng() < pSpot) {
-        const maxCells = (windMs * 90) / cellSize
+        const maxCells = (cellWindMs * 90) / cellSize
         const range = 2 + rng() * maxCells
         const jitter = ((rng() - 0.5) * 34 * Math.PI) / 180
-        const th = ((windToBearing * Math.PI) / 180) + jitter
+        const th = ((cellWindToBearing * Math.PI) / 180) + jitter
         const sc2 = Math.round(c + Math.sin(th) * range)
         const sr2 = Math.round(r - Math.cos(th) * range)
         if (sc2 >= 0 && sr2 >= 0 && sc2 < cols && sr2 < rows) {
@@ -340,8 +402,12 @@ export function step(sim: Sim, input: StepInput) {
 /**
  * Perimeter/containment need a full-grid pass, so this is called once per
  * rendered frame rather than once per simulation step.
+ *
+ * `structures` is a per-cell count of real buildings when a provider supplied
+ * one. Without it the loss figure stays the `STRUCTURES_PER_HA` estimate over
+ * burnt developed land, which is what the browser-only path uses.
  */
-export function recomputeStats(sim: Sim) {
+export function recomputeStats(sim: Sim, structures?: Float32Array) {
   const { cols, rows, cellSize, fuel } = sim.terrain
   const { state, treatment } = sim
   const cellArea = cellSize * cellSize
@@ -351,10 +417,12 @@ export function recomputeStats(sim: Sim) {
   // barrier (line, retardant, water) sits on the far side.
   let edge = 0
   let held = 0
+  let structuresLost = 0
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
       const i = r * cols + c
       if (state[i] === Cell.Unburned) continue
+      if (structures) structuresLost += structures[i]
       for (let d = 0; d < 4; d++) {
         const nc = c + ORTHO[d][0]
         const nr = r + ORTHO[d][1]
@@ -378,7 +446,9 @@ export function recomputeStats(sim: Sim) {
     maxIntensity: sim.peakIntensity,
     flameLength: sim.peakIntensity > 0 ? 0.0775 * Math.pow(sim.peakIntensity, 0.46) : 0,
     wuiCells: sim.wuiCells,
-    structuresLost: Math.round(((sim.wuiCells * cellArea) / 10000) * STRUCTURES_PER_HA),
+    structuresLost: structures
+      ? Math.round(structuresLost)
+      : Math.round(((sim.wuiCells * cellArea) / 10000) * STRUCTURES_PER_HA),
     spotFires: sim.spotFires,
   }
 

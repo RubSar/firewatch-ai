@@ -227,10 +227,22 @@ input[type="range"]:disabled::-webkit-slider-thumb { background: var(--muted); c
 .leaflet-bottom { bottom: 58px; }
 
 .data-chip {
-  font-size: 11px; color: var(--muted); border: 1px solid var(--line);
-  background: var(--panel-2); border-radius: 999px; padding: 4px 11px; white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 7px;
+  font: inherit; font-size: 11px; color: var(--muted); border: 1px solid var(--line);
+  background: var(--panel-2); border-radius: 999px; padding: 4px 6px 4px 11px; white-space: nowrap;
+  cursor: pointer;
 }
+.data-chip:hover { border-color: #46566b; color: var(--text); }
 .data-chip.live { color: #7fd4a0; border-color: #2b5740; background: rgba(74, 222, 128, .08); }
+.data-chip.live:hover { border-color: #47846a; color: #a8e8c2; }
+/* Small, but it is the only thing on the chip that looks clickable. */
+.chip-info {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 15px; height: 15px; border-radius: 50%;
+  border: 1px solid currentColor; opacity: .75;
+  font-size: 10px; font-weight: 700; font-style: italic; line-height: 1;
+}
+.data-chip:hover .chip-info { opacity: 1; }
 
 .ignite-prompt {
   position: absolute; z-index: 450; left: 50%; top: 42%; transform: translate(-50%, -50%);
@@ -449,3 +461,62 @@ input[type="range"]:disabled::-webkit-slider-thumb { background: var(--muted); c
   border-color: #e0a94a;
   color: #ffeec2;
 }
+
+/* ---------- data sources modal ---------- */
+.modal-backdrop {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(6, 10, 15, .62); backdrop-filter: blur(3px);
+  display: flex; align-items: center; justify-content: center; padding: 24px;
+}
+.modal {
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, .6);
+  display: flex; flex-direction: column; max-height: min(720px, 86vh);
+}
+.modal > header {
+  display: flex; align-items: flex-start; gap: 16px;
+  padding: 16px 18px 12px; border-bottom: 1px solid var(--line);
+}
+.modal > header h3 { margin: 0; font-size: 15px; font-weight: 650; }
+.modal > header .sub { margin: 3px 0 0; font-size: 12px; color: var(--muted); }
+.modal > header .btn { margin-left: auto; font-size: 17px; line-height: 1; padding: 2px 9px; }
+.modal > footer {
+  padding: 10px 18px; border-top: 1px solid var(--line); font-size: 11px;
+}
+.modal .dim { color: var(--muted); }
+
+.sources { width: min(640px, 100%); }
+.sources .tally { margin: 14px 18px 0; font-size: 12px; color: var(--muted); }
+.sources .tally b { color: var(--text); }
+.sources .empty { padding: 16px 18px; font-size: 13px; }
+.sources .empty p { margin: 0 0 10px; }
+.sources code {
+  font: 11px var(--mono); background: var(--panel-2);
+  border: 1px solid var(--line); border-radius: 4px; padding: 1px 5px;
+}
+
+.port-list { list-style: none; margin: 10px 0 0; padding: 0 18px 16px; overflow-y: auto; }
+.port {
+  padding: 10px 0 11px; border-bottom: 1px solid #1f2836;
+  /* The left rule is the scannable part: three greens/ambers down the page. */
+  padding-left: 11px; border-left: 2px solid transparent;
+}
+.port:last-child { border-bottom: none; }
+.port.measured { border-left-color: #4ade80; }
+.port.derived { border-left-color: var(--hot); }
+.port.synthetic { border-left-color: #47536a; }
+
+.port-head { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+.port-name { font-size: 13px; font-weight: 600; }
+.port .src { font-size: 10px; color: var(--muted); margin-left: auto; }
+.port-note { margin: 5px 0 0; font-size: 12px; color: #b9c5d4; }
+.port .meta { margin: 4px 0 0; font-size: 11px; color: var(--muted); font-family: var(--mono); }
+.port .degraded { margin: 5px 0 0; font-size: 11px; color: #f0a94a; }
+
+.kind {
+  font-size: 10px; letter-spacing: .3px; text-transform: uppercase;
+  border-radius: 999px; padding: 2px 7px; border: 1px solid;
+}
+.kind.measured { color: #7fd4a0; border-color: #2b5740; background: rgba(74, 222, 128, .09); }
+.kind.derived { color: #e8c473; border-color: #5c4a22; background: rgba(255, 210, 77, .09); }
+.kind.synthetic { color: #93a1b5; border-color: #38455a; background: rgba(147, 161, 181, .08); }

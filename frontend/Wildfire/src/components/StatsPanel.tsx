@@ -4,12 +4,20 @@ import { STRUCTURES_PER_HA } from '@firewatch/sim/model'
 interface Props {
   stats: Stats
   fmc: number
+  /**
+   * True when the server counted real OSM building footprints per cell. The
+   * figure means a different thing then, so the footnote has to change with it.
+   */
+  structuresCounted?: boolean
 }
 
 const fmt = (n: number, d = 0) => n.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d })
 
-export function StatsPanel({ stats, fmc }: Props) {
+export function StatsPanel({ stats, fmc, structuresCounted }: Props) {
   const acres = stats.area * 2.4711
+  const structuresNote = structuresCounted
+    ? 'mapped OSM buildings inside the burn scar — unmapped ones are not counted'
+    : `estimated at ${STRUCTURES_PER_HA} structures per hectare of burnt developed land`
   return (
     <div className="stats">
       <h3>Incident status</h3>
@@ -63,13 +71,13 @@ export function StatsPanel({ stats, fmc }: Props) {
         <span className="v">{fmt(stats.spotFires)}</span>
       </div>
       <div className="stat">
-        <span className="k" title={`Estimated at ${STRUCTURES_PER_HA} structures per hectare of burnt developed land`}>
+        <span className="k" title={structuresNote}>
           Structures lost*
         </span>
         <span className="v warn">{fmt(stats.structuresLost)}</span>
       </div>
       <p className="note" style={{ margin: '8px 0 0', fontSize: 10 }}>
-        * estimated at {STRUCTURES_PER_HA} structures per hectare of burnt developed land.
+        * {structuresNote}.
       </p>
     </div>
   )
