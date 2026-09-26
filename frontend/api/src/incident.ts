@@ -30,7 +30,8 @@ export class Incident {
   readonly provenance: Record<string, Provenance> = {}
   sim: Sim
   playing = false
-  speed = 300
+  /** Matches the UI's DEFAULT_SPEED; the client pushes its own on connect. */
+  speed = 60
   params: Params
   forecast: ForecastHour[]
   private carry = 0
