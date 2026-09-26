@@ -1,0 +1,103 @@
+{
+  "schema_version": "firewatch.research.result.v1",
+  "created_at_utc": "2026-09-26T21:01:32.083302Z",
+  "dataset_id": "flame3-sycan-marsh-v1",
+  "dataset_version": 1,
+  "data_kind": "real",
+  "split": "pilot",
+  "evidence_level": "single_incident_pilot",
+  "manifest_sha256": "d3f04f947e39459f22e37db64c083968ec15a4f7a8e4bcf44530951f59115410",
+  "config": {
+    "rgb_red_min": 150,
+    "rgb_red_green_gap": 15,
+    "rgb_saturation_min": 0.2,
+    "thermal_threshold_c": 80.0,
+    "min_component_pixels": 8,
+    "min_presence_pixels": 16
+  },
+  "code_sha256": {
+    "baselines.py": "955a7a0b0cc1e4398236d3797909d52ff276d87ee7a54da55630a66dc1b046a3",
+    "dataset.py": "c022091f84c6e948407c5df5c4bd007d3f6367fd6bf542520298eb4e1b66c802",
+    "run_baseline.py": "40080272881cf67972b6454796001dec3b94c0ea346e905a1e8a0735b2f2c5fd"
+  },
+  "environment": {
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "pillow": "12.3.0",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "processor": "Intel64 Family 6 Model 154 Stepping 3, GenuineIntel"
+  },
+  "samples": 24,
+  "incidents": 1,
+  "image_presence": {
+    "rgb_rules": {
+      "tp": 8,
+      "fp": 9,
+      "tn": 3,
+      "fn": 4,
+      "unavailable": 0,
+      "unlabeled": 0,
+      "precision": 0.47058823529411764,
+      "recall": 0.6666666666666666,
+      "negative_image_false_positive_rate": 0.75,
+      "f1": 0.5517241379310345,
+      "evaluated": 24
+    },
+    "thermal_threshold": {
+      "tp": 12,
+      "fp": 0,
+      "tn": 12,
+      "fn": 0,
+      "unavailable": 0,
+      "unlabeled": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "negative_image_false_positive_rate": 0.0,
+      "f1": 1.0,
+      "evaluated": 24
+    },
+    "presence_or": {
+      "tp": 12,
+      "fp": 9,
+      "tn": 3,
+      "fn": 0,
+      "unavailable": 0,
+      "unlabeled": 0,
+      "precision": 0.5714285714285714,
+      "recall": 1.0,
+      "negative_image_false_positive_rate": 0.75,
+      "f1": 0.7272727272727273,
+      "evaluated": 24
+    }
+  },
+  "rgb_pixel_segmentation": null,
+  "labeled_masks": 0,
+  "algorithm_wall_time_ms": {
+    "rgb_rules": {
+      "median": 19.252050002251053,
+      "p95": 147.60416999997685,
+      "n": 24
+    },
+    "thermal_threshold": {
+      "median": 1.9058500001847278,
+      "p95": 36.03239500334894,
+      "n": 24
+    }
+  },
+  "unavailable_metrics": {
+    "boundary_error": "Not implemented in this milestone; requires independently reviewed pixel masks",
+    "false_alerts_per_flight_hour": "No continuous, fully labeled flight timeline evaluated",
+    "time_to_detection": "No verified event onset and continuous timeline evaluated",
+    "capture_to_result_latency": "Offline processing; capture/receipt clocks not instrumented",
+    "geolocation_and_spread_error": "Image-space pilot; no calibrated ground projection evaluated"
+  },
+  "limitations": [
+    "No learned model trained or evaluated; no evidence yet of improvement over these rules.",
+    "Publisher image labels are not pixel masks; label generation was not independently audited.",
+    "Thermal anomalies and visible flame are different targets; presence comparison is exploratory.",
+    "Case-balanced rank sampling does not estimate operational prevalence or false alerts/hour.",
+    "Algorithm timing excludes loading, networking, visualization and queueing; not drone latency.",
+    "The image-level OR does not perform pixel fusion, geolocation or temporal tracking.",
+    "No unseen-incident generalization claim is supported by a single-incident pilot."
+  ]
+}
