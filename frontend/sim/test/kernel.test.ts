@@ -17,6 +17,7 @@ import assert from 'node:assert/strict'
 import { Fuel, FUELS } from '../src/fuels.ts'
 import { Cell, Crown, attachCanopy, createSim, ignite, recomputeStats, step } from '../src/model.ts'
 import { fuelMoisture } from '../src/weather.ts'
+import { MIDFLAME_WIND_FACTOR, rothermelSpread } from '../src/rothermel.ts'
 import {
   DIRECTIONS, calm, equivalentRadius, flatTerrain, meanReachByDirection, nominalRos, reach, runFrom,
 } from './harness.ts'
@@ -363,4 +364,51 @@ describe('crown fire', () => {
     )
     assert.ok(crowned.stats.spotFires >= surface.stats.spotFires, 'crowning did not increase spotting')
   })
+})
+
+/**
+ * The external reference ARCHITECTURE.md's Verification section asks for.
+ *
+ * Until now the only "target" available was `nominalRos`, which is the
+ * kernel's own formula — a model checked against its own opinion. Rothermel
+ * shares no structure with it, so disagreement means something.
+ *
+ * Both are `todo`: they measure real, quantified gaps that need kernel work,
+ * and failing the build on a known defect blocks every unrelated change.
+ * `npm run bench` prints the full table.
+ */
+todo('calm-wind spread matches Rothermel within a factor of two', () => {
+  const f = FUELS[Fuel.Grass]
+  const params = calm({ temperature: 25, humidity: 25 })
+  const reference = rothermelSpread({
+    fuel: { load: f.load, depth: f.depth, sav: f.sav, moistureOfExtinction: f.mx / 100 },
+    moisture: fuelMoisture(params) / 100,
+    windKmh: 0,
+    slopeTan: 0,
+  }).rosMMin
+  const steps = 500
+  const emergent = (equivalentRadius(runFrom(flatTerrain(), params, { steps, dt: 10, seed: 7 })) / (steps * 10)) * 60
+  assert.ok(
+    emergent / reference > 0.5 && emergent / reference < 2,
+    `emergent ${emergent.toFixed(2)} m/min against Rothermel ${reference.toFixed(2)} ` +
+      `— ${(emergent / reference).toFixed(1)}x (the arrival-draw overshoot)`
+  )
+})
+
+todo('wind response matches Rothermel — currently far too weak', () => {
+  // The larger of the two errors, and the one that matters operationally:
+  // the kernel's exp(0.115*U) reaches 3.6x at 40 km/h where Rothermel reaches
+  // 65x, so wind-driven fire — the dangerous case — is badly under-predicted.
+  const f = FUELS[Fuel.Grass]
+  const fuel = { load: f.load, depth: f.depth, sav: f.sav, moistureOfExtinction: f.mx / 100 }
+  const moisture = fuelMoisture(calm({ temperature: 25, humidity: 25 })) / 100
+  const at = (w: number) =>
+    rothermelSpread({ fuel, moisture, windKmh: w * MIDFLAME_WIND_FACTOR, slopeTan: 0 }).rosMMin
+  const referenceGain = at(40) / at(0)
+  const kernelGain = Math.min(40, Math.exp(0.115 * (40 / 3.6)))
+  assert.ok(
+    kernelGain / referenceGain > 0.5,
+    `at 40 km/h the kernel multiplies spread by ${kernelGain.toFixed(1)}x ` +
+      `where Rothermel gives ${referenceGain.toFixed(1)}x`
+  )
 })
