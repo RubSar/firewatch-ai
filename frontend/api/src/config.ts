@@ -22,6 +22,15 @@ export interface Config {
   idleTimeoutMs: number
   /** Overpass endpoint for OSM barriers. The public instance is rate-limited. */
   overpassUrl: string
+  /**
+   * Network budget for one Overpass query, ms.
+   *
+   * Separate from `fetchTimeoutMs` because the responses are in a different
+   * class: every building in a dense 15 km box is megabytes of JSON, and 15 s
+   * is not enough for Athens. Callers do not wait this long — `osm.ts` puts a
+   * short deadline in front and lets the download finish into the cache.
+   */
+  overpassTimeoutMs: number
 }
 
 export function loadConfig(env = process.env): Config {
@@ -36,5 +45,6 @@ export function loadConfig(env = process.env): Config {
     fetchTimeoutMs: Number(env.FETCH_TIMEOUT_MS ?? 15000),
     idleTimeoutMs: Number(env.IDLE_TIMEOUT_MS ?? 60000),
     overpassUrl: env.OVERPASS_URL ?? 'https://overpass-api.de/api/interpreter',
+    overpassTimeoutMs: Number(env.OVERPASS_TIMEOUT_MS ?? 60000),
   }
 }

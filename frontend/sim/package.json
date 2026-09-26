@@ -13,5 +13,9 @@
     "./classify": "./src/classify.ts",
     "./noise": "./src/noise.ts",
     "./geo": "./src/geo.ts"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.ts",
+    "typecheck": "tsc -b"
   }
 }

@@ -120,7 +120,15 @@ export type BarrierProvider = Provider<TerrainQuery, BarrierField>
 
 /** Burn history → the graded fuel reduction of §3, never a binary mask. */
 export interface SeverityGrid {
+  /** Relative Burn Ratio, for display and thresholding by a caller that wants to. */
   rbr: Float32Array
+  /**
+   * Key & Benson class 0-4 (unburned .. high). Classified by the provider
+   * because only it holds the dNBR that the breaks are defined on — RBR is a
+   * different scale and thresholding it with dNBR breaks is simply wrong.
+   */
+  severity: Uint8Array
+  /** Years since the burn, 99 where none was detected. */
   yearsSince: Float32Array
 }
 export type BurnHistoryProvider = Provider<TerrainQuery, SeverityGrid>

@@ -54,6 +54,8 @@ const PEOPLE_PER_STRUCTURE = 2.5
 
 interface OverpassWay {
   type: string
+  /** Present on every element; used to de-duplicate across subdivided boxes. */
+  id?: number
   tags?: Record<string, string>
   geometry?: { lat: number; lon: number }[]
   /** `out center` gives one point per way or relation instead of its outline. */
@@ -74,8 +76,10 @@ export function osmBarriers(cfg: Config): BarrierProvider {
         cfg,
         // `out geom` returns coordinates inline, which avoids a second round
         // trip to resolve node ids and roughly halves the response.
-        `${head(cfg)}(way["highway"~"^(${ROADS})$"](${bbox(bounds)});` +
-          `way["waterway"~"^(${WATERWAYS})$"](${bbox(bounds)}););out geom;`,
+        (box) =>
+          `${head(cfg)}(way["highway"~"^(${ROADS})$"](${box});` +
+          `way["waterway"~"^(${WATERWAYS})$"](${box}););out geom;`,
+        bounds,
         signal
       )
       const ways = (json.elements ?? []).filter((e) => e.type === 'way' && (e.geometry?.length ?? 0) > 1)
@@ -147,7 +151,8 @@ export function osmValuesAtRisk(cfg: Config): ValuesAtRisk {
       const { cols, rows, bounds } = q.grid
       const json = await overpass(
         cfg,
-        `${head(cfg)}(way["building"](${bbox(bounds)});relation["building"](${bbox(bounds)}););out center;`,
+        (box) => `${head(cfg)}(way["building"](${box});relation["building"](${box}););out center;`,
+        bounds,
         signal
       )
 
@@ -269,13 +274,46 @@ function crosses(
   )
 }
 
-const head = (cfg: Config) => `[out:json][timeout:${Math.round(cfg.fetchTimeoutMs / 1000)}];`
+const head = (cfg: Config) => `[out:json][timeout:${Math.round(cfg.overpassTimeoutMs / 1000)}];`
 const bbox = (b: TerrainQuery['grid']['bounds']) =>
   `${b.south.toFixed(5)},${b.west.toFixed(5)},${b.north.toFixed(5)},${b.east.toFixed(5)}`
 
-/** One Overpass call per query, cached on disk. */
-async function overpass(cfg: Config, query: string, signal?: AbortSignal) {
-  const key = createHash('sha1').update(cfg.overpassUrl + query).digest('hex')
+/**
+ * How long a caller waits for a cold query before giving up on it.
+ *
+ * Short, because incident creation is behind it. The download is NOT cancelled
+ * when this expires — it runs on, writes the cache, and the next incident over
+ * the same ground gets it instantly. The same bargain the land-cover read and
+ * the FIRMS observer strike: degrade now, be right shortly.
+ *
+ * This is what stops a dense city from falling back forever. Athens returns
+ * megabytes of building footprints and cannot finish inside any deadline a
+ * request can afford; given one uninterrupted run it finishes and stays cached.
+ */
+const DEADLINE_MS = 9000
+
+/** In-flight queries by cache key, so two incidents over one town fetch once. */
+const inflight = new Map<string, Promise<OverpassResponse>>()
+
+/** How far the box may be subdivided: 2 gives at most 16 leaves. */
+const MAX_SPLIT_DEPTH = 2
+/** Overpass asks for low concurrency, so leaves go out one at a time. */
+const BETWEEN_TILES_MS = 1000
+
+type BuildQuery = (box: string) => string
+
+/**
+ * One logical Overpass query, cached on disk, with a deadline in front of it.
+ *
+ * The deadline covers the *whole* job including any subdivision, not each
+ * request, so a caller waits `DEADLINE_MS` and no longer, however many tiles it
+ * takes underneath.
+ */
+async function overpass(
+  cfg: Config, build: BuildQuery, bounds: TerrainQuery['grid']['bounds'], signal?: AbortSignal
+) {
+  const rootQuery = build(bbox(bounds))
+  const key = createHash('sha1').update(cfg.overpassUrl + rootQuery).digest('hex')
   const path = join(cfg.tileCacheDir, `osm-${key}.json`)
   try {
     return JSON.parse(await readFile(path, 'utf8')) as OverpassResponse
@@ -283,6 +321,105 @@ async function overpass(cfg: Config, query: string, signal?: AbortSignal) {
     // not cached
   }
 
+  let job = inflight.get(key)
+  if (!job) {
+    // Deliberately not given the caller's signal: this outlives the request
+    // that started it, and one abandoned incident must not cancel a download
+    // another incident is waiting on. `overpassTimeoutMs` is what bounds it.
+    job = tiled(cfg, build, bounds, MAX_SPLIT_DEPTH)
+      .then(async (json) => {
+        // Cache the merged result under the root key, so the next incident is
+        // one file read rather than a doomed root query plus N leaves.
+        await mkdir(cfg.tileCacheDir, { recursive: true }).catch(() => undefined)
+        await writeFile(path, JSON.stringify(json)).catch(() => undefined)
+        return json
+      })
+      .finally(() => inflight.delete(key))
+    // The race below drops this promise on a slow query; an unhandled
+    // rejection would take the process down with it.
+    job.catch(() => undefined)
+    inflight.set(key, job)
+  }
+
+  let timer: ReturnType<typeof setTimeout> | undefined
+  return await Promise.race([
+    job,
+    new Promise<never>((_, reject) => {
+      const giveUp = () =>
+        reject(new Error(`still downloading after ${DEADLINE_MS} ms — cached for the next incident`))
+      timer = setTimeout(giveUp, DEADLINE_MS)
+      signal?.addEventListener('abort', giveUp, { once: true })
+    }),
+  ]).finally(() => clearTimeout(timer))
+}
+
+/**
+ * Fetches a box, quartering it when Overpass refuses the whole thing.
+ *
+ * Every building in a 15 km box over Athens is a query the public instance
+ * answers with a 504 in ten seconds — not a timeout on our side, a refusal.
+ * The same box in quarters succeeds: 48k buildings in 39 s for the dense
+ * quadrant, 3.5k in 2 s for the sparse one. Subdividing only on failure keeps
+ * the rural case at one request and pays the extra round trips exactly where
+ * the data is dense enough to need them.
+ */
+async function tiled(
+  cfg: Config, build: BuildQuery, b: TerrainQuery['grid']['bounds'], depth: number
+): Promise<OverpassResponse> {
+  try {
+    return await fetchQuery(cfg, build(bbox(b)))
+  } catch (err) {
+    if (depth <= 0) throw err
+    // Worth a line in the log: it is the difference between one request and
+    // sixteen, and it is how you find out a region is too dense for the public
+    // instance before someone reports the port as flaky.
+    console.warn(`[osm] ${(err as Error).message} — splitting ${bbox(b)} into quadrants`)
+    const midLat = (b.north + b.south) / 2
+    const midLng = (b.east + b.west) / 2
+    const quads = [
+      { north: b.north, south: midLat, west: b.west, east: midLng },
+      { north: b.north, south: midLat, west: midLng, east: b.east },
+      { north: midLat, south: b.south, west: b.west, east: midLng },
+      { north: midLat, south: b.south, west: midLng, east: b.east },
+    ]
+    const elements: OverpassWay[] = []
+    let osm3s: OverpassResponse['osm3s']
+    for (const q of quads) {
+      const part = await tiled(cfg, build, q, depth - 1)
+      elements.push(...(part.elements ?? []))
+      osm3s ??= part.osm3s
+      await new Promise((r) => setTimeout(r, BETWEEN_TILES_MS))
+    }
+    // A way crossing a split line comes back from both quadrants. Barriers
+    // rasterise idempotently — the same fraction, maxed onto the same edges —
+    // but a building counted twice is a structure that does not exist.
+    const seen = new Set<number>()
+    return {
+      osm3s,
+      elements: elements.filter((e) => {
+        const id = e.id
+        if (id === undefined) return true
+        if (seen.has(id)) return false
+        seen.add(id)
+        return true
+      }),
+    }
+  }
+}
+
+/** One request to Overpass, memoised on disk by its exact query text. */
+async function fetchQuery(cfg: Config, query: string): Promise<OverpassResponse> {
+  const key = createHash('sha1').update(cfg.overpassUrl + query).digest('hex')
+  const path = join(cfg.tileCacheDir, `osm-${key}.json`)
+  try {
+    return JSON.parse(await readFile(path, 'utf8')) as OverpassResponse
+  } catch {
+    // not cached
+  }
+  return await download(cfg, query, path)
+}
+
+async function download(cfg: Config, query: string, path: string): Promise<OverpassResponse> {
   // 429 and 504 are how the public instance says "busy, come back": it runs a
   // slot queue, and a bbox that returns 650 kB in a second can 504 a minute
   // later. One retry converts most of those into a hit; past that, the caller's
@@ -290,9 +427,7 @@ async function overpass(cfg: Config, query: string, signal?: AbortSignal) {
   let lastErr: Error | null = null
   for (let attempt = 0; attempt < 2; attempt++) {
     const ac = new AbortController()
-    const timer = setTimeout(() => ac.abort(), cfg.fetchTimeoutMs)
-    const onAbort = () => ac.abort()
-    signal?.addEventListener('abort', onAbort, { once: true })
+    const timer = setTimeout(() => ac.abort(), cfg.overpassTimeoutMs)
     try {
       const res = await fetch(cfg.overpassUrl, {
         method: 'POST',
@@ -317,7 +452,6 @@ async function overpass(cfg: Config, query: string, signal?: AbortSignal) {
       return json
     } finally {
       clearTimeout(timer)
-      signal?.removeEventListener('abort', onAbort)
     }
   }
   throw lastErr ?? new Error('overpass unreachable')

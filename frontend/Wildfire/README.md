@@ -95,7 +95,7 @@ shows what the current scenario is running on.
 |---|---|---|
 | Elevation | AWS Terrarium terrain tiles | RGB-encoded height, public, no key |
 | Water & snow | **Sentinel-2 L2A Scene Classification**, AWS Open Data | keyless; measured, not inferred from colour |
-| Land cover → fuel model | Esri World Imagery | visible-band proxy for the vegetation split, see below |
+| Land cover → fuel model | Esri World Imagery | visible-band proxy **tuned on Armenian imagery**; water/snow come from SCL and travel, the vegetation split does not |
 | Weather | real in server mode (Open-Meteo); mocked in browser mode — `frontend/sim/src/weather.ts` | `mockForecast()` and the live feed return the same shape |
 | Days since rain | **Open-Meteo** daily precipitation, 61 days back | measured, not carried from the preset; ≥2 mm counts as a wetting rain |
 | Barriers | **OpenStreetMap** roads and watercourses, via Overpass | keyless; server-side only. Geometry measured, widths assumed per tag |
@@ -171,9 +171,12 @@ Two honest caveats:
   as 30 m including verges, a residential street as 7 m, a stream as 5 m.
 
 Overpass is a shared community endpoint: responses are cached on disk beside the
-tiles, a 429 or 504 is retried once, and `OVERPASS_URL` points at a private
-instance. If it stays unreachable the port degrades to `no-barriers` and the chip
-says so.
+tiles, a 429 or 504 is retried once and then the box is quartered, and
+`OVERPASS_URL` points at a private instance. Dense cities need room — every
+building in a 15 km box over Athens is 20-40 s of server-side work — so Overpass
+gets its own 60 s budget (`OVERPASS_TIMEOUT_MS`) while callers wait 9 s and move
+on, picking the result up from cache on the next incident. If it stays
+unreachable the port degrades to `no-barriers` and the chip says so.
 
 ### Structures at risk
 

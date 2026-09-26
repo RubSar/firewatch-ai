@@ -24,6 +24,7 @@
 import { fromUrl, type GeoTIFFImage } from 'geotiff'
 import type { Bounds } from '@firewatch/sim/terrain'
 import type { Config } from '../config.ts'
+import { COG_OPTS } from './cogfetch.ts'
 
 /** Sentinel-2 Scene Classification Layer classes. */
 export const SCL = {
@@ -73,7 +74,7 @@ export interface LandCover {
  * into them. Written out rather than pulled from proj4 because it is one
  * well-defined formula and this is the only place that needs it.
  */
-function toUtm(lat: number, lng: number, zone: number, south: boolean) {
+export function toUtm(lat: number, lng: number, zone: number, south: boolean) {
   const a = 6378137.0
   const f = 1 / 298.257223563
   const k0 = 0.9996
@@ -113,31 +114,48 @@ function toUtm(lat: number, lng: number, zone: number, south: boolean) {
   return { easting, northing }
 }
 
-interface StacItem {
+export interface StacItem {
   id: string
   properties: { datetime: string; 'eo:cloud_cover'?: number; 'proj:epsg'?: number }
-  assets: Record<string, { href: string }>
+  assets: Record<string, {
+    href: string
+    /**
+     * L2A COGs hold uint16 digital numbers, not reflectance. Since processing
+     * baseline 04.00 the conversion is `DN * 0.0001 - 0.1`, and the asset
+     * carries both terms. `nodata` is 0, which is NOT a dark pixel.
+     */
+    'raster:bands'?: { scale?: number; offset?: number; nodata?: number }[]
+  }>
 }
 
-/** One retry: these hosts drop connections often enough to matter. */
-async function withRetry<T>(label: string, fn: () => Promise<T>): Promise<T> {
-  try {
-    return await fn()
-  } catch (err) {
-    const msg = (err as Error).message
-    if (/abort/i.test(msg)) throw err
-    await new Promise((r) => setTimeout(r, 400))
+/**
+ * Retry with backoff. These S3 endpoints drop connections often enough that a
+ * single retry still left roughly a third of reads failing — and a COG read is
+ * many range requests, so the chance at least one fails compounds.
+ */
+async function withRetry<T>(label: string, fn: () => Promise<T>, attempts = 4): Promise<T> {
+  let last: Error | null = null
+  for (let i = 0; i < attempts; i++) {
     try {
       return await fn()
-    } catch (err2) {
-      throw new Error(`${label}: ${(err2 as Error).message} (after retry)`)
+    } catch (err) {
+      last = err as Error
+      if (/abort/i.test(last.message)) throw last
+      await new Promise((r) => setTimeout(r, 300 * 2 ** i))
     }
   }
+  throw new Error(`${label}: ${last?.message} (after ${attempts} attempts)`)
 }
 
-async function searchScenes(bounds: Bounds, timeoutMs: number): Promise<StacItem[]> {
+export async function searchScenes(
+  bounds: Bounds,
+  timeoutMs: number,
+  window?: { from: number; to: number }
+): Promise<StacItem[]> {
   // Full RFC3339 — earth-search rejects a bare yyyy-mm-dd with a 400.
-  const since = new Date(Date.now() - LOOKBACK_DAYS * 86400_000).toISOString()
+  const range = window
+    ? `${new Date(window.from).toISOString()}/${new Date(window.to).toISOString()}`
+    : `${new Date(Date.now() - LOOKBACK_DAYS * 86400_000).toISOString()}/..`
   const ac = new AbortController()
   const timer = setTimeout(() => ac.abort(), timeoutMs)
   try {
@@ -148,7 +166,7 @@ async function searchScenes(bounds: Bounds, timeoutMs: number): Promise<StacItem
       body: JSON.stringify({
         collections: ['sentinel-2-l2a'],
         bbox: [bounds.west, bounds.south, bounds.east, bounds.north],
-        datetime: `${since}/..`,
+        datetime: range,
         query: { 'eo:cloud_cover': { lt: MAX_CLOUD } },
         // Least cloudy first: a clear scene from last month beats a hazy one
         // from yesterday for land cover, which changes on a seasonal scale.
@@ -164,6 +182,90 @@ async function searchScenes(bounds: Bounds, timeoutMs: number): Promise<StacItem
 }
 
 /** Reads the SCL window covering `bounds` and resamples it onto the grid. */
+/**
+ * Reads one band of a scene over `bounds` and resamples it onto the grid.
+ * Shared by the SCL land-cover read and the dNBR burn-severity read.
+ */
+export async function sampleBand(
+  item: StacItem,
+  asset: string,
+  bounds: Bounds,
+  cols: number,
+  rows: number
+): Promise<Float32Array | null> {
+  const epsg = item.properties['proj:epsg']
+  if (!epsg || !item.assets[asset]) return null
+  const south = epsg >= 32700
+  const zone = epsg - (south ? 32700 : 32600)
+
+  const img: GeoTIFFImage = await withRetry(`open-${asset}`, async () =>
+    (await fromUrl(item.assets[asset].href, COG_OPTS)).getImage()
+  )
+  const [ox, oy] = img.getOrigin()
+  const [rx, ry] = img.getResolution()
+  const W = img.getWidth()
+  const H = img.getHeight()
+
+  const corners = [
+    toUtm(bounds.north, bounds.west, zone, south),
+    toUtm(bounds.north, bounds.east, zone, south),
+    toUtm(bounds.south, bounds.west, zone, south),
+    toUtm(bounds.south, bounds.east, zone, south),
+  ]
+  const xs = corners.map((c) => (c.easting - ox) / rx)
+  const ys = corners.map((c) => (c.northing - oy) / ry)
+  const x0 = Math.max(0, Math.floor(Math.min(...xs)) - 1)
+  const x1 = Math.min(W, Math.ceil(Math.max(...xs)) + 1)
+  const y0 = Math.max(0, Math.floor(Math.min(...ys)) - 1)
+  const y1 = Math.min(H, Math.ceil(Math.max(...ys)) + 1)
+  if (x1 - x0 < 2 || y1 - y0 < 2) return null
+
+  const raster = await withRetry(`read-${asset}`, () => img.readRasters({ window: [x0, y0, x1, y1] }))
+  const band = (Array.isArray(raster) ? raster[0] : raster) as unknown as ArrayLike<number>
+  const bw = x1 - x0
+  const bh = y1 - y0
+
+  /*
+   * Digital number -> reflectance.
+   *
+   * `scale` is applied; the advertised `offset` is deliberately NOT, and that
+   * asymmetry needs justifying. Element84's STAC lists `scale: 0.0001,
+   * offset: -0.1` for these bands — ESA's BOA_ADD_OFFSET from processing
+   * baseline 04.00 — but the pixels in `sentinel-cogs` do not carry it.
+   *
+   * Measured, because the metadata alone would say otherwise: over deep water
+   * on Lake Sevan both bands read DN ~100-130, which is rho ~0.01 with scale
+   * alone and an impossible rho ~-0.09 with the offset applied. Summer forest
+   * at Dilijan reads DN 3359/964 -> 0.336/0.096 NIR/SWIR2, textbook values.
+   * To re-check after a collection change: sample open water and confirm both
+   * bands land near zero rather than near -0.09.
+   *
+   * NBR would not notice either way — a pure scale cancels in a normalised
+   * difference — but every value here should still be a real reflectance.
+   */
+  const meta = item.assets[asset]['raster:bands']?.[0]
+  const scale = meta?.scale ?? 1
+  const nodata = meta?.nodata
+
+  const out = new Float32Array(cols * rows)
+  for (let r = 0; r < rows; r++) {
+    const lat = bounds.north - ((r + 0.5) / rows) * (bounds.north - bounds.south)
+    for (let c = 0; c < cols; c++) {
+      const lng = bounds.west + ((c + 0.5) / cols) * (bounds.east - bounds.west)
+      const u = toUtm(lat, lng, zone, south)
+      const px = Math.round((u.easting - ox) / rx) - x0
+      const py = Math.round((u.northing - oy) / ry) - y0
+      const dn = px < 0 || py < 0 || px >= bw || py >= bh ? NaN : (band[py * bw + px] ?? NaN)
+      // No-data must be NaN, not 0. A granule-edge pixel of 0 in one band and
+      // real signal in the other makes `nbr()` return exactly +-1 — which
+      // clears the vegetation floor and then differences into a large dNBR,
+      // i.e. a burn scar invented out of missing data.
+      out[r * cols + c] = !Number.isFinite(dn) || dn === nodata ? NaN : dn * scale
+    }
+  }
+  return out
+}
+
 async function sampleScene(
   item: StacItem,
   bounds: Bounds,
@@ -176,7 +278,7 @@ async function sampleScene(
   const zone = epsg - (south ? 32700 : 32600)
 
   const img: GeoTIFFImage = await withRetry('open-cog', async () =>
-    (await fromUrl(item.assets.scl.href)).getImage()
+    (await fromUrl(item.assets.scl.href, COG_OPTS)).getImage()
   )
   const [ox, oy] = img.getOrigin()
   const [rx, ry] = img.getResolution()
