@@ -1,3 +1,4 @@
+import { TimeHeap } from './heap.ts'
 import { andersonLB } from './shape.ts'
 import { FUELS, Fuel, WIND_COEFFICIENTS, type FuelModel } from './fuels.ts'
 import type { Terrain } from './terrain.ts'
@@ -74,6 +75,14 @@ export interface Sim {
   /** Per cell: Crown.None | Passive | Active. */
   crown: Uint8Array | null
   active: number[]
+  /**
+   * Minimum travel time to each cell, sim seconds; Infinity = not yet reached.
+   * Float32 so that the value pushed onto `front` and the value stored here are
+   * bit-identical, which is what makes the stale-entry check work.
+   */
+  arrival: Float32Array
+  /** Dijkstra frontier for the minimum-travel-time propagation. */
+  front: TimeHeap
   time: number
   /** Bumped whenever the grid changes outside of a step, so the renderer can
    *  skip repainting a frame in which nothing moved. */
@@ -120,6 +129,8 @@ export function createSim(terrain: Terrain, seed = 0xf13e5): Sim {
     canopyLeft: null,
     crown: null,
     active: [],
+    arrival: new Float32Array(n).fill(Infinity),
+    front: new TimeHeap(),
     time: 0,
     revision: 0,
     burnedCells: 0,
@@ -151,6 +162,11 @@ export function transferSimState(from: Sim, to: Sim): boolean {
   to.ignitedAt.set(from.ignitedAt)
   to.treatment.set(from.treatment)
   to.active = [...from.active]
+  to.arrival.set(from.arrival)
+  // The frontier is rebuilt from the burning cells on the next step, so it is
+  // dropped rather than copied — the rates it was built from belonged to the
+  // old terrain anyway.
+  to.front.clear()
   to.time = from.time
   to.revision = from.revision + 1
   to.burnedCells = from.burnedCells
@@ -189,6 +205,7 @@ export function ignite(sim: Sim, col: number, row: number, radius = 1): number {
       if (sim.state[i] !== Cell.Unburned || FUELS[fuel[i]].load <= 0) continue
       sim.state[i] = Cell.Burning
       sim.ignitedAt[i] = sim.time
+      sim.arrival[i] = sim.time
       sim.intensity[i] = 1
       sim.active.push(i)
       sim.burnedCells++
@@ -219,6 +236,16 @@ export function paintTreatment(sim: Sim, col: number, row: number, radius: numbe
   }
   // Only rescan the active list if this stamp actually put something out.
   if (knocked) sim.active = sim.active.filter((i) => sim.state[i] === Cell.Burning)
+  /**
+   * Discard queued arrival times, or the line does not work.
+   *
+   * MTT computes when the fire WILL reach a cell, so the moment a line is drawn
+   * the cells behind it already hold arrival times calculated as if it were not
+   * there. Without this the fire walks straight through a dozer line drawn in
+   * front of it — the one behaviour this product cannot get wrong, and a defect
+   * that would only show up by watching the map, never in a stats assertion.
+   */
+  invalidateFront(sim)
   sim.revision++
 }
 
@@ -467,8 +494,35 @@ function moistureDamping(f: FuelModel, fmc: number): number {
   return f.load <= 0 || fmc >= f.mx ? 0 : Math.pow((f.mx - fmc) / (f.mx - 1.5), 1.5)
 }
 
+/**
+ * Discards every queued arrival time, so the frontier is rebuilt from the
+ * currently burning cells under present conditions.
+ *
+ * MTT computes when the fire WILL reach a cell, which means an arrival time can
+ * be queued long before it comes due. Anything that changes the rate field
+ * afterwards — a dozer line, retardant, a wind shift — would otherwise be
+ * ignored by arrivals already in the queue, and a control line drawn in front of
+ * a fire would not stop it. That is the one behaviour this product cannot get
+ * wrong, so it is invalidated explicitly rather than left to decay.
+ *
+ * Only cells with a queued arrival can be stale, so this walks the heap rather
+ * than the grid. Burning cells are not re-pushed: `step` relaxes every active
+ * cell each time it runs, which repopulates the frontier for free.
+ *
+ * Call it after mutating `treatment` or `blockFrac` outside a step.
+ */
+export function invalidateFront(sim: Sim) {
+  const { arrival, front, state } = sim
+  for (let k = 0; k < front.size; k++) {
+    const j = front.vals[k]
+    if (state[j] === Cell.Unburned) arrival[j] = Infinity
+  }
+  front.clear()
+}
+
 export function step(sim: Sim, input: StepInput) {
   const { terrain, state, fuelLeft, intensity, treatment, rng, canopy, canopyLeft, crown } = sim
+  const { arrival, front } = sim
   const { cols, rows, cellSize, elevation, fuel } = terrain
   const { weather, params, dt, blockFrac, windField, moisture } = input
 
@@ -498,63 +552,83 @@ export function step(sim: Sim, input: StepInput) {
   const headMultOf = FUELS.map((f) => windMultiplier(f.id, windMs, 1))
   const eccUniform = ellipseEccentricity(windMs)
 
-  const ignitions: number[] = []
-  const stillActive: number[] = []
-  let maxRos = 0
-  let maxIntensity = 0
+  const now = sim.time
+  const until = now + dt
+  // Constant across the grid, and relax() needs it, so it is hoisted.
+  const heatMult = Math.max(0.2, tempMult)
 
-  for (let k = 0; k < sim.active.length; k++) {
-    const i = sim.active[k]
+  /**
+   * THE FRONTIER IS NOT RESEEDED WHEN THE WEATHER MOVES, on purpose.
+   *
+   * MTT assumes a static rate field, so the textbook answer is to recompute per
+   * burn period, and a first version did that on a quantised weather signature.
+   * It was badly wrong: reseeding discards queued arrival times, and this model
+   * has no notion of partial progress along a link, so a link slower than one
+   * step restarts its clock every reseed and NEVER completes. With gusting on,
+   * the signature changed almost every step and only links finishing inside a
+   * single 10 s step could ever fire. The fire came out 165x too small with
+   * nothing flaming — caught by `npm run smoke:api`, not by any unit test.
+   *
+   * Not reseeding is safe here because the frontier is inherently shallow: relax
+   * only ever pushes the eight immediate neighbours of a burning or
+   * freshly-settled cell, so pending arrivals are one ring deep. Relaxation
+   * lowers a time but never raises it, which means a gust can pull that single
+   * ring in early and nothing beyond it. The error is bounded to one cell and
+   * self-corrects; the alternative was a fire that could not spread.
+   *
+   * Treatment changes are different and DO reseed — see `invalidateFront`. There
+   * the cost of stale arrivals is a dozer line that does not work, which is worth
+   * losing a ring of progress over.
+   */
+
+  let lastMaxRos = 0
+  let lastWindMs = windMs
+  let lastWindToBearing = windToBearing
+
+  /**
+   * Relax every outgoing link of cell `i`, given that the fire is there at
+   * `base` — the edge-relaxation half of Finney (2002) Minimum Travel Time.
+   *
+   * Travel time along a link is `distance / R(theta)`, so the arrival time at a
+   * neighbour is a real number rather than a multiple of `dt`. That is what
+   * replaced `p = 1 - exp(-ROS dt / d)` and a Bernoulli draw, and it fixes two
+   * measured defects at once:
+   *
+   *   - the arrival-draw overshoot. The draw gave each link an independent
+   *     chance every step, so the front advanced by first-passage percolation
+   *     over many paths rather than at the rate the kernel reported — 4.45x too
+   *     fast in calm air.
+   *   - the ceiling at `cellSize / dt`. Emergent head rate was about
+   *     `p * cellSize / dt`, saturating at 3 m/s on a 30 m grid at DT = 10, so
+   *     nominal head rates above ~30 km/h of wind were simply unreachable and
+   *     four of five hindcasts under-predicted extent.
+   *
+   * Also returns the head-fire rate for `i` and leaves the fastest actual edge
+   * rate in `lastMaxRos`, because the combustion pass needs both and this is the
+   * only place the eight directions are visited.
+   */
+  const relax = (i: number, base: number): number => {
     const fm = FUELS[fuel[i]]
-
-    // --- fuel consumption ---
-    fuelLeft[i] -= (fm.load / burnDuration(fm.load)) * dt
-    if (fuelLeft[i] <= 0) {
-      state[i] = Cell.Burned
-      intensity[i] = 0
-      continue
-    }
-
-    const c = i % cols
-    const r = (i / cols) | 0
-
-    // --- head-fire rate of spread for this cell ---
-    const heatMult = Math.max(0.2, tempMult)
-
-    if (dampingAt(fm, i) <= 0) {
-      // Too wet to carry — the cell burns out where it stands.
-      fuelLeft[i] -= (fm.load / burnDuration(fm.load)) * dt * 2
-      intensity[i] = Math.min(intensity[i], 250)
-      stillActive.push(i)
-      continue
-    }
-
-    // Local wind where a field is supplied, otherwise the single vector.
-    let cellWindMs = windMs
-    let cellWindToBearing = windToBearing
+    lastMaxRos = 0
+    let wMs = windMs
+    let wBearing = windToBearing
     if (windField) {
       const u = windField.u[i]
       const v = windField.v[i]
-      cellWindMs = Math.hypot(u, v) * gustScale
+      wMs = Math.hypot(u, v) * gustScale
       // atan2(u, v) gives the bearing the wind blows TOWARD, clockwise from
       // north — which is already the convention the spread term wants.
-      cellWindToBearing = (((Math.atan2(u, v) * 180) / Math.PI) + gustVeer + 360) % 360
+      wBearing = (((Math.atan2(u, v) * 180) / Math.PI) + gustVeer + 360) % 360
     }
+    lastWindMs = wMs
+    lastWindToBearing = wBearing
+    if (dampingAt(fm, i) <= 0) return 0
 
-    const ecc = uniformWind ? eccUniform : ellipseEccentricity(cellWindMs)
+    const c = i % cols
+    const r = (i / cols) | 0
+    const ecc = uniformWind ? eccUniform : ellipseEccentricity(wMs)
+    let headMax = 0
 
-    /**
-     * `cellMaxRos` is the fastest edge actually leaving this cell, which is
-     * what a crew holding a line faces. `cellHeadRos` is the head-fire rate
-     * before the ellipse, which is what Byram's intensity and Van Wagner's
-     * crown criteria are defined on. They used to be the same number; with an
-     * ellipse they must not be, because the eight lattice directions can sit up
-     * to 22.5 deg off the wind and `ellipseShape` there is as low as 0.6 — so
-     * reading intensity off the lattice maximum would make a fire's reported
-     * intensity depend on the wind's bearing relative to the grid.
-     */
-    let cellMaxRos = 0
-    let cellHeadRos = 0
     for (let d = 0; d < NEIGHBOURS.length; d++) {
       const [dc, dr, distMul, bearing] = NEIGHBOURS[d]
       const nc = c + dc
@@ -584,24 +658,74 @@ export function step(sim: Sim, input: StepInput) {
       if (nMoist <= 0) continue
 
       // Head-fire rate for this fuel, on this slope: phi_w at full alignment.
-      const headMult = uniformWind ? headMultOf[fuel[j]] : windMultiplier(fuel[j], cellWindMs, 1)
+      const headMult = uniformWind ? headMultOf[fuel[j]] : windMultiplier(fuel[j], wMs, 1)
       const headRos = nf.baseRos * nMoist * heatMult * slopeMult * headMult
-      if (headRos > cellHeadRos) cellHeadRos = headRos
+      if (headRos > headMax) headMax = headRos
 
       // Richards (1990): the head rate scaled onto the spread ellipse. Slope
       // stays per-direction rather than being folded into a combined
       // wind-slope vector as FARSITE does — a simplification, and the one
       // place this departs from the reference formulation.
-      const cosTheta = Math.cos(((bearing - cellWindToBearing) * Math.PI) / 180)
+      const cosTheta = Math.cos(((bearing - wBearing) * Math.PI) / 180)
 
       let ros = headRos * ellipseShape(ecc, cosTheta) * (1 - block)
       if (treatment[j] === Treatment.Retardant) ros *= 0.12
+      if (ros <= 0) continue
+      if (ros > lastMaxRos) lastMaxRos = ros
 
-      if (ros > cellMaxRos) cellMaxRos = ros
-      // Exponential arrival: p = 1 - exp(-ROS * dt / distance).
-      const p = 1 - Math.exp(-(ros * dt) / dist)
-      if (rng() < p) ignitions.push(j)
+      const t = base + dist / ros
+      if (t < arrival[j]) {
+        arrival[j] = t
+        // Push what was STORED, not `t`: arrival is Float32 and the heap key is
+        // Float64, so pushing `t` would make the stale-entry check on pop never
+        // match and every cell would ignite off its first, worst path.
+        front.push(arrival[j], j)
+      }
     }
+    return headMax
+  }
+
+  const ignitions: number[] = []
+  const stillActive: number[] = []
+  let maxRos = 0
+  let maxIntensity = 0
+
+  for (let k = 0; k < sim.active.length; k++) {
+    const i = sim.active[k]
+    const fm = FUELS[fuel[i]]
+
+    // --- fuel consumption ---
+    fuelLeft[i] -= (fm.load / burnDuration(fm.load)) * dt
+    if (fuelLeft[i] <= 0) {
+      state[i] = Cell.Burned
+      intensity[i] = 0
+      continue
+    }
+
+    const c = i % cols
+    const r = (i / cols) | 0
+
+    if (dampingAt(fm, i) <= 0) {
+      // Too wet to carry — the cell burns out where it stands.
+      fuelLeft[i] -= (fm.load / burnDuration(fm.load)) * dt * 2
+      intensity[i] = Math.min(intensity[i], 250)
+      stillActive.push(i)
+      continue
+    }
+
+    /**
+     * Propagate from this cell, and read back the rates doing so implied.
+     *
+     * `relax` visits the eight directions once and is the only place they are
+     * visited, so the combustion terms below take their rates from it rather
+     * than recomputing. `base` is clamped forward to `now`: a cell that has been
+     * alight for an hour must give its neighbours an arrival time an hour later,
+     * not one measured from when it first lit.
+     */
+    const cellHeadRos = relax(i, Math.max(arrival[i], now))
+    const cellMaxRos = lastMaxRos
+    const cellWindMs = lastWindMs
+    const cellWindToBearing = lastWindToBearing
 
     // Byram: I = H * w * ROS.
     let byram = HEAT_YIELD * fm.load * cellHeadRos
@@ -683,10 +807,42 @@ export function step(sim: Sim, input: StepInput) {
     stillActive.push(i)
   }
 
+  /**
+   * Settle every cell the fire reaches inside this step, earliest first.
+   *
+   * This is the search half of MTT. A cell popped here immediately relaxes its
+   * own links, so a chain of cells can ignite within one step — which is what
+   * lifts the old `cellSize / dt` ceiling on head-fire rate. It terminates
+   * because each pop marks a cell Burning permanently, so at worst it settles
+   * the grid once.
+   *
+   * `arrival[j] !== t` discards stale heap entries: lazy deletion means a cell
+   * with an improved time still has its old, worse entry in the queue, and
+   * igniting off that would undo the shortest-path property entirely.
+   */
+  while (front.peekKey() <= until) {
+    const t = front.peekKey()
+    const j = front.pop()
+    if (j < 0) break
+    if (arrival[j] !== t || state[j] !== Cell.Unburned) continue
+    state[j] = Cell.Burning
+    // The true arrival, not the step boundary — isochrones read this, and
+    // quantising it to dt was visible as terracing in the arrival-time bands.
+    sim.ignitedAt[j] = t
+    intensity[j] = 500
+    if (fuel[j] === Fuel.Urban) sim.wuiCells++
+    sim.burnedCells++
+    stillActive.push(j)
+    relax(j, t)
+  }
+
+  // Spot fires are still stochastic and still land whole: an ember either
+  // starts a fire or it does not, and there is no travel time to accumulate.
   for (const j of ignitions) {
     if (state[j] !== Cell.Unburned) continue
     state[j] = Cell.Burning
-    sim.ignitedAt[j] = sim.time
+    sim.ignitedAt[j] = until
+    arrival[j] = until
     intensity[j] = 500
     if (fuel[j] === Fuel.Urban) sim.wuiCells++
     sim.burnedCells++
