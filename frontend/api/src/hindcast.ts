@@ -24,6 +24,7 @@
  */
 import { buildTerrain, scenarioAt } from '@firewatch/sim/terrain'
 import { Cell, createSim, ignite, recomputeStats, step } from '@firewatch/sim/model'
+import { FUELS } from '@firewatch/sim/fuels'
 import type { Params } from '@firewatch/sim/weather'
 import { loadConfig } from './config.ts'
 import { imageryFuel, terrariumDem } from './providers/tier1.ts'
@@ -177,6 +178,45 @@ async function archiveWeather(
   }
 }
 
+/**
+ * Every burnable cell fuel-connected to the ignition point.
+ *
+ * The ceiling on what any spread model could ever burn here, whatever its
+ * rate. Two of three hindcasts burnt out well before their replay window
+ * ended and lengthening the window changed nothing, which says the model is
+ * limited by what it can REACH rather than by how fast it travels. This
+ * measures that ceiling so the two can be told apart: if the modelled area
+ * sits at the ceiling, the rate is irrelevant and the fix is fuel
+ * connectivity and barriers.
+ *
+ * Eight-connected, matching the kernel's neighbour set.
+ */
+function reachableArea(fuel: Uint8Array, cols: number, rows: number, startCol: number, startRow: number): Uint8Array {
+  const seen = new Uint8Array(cols * rows)
+  const start = startRow * cols + startCol
+  if (FUELS[fuel[start]].load <= 0) return seen
+  const stack = [start]
+  seen[start] = 1
+  while (stack.length) {
+    const i = stack.pop()!
+    const c = i % cols
+    const r = (i / cols) | 0
+    for (let dr = -1; dr <= 1; dr++) {
+      for (let dc = -1; dc <= 1; dc++) {
+        if (!dc && !dr) continue
+        const nc = c + dc
+        const nr = r + dr
+        if (nc < 0 || nr < 0 || nc >= cols || nr >= rows) continue
+        const j = nr * cols + nc
+        if (seen[j] || FUELS[fuel[j]].load <= 0) continue
+        seen[j] = 1
+        stack.push(j)
+      }
+    }
+  }
+  return seen
+}
+
 export function dice(a: Uint8Array, b: Uint8Array) {
   let inter = 0
   let ca = 0
@@ -303,6 +343,22 @@ async function run(p: Perimeter, cfg: Config) {
   // "burns too long", and it is the one to chase.
   console.log(`  growth: ${sim.active.length === 0 ? 'burnt out' : `${sim.active.length} cells still alight`}` +
     ` at the end of the replay`)
+
+  // Is the model rate-limited or reach-limited?
+  const reachable = reachableArea(terrain.fuel, cols, rows, ic, ir)
+  let reachCells = 0
+  for (const v of reachable) if (v) reachCells++
+  let burnable = 0
+  for (const f of terrain.fuel) if (FUELS[f].load > 0) burnable++
+  const modelledCells = sim.burnedCells
+  console.log(
+    `  reachable: ${(reachCells * haPerCell).toFixed(0)} ha fuel-connected to the origin ` +
+    `(${((burnable / terrain.fuel.length) * 100).toFixed(0)}% of the grid is burnable at all)`
+  )
+  console.log(
+    `  the model burnt ${((modelledCells / Math.max(1, reachCells)) * 100).toFixed(0)}% of what it could reach` +
+    ` -> ${modelledCells / Math.max(1, reachCells) > 0.9 ? 'REACH-limited: rate is not the binding constraint' : 'rate-limited: it stopped short of the reachable area'}`
+  )
   const d = dice(truth, modelled)
 
   /**
