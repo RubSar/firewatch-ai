@@ -9,6 +9,7 @@ import {
 } from '@firewatch/sim/weather'
 import { ControlPanel, type Layers, type Tool } from './components/ControlPanel.tsx'
 import { MapView } from './components/MapView.tsx'
+import { MapTools } from './components/MapTools.tsx'
 import { StatsPanel } from './components/StatsPanel.tsx'
 import { Legend } from './components/Legend.tsx'
 import { GrowthChart } from './components/GrowthChart.tsx'
@@ -348,12 +349,8 @@ export default function App() {
             onParams={(patch) => setParams((p) => ({ ...p, ...patch }))}
             preset={presetId}
             onPreset={setPresetId}
-            tool={tool}
-            onTool={setTool}
             layers={layers}
             onLayers={(patch) => setLayers((l) => ({ ...l, ...patch }))}
-            onClearLines={clearLines}
-            hasLines={hasLines}
           />
         </aside>
 
@@ -373,6 +370,17 @@ export default function App() {
               ambientC={effective.temperature}
             />
           )}
+
+          <div className="hud hud-tl">
+            <MapTools
+              tool={tool}
+              onTool={setTool}
+              onClearLines={clearLines}
+              hasLines={hasLines}
+              thermal={layers.thermal}
+              onThermal={(v) => setLayers((l) => ({ ...l, thermal: v }))}
+            />
+          </div>
 
           {params.followForecast && forecast.length > 0 && (
             <div className="hud hud-top">

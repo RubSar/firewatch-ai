@@ -52,6 +52,8 @@ export function MapView(props: Props) {
   const domainRef = useRef<L.Rectangle | null>(null)
   const firesRef = useRef<L.LayerGroup | null>(null)
   const toCellRef = useRef<((ll: L.LatLng) => { col: number; row: number } | null) | null>(null)
+  /** The draw callback, so the zoom handler can force a repaint. */
+  const drawFnRef = useRef<(() => void) | null>(null)
   const geomRef = useRef<FireGeometry | null>(null)
   const bufRef = useRef<GeometryBuffers | null>(null)
   const lastPaint = useRef({ key: '' })
@@ -169,6 +171,58 @@ export function MapView(props: Props) {
       }).addTo(map)
     }
   }, [props.layers.base, props.layers.tileStyle])
+
+  // --- keep the fire canvas in step with Leaflet's zoom animation -------
+  //
+  // The canvas is positioned over the map rather than inside Leaflet's
+  // transformed panes, and it is drawn from latLngToContainerPoint. During an
+  // animated zoom that helper still reports the PRE-animation geometry, so the
+  // tiles glide to the new zoom while the fire sits still and then snaps at
+  // zoomend — which is exactly the jerk you see.
+  //
+  // The fix is the same one Leaflet uses for its own canvas renderer: mirror
+  // the animation with a CSS transform for its duration, then drop the
+  // transform at zoomend and let the next frame redraw at the true geometry.
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map) return
+
+    const onZoomAnim = (e: L.ZoomAnimEvent) => {
+      const cv = canvasRef.current
+      if (!cv) return
+      const scale = map.getZoomScale(e.zoom, map.getZoom())
+      // Where the incoming centre sits right now; after the zoom it must land
+      // in the middle of the viewport. Solve s·p + t = centre for t.
+      const p0 = map.latLngToContainerPoint(e.center)
+      const size = map.getSize()
+      cv.style.transformOrigin = '0 0'
+      // Matches Leaflet's own zoom animation so the two move together; a
+      // different easing is more obvious than no animation at all.
+      cv.style.transition = 'transform 250ms cubic-bezier(0, 0, 0.25, 1)'
+      cv.style.transform =
+        `translate(${size.x / 2 - scale * p0.x}px, ${size.y / 2 - scale * p0.y}px) scale(${scale})`
+    }
+
+    const clearTransform = () => {
+      const cv = canvasRef.current
+      if (!cv) return
+      cv.style.transition = ''
+      cv.style.transform = ''
+      cv.style.transformOrigin = ''
+      // Redraw immediately at the true geometry rather than waiting a frame,
+      // so there is no flash of untransformed canvas.
+      drawFnRef.current?.()
+    }
+
+    map.on('zoomanim', onZoomAnim)
+    map.on('zoomend', clearTransform)
+    map.on('viewreset', clearTransform)
+    return () => {
+      map.off('zoomanim', onZoomAnim)
+      map.off('zoomend', clearTransform)
+      map.off('viewreset', clearTransform)
+    }
+  }, [])
 
   // --- map interaction --------------------------------------------------
   useEffect(() => {
@@ -491,6 +545,7 @@ export function MapView(props: Props) {
 
       ctx.restore()
     }
+    drawFnRef.current = draw
     p.current.registerDraw(draw)
   }, [])
 
