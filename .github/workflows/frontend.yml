@@ -1,0 +1,60 @@
+# Gates every change to frontend/ — ARCHITECTURE.md's Verification section
+# says the kernel checks "run in CI and gate every kernel change", and until
+# this file existed that sentence was not true.
+#
+# Everything here is hermetic. The app talks to six external services, and a
+# gate that fails when NASA is slow teaches people to ignore the gate, so the
+# suite runs against procedural terrain and mock weather only. Live-data paths
+# have their own diagnostics (watercheck, scarcheck, smoke:api in live mode)
+# and are run deliberately, not on every push.
+name: frontend
+
+on:
+  push:
+    paths: ['frontend/**', '.github/workflows/frontend.yml']
+  pull_request:
+    paths: ['frontend/**', '.github/workflows/frontend.yml']
+
+concurrency:
+  group: frontend-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: frontend
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      # Node 24: the API and the shared sim run TypeScript through native type
+      # stripping with no build step, so the runtime version is load-bearing
+      # rather than a preference.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - run: npm ci
+
+      - name: Typecheck all workspaces
+        run: npm run typecheck --workspaces --if-present
+
+      - name: Kernel physics tests
+        run: npm test
+        # Isotropy, wind, slope, moisture of extinction, determinism and the
+        # bookkeeping invariants. One test is `todo` on purpose: the front
+        # advances at 4.45x its own nominal ROS and that is a known, recorded
+        # defect needing the §4 energy accumulator, not a regression.
+
+      - name: Build
+        run: npm run build
+
+      - name: API smoke (offline, hermetic)
+        run: npm run smoke:api
+        env:
+          FIREWATCH_MODE: offline
