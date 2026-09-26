@@ -216,11 +216,16 @@ export function imageryFuel(cfg: Config): FuelProvider {
       }
 
       const n = cols * rows
+      // Say where the thresholds came from, not just what they are. SCL makes
+      // water and snow trustworthy anywhere; the vegetation split is a set of
+      // brightness and texture breaks fitted to Armenian imagery, and nothing
+      // else in the UI would tell someone simulating Yosemite that.
+      const tuned = 'vegetation split is a visible-band proxy tuned on Armenian imagery, unvalidated elsewhere'
       const note = land
         ? `Live imagery z${z} + Sentinel-2 SCL ${land.observedAt.slice(0, 10)} ` +
           `(${(land.cloudCover).toFixed(0)}% cloud, ${(land.usable * 100).toFixed(0)}% usable) — ` +
-          `water/snow measured, vegetation split is a visible-band proxy`
-        : `Live imagery · z${z} — visible-band proxy, no Sentinel-2 scene available`
+          `water/snow measured, ${tuned}`
+        : `Live imagery · z${z} — no Sentinel-2 scene available, ${tuned}`
       void sclSnow
       void n
 
@@ -310,7 +315,11 @@ export const noBurnHistory: BurnHistoryProvider = {
   async fetch(q: TerrainQuery) {
     const t = buildTerrain(q.scenario)
     const n = t.cols * t.rows
-    const data: SeverityGrid = { rbr: new Float32Array(n), yearsSince: new Float32Array(n).fill(99) }
+    const data: SeverityGrid = {
+      rbr: new Float32Array(n),
+      severity: new Uint8Array(n),
+      yearsSince: new Float32Array(n).fill(99),
+    }
     return { data, provenance: synthetic('none', 'No burn history — GEE dNBR not wired (§3)') }
   },
 }

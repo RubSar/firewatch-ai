@@ -14,9 +14,10 @@ import {
 } from '@firewatch/sim'
 import type { ForecastHour, Params, Scenario, Sim, Stats, Terrain, Weather } from '@firewatch/sim'
 import type {
-  ElevationGrid, FuelMoistureModel, GridSpec, Provenance, TerrainQuery,
+  ElevationGrid, FuelMoistureModel, GridSpec, Provenance, SeverityGrid, TerrainQuery,
 } from '@firewatch/contracts/providers'
 import { warmMoistureHistory, windAnomalyFor, windFieldFrom, type WindAnomaly } from './providers/tier2.ts'
+import { SURFACE_REMAINING } from './providers/burnhistory.ts'
 import { encodeState, encodeTerrain, type StateFrameInput } from '@firewatch/contracts/codec'
 import type { IncidentCommand, IncidentDto } from '@firewatch/contracts/wire'
 import { resolve } from './providers/provenance.ts'
@@ -158,6 +159,7 @@ export class Incident {
     if (values.data.structures.length === base.cols * base.rows) inc.structures = values.data.structures
     inc.provenance.observer = observer.provenance
     inc.provenance.burnHistory = burnHistory.provenance
+    inc.applyBurnScars(burnHistory.data)
 
     if (weather) {
       inc.provenance.weather = weather.provenance
@@ -189,9 +191,15 @@ export class Incident {
     inc.gridSpec = grid
     inc.elevationGrid = elev.data
     inc.moistureModel = reg.moisture
-    inc.windAnomaly = await windAnomalyFor(base.bounds, base.cols, base.rows, cfg, signal)
-      .catch(() => null)
-    await warmMoistureHistory(base.bounds, cfg).catch(() => null)
+    // Offline must mean NO network, not "network that fails quietly": these
+    // two reach Open-Meteo directly rather than through a provider, so without
+    // the guard an offline run still made two requests and inherited their
+    // latency and flakiness. CI depends on offline being hermetic.
+    if (cfg.mode === 'live') {
+      inc.windAnomaly = await windAnomalyFor(base.bounds, base.cols, base.rows, cfg, signal)
+        .catch(() => null)
+      await warmMoistureHistory(base.bounds, cfg).catch(() => null)
+    }
     inc.rebuildFields()
 
     // Moisture is recorded even though it is evaluated per step rather than
@@ -203,6 +211,34 @@ export class Incident {
 
     recomputeStats(inc.sim, inc.structures ?? undefined)
     return inc
+  }
+
+  /**
+   * Reduces remaining fuel where a recent burn scar is measured.
+   *
+   * Graded, never a mask: a low-severity burn leaves most of the bed, a
+   * high-severity one leaves almost nothing, and everything recovers with
+   * time. Applied to `fuelLeft` rather than to the fuel model, so the cell
+   * keeps its type — it is scarred timber, not suddenly barren ground, and it
+   * will carry fire again once it regrows.
+   */
+  applyBurnScars(sev: SeverityGrid) {
+    const n = this.sim.fuelLeft.length
+    if (sev.severity.length !== n) return
+    let touched = 0
+    for (let i = 0; i < n; i++) {
+      const years = sev.yearsSince[i]
+      if (years > 12) continue
+      const cls = sev.severity[i]
+      if (cls === 0) continue
+      // Recovery: the reduction fades out over roughly a decade, fastest in
+      // the first couple of years when the fine fuels come back.
+      const recovered = Math.min(1, Math.max(0, years / 10) ** 0.5)
+      const remaining = SURFACE_REMAINING[cls]
+      this.sim.fuelLeft[i] *= remaining + (1 - remaining) * recovered
+      touched++
+    }
+    if (touched) this.sim.revision++
   }
 
   /**

@@ -66,7 +66,17 @@ export const EMPTY_STATS: Stats = {
   maxRos: 0, maxIntensity: 0, flameLength: 0, wuiCells: 0, structuresLost: 0, spotFires: 0,
 }
 
-export function createSim(terrain: Terrain): Sim {
+/**
+ * `seed` exists for tests.
+ *
+ * The kernel is stochastic but deterministic, which is what makes a run
+ * reproducible — and also what makes a single run impossible to tell apart
+ * from a systematic bias, since every run returns the identical answer.
+ * Averaging over seeds is the only way to ask whether the lattice itself
+ * favours a direction: worst-direction deviation measures 23% at one seed,
+ * 7.7% at eight and 5.2% at twenty-four. Production leaves it unset.
+ */
+export function createSim(terrain: Terrain, seed = 0xf13e5): Sim {
   const n = terrain.cols * terrain.rows
   return {
     terrain,
@@ -85,7 +95,7 @@ export function createSim(terrain: Terrain): Sim {
     spotFires: 0,
     stats: { ...EMPTY_STATS },
     history: [],
-    rng: makeRng(0xf13e5),
+    rng: makeRng(seed),
   }
 }
 
@@ -160,6 +170,32 @@ export function paintTreatment(sim: Sim, col: number, row: number, radius: numbe
   if (knocked) sim.active = sim.active.filter((i) => sim.state[i] === Cell.Burning)
   sim.revision++
 }
+
+/**
+ * WHY THE SPREAD RATE IS NOT CALIBRATED — read before trying.
+ *
+ * The front advances at ~4.45x the ROS this kernel reports. Three fixes were
+ * implemented and measured, and all three were reverted because each traded a
+ * uniform error for a worse non-uniform one:
+ *
+ *   per-link draw (current)          rate 4.45x, spread  18%, isotropy  7.7%
+ *   + hazard divided by 4.6          rate 0.68x, spread 300%
+ *   receiver-side, combine by MAX    rate 3.01x, spread  25%, isotropy 14.7%
+ *   receiver-side, normalised sum    rate 1.70x, spread 216%, isotropy 17.6%
+ *
+ * The cause is that this lattice sits near a percolation threshold, so
+ * slowing links does not slow fuels proportionally — the fast ones scale and
+ * the slow ones collapse. And the residual after the double-count is removed
+ * is first-passage percolation: arrival times are exponential, so the front
+ * travels the luckiest of many paths and outruns the mean by construction.
+ * Neither is reachable with a constant.
+ *
+ * A uniform, characterised 4.45x error is more useful than a non-uniform 1.7x
+ * one, because you can reason about the first. The real fix is the
+ * deterministic energy accumulator of ARCHITECTURE.md §4, which does not
+ * double-count and does not draw. `sim/test/kernel.test.ts` keeps the number
+ * visible on every run.
+ */
 
 /** How long a cell stays alight, seconds — heavy fuels smoulder far longer. */
 const burnDuration = (load: number) => 360 + load * 900
