@@ -24,6 +24,10 @@ const SPEEDS = [
   { label: '30 min/s', value: 1800 },
 ]
 
+/** Simulated seconds per real second on load. The slowest step, so a new fire
+ *  is watchable rather than already over by the time you have read the panel. */
+const DEFAULT_SPEED = 60
+
 const FORECAST_START_HOUR = 13
 
 /**
@@ -160,7 +164,7 @@ export default function App() {
     { count: number; note: string; truncated: boolean; loading?: boolean } | null
   >(null)
   const [playing, setPlaying] = useState(false)
-  const [speed, setSpeed] = useState(300)
+  const [speed, setSpeed] = useState(DEFAULT_SPEED)
   const [stats, setStats] = useState<Stats>(EMPTY_STATS)
   const [simTime, setSimTime] = useState(0)
   const [hasLines, setHasLines] = useState(false)
