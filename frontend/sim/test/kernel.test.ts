@@ -15,7 +15,9 @@
 import { describe, it, todo } from 'node:test'
 import assert from 'node:assert/strict'
 import { Fuel, FUELS } from '../src/fuels.ts'
-import { Cell, Crown, attachCanopy, createSim, ignite, recomputeStats, step } from '../src/model.ts'
+import {
+  Cell, Crown, attachCanopy, createSim, ignite, recomputeStats, step, windMultiplier,
+} from '../src/model.ts'
 import { fuelMoisture } from '../src/weather.ts'
 import { MIDFLAME_WIND_FACTOR, rothermelSpread } from '../src/rothermel.ts'
 import {
@@ -297,20 +299,28 @@ describe('crown fire', () => {
     assert.ok(sim.crownCells > 0, 'never crowned despite a running timber fire')
   })
 
-  it('is blocked by a high canopy base, at identical fire intensity', () => {
-    const low = runCrown({ wind: 60, cbh: 5, cbd: 0.1 })
-    const high = runCrown({ wind: 60, cbh: 15, cbd: 0.1 })
-    assert.ok(low.crownCells > 0)
-    assert.equal(high.crownCells, 0, 'a 15 m crown base should be out of reach')
+  it('is blocked by a high enough canopy base, at identical fire intensity', () => {
+    // Relative rather than absolute: I_0 grows as CBH^1.5, so whatever the
+    // fire's intensity, some canopy base is out of reach. Pinning a specific
+    // height would make this a test of the spread rate instead.
+    const low = runCrown({ wind: 20, cbh: 3, cbd: 0.1 })
+    const high = runCrown({ wind: 20, cbh: 40, cbd: 0.1 })
+    assert.ok(low.crownCells > 0, 'a low crown base was never reached')
+    assert.equal(high.crownCells, 0, 'a 40 m crown base should be out of reach')
   })
 
   it('transitions sharply at I_0 rather than gradually', () => {
-    // Van Wagner's criterion is a threshold, not a ramp: a small change in
-    // canopy base height either side of the fire's intensity should flip it.
-    const below = runCrown({ wind: 45, cbh: 11, cbd: 0.1 })
-    const above = runCrown({ wind: 45, cbh: 4, cbd: 0.1 })
-    assert.equal(below.crownCells, 0)
-    assert.ok(above.crownCells > 50, `only ${above.crownCells} cells crowned below the threshold`)
+    // Van Wagner's criterion is a threshold, not a ramp. Bracket it by
+    // searching for the height where crowning stops, then check that one step
+    // either side of it flips the outcome.
+    let blocked = 4
+    while (blocked < 200 && runCrown({ wind: 20, cbh: blocked, cbd: 0.1 }).crownCells > 0) {
+      blocked *= 2
+    }
+    const passes = runCrown({ wind: 20, cbh: blocked / 2, cbd: 0.1 })
+    const fails = runCrown({ wind: 20, cbh: blocked, cbd: 0.1 })
+    assert.ok(passes.crownCells > 50, `only ${passes.crownCells} cells crowned below the threshold`)
+    assert.equal(fails.crownCells, 0, `still crowning at a ${blocked} m crown base`)
   })
 
   const countActive = (s: { crown: Uint8Array | null }) =>
@@ -326,19 +336,6 @@ describe('crown fire', () => {
     assert.equal(countActive(sparse), 0, 'sparse canopy should torch, not crown actively')
   })
 
-  it('records that realistic canopy does not yet crown actively', () => {
-    // Not a desired behaviour — a consequence of nominal ROS sitting ~4.45x
-    // below the emergent rate. Asserted so that when the energy kernel closes
-    // that gap this test fails loudly and gets deleted, rather than the change
-    // going unnoticed.
-    const realistic = runCrown({ wind: 60, cbh: 5, cbd: 0.2 })
-    assert.equal(
-      countActive(realistic),
-      0,
-      'realistic canopy now crowns actively — the spread rate was fixed; delete this test'
-    )
-    assert.ok(realistic.crownCells > 0, 'it should still be torching')
-  })
 
   it('consumes canopy fuel only where it crowned', () => {
     const sim = runCrown({ wind: 60, cbh: 5, cbd: 0.1 })
@@ -356,8 +353,8 @@ describe('crown fire', () => {
   })
 
   it('raises fireline intensity and long-range spotting when it crowns', () => {
-    const surface = runCrown({ wind: 60, cbh: 15, cbd: 0.1 })
-    const crowned = runCrown({ wind: 60, cbh: 5, cbd: 0.1 })
+    const surface = runCrown({ wind: 20, cbh: 40, cbd: 0.1 })
+    const crowned = runCrown({ wind: 20, cbh: 3, cbd: 0.1 })
     assert.ok(
       crowned.stats.maxIntensity > surface.stats.maxIntensity,
       'crowning did not add the canopy to the heat release'
@@ -395,20 +392,27 @@ todo('calm-wind spread matches Rothermel within a factor of two', () => {
   )
 })
 
-todo('wind response matches Rothermel — currently far too weak', () => {
-  // The larger of the two errors, and the one that matters operationally:
-  // the kernel's exp(0.115*U) reaches 3.6x at 40 km/h where Rothermel reaches
-  // 65x, so wind-driven fire — the dangerous case — is badly under-predicted.
+it('matches Rothermel\'s wind response across the useful range', () => {
+  // Was the larger of the two errors: exp(0.115*U) reached 3.6x at 40 km/h
+  // where Rothermel reaches 65x, so wind-driven fire — the dangerous case —
+  // was badly under-predicted. The kernel now uses Rothermel's own phi_w.
+  //
+  // Calls windMultiplier rather than restating it: a test that keeps its own
+  // copy of the formula stops testing the code, which is how the original
+  // version of this kept passing the wrong thing.
   const f = FUELS[Fuel.Grass]
   const fuel = { load: f.load, depth: f.depth, sav: f.sav, moistureOfExtinction: f.mx / 100 }
   const moisture = fuelMoisture(calm({ temperature: 25, humidity: 25 })) / 100
   const at = (w: number) =>
     rothermelSpread({ fuel, moisture, windKmh: w * MIDFLAME_WIND_FACTOR, slopeTan: 0 }).rosMMin
-  const referenceGain = at(40) / at(0)
-  const kernelGain = Math.min(40, Math.exp(0.115 * (40 / 3.6)))
-  assert.ok(
-    kernelGain / referenceGain > 0.5,
-    `at 40 km/h the kernel multiplies spread by ${kernelGain.toFixed(1)}x ` +
-      `where Rothermel gives ${referenceGain.toFixed(1)}x`
-  )
+  for (const kmh of [10, 20, 40, 65]) {
+    const referenceGain = at(kmh) / at(0)
+    const kernelGain = windMultiplier(Fuel.Grass, kmh / 3.6, 1)
+    const err = Math.abs(kernelGain - referenceGain) / referenceGain
+    assert.ok(
+      err < 0.1,
+      `at ${kmh} km/h the kernel multiplies spread by ${kernelGain.toFixed(1)}x ` +
+        `where Rothermel gives ${referenceGain.toFixed(1)}x`
+    )
+  }
 })

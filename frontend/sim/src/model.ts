@@ -1,4 +1,4 @@
-import { FUELS, Fuel, type FuelModel } from './fuels.ts'
+import { FUELS, Fuel, WIND_COEFFICIENTS, type FuelModel } from './fuels.ts'
 import type { Terrain } from './terrain.ts'
 import type { Params, Weather } from './weather.ts'
 import { fuelMoisture } from './weather.ts'
@@ -320,6 +320,51 @@ const burnDuration = (load: number) => 360 + load * 900
  * `blockFrac[i * 8 + d]`: a barrier provider that rasterises onto a different
  * ordering blocks the wrong edges, and nothing would fail loudly.
  */
+/** Midflame wind as a fraction of the 10 m wind the weather feed reports. */
+const MIDFLAME_FACTOR = 0.4
+/** km/h to ft/min, the units Rothermel's wind coefficients are defined in. */
+const KMH_TO_FT_MIN = 54.6807
+/**
+ * Ceiling on the wind multiplier.
+ *
+ * Rothermel's phi_w is unbounded in the formula but capped in practice —
+ * BehavePlus limits effective wind against reaction intensity, because past
+ * some speed the flame is blown off the fuel rather than driven into it.
+ *
+ * The proper limit is a function of reaction intensity and is the refinement
+ * to make here. This flat ceiling is a backstop against a slider producing a
+ * meaningless number, and is deliberately set high enough not to bite inside
+ * real fire weather: it was 150, which clipped grass at 65 km/h — a strong
+ * wind, not an impossible one — and quietly turned a correct formula into a
+ * wrong answer. 1000 corresponds to roughly 150 km/h midflame in fine fuel.
+ */
+const MAX_WIND_FACTOR = 1000
+
+/**
+ * Rothermel's wind multiplier for the fuel being entered, `1 + phi_w`.
+ *
+ * Replaces `exp(0.115·U)`, which was badly too weak: it reached 3.6x at
+ * 40 km/h and 8x at 65, where Rothermel reaches 65x and 177x. Under-predicting
+ * wind-driven spread is the worst direction to be wrong in — that is the case
+ * that kills people — and nothing could see it until `npm run bench` gave the
+ * kernel an external reference to disagree with.
+ *
+ * Wind response belongs to the fuel bed, so the coefficients are per fuel and
+ * precomputed in fuels.ts.
+ *
+ * Backing keeps an exponential decay rather than an inverted phi_w: a fire
+ * backing into 65 km/h does not creep at 1/177 of its calm rate, it creeps a
+ * little below it, and inverting an unbounded term would be nonsense.
+ */
+export function windMultiplier(fuelId: number, windMs: number, align: number): number {
+  const w = WIND_COEFFICIENTS[fuelId]
+  if (!w || w.b === 0) return 1
+  const alongKmh = windMs * 3.6 * align * MIDFLAME_FACTOR
+  if (alongKmh <= 0) return Math.max(0.15, Math.exp(0.115 * windMs * align))
+  const phiW = w.c * Math.pow(alongKmh * KMH_TO_FT_MIN, w.b) * w.packing
+  return 1 + Math.min(MAX_WIND_FACTOR, phiW)
+}
+
 export const NEIGHBOURS: [number, number, number, number][] = [
   [0, -1, 1, 0], [1, -1, Math.SQRT2, 45], [1, 0, 1, 90], [1, 1, Math.SQRT2, 135],
   [0, 1, 1, 180], [-1, 1, Math.SQRT2, 225], [-1, 0, 1, 270], [-1, -1, Math.SQRT2, 315],
@@ -468,7 +513,7 @@ export function step(sim: Sim, input: StepInput) {
       // Wind: exponential in the component of wind along the spread direction,
       // so the head races and the backing edge crawls.
       const align = Math.cos(((bearing - cellWindToBearing) * Math.PI) / 180)
-      const windMult = Math.min(40, Math.exp(0.115 * cellWindMs * align))
+      const windMult = windMultiplier(fuel[j], cellWindMs, align)
 
       // Spread is governed by the fuel being entered, damped by its own
       // moisture of extinction — grass carries where damp timber will not.
