@@ -1,0 +1,870 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "FireWatch Fuel Index Service",
+    "description": "Dynamic World + Sentinel-2 NDMI. Experimental relative fuel score; not a fire forecast.",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/healthz": {
+      "get": {
+        "summary": "Health",
+        "operationId": "health_healthz_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/method": {
+      "get": {
+        "summary": "Method",
+        "operationId": "method_v1_method_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/fuel-index": {
+      "post": {
+        "summary": "Fuel Index",
+        "operationId": "fuel_index_v1_fuel_index_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnalysisRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalysisResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/fire-investigation": {
+      "post": {
+        "summary": "Fire Investigation",
+        "operationId": "fire_investigation_v1_fire_investigation_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FireInvestigationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FireInvestigationResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AnalysisRequest": {
+        "properties": {
+          "start_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Start Date"
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date",
+            "title": "End Date"
+          },
+          "cell_size_m": {
+            "type": "integer",
+            "maximum": 5000.0,
+            "minimum": 100.0,
+            "title": "Cell Size M",
+            "default": 5000
+          },
+          "region": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Polygon"
+              },
+              {
+                "$ref": "#/components/schemas/MultiPolygon"
+              }
+            ],
+            "title": "Region",
+            "discriminator": {
+              "propertyName": "type",
+              "mapping": {
+                "MultiPolygon": "#/components/schemas/MultiPolygon",
+                "Polygon": "#/components/schemas/Polygon"
+              }
+            }
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "start_date",
+          "end_date",
+          "region"
+        ],
+        "title": "AnalysisRequest"
+      },
+      "AnalysisResponse": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "FeatureCollection",
+            "title": "Type",
+            "default": "FeatureCollection"
+          },
+          "schema_version": {
+            "type": "string",
+            "const": "fuel-index/1.0",
+            "title": "Schema Version",
+            "default": "fuel-index/1.0"
+          },
+          "generated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Generated At"
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Start Date"
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date",
+            "title": "End Date"
+          },
+          "cell_size_m": {
+            "type": "integer",
+            "title": "Cell Size M"
+          },
+          "analysis_resolution_m": {
+            "type": "integer",
+            "title": "Analysis Resolution M",
+            "default": 20
+          },
+          "grid_crs": {
+            "type": "string",
+            "title": "Grid Crs"
+          },
+          "method": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonValue"
+            },
+            "type": "object",
+            "title": "Method"
+          },
+          "provenance": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonValue"
+            },
+            "type": "object",
+            "title": "Provenance"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Limitations"
+          },
+          "summary": {
+            "$ref": "#/components/schemas/Summary"
+          },
+          "features": {
+            "items": {
+              "$ref": "#/components/schemas/CellFeature"
+            },
+            "type": "array",
+            "title": "Features"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "generated_at",
+          "start_date",
+          "end_date",
+          "cell_size_m",
+          "grid_crs",
+          "method",
+          "provenance",
+          "limitations",
+          "summary",
+          "features"
+        ],
+        "title": "AnalysisResponse"
+      },
+      "CellFeature": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "Feature",
+            "title": "Type",
+            "default": "Feature"
+          },
+          "geometry": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Polygon"
+              },
+              {
+                "$ref": "#/components/schemas/MultiPolygon"
+              }
+            ],
+            "title": "Geometry",
+            "discriminator": {
+              "propertyName": "type",
+              "mapping": {
+                "MultiPolygon": "#/components/schemas/MultiPolygon",
+                "Polygon": "#/components/schemas/Polygon"
+              }
+            }
+          },
+          "properties": {
+            "$ref": "#/components/schemas/CellProperties"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "geometry",
+          "properties"
+        ],
+        "title": "CellFeature"
+      },
+      "CellProperties": {
+        "properties": {
+          "cell_id": {
+            "type": "string",
+            "title": "Cell Id"
+          },
+          "area_m2": {
+            "type": "number",
+            "exclusiveMinimum": 0.0,
+            "title": "Area M2"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "scored",
+              "non_vegetated",
+              "no_data",
+              "insufficient_coverage",
+              "unsupported_built_area",
+              "missing_moisture"
+            ],
+            "title": "Status"
+          },
+          "score": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 100.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Score"
+          },
+          "landcover_probabilities": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "number"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Landcover Probabilities"
+          },
+          "vegetation_probability": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Vegetation Probability"
+          },
+          "ndmi": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 1.0,
+                "minimum": -1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ndmi"
+          },
+          "dryness_proxy": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 1.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dryness Proxy"
+          },
+          "valid_coverage": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Valid Coverage"
+          },
+          "observation_count_mean": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Observation Count Mean"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "cell_id",
+          "area_m2",
+          "status",
+          "valid_coverage"
+        ],
+        "title": "CellProperties"
+      },
+      "FireInvestigationRequest": {
+        "properties": {
+          "start_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Start Date"
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date",
+            "title": "End Date"
+          },
+          "cell_size_m": {
+            "type": "integer",
+            "maximum": 5000.0,
+            "minimum": 100.0,
+            "title": "Cell Size M",
+            "default": 5000
+          },
+          "fire": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Polygon"
+              },
+              {
+                "$ref": "#/components/schemas/MultiPolygon"
+              }
+            ],
+            "title": "Fire",
+            "discriminator": {
+              "propertyName": "type",
+              "mapping": {
+                "MultiPolygon": "#/components/schemas/MultiPolygon",
+                "Polygon": "#/components/schemas/Polygon"
+              }
+            }
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "start_date",
+          "end_date",
+          "fire"
+        ],
+        "title": "FireInvestigationRequest"
+      },
+      "FireInvestigationResponse": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "FeatureCollection",
+            "title": "Type",
+            "default": "FeatureCollection"
+          },
+          "schema_version": {
+            "type": "string",
+            "const": "fuel-index/1.0",
+            "title": "Schema Version",
+            "default": "fuel-index/1.0"
+          },
+          "generated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Generated At"
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Start Date"
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date",
+            "title": "End Date"
+          },
+          "cell_size_m": {
+            "type": "integer",
+            "title": "Cell Size M"
+          },
+          "analysis_resolution_m": {
+            "type": "integer",
+            "title": "Analysis Resolution M",
+            "default": 20
+          },
+          "grid_crs": {
+            "type": "string",
+            "title": "Grid Crs"
+          },
+          "method": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonValue"
+            },
+            "type": "object",
+            "title": "Method"
+          },
+          "provenance": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonValue"
+            },
+            "type": "object",
+            "title": "Provenance"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Limitations"
+          },
+          "summary": {
+            "$ref": "#/components/schemas/Summary"
+          },
+          "features": {
+            "items": {
+              "$ref": "#/components/schemas/CellFeature"
+            },
+            "type": "array",
+            "title": "Features"
+          },
+          "investigation": {
+            "$ref": "#/components/schemas/InvestigationGeometry"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "generated_at",
+          "start_date",
+          "end_date",
+          "cell_size_m",
+          "grid_crs",
+          "method",
+          "provenance",
+          "limitations",
+          "summary",
+          "features",
+          "investigation"
+        ],
+        "title": "FireInvestigationResponse"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "InvestigationGeometry": {
+        "properties": {
+          "fire": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Polygon"
+              },
+              {
+                "$ref": "#/components/schemas/MultiPolygon"
+              }
+            ],
+            "title": "Fire",
+            "discriminator": {
+              "propertyName": "type",
+              "mapping": {
+                "MultiPolygon": "#/components/schemas/MultiPolygon",
+                "Polygon": "#/components/schemas/Polygon"
+              }
+            }
+          },
+          "wrapper": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Polygon"
+              },
+              {
+                "$ref": "#/components/schemas/MultiPolygon"
+              }
+            ],
+            "title": "Wrapper",
+            "discriminator": {
+              "propertyName": "type",
+              "mapping": {
+                "MultiPolygon": "#/components/schemas/MultiPolygon",
+                "Polygon": "#/components/schemas/Polygon"
+              }
+            }
+          },
+          "investigation_area": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Polygon"
+              },
+              {
+                "$ref": "#/components/schemas/MultiPolygon"
+              }
+            ],
+            "title": "Investigation Area",
+            "discriminator": {
+              "propertyName": "type",
+              "mapping": {
+                "MultiPolygon": "#/components/schemas/MultiPolygon",
+                "Polygon": "#/components/schemas/Polygon"
+              }
+            }
+          },
+          "buffer_m": {
+            "type": "integer",
+            "const": 28000,
+            "title": "Buffer M",
+            "default": 28000
+          },
+          "buffer_method": {
+            "type": "string",
+            "title": "Buffer Method"
+          },
+          "buffer_crs": {
+            "type": "string",
+            "title": "Buffer Crs"
+          },
+          "areas_m2": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object",
+            "title": "Areas M2"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "fire",
+          "wrapper",
+          "investigation_area",
+          "buffer_method",
+          "buffer_crs",
+          "areas_m2"
+        ],
+        "title": "InvestigationGeometry"
+      },
+      "JsonValue": {},
+      "MultiPolygon": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "MultiPolygon",
+            "title": "Type"
+          },
+          "coordinates": {
+            "items": {
+              "items": {
+                "items": {
+                  "prefixItems": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    }
+                  ],
+                  "type": "array",
+                  "maxItems": 2,
+                  "minItems": 2
+                },
+                "type": "array",
+                "maxItems": 5000,
+                "minItems": 4
+              },
+              "type": "array",
+              "maxItems": 100,
+              "minItems": 1
+            },
+            "type": "array",
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Coordinates"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "type",
+          "coordinates"
+        ],
+        "title": "MultiPolygon"
+      },
+      "Polygon": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "Polygon",
+            "title": "Type"
+          },
+          "coordinates": {
+            "items": {
+              "items": {
+                "prefixItems": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ],
+                "type": "array",
+                "maxItems": 2,
+                "minItems": 2
+              },
+              "type": "array",
+              "maxItems": 5000,
+              "minItems": 4
+            },
+            "type": "array",
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Coordinates"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "type",
+          "coordinates"
+        ],
+        "title": "Polygon"
+      },
+      "Summary": {
+        "properties": {
+          "cell_count": {
+            "type": "integer",
+            "title": "Cell Count"
+          },
+          "scored_cell_count": {
+            "type": "integer",
+            "title": "Scored Cell Count"
+          },
+          "total_area_m2": {
+            "type": "number",
+            "title": "Total Area M2"
+          },
+          "scored_cell_area_m2": {
+            "type": "number",
+            "title": "Scored Cell Area M2"
+          },
+          "unscored_cell_area_m2": {
+            "type": "number",
+            "title": "Unscored Cell Area M2"
+          },
+          "observed_scored_area_m2": {
+            "type": "number",
+            "title": "Observed Scored Area M2"
+          },
+          "mean_score": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mean Score"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "cell_count",
+          "scored_cell_count",
+          "total_area_m2",
+          "scored_cell_area_m2",
+          "unscored_cell_area_m2",
+          "observed_scored_area_m2",
+          "mean_score"
+        ],
+        "title": "Summary"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

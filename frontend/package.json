@@ -1,0 +1,20 @@
+{
+  "name": "firewatch-explorer",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "test": "node --test visualization/analysis.test.js src/api/*.test.js"
+  },
+  "dependencies": {
+    "@turf/turf": "^7.4.0",
+    "leaflet": "^1.9.4",
+    "lucide": "^0.468.0"
+  },
+  "devDependencies": {
+    "prettier": "^3.9.9",
+    "vite": "^6.1.0"
+  }
+}

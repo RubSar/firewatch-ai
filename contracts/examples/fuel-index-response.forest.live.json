@@ -1,0 +1,339 @@
+{
+  "type": "FeatureCollection",
+  "schema_version": "fuel-index/1.0",
+  "generated_at": "2026-09-26T12:01:37.907138Z",
+  "start_date": "2025-07-01",
+  "end_date": "2025-08-01",
+  "cell_size_m": 1000,
+  "analysis_resolution_m": 20,
+  "grid_crs": "EPSG:32610",
+  "method": {
+    "id": "dw-ndmi-experimental-v1",
+    "calibrated": false,
+    "vegetation_classes": [
+      "trees",
+      "grass",
+      "flooded_vegetation",
+      "crops",
+      "shrub_and_scrub"
+    ],
+    "ndmi_formula": "(B8 - B11) / (B8 + B11)",
+    "dryness_formula": "clamp((0.4 - vegetation_weighted_ndmi) / 0.6, 0, 1)",
+    "score_formula": "round(100 * vegetation_probability * dryness_proxy, 1)",
+    "ndmi_dry_anchor": -0.2,
+    "ndmi_wet_anchor": 0.4,
+    "minimum_valid_coverage": 0.7,
+    "minimum_dw_top1_probability": 0.6,
+    "unsupported_built_threshold": 0.2,
+    "minimum_vegetation_probability": 0.05,
+    "non_vegetated_probability_threshold": 0.9,
+    "temporal_reducer": "mean over same-acquisition common-valid observations",
+    "spatial_reducer": "pixel-area-weighted mean on common-valid support"
+  },
+  "provenance": {
+    "provider": "google_earth_engine",
+    "synthetic": false,
+    "dynamic_world_collection": "GOOGLE/DYNAMICWORLD/V1",
+    "sentinel2_collection": "COPERNICUS/S2_SR_HARMONIZED",
+    "dynamic_world_native_resolution_m": 10,
+    "ndmi_effective_resolution_m": 20,
+    "acquisition_pairs": [
+      {
+        "acquired_at": "2025-07-01T19:31:12Z",
+        "dynamic_world_id": "20250701T191909_20250701T192855_T10UDU",
+        "sentinel2_id": "20250701T191909_20250701T192855_T10UDU"
+      },
+      {
+        "acquired_at": "2025-07-06T19:31:32Z",
+        "dynamic_world_id": "20250706T191931_20250706T192933_T10UDU",
+        "sentinel2_id": "20250706T191931_20250706T192933_T10UDU"
+      },
+      {
+        "acquired_at": "2025-07-11T19:31:13Z",
+        "dynamic_world_id": "20250711T191909_20250711T192719_T10UDU",
+        "sentinel2_id": "20250711T191909_20250711T192719_T10UDU"
+      },
+      {
+        "acquired_at": "2025-07-13T19:21:36Z",
+        "dynamic_world_id": "20250713T190941_20250713T191754_T10UDU",
+        "sentinel2_id": "20250713T190941_20250713T191754_T10UDU"
+      },
+      {
+        "acquired_at": "2025-07-13T19:21:43Z",
+        "dynamic_world_id": "20250713T190941_20250713T192138_T10UDU",
+        "sentinel2_id": "20250713T190941_20250713T192138_T10UDU"
+      },
+      {
+        "acquired_at": "2025-07-16T19:31:32Z",
+        "dynamic_world_id": "20250716T191931_20250716T192938_T10UDU",
+        "sentinel2_id": "20250716T191931_20250716T192938_T10UDU"
+      },
+      {
+        "acquired_at": "2025-07-21T19:31:12Z",
+        "dynamic_world_id": "20250721T191909_20250721T192428_T10UDU",
+        "sentinel2_id": "20250721T191909_20250721T192428_T10UDU"
+      },
+      {
+        "acquired_at": "2025-07-23T19:21:36Z",
+        "dynamic_world_id": "20250723T190941_20250723T192105_T10UDU",
+        "sentinel2_id": "20250723T190941_20250723T192105_T10UDU"
+      },
+      {
+        "acquired_at": "2025-07-26T19:31:31Z",
+        "dynamic_world_id": "20250726T191931_20250726T192912_T10UDU",
+        "sentinel2_id": "20250726T191931_20250726T192912_T10UDU"
+      },
+      {
+        "acquired_at": "2025-07-28T19:21:14Z",
+        "dynamic_world_id": "20250728T190919_20250728T191622_T10UDU",
+        "sentinel2_id": "20250728T190919_20250728T191622_T10UDU"
+      },
+      {
+        "acquired_at": "2025-07-28T19:31:27Z",
+        "dynamic_world_id": "20250728T192841_20250728T192837_T10UDU",
+        "sentinel2_id": "20250728T192841_20250728T192837_T10UDU"
+      },
+      {
+        "acquired_at": "2025-07-31T19:31:09Z",
+        "dynamic_world_id": "20250731T191909_20250731T192454_T10UDU",
+        "sentinel2_id": "20250731T191909_20250731T192454_T10UDU"
+      }
+    ],
+    "pair_count": 12,
+    "retrieved_at": "2026-09-26T12:01:35.613297+00:00",
+    "attribution": "This dataset is produced for the Dynamic World Project by Google in partnership with National Geographic Society and the World Resources Institute. Contains modified Copernicus Sentinel data.",
+    "sources": [
+      "https://developers.google.com/earth-engine/datasets/catalog/GOOGLE_DYNAMICWORLD_V1",
+      "https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2_SR_HARMONIZED"
+    ],
+    "asset_scope": "Candidate matched acquisitions across the request region; not all assets contribute to every cell"
+  },
+  "limitations": [
+    "Experimental relative fuel score, not official Burning Index, FWI, burn probability or spread forecast.",
+    "NDMI is a spectral vegetation moisture proxy, not measured live/dead fuel moisture.",
+    "NDMI anchors and classification/coverage thresholds are unvalidated demo assumptions.",
+    "Dynamic World probability means are not measured land-cover area fractions.",
+    "Canopy can hide surface fuel; deadwood, wind, weather, slope and fuel load are not modeled.",
+    "Temporal averages can hide change. Source acquisitions may be old or partly cloudy.",
+    "Cells aggregate 20 m observations; finer output does not create finer source detail."
+  ],
+  "summary": {
+    "cell_count": 4,
+    "scored_cell_count": 3,
+    "total_area_m2": 832063.0730827285,
+    "scored_cell_area_m2": 771386.811,
+    "unscored_cell_area_m2": 60676.26208272856,
+    "observed_scored_area_m2": 650795.3412650027,
+    "mean_score": 0.5
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -123.95,
+              47.85
+            ],
+            [
+              -123.94999999807008,
+              47.858409001862135
+            ],
+            [
+              -123.9492099780843,
+              47.85841553645667
+            ],
+            [
+              -123.94905639294291,
+              47.85000003722041
+            ],
+            [
+              -123.95,
+              47.85
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "cell_id": "32610-428-5300",
+        "area_m2": 60676.263,
+        "status": "insufficient_coverage",
+        "score": null,
+        "landcover_probabilities": {
+          "water": 0.12964355901722383,
+          "trees": 0.6177162961519538,
+          "grass": 0.03726076751321942,
+          "flooded_vegetation": 0.035051182014899915,
+          "crops": 0.03143361724590559,
+          "shrub_and_scrub": 0.039305676566414,
+          "built": 0.03281387497197826,
+          "bare": 0.037710979955005296,
+          "snow_and_ice": 0.0390640465633999
+        },
+        "vegetation_probability": 0.7607675394923927,
+        "ndmi": 0.38200724172509815,
+        "dryness_proxy": null,
+        "valid_coverage": 0.6461956547950921,
+        "observation_count_mean": 9.29608712914971
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -123.95,
+              47.86
+            ],
+            [
+              -123.94923890340304,
+              47.8600000306252
+            ],
+            [
+              -123.9492099780843,
+              47.85841553645667
+            ],
+            [
+              -123.94999999807008,
+              47.858409001862135
+            ],
+            [
+              -123.95,
+              47.86
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "cell_id": "32610-428-5301",
+        "area_m2": 10245.516,
+        "status": "scored",
+        "score": 0.0,
+        "landcover_probabilities": {
+          "water": 0.03702067072008509,
+          "trees": 0.7339595246040806,
+          "grass": 0.03338589860804762,
+          "flooded_vegetation": 0.03358193830070145,
+          "crops": 0.03165216274342633,
+          "shrub_and_scrub": 0.033804832764078134,
+          "built": 0.029958707325625847,
+          "bare": 0.033984434037572134,
+          "snow_and_ice": 0.032651830896382746
+        },
+        "vegetation_probability": 0.8663843570203342,
+        "ndmi": 0.4189665163879186,
+        "dryness_proxy": 0.0,
+        "valid_coverage": 1.0,
+        "observation_count_mean": 10.000000000000002
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -123.94,
+              47.85
+            ],
+            [
+              -123.94905639294291,
+              47.85000003722041
+            ],
+            [
+              -123.9492099780843,
+              47.85841553645667
+            ],
+            [
+              -123.93999999817146,
+              47.85849131495844
+            ],
+            [
+              -123.94,
+              47.85
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "cell_id": "32610-429-5300",
+        "area_m2": 642440.596,
+        "status": "scored",
+        "score": 0.6,
+        "landcover_probabilities": {
+          "water": 0.07171836533698978,
+          "trees": 0.6837869471269642,
+          "grass": 0.03749146854635464,
+          "flooded_vegetation": 0.03285386638948159,
+          "crops": 0.031930236643641065,
+          "shrub_and_scrub": 0.03791919047579756,
+          "built": 0.03232942204554468,
+          "bare": 0.036893768433580346,
+          "snow_and_ice": 0.03507673500164614
+        },
+        "vegetation_probability": 0.823981709182239,
+        "ndmi": 0.39594753374099606,
+        "dryness_proxy": 0.00675411043167327,
+        "valid_coverage": 0.8297286152426454,
+        "observation_count_mean": 9.783112330464553
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -123.94,
+              47.85999999999999
+            ],
+            [
+              -123.93999999817146,
+              47.85849131495844
+            ],
+            [
+              -123.9492099780843,
+              47.85841553645667
+            ],
+            [
+              -123.94923890340304,
+              47.8600000306252
+            ],
+            [
+              -123.94,
+              47.85999999999999
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "cell_id": "32610-429-5301",
+        "area_m2": 118700.699,
+        "status": "scored",
+        "score": 0.0,
+        "landcover_probabilities": {
+          "water": 0.05445521670649966,
+          "trees": 0.7100077738707758,
+          "grass": 0.03474164184392234,
+          "flooded_vegetation": 0.0340241955606449,
+          "crops": 0.03180747980560316,
+          "shrub_and_scrub": 0.035162880863671475,
+          "built": 0.03189888691670461,
+          "bare": 0.034208653396608356,
+          "snow_and_ice": 0.033693271035569676
+        },
+        "vegetation_probability": 0.8457439719446177,
+        "ndmi": 0.40335548965153656,
+        "dryness_proxy": 0.0,
+        "valid_coverage": 0.9056263364570657,
+        "observation_count_mean": 9.265794316282777
+      }
+    }
+  ]
+}

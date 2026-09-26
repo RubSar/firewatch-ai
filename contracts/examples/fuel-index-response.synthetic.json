@@ -1,0 +1,525 @@
+{
+  "type": "FeatureCollection",
+  "schema_version": "fuel-index/1.0",
+  "generated_at": "2026-09-26T11:40:16.123475Z",
+  "start_date": "2025-08-01",
+  "end_date": "2025-08-16",
+  "cell_size_m": 2000,
+  "analysis_resolution_m": 20,
+  "grid_crs": "EPSG:32611",
+  "method": {
+    "id": "dw-ndmi-experimental-v1",
+    "calibrated": false,
+    "vegetation_classes": [
+      "trees",
+      "grass",
+      "flooded_vegetation",
+      "crops",
+      "shrub_and_scrub"
+    ],
+    "ndmi_formula": "(B8 - B11) / (B8 + B11)",
+    "dryness_formula": "clamp((0.4 - vegetation_weighted_ndmi) / 0.6, 0, 1)",
+    "score_formula": "round(100 * vegetation_probability * dryness_proxy, 1)",
+    "ndmi_dry_anchor": -0.2,
+    "ndmi_wet_anchor": 0.4,
+    "minimum_valid_coverage": 0.7,
+    "minimum_dw_top1_probability": 0.6,
+    "unsupported_built_threshold": 0.2,
+    "minimum_vegetation_probability": 0.05,
+    "non_vegetated_probability_threshold": 0.9,
+    "temporal_reducer": "mean over same-acquisition common-valid observations",
+    "spatial_reducer": "pixel-area-weighted mean on common-valid support"
+  },
+  "provenance": {
+    "provider": "test_fixture",
+    "synthetic": true
+  },
+  "limitations": [
+    "Experimental relative fuel score, not official Burning Index, FWI, burn probability or spread forecast.",
+    "NDMI is a spectral vegetation moisture proxy, not measured live/dead fuel moisture.",
+    "NDMI anchors and classification/coverage thresholds are unvalidated demo assumptions.",
+    "Dynamic World probability means are not measured land-cover area fractions.",
+    "Canopy can hide surface fuel; deadwood, wind, weather, slope and fuel load are not modeled.",
+    "Temporal averages can hide change. Source acquisitions may be old or partly cloudy.",
+    "Cells aggregate 20 m observations; finer output does not create finer source detail."
+  ],
+  "summary": {
+    "cell_count": 9,
+    "scored_cell_count": 9,
+    "total_area_m2": 24462318.7492796,
+    "scored_cell_area_m2": 24462318.748,
+    "unscored_cell_area_m2": 0.0012795999646186829,
+    "observed_scored_area_m2": 22016086.8732,
+    "mean_score": 50.0
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.8,
+              37.7
+            ],
+            [
+              -119.79999976876108,
+              37.71603407366872
+            ],
+            [
+              -119.79090704680009,
+              37.71624983683667
+            ],
+            [
+              -119.79029731069302,
+              37.70000166037419
+            ],
+            [
+              -119.8,
+              37.7
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "cell_id": "32611-126-2088",
+        "area_m2": 1484933.201,
+        "status": "scored",
+        "score": 50.0,
+        "landcover_probabilities": {
+          "water": 0.0,
+          "trees": 1.0,
+          "grass": 0.0,
+          "flooded_vegetation": 0.0,
+          "crops": 0.0,
+          "shrub_and_scrub": 0.0,
+          "built": 0.0,
+          "bare": 0.0,
+          "snow_and_ice": 0.0
+        },
+        "vegetation_probability": 1.0,
+        "ndmi": 0.1,
+        "dryness_proxy": 0.5000000000000001,
+        "valid_coverage": 0.9,
+        "observation_count_mean": 2.0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.79999976940707,
+              37.73405526426674
+            ],
+            [
+              -119.79158329256347,
+              37.73425503705334
+            ],
+            [
+              -119.79090704680009,
+              37.71624983683667
+            ],
+            [
+              -119.79999976876108,
+              37.71603407366872
+            ],
+            [
+              -119.79999976940707,
+              37.73405526426674
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "cell_id": "32611-126-2089",
+        "area_m2": 1543757.172,
+        "status": "scored",
+        "score": 50.0,
+        "landcover_probabilities": {
+          "water": 0.0,
+          "trees": 1.0,
+          "grass": 0.0,
+          "flooded_vegetation": 0.0,
+          "crops": 0.0,
+          "shrub_and_scrub": 0.0,
+          "built": 0.0,
+          "bare": 0.0,
+          "snow_and_ice": 0.0
+        },
+        "vegetation_probability": 1.0,
+        "ndmi": 0.1,
+        "dryness_proxy": 0.5000000000000001,
+        "valid_coverage": 0.9,
+        "observation_count_mean": 2.0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.8,
+              37.75
+            ],
+            [
+              -119.79217519596428,
+              37.75000140204482
+            ],
+            [
+              -119.79158329256347,
+              37.73425503705334
+            ],
+            [
+              -119.79999976940707,
+              37.73405526426674
+            ],
+            [
+              -119.8,
+              37.75
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "cell_id": "32611-126-2090",
+        "area_m2": 1259095.498,
+        "status": "scored",
+        "score": 50.0,
+        "landcover_probabilities": {
+          "water": 0.0,
+          "trees": 1.0,
+          "grass": 0.0,
+          "flooded_vegetation": 0.0,
+          "crops": 0.0,
+          "shrub_and_scrub": 0.0,
+          "built": 0.0,
+          "bare": 0.0,
+          "snow_and_ice": 0.0
+        },
+        "vegetation_probability": 1.0,
+        "ndmi": 0.1,
+        "dryness_proxy": 0.5000000000000001,
+        "valid_coverage": 0.9,
+        "observation_count_mean": 2.0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.79029731069302,
+              37.70000166037419
+            ],
+            [
+              -119.79090704680009,
+              37.71624983683667
+            ],
+            [
+              -119.7682411544311,
+              37.716784622485676
+            ],
+            [
+              -119.76761649720858,
+              37.70000242258704
+            ],
+            [
+              -119.79029731069302,
+              37.70000166037419
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "cell_id": "32611-127-2088",
+        "area_m2": 3666444.196,
+        "status": "scored",
+        "score": 50.0,
+        "landcover_probabilities": {
+          "water": 0.0,
+          "trees": 1.0,
+          "grass": 0.0,
+          "flooded_vegetation": 0.0,
+          "crops": 0.0,
+          "shrub_and_scrub": 0.0,
+          "built": 0.0,
+          "bare": 0.0,
+          "snow_and_ice": 0.0
+        },
+        "vegetation_probability": 1.0,
+        "ndmi": 0.1,
+        "dryness_proxy": 0.5000000000000001,
+        "valid_coverage": 0.9,
+        "observation_count_mean": 2.0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.79090704680009,
+              37.71624983683667
+            ],
+            [
+              -119.79158329256347,
+              37.73425503705334
+            ],
+            [
+              -119.76891192535643,
+              37.734790167881506
+            ],
+            [
+              -119.7682411544311,
+              37.716784622485676
+            ],
+            [
+              -119.79090704680009,
+              37.71624983683667
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "cell_id": "32611-127-2089",
+        "area_m2": 3997286.217,
+        "status": "scored",
+        "score": 50.0,
+        "landcover_probabilities": {
+          "water": 0.0,
+          "trees": 1.0,
+          "grass": 0.0,
+          "flooded_vegetation": 0.0,
+          "crops": 0.0,
+          "shrub_and_scrub": 0.0,
+          "built": 0.0,
+          "bare": 0.0,
+          "snow_and_ice": 0.0
+        },
+        "vegetation_probability": 1.0,
+        "ndmi": 0.1,
+        "dryness_proxy": 0.5000000000000001,
+        "valid_coverage": 0.9,
+        "observation_count_mean": 2.0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.76947910762357,
+              37.750002525781795
+            ],
+            [
+              -119.76891192535643,
+              37.734790167881506
+            ],
+            [
+              -119.79158329256347,
+              37.73425503705334
+            ],
+            [
+              -119.79217519596428,
+              37.75000140204482
+            ],
+            [
+              -119.76947910762357,
+              37.750002525781795
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "cell_id": "32611-127-2090",
+        "area_m2": 3436510.679,
+        "status": "scored",
+        "score": 50.0,
+        "landcover_probabilities": {
+          "water": 0.0,
+          "trees": 1.0,
+          "grass": 0.0,
+          "flooded_vegetation": 0.0,
+          "crops": 0.0,
+          "shrub_and_scrub": 0.0,
+          "built": 0.0,
+          "bare": 0.0,
+          "snow_and_ice": 0.0
+        },
+        "vegetation_probability": 1.0,
+        "ndmi": 0.1,
+        "dryness_proxy": 0.5000000000000001,
+        "valid_coverage": 0.9,
+        "observation_count_mean": 2.0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.75,
+              37.7
+            ],
+            [
+              -119.76761649720858,
+              37.70000242258704
+            ],
+            [
+              -119.7682411544311,
+              37.716784622485676
+            ],
+            [
+              -119.74999976465827,
+              37.71721184494818
+            ],
+            [
+              -119.75,
+              37.7
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "cell_id": "32611-128-2088",
+        "area_m2": 2983146.32,
+        "status": "scored",
+        "score": 50.0,
+        "landcover_probabilities": {
+          "water": 0.0,
+          "trees": 1.0,
+          "grass": 0.0,
+          "flooded_vegetation": 0.0,
+          "crops": 0.0,
+          "shrub_and_scrub": 0.0,
+          "built": 0.0,
+          "bare": 0.0,
+          "snow_and_ice": 0.0
+        },
+        "vegetation_probability": 1.0,
+        "ndmi": 0.1,
+        "dryness_proxy": 0.5000000000000001,
+        "valid_coverage": 0.9,
+        "observation_count_mean": 2.0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.74999976465827,
+              37.71721184494818
+            ],
+            [
+              -119.7682411544311,
+              37.716784622485676
+            ],
+            [
+              -119.76891192535643,
+              37.734790167881506
+            ],
+            [
+              -119.74999978299816,
+              37.735233225014944
+            ],
+            [
+              -119.74999976465827,
+              37.71721184494818
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "cell_id": "32611-128-2089",
+        "area_m2": 3275731.028,
+        "status": "scored",
+        "score": 50.0,
+        "landcover_probabilities": {
+          "water": 0.0,
+          "trees": 1.0,
+          "grass": 0.0,
+          "flooded_vegetation": 0.0,
+          "crops": 0.0,
+          "shrub_and_scrub": 0.0,
+          "built": 0.0,
+          "bare": 0.0,
+          "snow_and_ice": 0.0
+        },
+        "vegetation_probability": 1.0,
+        "ndmi": 0.1,
+        "dryness_proxy": 0.5000000000000001,
+        "valid_coverage": 0.9,
+        "observation_count_mean": 2.0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.75,
+              37.75
+            ],
+            [
+              -119.74999978299816,
+              37.735233225014944
+            ],
+            [
+              -119.76891192535643,
+              37.734790167881506
+            ],
+            [
+              -119.76947910762357,
+              37.750002525781795
+            ],
+            [
+              -119.75,
+              37.75
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "cell_id": "32611-128-2090",
+        "area_m2": 2815414.437,
+        "status": "scored",
+        "score": 50.0,
+        "landcover_probabilities": {
+          "water": 0.0,
+          "trees": 1.0,
+          "grass": 0.0,
+          "flooded_vegetation": 0.0,
+          "crops": 0.0,
+          "shrub_and_scrub": 0.0,
+          "built": 0.0,
+          "bare": 0.0,
+          "snow_and_ice": 0.0
+        },
+        "vegetation_probability": 1.0,
+        "ndmi": 0.1,
+        "dryness_proxy": 0.5000000000000001,
+        "valid_coverage": 0.9,
+        "observation_count_mean": 2.0
+      }
+    }
+  ]
+}
