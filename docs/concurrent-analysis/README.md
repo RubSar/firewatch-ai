@@ -11,6 +11,7 @@ Research date: 2026-09-26. Scope: public product and science pages, one vendor c
 5. [Technical feasibility](05-technical-feasibility/architecture.md)
 6. [Product direction and scope options](06-product-direction/options.md)
 7. [Source register and evidence gaps](07-sources/register.md)
+8. [Drone near-realtime pipeline](08-drone-realtime/pipeline.md)
 
 ## Main finding
 
@@ -20,4 +21,4 @@ Our inference: the useful reference is a set of workflows connecting observation
 
 Source IDs resolve to direct links in the source register; important claims also link inline. “Vendor claim” means Technosylva states it, without independent verification here. “Proposal” means our suggestion, not a user-approved requirement. Interface observations are limited to public page content; no authenticated application or hands-on product trial was inspected.
 
-[Project decisions](../AGENTS.md) are the authoritative decision log.
+[Project decisions](../../AGENTS.md) are the authoritative decision log.
