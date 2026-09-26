@@ -1,0 +1,196 @@
+{
+  "packet_id": "bba93823e2e0797e503f1c24f25598872515560ffc754b8fc93ff8feaf424c46",
+  "created_at_utc": "2026-09-26T21:51:38.065815Z",
+  "inventory_sha256": "ad481bc20a878e69fdd42970edff10cc193e430932d32732b79f073871a2bcfa",
+  "audit_sha256": "f96186a6ae07fe115cc360622185fcc7b2bece24a429ba5aac2856965a756a48",
+  "code_sha256": {
+    "review_packet.py": "990eb48f6cbe0262d9e726d2889e3c75530669ef99dfbe1ca52979e1fb7968c8",
+    "review_ui.html": "f4be2cc755cb2f4084df6e7fd5c314224e9bf3727b078b9434595e07088db61a",
+    "review_ui.js": "2ccd940b4bb1d80e577156fc0d702cbefd893aa4e4aeb7d2fa10024bcf1ee407"
+  },
+  "sampling": "Existing M1 pilot audit selection; not a representative held-out evaluation set.",
+  "reviewers": {
+    "A": null,
+    "B": null
+  },
+  "human_reviews_received": 0,
+  "status": "awaiting_two_independent_human_reviewers",
+  "benchmark_frozen": false,
+  "case_mapping": [
+    {
+      "case_id": "case-001",
+      "sample_id": "flame2-rff-116",
+      "incident_id": "flame2-northern-arizona-2021-11",
+      "site_id": "flame2-northern-arizona-burn-site",
+      "split": "pilot"
+    },
+    {
+      "case_id": "case-002",
+      "sample_id": "flame2-rff-3250",
+      "incident_id": "flame2-northern-arizona-2021-11",
+      "site_id": "flame2-northern-arizona-burn-site",
+      "split": "pilot"
+    },
+    {
+      "case_id": "case-003",
+      "sample_id": "flame2-rff-6194",
+      "incident_id": "flame2-northern-arizona-2021-11",
+      "site_id": "flame2-northern-arizona-burn-site",
+      "split": "pilot"
+    },
+    {
+      "case_id": "case-004",
+      "sample_id": "flame2-rff-9001",
+      "incident_id": "flame2-northern-arizona-2021-11",
+      "site_id": "flame2-northern-arizona-burn-site",
+      "split": "pilot"
+    },
+    {
+      "case_id": "case-005",
+      "sample_id": "flame2-rff-12114",
+      "incident_id": "flame2-northern-arizona-2021-11",
+      "site_id": "flame2-northern-arizona-burn-site",
+      "split": "pilot"
+    },
+    {
+      "case_id": "case-006",
+      "sample_id": "flame2-rff-14946",
+      "incident_id": "flame2-northern-arizona-2021-11",
+      "site_id": "flame2-northern-arizona-burn-site",
+      "split": "pilot"
+    },
+    {
+      "case_id": "case-007",
+      "sample_id": "flame2-rff-17535",
+      "incident_id": "flame2-northern-arizona-2021-11",
+      "site_id": "flame2-northern-arizona-burn-site",
+      "split": "pilot"
+    },
+    {
+      "case_id": "case-008",
+      "sample_id": "flame2-rff-20504",
+      "incident_id": "flame2-northern-arizona-2021-11",
+      "site_id": "flame2-northern-arizona-burn-site",
+      "split": "pilot"
+    },
+    {
+      "case_id": "case-009",
+      "sample_id": "flame2-rff-22656",
+      "incident_id": "flame2-northern-arizona-2021-11",
+      "site_id": "flame2-northern-arizona-burn-site",
+      "split": "pilot"
+    },
+    {
+      "case_id": "case-010",
+      "sample_id": "flame2-rff-25280",
+      "incident_id": "flame2-northern-arizona-2021-11",
+      "site_id": "flame2-northern-arizona-burn-site",
+      "split": "pilot"
+    },
+    {
+      "case_id": "case-011",
+      "sample_id": "flame2-rff-28136",
+      "incident_id": "flame2-northern-arizona-2021-11",
+      "site_id": "flame2-northern-arizona-burn-site",
+      "split": "pilot"
+    },
+    {
+      "case_id": "case-012",
+      "sample_id": "flame2-rff-31215",
+      "incident_id": "flame2-northern-arizona-2021-11",
+      "site_id": "flame2-northern-arizona-burn-site",
+      "split": "pilot"
+    },
+    {
+      "case_id": "case-013",
+      "sample_id": "flame2-rff-34670",
+      "incident_id": "flame2-northern-arizona-2021-11",
+      "site_id": "flame2-northern-arizona-burn-site",
+      "split": "pilot"
+    },
+    {
+      "case_id": "case-014",
+      "sample_id": "flame2-rff-37602",
+      "incident_id": "flame2-northern-arizona-2021-11",
+      "site_id": "flame2-northern-arizona-burn-site",
+      "split": "pilot"
+    },
+    {
+      "case_id": "case-015",
+      "sample_id": "flame2-rff-40525",
+      "incident_id": "flame2-northern-arizona-2021-11",
+      "site_id": "flame2-northern-arizona-burn-site",
+      "split": "pilot"
+    },
+    {
+      "case_id": "case-016",
+      "sample_id": "flame2-rff-42781",
+      "incident_id": "flame2-northern-arizona-2021-11",
+      "site_id": "flame2-northern-arizona-burn-site",
+      "split": "pilot"
+    },
+    {
+      "case_id": "case-017",
+      "sample_id": "flame2-rff-44972",
+      "incident_id": "flame2-northern-arizona-2021-11",
+      "site_id": "flame2-northern-arizona-burn-site",
+      "split": "pilot"
+    },
+    {
+      "case_id": "case-018",
+      "sample_id": "flame2-rff-47581",
+      "incident_id": "flame2-northern-arizona-2021-11",
+      "site_id": "flame2-northern-arizona-burn-site",
+      "split": "pilot"
+    },
+    {
+      "case_id": "case-019",
+      "sample_id": "flame2-rff-50396",
+      "incident_id": "flame2-northern-arizona-2021-11",
+      "site_id": "flame2-northern-arizona-burn-site",
+      "split": "pilot"
+    },
+    {
+      "case_id": "case-020",
+      "sample_id": "flame2-rff-53385",
+      "incident_id": "flame2-northern-arizona-2021-11",
+      "site_id": "flame2-northern-arizona-burn-site",
+      "split": "pilot"
+    },
+    {
+      "case_id": "case-021",
+      "sample_id": "flame2-rff-47850",
+      "incident_id": "flame2-northern-arizona-2021-11",
+      "site_id": "flame2-northern-arizona-burn-site",
+      "split": "pilot"
+    },
+    {
+      "case_id": "case-022",
+      "sample_id": "flame2-rff-35347",
+      "incident_id": "flame2-northern-arizona-2021-11",
+      "site_id": "flame2-northern-arizona-burn-site",
+      "split": "pilot"
+    },
+    {
+      "case_id": "case-023",
+      "sample_id": "flame2-rff-31874",
+      "incident_id": "flame2-northern-arizona-2021-11",
+      "site_id": "flame2-northern-arizona-burn-site",
+      "split": "pilot"
+    },
+    {
+      "case_id": "case-024",
+      "sample_id": "flame2-rff-46494",
+      "incident_id": "flame2-northern-arizona-2021-11",
+      "site_id": "flame2-northern-arizona-burn-site",
+      "split": "pilot"
+    },
+    {
+      "case_id": "case-025",
+      "sample_id": "flame2-rff-13707",
+      "incident_id": "flame2-northern-arizona-2021-11",
+      "site_id": "flame2-northern-arizona-burn-site",
+      "split": "pilot"
+    }
+  ]
+}

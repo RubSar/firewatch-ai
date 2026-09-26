@@ -1,0 +1,5832 @@
+{
+  "exact_decoded_rgb_groups": [],
+  "near_duplicate_candidates": [
+    {
+      "left": "flame2-rff-246",
+      "right": "flame2-rff-378",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-246",
+      "right": "flame2-rff-384",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-378",
+      "right": "flame2-rff-384",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-792",
+      "right": "flame2-rff-865",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-792",
+      "right": "flame2-rff-885",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-792",
+      "right": "flame2-rff-955",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-865",
+      "right": "flame2-rff-885",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-865",
+      "right": "flame2-rff-938",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-865",
+      "right": "flame2-rff-955",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-885",
+      "right": "flame2-rff-938",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-885",
+      "right": "flame2-rff-955",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-938",
+      "right": "flame2-rff-955",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-1226",
+      "right": "flame2-rff-1234",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-1303",
+      "right": "flame2-rff-1322",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-1434",
+      "right": "flame2-rff-1477",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-1500",
+      "right": "flame2-rff-1501",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-1937",
+      "right": "flame2-rff-1949",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-1937",
+      "right": "flame2-rff-1988",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-1937",
+      "right": "flame2-rff-2077",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-1937",
+      "right": "flame2-rff-2125",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-1949",
+      "right": "flame2-rff-1988",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-1949",
+      "right": "flame2-rff-2077",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-1988",
+      "right": "flame2-rff-2077",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-2077",
+      "right": "flame2-rff-2125",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-2077",
+      "right": "flame2-rff-2149",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-2077",
+      "right": "flame2-rff-2176",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-2125",
+      "right": "flame2-rff-2149",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-2125",
+      "right": "flame2-rff-2176",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-2149",
+      "right": "flame2-rff-2176",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-2308",
+      "right": "flame2-rff-2372",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-2534",
+      "right": "flame2-rff-2603",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-2806",
+      "right": "flame2-rff-2808",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-2806",
+      "right": "flame2-rff-2856",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-2806",
+      "right": "flame2-rff-2951",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-2806",
+      "right": "flame2-rff-2974",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-2808",
+      "right": "flame2-rff-2856",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-2808",
+      "right": "flame2-rff-2951",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-2808",
+      "right": "flame2-rff-2974",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-2856",
+      "right": "flame2-rff-2951",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-2856",
+      "right": "flame2-rff-2974",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-2951",
+      "right": "flame2-rff-2974",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3103",
+      "right": "flame2-rff-3149",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3103",
+      "right": "flame2-rff-3250",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3103",
+      "right": "flame2-rff-3355",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3103",
+      "right": "flame2-rff-3359",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3103",
+      "right": "flame2-rff-3422",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3103",
+      "right": "flame2-rff-3430",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3103",
+      "right": "flame2-rff-3431",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3103",
+      "right": "flame2-rff-3660",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3103",
+      "right": "flame2-rff-3726",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3103",
+      "right": "flame2-rff-3739",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3103",
+      "right": "flame2-rff-3741",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3103",
+      "right": "flame2-rff-3766",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3103",
+      "right": "flame2-rff-3845",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3103",
+      "right": "flame2-rff-4052",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3103",
+      "right": "flame2-rff-4107",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3103",
+      "right": "flame2-rff-4150",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3103",
+      "right": "flame2-rff-4169",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3103",
+      "right": "flame2-rff-4267",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3103",
+      "right": "flame2-rff-4281",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3103",
+      "right": "flame2-rff-4297",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3103",
+      "right": "flame2-rff-4350",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3103",
+      "right": "flame2-rff-4846",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3103",
+      "right": "flame2-rff-32549",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3103",
+      "right": "flame2-rff-32620",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3149",
+      "right": "flame2-rff-3250",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3149",
+      "right": "flame2-rff-3355",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3149",
+      "right": "flame2-rff-3359",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3149",
+      "right": "flame2-rff-3422",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3149",
+      "right": "flame2-rff-3430",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3149",
+      "right": "flame2-rff-3431",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3149",
+      "right": "flame2-rff-3517",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3149",
+      "right": "flame2-rff-3726",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3149",
+      "right": "flame2-rff-3739",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3149",
+      "right": "flame2-rff-3741",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3149",
+      "right": "flame2-rff-3766",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3149",
+      "right": "flame2-rff-3845",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3149",
+      "right": "flame2-rff-4052",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3149",
+      "right": "flame2-rff-4107",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3149",
+      "right": "flame2-rff-4150",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3149",
+      "right": "flame2-rff-4169",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3149",
+      "right": "flame2-rff-4267",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3149",
+      "right": "flame2-rff-4281",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3149",
+      "right": "flame2-rff-4297",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3149",
+      "right": "flame2-rff-32549",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3149",
+      "right": "flame2-rff-32620",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3250",
+      "right": "flame2-rff-3355",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3250",
+      "right": "flame2-rff-3359",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3250",
+      "right": "flame2-rff-3422",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3250",
+      "right": "flame2-rff-3430",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3250",
+      "right": "flame2-rff-3431",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3250",
+      "right": "flame2-rff-3517",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3250",
+      "right": "flame2-rff-3726",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3250",
+      "right": "flame2-rff-3739",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3250",
+      "right": "flame2-rff-3741",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3250",
+      "right": "flame2-rff-3766",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3250",
+      "right": "flame2-rff-3845",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3250",
+      "right": "flame2-rff-4052",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3250",
+      "right": "flame2-rff-4107",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3250",
+      "right": "flame2-rff-4150",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3250",
+      "right": "flame2-rff-4169",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3250",
+      "right": "flame2-rff-4267",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3250",
+      "right": "flame2-rff-4281",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3250",
+      "right": "flame2-rff-4297",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3250",
+      "right": "flame2-rff-32549",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3250",
+      "right": "flame2-rff-32620",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3355",
+      "right": "flame2-rff-3359",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3355",
+      "right": "flame2-rff-3422",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3355",
+      "right": "flame2-rff-3430",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3355",
+      "right": "flame2-rff-3431",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3355",
+      "right": "flame2-rff-3517",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3355",
+      "right": "flame2-rff-3726",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3355",
+      "right": "flame2-rff-3739",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3355",
+      "right": "flame2-rff-3741",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3355",
+      "right": "flame2-rff-3766",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3355",
+      "right": "flame2-rff-3845",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3355",
+      "right": "flame2-rff-4052",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3355",
+      "right": "flame2-rff-4107",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3355",
+      "right": "flame2-rff-4150",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3355",
+      "right": "flame2-rff-4169",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3355",
+      "right": "flame2-rff-4267",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3355",
+      "right": "flame2-rff-4281",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3355",
+      "right": "flame2-rff-4297",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3355",
+      "right": "flame2-rff-32549",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3355",
+      "right": "flame2-rff-32620",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3359",
+      "right": "flame2-rff-3422",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3359",
+      "right": "flame2-rff-3430",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3359",
+      "right": "flame2-rff-3431",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3359",
+      "right": "flame2-rff-3517",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3359",
+      "right": "flame2-rff-3726",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3359",
+      "right": "flame2-rff-3739",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3359",
+      "right": "flame2-rff-3741",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3359",
+      "right": "flame2-rff-3766",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3359",
+      "right": "flame2-rff-3845",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3359",
+      "right": "flame2-rff-4052",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3359",
+      "right": "flame2-rff-4107",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3359",
+      "right": "flame2-rff-4150",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3359",
+      "right": "flame2-rff-4169",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3359",
+      "right": "flame2-rff-4267",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3359",
+      "right": "flame2-rff-4281",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3359",
+      "right": "flame2-rff-4297",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3359",
+      "right": "flame2-rff-32549",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3359",
+      "right": "flame2-rff-32620",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3422",
+      "right": "flame2-rff-3430",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3422",
+      "right": "flame2-rff-3431",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3422",
+      "right": "flame2-rff-3517",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3422",
+      "right": "flame2-rff-3660",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3422",
+      "right": "flame2-rff-3726",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3422",
+      "right": "flame2-rff-3739",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3422",
+      "right": "flame2-rff-3741",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3422",
+      "right": "flame2-rff-3766",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3422",
+      "right": "flame2-rff-3845",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3422",
+      "right": "flame2-rff-4052",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3422",
+      "right": "flame2-rff-4107",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3422",
+      "right": "flame2-rff-4150",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3422",
+      "right": "flame2-rff-4169",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3422",
+      "right": "flame2-rff-4267",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3422",
+      "right": "flame2-rff-4281",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3422",
+      "right": "flame2-rff-4297",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3422",
+      "right": "flame2-rff-4350",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3422",
+      "right": "flame2-rff-4846",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3422",
+      "right": "flame2-rff-4897",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3422",
+      "right": "flame2-rff-32094",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3422",
+      "right": "flame2-rff-32107",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3422",
+      "right": "flame2-rff-32549",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3422",
+      "right": "flame2-rff-32620",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3430",
+      "right": "flame2-rff-3431",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3430",
+      "right": "flame2-rff-3517",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3430",
+      "right": "flame2-rff-3660",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3430",
+      "right": "flame2-rff-3726",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3430",
+      "right": "flame2-rff-3739",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3430",
+      "right": "flame2-rff-3741",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3430",
+      "right": "flame2-rff-3766",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3430",
+      "right": "flame2-rff-3845",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3430",
+      "right": "flame2-rff-4052",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3430",
+      "right": "flame2-rff-4107",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3430",
+      "right": "flame2-rff-4150",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3430",
+      "right": "flame2-rff-4169",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3430",
+      "right": "flame2-rff-4267",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3430",
+      "right": "flame2-rff-4281",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3430",
+      "right": "flame2-rff-4297",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3430",
+      "right": "flame2-rff-4350",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3430",
+      "right": "flame2-rff-4846",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3430",
+      "right": "flame2-rff-4897",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3430",
+      "right": "flame2-rff-32094",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3430",
+      "right": "flame2-rff-32107",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3430",
+      "right": "flame2-rff-32549",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3430",
+      "right": "flame2-rff-32620",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3431",
+      "right": "flame2-rff-3517",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3431",
+      "right": "flame2-rff-3660",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3431",
+      "right": "flame2-rff-3726",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3431",
+      "right": "flame2-rff-3739",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3431",
+      "right": "flame2-rff-3741",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3431",
+      "right": "flame2-rff-3766",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3431",
+      "right": "flame2-rff-3845",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3431",
+      "right": "flame2-rff-4052",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3431",
+      "right": "flame2-rff-4107",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3431",
+      "right": "flame2-rff-4150",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3431",
+      "right": "flame2-rff-4169",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3431",
+      "right": "flame2-rff-4267",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3431",
+      "right": "flame2-rff-4281",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3431",
+      "right": "flame2-rff-4297",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3431",
+      "right": "flame2-rff-4350",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3431",
+      "right": "flame2-rff-4846",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3431",
+      "right": "flame2-rff-4897",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3431",
+      "right": "flame2-rff-32094",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3431",
+      "right": "flame2-rff-32107",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3431",
+      "right": "flame2-rff-32549",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3431",
+      "right": "flame2-rff-32620",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3517",
+      "right": "flame2-rff-3726",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3517",
+      "right": "flame2-rff-3739",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3517",
+      "right": "flame2-rff-3741",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3517",
+      "right": "flame2-rff-3766",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3517",
+      "right": "flame2-rff-3845",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3517",
+      "right": "flame2-rff-4052",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3517",
+      "right": "flame2-rff-4107",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3517",
+      "right": "flame2-rff-4150",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3517",
+      "right": "flame2-rff-4169",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3517",
+      "right": "flame2-rff-4267",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3517",
+      "right": "flame2-rff-4281",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3517",
+      "right": "flame2-rff-4297",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3517",
+      "right": "flame2-rff-32549",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3649",
+      "right": "flame2-rff-3660",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3649",
+      "right": "flame2-rff-3726",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3649",
+      "right": "flame2-rff-3739",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3649",
+      "right": "flame2-rff-3741",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3649",
+      "right": "flame2-rff-3766",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3649",
+      "right": "flame2-rff-3845",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3649",
+      "right": "flame2-rff-4052",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3649",
+      "right": "flame2-rff-4107",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3649",
+      "right": "flame2-rff-4150",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3649",
+      "right": "flame2-rff-4169",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3649",
+      "right": "flame2-rff-4267",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3649",
+      "right": "flame2-rff-4281",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3649",
+      "right": "flame2-rff-4297",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3649",
+      "right": "flame2-rff-4350",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3649",
+      "right": "flame2-rff-4402",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3649",
+      "right": "flame2-rff-4421",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3649",
+      "right": "flame2-rff-4432",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3649",
+      "right": "flame2-rff-32549",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3660",
+      "right": "flame2-rff-3726",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3660",
+      "right": "flame2-rff-3739",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3660",
+      "right": "flame2-rff-3741",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3660",
+      "right": "flame2-rff-3766",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3660",
+      "right": "flame2-rff-3845",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3660",
+      "right": "flame2-rff-4052",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3660",
+      "right": "flame2-rff-4107",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3660",
+      "right": "flame2-rff-4150",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3660",
+      "right": "flame2-rff-4169",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3660",
+      "right": "flame2-rff-4267",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3660",
+      "right": "flame2-rff-4281",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3660",
+      "right": "flame2-rff-4297",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3660",
+      "right": "flame2-rff-4350",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3660",
+      "right": "flame2-rff-4402",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3660",
+      "right": "flame2-rff-4421",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3660",
+      "right": "flame2-rff-4432",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3660",
+      "right": "flame2-rff-4846",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3660",
+      "right": "flame2-rff-4897",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3660",
+      "right": "flame2-rff-32549",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3660",
+      "right": "flame2-rff-32620",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3726",
+      "right": "flame2-rff-3739",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3726",
+      "right": "flame2-rff-3741",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3726",
+      "right": "flame2-rff-3766",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3726",
+      "right": "flame2-rff-3845",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3726",
+      "right": "flame2-rff-4052",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3726",
+      "right": "flame2-rff-4107",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3726",
+      "right": "flame2-rff-4150",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3726",
+      "right": "flame2-rff-4169",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3726",
+      "right": "flame2-rff-4267",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3726",
+      "right": "flame2-rff-4281",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3726",
+      "right": "flame2-rff-4297",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3726",
+      "right": "flame2-rff-4350",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3726",
+      "right": "flame2-rff-4402",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3726",
+      "right": "flame2-rff-4421",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3726",
+      "right": "flame2-rff-4432",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3726",
+      "right": "flame2-rff-4767",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3726",
+      "right": "flame2-rff-4800",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3726",
+      "right": "flame2-rff-4846",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3726",
+      "right": "flame2-rff-32549",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3739",
+      "right": "flame2-rff-3741",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3739",
+      "right": "flame2-rff-3766",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3739",
+      "right": "flame2-rff-3845",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3739",
+      "right": "flame2-rff-4052",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3739",
+      "right": "flame2-rff-4107",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3739",
+      "right": "flame2-rff-4150",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3739",
+      "right": "flame2-rff-4169",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3739",
+      "right": "flame2-rff-4267",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3739",
+      "right": "flame2-rff-4281",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3739",
+      "right": "flame2-rff-4297",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3739",
+      "right": "flame2-rff-4350",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3739",
+      "right": "flame2-rff-4402",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3739",
+      "right": "flame2-rff-4421",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3739",
+      "right": "flame2-rff-4432",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3739",
+      "right": "flame2-rff-4767",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3739",
+      "right": "flame2-rff-4800",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3739",
+      "right": "flame2-rff-4846",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3739",
+      "right": "flame2-rff-32549",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3741",
+      "right": "flame2-rff-3766",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3741",
+      "right": "flame2-rff-3845",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3741",
+      "right": "flame2-rff-4052",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3741",
+      "right": "flame2-rff-4107",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3741",
+      "right": "flame2-rff-4150",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3741",
+      "right": "flame2-rff-4169",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3741",
+      "right": "flame2-rff-4267",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3741",
+      "right": "flame2-rff-4281",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3741",
+      "right": "flame2-rff-4297",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3741",
+      "right": "flame2-rff-4350",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3741",
+      "right": "flame2-rff-4402",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3741",
+      "right": "flame2-rff-4421",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3741",
+      "right": "flame2-rff-4432",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3741",
+      "right": "flame2-rff-4767",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3741",
+      "right": "flame2-rff-4800",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3741",
+      "right": "flame2-rff-4846",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3741",
+      "right": "flame2-rff-32549",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3766",
+      "right": "flame2-rff-3845",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3766",
+      "right": "flame2-rff-4052",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3766",
+      "right": "flame2-rff-4107",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3766",
+      "right": "flame2-rff-4150",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3766",
+      "right": "flame2-rff-4169",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3766",
+      "right": "flame2-rff-4267",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3766",
+      "right": "flame2-rff-4281",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3766",
+      "right": "flame2-rff-4297",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3766",
+      "right": "flame2-rff-4350",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3766",
+      "right": "flame2-rff-4402",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3766",
+      "right": "flame2-rff-4421",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3766",
+      "right": "flame2-rff-4432",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3766",
+      "right": "flame2-rff-4767",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3766",
+      "right": "flame2-rff-4800",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3766",
+      "right": "flame2-rff-4846",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3766",
+      "right": "flame2-rff-32549",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3845",
+      "right": "flame2-rff-4052",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3845",
+      "right": "flame2-rff-4107",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3845",
+      "right": "flame2-rff-4150",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3845",
+      "right": "flame2-rff-4169",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3845",
+      "right": "flame2-rff-4267",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3845",
+      "right": "flame2-rff-4281",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3845",
+      "right": "flame2-rff-4297",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-3845",
+      "right": "flame2-rff-4350",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-3845",
+      "right": "flame2-rff-4402",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3845",
+      "right": "flame2-rff-4421",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3845",
+      "right": "flame2-rff-4432",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-3845",
+      "right": "flame2-rff-4767",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3845",
+      "right": "flame2-rff-4800",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-3845",
+      "right": "flame2-rff-4846",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-3845",
+      "right": "flame2-rff-32549",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-4052",
+      "right": "flame2-rff-4107",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-4052",
+      "right": "flame2-rff-4150",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-4052",
+      "right": "flame2-rff-4169",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-4052",
+      "right": "flame2-rff-4267",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-4052",
+      "right": "flame2-rff-4281",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-4052",
+      "right": "flame2-rff-4297",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-4052",
+      "right": "flame2-rff-4350",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-4052",
+      "right": "flame2-rff-4402",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-4052",
+      "right": "flame2-rff-4421",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-4052",
+      "right": "flame2-rff-4432",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-4052",
+      "right": "flame2-rff-4767",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-4052",
+      "right": "flame2-rff-4800",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-4052",
+      "right": "flame2-rff-4846",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-4052",
+      "right": "flame2-rff-32549",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-4107",
+      "right": "flame2-rff-4150",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-4107",
+      "right": "flame2-rff-4169",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-4107",
+      "right": "flame2-rff-4267",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-4107",
+      "right": "flame2-rff-4281",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-4107",
+      "right": "flame2-rff-4297",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-4107",
+      "right": "flame2-rff-4350",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-4107",
+      "right": "flame2-rff-4402",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-4107",
+      "right": "flame2-rff-4421",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-4107",
+      "right": "flame2-rff-4432",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-4107",
+      "right": "flame2-rff-4767",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-4107",
+      "right": "flame2-rff-4800",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-4107",
+      "right": "flame2-rff-4846",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-4107",
+      "right": "flame2-rff-32549",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-4150",
+      "right": "flame2-rff-4169",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-4150",
+      "right": "flame2-rff-4267",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-4150",
+      "right": "flame2-rff-4281",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-4150",
+      "right": "flame2-rff-4297",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-4150",
+      "right": "flame2-rff-4350",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-4150",
+      "right": "flame2-rff-4402",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-4150",
+      "right": "flame2-rff-4421",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-4150",
+      "right": "flame2-rff-4432",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-4150",
+      "right": "flame2-rff-4767",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-4150",
+      "right": "flame2-rff-4800",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-4150",
+      "right": "flame2-rff-4846",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-4150",
+      "right": "flame2-rff-32549",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-4169",
+      "right": "flame2-rff-4267",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-4169",
+      "right": "flame2-rff-4281",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-4169",
+      "right": "flame2-rff-4297",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-4169",
+      "right": "flame2-rff-4350",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-4169",
+      "right": "flame2-rff-4402",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-4169",
+      "right": "flame2-rff-4421",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-4169",
+      "right": "flame2-rff-4432",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-4169",
+      "right": "flame2-rff-4767",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-4169",
+      "right": "flame2-rff-4800",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-4169",
+      "right": "flame2-rff-4846",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-4169",
+      "right": "flame2-rff-32549",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-4267",
+      "right": "flame2-rff-4281",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-4267",
+      "right": "flame2-rff-4297",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-4267",
+      "right": "flame2-rff-4350",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-4267",
+      "right": "flame2-rff-4402",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-4267",
+      "right": "flame2-rff-4421",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-4267",
+      "right": "flame2-rff-4432",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-4267",
+      "right": "flame2-rff-4767",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-4267",
+      "right": "flame2-rff-4800",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-4267",
+      "right": "flame2-rff-4846",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-4267",
+      "right": "flame2-rff-32549",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-4281",
+      "right": "flame2-rff-4297",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-4281",
+      "right": "flame2-rff-4350",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-4281",
+      "right": "flame2-rff-4402",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-4281",
+      "right": "flame2-rff-4421",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-4281",
+      "right": "flame2-rff-4432",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-4281",
+      "right": "flame2-rff-4767",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-4281",
+      "right": "flame2-rff-4800",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-4281",
+      "right": "flame2-rff-4846",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-4281",
+      "right": "flame2-rff-32549",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-4297",
+      "right": "flame2-rff-4350",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-4297",
+      "right": "flame2-rff-4402",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-4297",
+      "right": "flame2-rff-4421",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-4297",
+      "right": "flame2-rff-4432",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-4297",
+      "right": "flame2-rff-4767",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-4297",
+      "right": "flame2-rff-4800",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-4297",
+      "right": "flame2-rff-4846",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-4297",
+      "right": "flame2-rff-32549",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-4350",
+      "right": "flame2-rff-4402",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-4350",
+      "right": "flame2-rff-4421",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-4350",
+      "right": "flame2-rff-4432",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-4350",
+      "right": "flame2-rff-4846",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-4350",
+      "right": "flame2-rff-4897",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-4350",
+      "right": "flame2-rff-32549",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-4350",
+      "right": "flame2-rff-32620",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-4402",
+      "right": "flame2-rff-4421",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-4402",
+      "right": "flame2-rff-4432",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-4402",
+      "right": "flame2-rff-32549",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-4421",
+      "right": "flame2-rff-4432",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-4421",
+      "right": "flame2-rff-32549",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-4432",
+      "right": "flame2-rff-32549",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-4767",
+      "right": "flame2-rff-4800",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-4897",
+      "right": "flame2-rff-12350",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-4897",
+      "right": "flame2-rff-32549",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-4897",
+      "right": "flame2-rff-32620",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-5121",
+      "right": "flame2-rff-5136",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-5269",
+      "right": "flame2-rff-5271",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-5761",
+      "right": "flame2-rff-5785",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-5834",
+      "right": "flame2-rff-5854",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-6133",
+      "right": "flame2-rff-6145",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-6674",
+      "right": "flame2-rff-6687",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-6674",
+      "right": "flame2-rff-6694",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-6687",
+      "right": "flame2-rff-6694",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-6789",
+      "right": "flame2-rff-6871",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-6789",
+      "right": "flame2-rff-6914",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-6789",
+      "right": "flame2-rff-6943",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-6789",
+      "right": "flame2-rff-7005",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-6789",
+      "right": "flame2-rff-7064",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-6789",
+      "right": "flame2-rff-7066",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-6789",
+      "right": "flame2-rff-7078",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-6871",
+      "right": "flame2-rff-6914",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-6871",
+      "right": "flame2-rff-6943",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-6871",
+      "right": "flame2-rff-7005",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-6871",
+      "right": "flame2-rff-7064",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-6871",
+      "right": "flame2-rff-7066",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-6871",
+      "right": "flame2-rff-7078",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-6914",
+      "right": "flame2-rff-6943",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-6914",
+      "right": "flame2-rff-7005",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-6914",
+      "right": "flame2-rff-7064",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-6914",
+      "right": "flame2-rff-7066",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-6914",
+      "right": "flame2-rff-7078",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-6943",
+      "right": "flame2-rff-7005",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-6943",
+      "right": "flame2-rff-7064",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-6943",
+      "right": "flame2-rff-7066",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-6943",
+      "right": "flame2-rff-7078",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-7005",
+      "right": "flame2-rff-7064",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-7005",
+      "right": "flame2-rff-7066",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-7005",
+      "right": "flame2-rff-7078",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-7064",
+      "right": "flame2-rff-7066",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-7064",
+      "right": "flame2-rff-7078",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-7066",
+      "right": "flame2-rff-7078",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-7211",
+      "right": "flame2-rff-7212",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-7273",
+      "right": "flame2-rff-7280",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-7606",
+      "right": "flame2-rff-7620",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-7620",
+      "right": "flame2-rff-7628",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-7628",
+      "right": "flame2-rff-7660",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-7957",
+      "right": "flame2-rff-7960",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-7957",
+      "right": "flame2-rff-8042",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-7960",
+      "right": "flame2-rff-8042",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-8441",
+      "right": "flame2-rff-8461",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-8622",
+      "right": "flame2-rff-8664",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-8622",
+      "right": "flame2-rff-8678",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-8622",
+      "right": "flame2-rff-8732",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-8622",
+      "right": "flame2-rff-8933",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-8622",
+      "right": "flame2-rff-8960",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-8622",
+      "right": "flame2-rff-9020",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-8664",
+      "right": "flame2-rff-8678",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-8664",
+      "right": "flame2-rff-8732",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-8664",
+      "right": "flame2-rff-8933",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-8664",
+      "right": "flame2-rff-8960",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-8664",
+      "right": "flame2-rff-9020",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-8678",
+      "right": "flame2-rff-8732",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-8678",
+      "right": "flame2-rff-8933",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-8678",
+      "right": "flame2-rff-8960",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-8678",
+      "right": "flame2-rff-9020",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-8732",
+      "right": "flame2-rff-8933",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-8732",
+      "right": "flame2-rff-8960",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-8732",
+      "right": "flame2-rff-9020",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-8933",
+      "right": "flame2-rff-8960",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-8933",
+      "right": "flame2-rff-9020",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-8960",
+      "right": "flame2-rff-9020",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-8980",
+      "right": "flame2-rff-9001",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-9153",
+      "right": "flame2-rff-9229",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-9153",
+      "right": "flame2-rff-9233",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-9153",
+      "right": "flame2-rff-9336",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-9153",
+      "right": "flame2-rff-9597",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-9229",
+      "right": "flame2-rff-9233",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-9229",
+      "right": "flame2-rff-9336",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-9229",
+      "right": "flame2-rff-9549",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-9229",
+      "right": "flame2-rff-9597",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-9233",
+      "right": "flame2-rff-9336",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-9233",
+      "right": "flame2-rff-9549",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-9233",
+      "right": "flame2-rff-9597",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-9336",
+      "right": "flame2-rff-9384",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-9384",
+      "right": "flame2-rff-9549",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-9549",
+      "right": "flame2-rff-9597",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-9549",
+      "right": "flame2-rff-9715",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-9549",
+      "right": "flame2-rff-9775",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-9597",
+      "right": "flame2-rff-9715",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-9597",
+      "right": "flame2-rff-9775",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-9715",
+      "right": "flame2-rff-9775",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-9903",
+      "right": "flame2-rff-9940",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-10138",
+      "right": "flame2-rff-10141",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-10230",
+      "right": "flame2-rff-10236",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-10230",
+      "right": "flame2-rff-10273",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-10230",
+      "right": "flame2-rff-10341",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-10230",
+      "right": "flame2-rff-10417",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-10230",
+      "right": "flame2-rff-10445",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-10236",
+      "right": "flame2-rff-10273",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-10236",
+      "right": "flame2-rff-10341",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-10236",
+      "right": "flame2-rff-10417",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-10236",
+      "right": "flame2-rff-10445",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-10273",
+      "right": "flame2-rff-10341",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-10273",
+      "right": "flame2-rff-10417",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-10273",
+      "right": "flame2-rff-10445",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-10341",
+      "right": "flame2-rff-10417",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-10341",
+      "right": "flame2-rff-10445",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-10417",
+      "right": "flame2-rff-10445",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-10679",
+      "right": "flame2-rff-10692",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-10679",
+      "right": "flame2-rff-10694",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-10679",
+      "right": "flame2-rff-10698",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-10692",
+      "right": "flame2-rff-10694",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-10692",
+      "right": "flame2-rff-10698",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-10694",
+      "right": "flame2-rff-10698",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-10881",
+      "right": "flame2-rff-10903",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-10881",
+      "right": "flame2-rff-10908",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-10881",
+      "right": "flame2-rff-10923",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-10903",
+      "right": "flame2-rff-10908",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-10903",
+      "right": "flame2-rff-10915",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-10903",
+      "right": "flame2-rff-10923",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-10908",
+      "right": "flame2-rff-10915",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-10908",
+      "right": "flame2-rff-10923",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-10915",
+      "right": "flame2-rff-10923",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-10915",
+      "right": "flame2-rff-10977",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-10915",
+      "right": "flame2-rff-10996",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-10915",
+      "right": "flame2-rff-11001",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-10915",
+      "right": "flame2-rff-11009",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-10915",
+      "right": "flame2-rff-11017",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-10915",
+      "right": "flame2-rff-11132",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-10915",
+      "right": "flame2-rff-11196",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-10923",
+      "right": "flame2-rff-10977",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-10977",
+      "right": "flame2-rff-10996",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-10977",
+      "right": "flame2-rff-11001",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-10977",
+      "right": "flame2-rff-11009",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-10977",
+      "right": "flame2-rff-11017",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-10977",
+      "right": "flame2-rff-11099",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-10977",
+      "right": "flame2-rff-11132",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-10977",
+      "right": "flame2-rff-11196",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-10977",
+      "right": "flame2-rff-11216",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-10996",
+      "right": "flame2-rff-11001",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-10996",
+      "right": "flame2-rff-11009",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-10996",
+      "right": "flame2-rff-11017",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-10996",
+      "right": "flame2-rff-11099",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-10996",
+      "right": "flame2-rff-11132",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-10996",
+      "right": "flame2-rff-11196",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-10996",
+      "right": "flame2-rff-11216",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-11001",
+      "right": "flame2-rff-11009",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-11001",
+      "right": "flame2-rff-11017",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-11001",
+      "right": "flame2-rff-11099",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-11001",
+      "right": "flame2-rff-11132",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-11001",
+      "right": "flame2-rff-11196",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-11001",
+      "right": "flame2-rff-11216",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-11009",
+      "right": "flame2-rff-11017",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-11009",
+      "right": "flame2-rff-11099",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-11009",
+      "right": "flame2-rff-11132",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-11009",
+      "right": "flame2-rff-11196",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-11009",
+      "right": "flame2-rff-11216",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-11017",
+      "right": "flame2-rff-11099",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-11017",
+      "right": "flame2-rff-11132",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-11017",
+      "right": "flame2-rff-11196",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-11017",
+      "right": "flame2-rff-11216",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-11099",
+      "right": "flame2-rff-11132",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-11099",
+      "right": "flame2-rff-11196",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-11099",
+      "right": "flame2-rff-11216",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-11132",
+      "right": "flame2-rff-11196",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-11132",
+      "right": "flame2-rff-11216",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-11196",
+      "right": "flame2-rff-11216",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-11438",
+      "right": "flame2-rff-11454",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-11438",
+      "right": "flame2-rff-11485",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-11438",
+      "right": "flame2-rff-11579",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-11438",
+      "right": "flame2-rff-11706",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-11454",
+      "right": "flame2-rff-11485",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-11454",
+      "right": "flame2-rff-11579",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-11454",
+      "right": "flame2-rff-11706",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-11485",
+      "right": "flame2-rff-11579",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-11485",
+      "right": "flame2-rff-11706",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-11579",
+      "right": "flame2-rff-11706",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-11837",
+      "right": "flame2-rff-11853",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-12269",
+      "right": "flame2-rff-12285",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-12350",
+      "right": "flame2-rff-32620",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-12428",
+      "right": "flame2-rff-12437",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-12428",
+      "right": "flame2-rff-12441",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-12437",
+      "right": "flame2-rff-12441",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-12716",
+      "right": "flame2-rff-12738",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-12738",
+      "right": "flame2-rff-12746",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-12820",
+      "right": "flame2-rff-12826",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-13225",
+      "right": "flame2-rff-13273",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-13225",
+      "right": "flame2-rff-13319",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-13225",
+      "right": "flame2-rff-13328",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-13225",
+      "right": "flame2-rff-13346",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-13225",
+      "right": "flame2-rff-13377",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-13225",
+      "right": "flame2-rff-13641",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-13225",
+      "right": "flame2-rff-13644",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-13273",
+      "right": "flame2-rff-13319",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-13273",
+      "right": "flame2-rff-13328",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-13273",
+      "right": "flame2-rff-13346",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-13273",
+      "right": "flame2-rff-13377",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-13273",
+      "right": "flame2-rff-13641",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-13273",
+      "right": "flame2-rff-13644",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-13319",
+      "right": "flame2-rff-13328",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-13319",
+      "right": "flame2-rff-13346",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-13319",
+      "right": "flame2-rff-13377",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-13319",
+      "right": "flame2-rff-13641",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-13319",
+      "right": "flame2-rff-13644",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-13328",
+      "right": "flame2-rff-13346",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-13328",
+      "right": "flame2-rff-13377",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-13328",
+      "right": "flame2-rff-13641",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-13328",
+      "right": "flame2-rff-13644",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-13346",
+      "right": "flame2-rff-13377",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-13346",
+      "right": "flame2-rff-13641",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-13346",
+      "right": "flame2-rff-13644",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-13377",
+      "right": "flame2-rff-13641",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-13377",
+      "right": "flame2-rff-13644",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-13641",
+      "right": "flame2-rff-13644",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-13846",
+      "right": "flame2-rff-13868",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-14022",
+      "right": "flame2-rff-14025",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-14432",
+      "right": "flame2-rff-14439",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-14462",
+      "right": "flame2-rff-14464",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-14946",
+      "right": "flame2-rff-14987",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-14946",
+      "right": "flame2-rff-14990",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-14946",
+      "right": "flame2-rff-15169",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-14946",
+      "right": "flame2-rff-15405",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-14987",
+      "right": "flame2-rff-14990",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-14987",
+      "right": "flame2-rff-15169",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-14990",
+      "right": "flame2-rff-15169",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-15114",
+      "right": "flame2-rff-15125",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-15114",
+      "right": "flame2-rff-15169",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-15114",
+      "right": "flame2-rff-15178",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-15114",
+      "right": "flame2-rff-15179",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-15114",
+      "right": "flame2-rff-15183",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-15114",
+      "right": "flame2-rff-15197",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-15114",
+      "right": "flame2-rff-15201",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-15114",
+      "right": "flame2-rff-15242",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-15125",
+      "right": "flame2-rff-15169",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-15125",
+      "right": "flame2-rff-15178",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-15125",
+      "right": "flame2-rff-15179",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-15125",
+      "right": "flame2-rff-15183",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-15125",
+      "right": "flame2-rff-15197",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-15125",
+      "right": "flame2-rff-15201",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-15125",
+      "right": "flame2-rff-15242",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-15125",
+      "right": "flame2-rff-15405",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-15125",
+      "right": "flame2-rff-15461",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-15169",
+      "right": "flame2-rff-15178",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-15169",
+      "right": "flame2-rff-15179",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-15169",
+      "right": "flame2-rff-15183",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-15169",
+      "right": "flame2-rff-15197",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-15169",
+      "right": "flame2-rff-15201",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-15169",
+      "right": "flame2-rff-15242",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-15169",
+      "right": "flame2-rff-15405",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-15169",
+      "right": "flame2-rff-15461",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-15178",
+      "right": "flame2-rff-15179",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-15178",
+      "right": "flame2-rff-15183",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-15178",
+      "right": "flame2-rff-15197",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-15178",
+      "right": "flame2-rff-15201",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-15178",
+      "right": "flame2-rff-15242",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-15178",
+      "right": "flame2-rff-15341",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-15178",
+      "right": "flame2-rff-15405",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-15178",
+      "right": "flame2-rff-15461",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-15179",
+      "right": "flame2-rff-15183",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-15179",
+      "right": "flame2-rff-15197",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-15179",
+      "right": "flame2-rff-15201",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-15179",
+      "right": "flame2-rff-15242",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-15179",
+      "right": "flame2-rff-15341",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-15179",
+      "right": "flame2-rff-15405",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-15179",
+      "right": "flame2-rff-15461",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-15183",
+      "right": "flame2-rff-15197",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-15183",
+      "right": "flame2-rff-15201",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-15183",
+      "right": "flame2-rff-15242",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-15183",
+      "right": "flame2-rff-15341",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-15183",
+      "right": "flame2-rff-15405",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-15183",
+      "right": "flame2-rff-15461",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-15197",
+      "right": "flame2-rff-15201",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-15197",
+      "right": "flame2-rff-15242",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-15197",
+      "right": "flame2-rff-15341",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-15197",
+      "right": "flame2-rff-15405",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-15197",
+      "right": "flame2-rff-15461",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-15201",
+      "right": "flame2-rff-15242",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-15201",
+      "right": "flame2-rff-15341",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-15201",
+      "right": "flame2-rff-15405",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-15201",
+      "right": "flame2-rff-15461",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-15242",
+      "right": "flame2-rff-15341",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-15242",
+      "right": "flame2-rff-15405",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-15242",
+      "right": "flame2-rff-15461",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-15341",
+      "right": "flame2-rff-15405",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-15405",
+      "right": "flame2-rff-15461",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-15702",
+      "right": "flame2-rff-15726",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-15702",
+      "right": "flame2-rff-15768",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-15726",
+      "right": "flame2-rff-15768",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-16271",
+      "right": "flame2-rff-16273",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-16271",
+      "right": "flame2-rff-16275",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-16273",
+      "right": "flame2-rff-16275",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-17325",
+      "right": "flame2-rff-17330",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-17372",
+      "right": "flame2-rff-17375",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-18036",
+      "right": "flame2-rff-18041",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-18036",
+      "right": "flame2-rff-18044",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-18041",
+      "right": "flame2-rff-18044",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-18041",
+      "right": "flame2-rff-18052",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-18044",
+      "right": "flame2-rff-18052",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-19317",
+      "right": "flame2-rff-19318",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-19497",
+      "right": "flame2-rff-19503",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-19497",
+      "right": "flame2-rff-19509",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-19503",
+      "right": "flame2-rff-19509",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-19509",
+      "right": "flame2-rff-19512",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-19509",
+      "right": "flame2-rff-19521",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-19512",
+      "right": "flame2-rff-19521",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-19620",
+      "right": "flame2-rff-19630",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-20028",
+      "right": "flame2-rff-20037",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-20037",
+      "right": "flame2-rff-20058",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-20194",
+      "right": "flame2-rff-20195",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-20504",
+      "right": "flame2-rff-20523",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-20523",
+      "right": "flame2-rff-20534",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-20578",
+      "right": "flame2-rff-20592",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-20592",
+      "right": "flame2-rff-20627",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-20627",
+      "right": "flame2-rff-20648",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-21166",
+      "right": "flame2-rff-21170",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-21249",
+      "right": "flame2-rff-21256",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-21645",
+      "right": "flame2-rff-21656",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-21790",
+      "right": "flame2-rff-21801",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-21851",
+      "right": "flame2-rff-21861",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-22069",
+      "right": "flame2-rff-22090",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-22090",
+      "right": "flame2-rff-22114",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-22114",
+      "right": "flame2-rff-22121",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-22121",
+      "right": "flame2-rff-22138",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-22138",
+      "right": "flame2-rff-22150",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-22138",
+      "right": "flame2-rff-22155",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-22150",
+      "right": "flame2-rff-22155",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-22284",
+      "right": "flame2-rff-22306",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-22322",
+      "right": "flame2-rff-22331",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-22519",
+      "right": "flame2-rff-22537",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-22519",
+      "right": "flame2-rff-22550",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-22537",
+      "right": "flame2-rff-22550",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-22593",
+      "right": "flame2-rff-22597",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-22656",
+      "right": "flame2-rff-22661",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-22661",
+      "right": "flame2-rff-22705",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-22705",
+      "right": "flame2-rff-22714",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-22705",
+      "right": "flame2-rff-22776",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-22775",
+      "right": "flame2-rff-22776",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-22860",
+      "right": "flame2-rff-22870",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-23056",
+      "right": "flame2-rff-23068",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-23068",
+      "right": "flame2-rff-23104",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-23162",
+      "right": "flame2-rff-23183",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-23551",
+      "right": "flame2-rff-23562",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-23562",
+      "right": "flame2-rff-23564",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-23738",
+      "right": "flame2-rff-23749",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-24138",
+      "right": "flame2-rff-24144",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-24144",
+      "right": "flame2-rff-24153",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-24542",
+      "right": "flame2-rff-24555",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-24839",
+      "right": "flame2-rff-24845",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-24912",
+      "right": "flame2-rff-24913",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-25208",
+      "right": "flame2-rff-25221",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-25221",
+      "right": "flame2-rff-25229",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-25272",
+      "right": "flame2-rff-25280",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-25328",
+      "right": "flame2-rff-25352",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-25352",
+      "right": "flame2-rff-25364",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-25364",
+      "right": "flame2-rff-25369",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-25364",
+      "right": "flame2-rff-25371",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-25364",
+      "right": "flame2-rff-25375",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-25369",
+      "right": "flame2-rff-25371",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-25369",
+      "right": "flame2-rff-25375",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-25369",
+      "right": "flame2-rff-25387",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-25371",
+      "right": "flame2-rff-25375",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-25371",
+      "right": "flame2-rff-25387",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-25375",
+      "right": "flame2-rff-25387",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-25493",
+      "right": "flame2-rff-25496",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-25618",
+      "right": "flame2-rff-25630",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-25711",
+      "right": "flame2-rff-25731",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-26454",
+      "right": "flame2-rff-26467",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-27346",
+      "right": "flame2-rff-27353",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-27465",
+      "right": "flame2-rff-27468",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-28024",
+      "right": "flame2-rff-28051",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-28132",
+      "right": "flame2-rff-28136",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-28132",
+      "right": "flame2-rff-28146",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-28132",
+      "right": "flame2-rff-28159",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-28136",
+      "right": "flame2-rff-28146",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-28136",
+      "right": "flame2-rff-28159",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-28146",
+      "right": "flame2-rff-28159",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-28375",
+      "right": "flame2-rff-28392",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-29035",
+      "right": "flame2-rff-29055",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-29439",
+      "right": "flame2-rff-29446",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-29439",
+      "right": "flame2-rff-29452",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-29446",
+      "right": "flame2-rff-29452",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-29854",
+      "right": "flame2-rff-29856",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-30733",
+      "right": "flame2-rff-30741",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-31635",
+      "right": "flame2-rff-31648",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-31800",
+      "right": "flame2-rff-31805",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-31964",
+      "right": "flame2-rff-32009",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-31964",
+      "right": "flame2-rff-32010",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-32009",
+      "right": "flame2-rff-32010",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-32094",
+      "right": "flame2-rff-32107",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-32094",
+      "right": "flame2-rff-32175",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-32107",
+      "right": "flame2-rff-32175",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-32549",
+      "right": "flame2-rff-32620",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-32771",
+      "right": "flame2-rff-32779",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-32779",
+      "right": "flame2-rff-32899",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-32899",
+      "right": "flame2-rff-32914",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-34487",
+      "right": "flame2-rff-34495",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-34495",
+      "right": "flame2-rff-34518",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-34518",
+      "right": "flame2-rff-34560",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-34560",
+      "right": "flame2-rff-34576",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-34670",
+      "right": "flame2-rff-34678",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-35012",
+      "right": "flame2-rff-35032",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-35408",
+      "right": "flame2-rff-35416",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-36164",
+      "right": "flame2-rff-36165",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-36573",
+      "right": "flame2-rff-36574",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-36573",
+      "right": "flame2-rff-36605",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-36574",
+      "right": "flame2-rff-36605",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-36632",
+      "right": "flame2-rff-36640",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-36949",
+      "right": "flame2-rff-36963",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-37203",
+      "right": "flame2-rff-37217",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-37203",
+      "right": "flame2-rff-37224",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-37217",
+      "right": "flame2-rff-37224",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-37448",
+      "right": "flame2-rff-37468",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-37580",
+      "right": "flame2-rff-37602",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-38212",
+      "right": "flame2-rff-38252",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-38334",
+      "right": "flame2-rff-38355",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-38334",
+      "right": "flame2-rff-38407",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-38355",
+      "right": "flame2-rff-38407",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-39112",
+      "right": "flame2-rff-39114",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-40339",
+      "right": "flame2-rff-40346",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-40339",
+      "right": "flame2-rff-40349",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-40346",
+      "right": "flame2-rff-40349",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-40374",
+      "right": "flame2-rff-40383",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-40407",
+      "right": "flame2-rff-40525",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-40777",
+      "right": "flame2-rff-40798",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-40878",
+      "right": "flame2-rff-40891",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-40878",
+      "right": "flame2-rff-40896",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-40891",
+      "right": "flame2-rff-40896",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-40957",
+      "right": "flame2-rff-40965",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-40957",
+      "right": "flame2-rff-40975",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-40965",
+      "right": "flame2-rff-40975",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-41103",
+      "right": "flame2-rff-41136",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-41298",
+      "right": "flame2-rff-41305",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-41465",
+      "right": "flame2-rff-41476",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-41465",
+      "right": "flame2-rff-41494",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-41476",
+      "right": "flame2-rff-41494",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-41708",
+      "right": "flame2-rff-41725",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-41725",
+      "right": "flame2-rff-41726",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-41725",
+      "right": "flame2-rff-41738",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-41726",
+      "right": "flame2-rff-41738",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-41815",
+      "right": "flame2-rff-41817",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-41815",
+      "right": "flame2-rff-41826",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-41817",
+      "right": "flame2-rff-41826",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-41826",
+      "right": "flame2-rff-41829",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-41962",
+      "right": "flame2-rff-41970",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-41962",
+      "right": "flame2-rff-41990",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-41970",
+      "right": "flame2-rff-41990",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-41990",
+      "right": "flame2-rff-42000",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-42186",
+      "right": "flame2-rff-42204",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-42186",
+      "right": "flame2-rff-42215",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-42186",
+      "right": "flame2-rff-42216",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-42204",
+      "right": "flame2-rff-42215",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-42204",
+      "right": "flame2-rff-42216",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-42215",
+      "right": "flame2-rff-42216",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-42509",
+      "right": "flame2-rff-42515",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-43125",
+      "right": "flame2-rff-43140",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-43306",
+      "right": "flame2-rff-43316",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-43673",
+      "right": "flame2-rff-43684",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-43673",
+      "right": "flame2-rff-43685",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-43684",
+      "right": "flame2-rff-43685",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-44063",
+      "right": "flame2-rff-44080",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-44080",
+      "right": "flame2-rff-44082",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-44273",
+      "right": "flame2-rff-44288",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-44273",
+      "right": "flame2-rff-44289",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-44288",
+      "right": "flame2-rff-44289",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-44345",
+      "right": "flame2-rff-44349",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-44587",
+      "right": "flame2-rff-44589",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-44783",
+      "right": "flame2-rff-44786",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-45548",
+      "right": "flame2-rff-45581",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-45548",
+      "right": "flame2-rff-45591",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-45581",
+      "right": "flame2-rff-45591",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-46026",
+      "right": "flame2-rff-46031",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-46026",
+      "right": "flame2-rff-46048",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-46026",
+      "right": "flame2-rff-46061",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-46031",
+      "right": "flame2-rff-46048",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-46031",
+      "right": "flame2-rff-46061",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-46048",
+      "right": "flame2-rff-46061",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-46445",
+      "right": "flame2-rff-46455",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-46494",
+      "right": "flame2-rff-46538",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-46494",
+      "right": "flame2-rff-49872",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-46606",
+      "right": "flame2-rff-46623",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-46606",
+      "right": "flame2-rff-46691",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-46606",
+      "right": "flame2-rff-47777",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-46606",
+      "right": "flame2-rff-48597",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-46606",
+      "right": "flame2-rff-48683",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-46606",
+      "right": "flame2-rff-48759",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-46606",
+      "right": "flame2-rff-48796",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-46606",
+      "right": "flame2-rff-48841",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-46606",
+      "right": "flame2-rff-48861",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-46606",
+      "right": "flame2-rff-49316",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-46606",
+      "right": "flame2-rff-49324",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-46606",
+      "right": "flame2-rff-49344",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-46606",
+      "right": "flame2-rff-49351",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-46606",
+      "right": "flame2-rff-49393",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-46606",
+      "right": "flame2-rff-49673",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-46623",
+      "right": "flame2-rff-46691",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-46623",
+      "right": "flame2-rff-47777",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-46623",
+      "right": "flame2-rff-48597",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-46623",
+      "right": "flame2-rff-48683",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-46623",
+      "right": "flame2-rff-48759",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-46623",
+      "right": "flame2-rff-48796",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-46623",
+      "right": "flame2-rff-48841",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-46623",
+      "right": "flame2-rff-48861",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-46623",
+      "right": "flame2-rff-49316",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-46623",
+      "right": "flame2-rff-49324",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-46623",
+      "right": "flame2-rff-49344",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-46623",
+      "right": "flame2-rff-49351",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-46623",
+      "right": "flame2-rff-49393",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-46623",
+      "right": "flame2-rff-49673",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-46691",
+      "right": "flame2-rff-47850",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-46691",
+      "right": "flame2-rff-48597",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-46691",
+      "right": "flame2-rff-48683",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-46691",
+      "right": "flame2-rff-48796",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-46691",
+      "right": "flame2-rff-49324",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-46691",
+      "right": "flame2-rff-49344",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-46691",
+      "right": "flame2-rff-49393",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-46776",
+      "right": "flame2-rff-46787",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-46776",
+      "right": "flame2-rff-46806",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-46776",
+      "right": "flame2-rff-46830",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-46787",
+      "right": "flame2-rff-46806",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-46787",
+      "right": "flame2-rff-46917",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-46806",
+      "right": "flame2-rff-46830",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-46806",
+      "right": "flame2-rff-46889",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-46806",
+      "right": "flame2-rff-46917",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-46830",
+      "right": "flame2-rff-46889",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-46830",
+      "right": "flame2-rff-46917",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-46889",
+      "right": "flame2-rff-46917",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-46917",
+      "right": "flame2-rff-46937",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-46917",
+      "right": "flame2-rff-46956",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-46917",
+      "right": "flame2-rff-46967",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-46937",
+      "right": "flame2-rff-46956",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-46937",
+      "right": "flame2-rff-46967",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-46956",
+      "right": "flame2-rff-46967",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-47221",
+      "right": "flame2-rff-47243",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-47383",
+      "right": "flame2-rff-47394",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-47566",
+      "right": "flame2-rff-47581",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-47581",
+      "right": "flame2-rff-47598",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-47598",
+      "right": "flame2-rff-47621",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-47598",
+      "right": "flame2-rff-47647",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-47598",
+      "right": "flame2-rff-49373",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-47598",
+      "right": "flame2-rff-49393",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-47621",
+      "right": "flame2-rff-47643",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-47621",
+      "right": "flame2-rff-47647",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-47621",
+      "right": "flame2-rff-47700",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-47621",
+      "right": "flame2-rff-48597",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-47621",
+      "right": "flame2-rff-49154",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-47621",
+      "right": "flame2-rff-49316",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-47621",
+      "right": "flame2-rff-49324",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-47621",
+      "right": "flame2-rff-49393",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-47643",
+      "right": "flame2-rff-47647",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-47643",
+      "right": "flame2-rff-48576",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-47643",
+      "right": "flame2-rff-49316",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-47647",
+      "right": "flame2-rff-49324",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-47647",
+      "right": "flame2-rff-49393",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-47771",
+      "right": "flame2-rff-47777",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-47771",
+      "right": "flame2-rff-49324",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-47777",
+      "right": "flame2-rff-48841",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-47777",
+      "right": "flame2-rff-48861",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-47777",
+      "right": "flame2-rff-49316",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-47777",
+      "right": "flame2-rff-49324",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-47777",
+      "right": "flame2-rff-49351",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-47850",
+      "right": "flame2-rff-47932",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-47850",
+      "right": "flame2-rff-48021",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-47850",
+      "right": "flame2-rff-48683",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-47850",
+      "right": "flame2-rff-48796",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-47890",
+      "right": "flame2-rff-47932",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-47890",
+      "right": "flame2-rff-48021",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-47890",
+      "right": "flame2-rff-48597",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-47890",
+      "right": "flame2-rff-48841",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-47890",
+      "right": "flame2-rff-48861",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-47890",
+      "right": "flame2-rff-49016",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-47890",
+      "right": "flame2-rff-49053",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-47932",
+      "right": "flame2-rff-48021",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-47932",
+      "right": "flame2-rff-48597",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-47932",
+      "right": "flame2-rff-48841",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-47932",
+      "right": "flame2-rff-48861",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-47932",
+      "right": "flame2-rff-49016",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48021",
+      "right": "flame2-rff-48597",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48021",
+      "right": "flame2-rff-48683",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-48021",
+      "right": "flame2-rff-48841",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48021",
+      "right": "flame2-rff-48861",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48021",
+      "right": "flame2-rff-49016",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-48021",
+      "right": "flame2-rff-49373",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-48021",
+      "right": "flame2-rff-49393",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-48050",
+      "right": "flame2-rff-48102",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-48358",
+      "right": "flame2-rff-48462",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48576",
+      "right": "flame2-rff-48597",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-48576",
+      "right": "flame2-rff-48683",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48576",
+      "right": "flame2-rff-48796",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-48576",
+      "right": "flame2-rff-49316",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-48576",
+      "right": "flame2-rff-49344",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48576",
+      "right": "flame2-rff-49351",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-48576",
+      "right": "flame2-rff-49373",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48576",
+      "right": "flame2-rff-49393",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48597",
+      "right": "flame2-rff-48683",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-48597",
+      "right": "flame2-rff-48759",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-48597",
+      "right": "flame2-rff-48796",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-48597",
+      "right": "flame2-rff-48841",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-48597",
+      "right": "flame2-rff-48861",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-48597",
+      "right": "flame2-rff-49316",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-48597",
+      "right": "flame2-rff-49324",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48597",
+      "right": "flame2-rff-49344",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48597",
+      "right": "flame2-rff-49351",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-48597",
+      "right": "flame2-rff-49373",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48597",
+      "right": "flame2-rff-49393",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-48597",
+      "right": "flame2-rff-49434",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-48683",
+      "right": "flame2-rff-48759",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48683",
+      "right": "flame2-rff-48796",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-48683",
+      "right": "flame2-rff-48841",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48683",
+      "right": "flame2-rff-48861",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48683",
+      "right": "flame2-rff-49316",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48683",
+      "right": "flame2-rff-49324",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-48683",
+      "right": "flame2-rff-49344",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-48683",
+      "right": "flame2-rff-49351",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48683",
+      "right": "flame2-rff-49373",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-48683",
+      "right": "flame2-rff-49393",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-48683",
+      "right": "flame2-rff-49731",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-48759",
+      "right": "flame2-rff-48796",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-48759",
+      "right": "flame2-rff-48841",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-48759",
+      "right": "flame2-rff-48861",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-48759",
+      "right": "flame2-rff-49316",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-48759",
+      "right": "flame2-rff-49324",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48759",
+      "right": "flame2-rff-49344",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48759",
+      "right": "flame2-rff-49351",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-48759",
+      "right": "flame2-rff-49393",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48759",
+      "right": "flame2-rff-49434",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-48759",
+      "right": "flame2-rff-49456",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-48759",
+      "right": "flame2-rff-49613",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48759",
+      "right": "flame2-rff-49673",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-48759",
+      "right": "flame2-rff-49731",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48759",
+      "right": "flame2-rff-49766",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-48796",
+      "right": "flame2-rff-48841",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-48796",
+      "right": "flame2-rff-48861",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-48796",
+      "right": "flame2-rff-49316",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-48796",
+      "right": "flame2-rff-49324",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48796",
+      "right": "flame2-rff-49344",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48796",
+      "right": "flame2-rff-49351",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-48796",
+      "right": "flame2-rff-49393",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48796",
+      "right": "flame2-rff-49673",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-48841",
+      "right": "flame2-rff-48861",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-48841",
+      "right": "flame2-rff-49016",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48841",
+      "right": "flame2-rff-49316",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-48841",
+      "right": "flame2-rff-49324",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48841",
+      "right": "flame2-rff-49344",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48841",
+      "right": "flame2-rff-49351",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-48841",
+      "right": "flame2-rff-49373",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48841",
+      "right": "flame2-rff-49393",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48861",
+      "right": "flame2-rff-49016",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48861",
+      "right": "flame2-rff-49316",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-48861",
+      "right": "flame2-rff-49324",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48861",
+      "right": "flame2-rff-49344",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48861",
+      "right": "flame2-rff-49351",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-48861",
+      "right": "flame2-rff-49373",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-48861",
+      "right": "flame2-rff-49393",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-49016",
+      "right": "flame2-rff-49053",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-49016",
+      "right": "flame2-rff-49373",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-49016",
+      "right": "flame2-rff-49393",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-49016",
+      "right": "flame2-rff-49581",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-49016",
+      "right": "flame2-rff-49613",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-49053",
+      "right": "flame2-rff-49393",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-49053",
+      "right": "flame2-rff-49613",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-49316",
+      "right": "flame2-rff-49324",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-49316",
+      "right": "flame2-rff-49344",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-49316",
+      "right": "flame2-rff-49351",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-49316",
+      "right": "flame2-rff-49373",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-49316",
+      "right": "flame2-rff-49393",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-49316",
+      "right": "flame2-rff-49673",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-49316",
+      "right": "flame2-rff-49731",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-49316",
+      "right": "flame2-rff-49766",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-49324",
+      "right": "flame2-rff-49344",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-49324",
+      "right": "flame2-rff-49351",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-49324",
+      "right": "flame2-rff-49373",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-49324",
+      "right": "flame2-rff-49393",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-49324",
+      "right": "flame2-rff-49731",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-49344",
+      "right": "flame2-rff-49351",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-49344",
+      "right": "flame2-rff-49373",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-49344",
+      "right": "flame2-rff-49393",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-49344",
+      "right": "flame2-rff-49673",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-49344",
+      "right": "flame2-rff-49731",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-49344",
+      "right": "flame2-rff-49766",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-49351",
+      "right": "flame2-rff-49373",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-49351",
+      "right": "flame2-rff-49393",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-49351",
+      "right": "flame2-rff-49673",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-49351",
+      "right": "flame2-rff-49731",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-49351",
+      "right": "flame2-rff-49766",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-49373",
+      "right": "flame2-rff-49393",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-49373",
+      "right": "flame2-rff-49731",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-49393",
+      "right": "flame2-rff-49434",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-49393",
+      "right": "flame2-rff-49613",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-49393",
+      "right": "flame2-rff-49731",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-49434",
+      "right": "flame2-rff-49456",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-49434",
+      "right": "flame2-rff-49581",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-49434",
+      "right": "flame2-rff-49613",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-49456",
+      "right": "flame2-rff-49581",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-49456",
+      "right": "flame2-rff-49613",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-49581",
+      "right": "flame2-rff-49613",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-49673",
+      "right": "flame2-rff-49731",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-49673",
+      "right": "flame2-rff-49766",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-49731",
+      "right": "flame2-rff-49766",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-50181",
+      "right": "flame2-rff-50185",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-50271",
+      "right": "flame2-rff-50274",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-50396",
+      "right": "flame2-rff-50410",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-50396",
+      "right": "flame2-rff-50427",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-50410",
+      "right": "flame2-rff-50427",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-50473",
+      "right": "flame2-rff-50484",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-50657",
+      "right": "flame2-rff-50671",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-50657",
+      "right": "flame2-rff-50672",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-50671",
+      "right": "flame2-rff-50672",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-50803",
+      "right": "flame2-rff-50816",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-50865",
+      "right": "flame2-rff-50904",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-51536",
+      "right": "flame2-rff-51546",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-51536",
+      "right": "flame2-rff-51578",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-51536",
+      "right": "flame2-rff-51611",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-51546",
+      "right": "flame2-rff-51578",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-51546",
+      "right": "flame2-rff-51611",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-51546",
+      "right": "flame2-rff-51639",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-51578",
+      "right": "flame2-rff-51611",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-51578",
+      "right": "flame2-rff-51639",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-51611",
+      "right": "flame2-rff-51639",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-51903",
+      "right": "flame2-rff-51942",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-51903",
+      "right": "flame2-rff-51948",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-51903",
+      "right": "flame2-rff-51950",
+      "hamming_distance": 4
+    },
+    {
+      "left": "flame2-rff-51942",
+      "right": "flame2-rff-51948",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-51942",
+      "right": "flame2-rff-51950",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-51948",
+      "right": "flame2-rff-51950",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-52046",
+      "right": "flame2-rff-52053",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-52502",
+      "right": "flame2-rff-52558",
+      "hamming_distance": 3
+    },
+    {
+      "left": "flame2-rff-52811",
+      "right": "flame2-rff-52812",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-53024",
+      "right": "flame2-rff-53046",
+      "hamming_distance": 2
+    },
+    {
+      "left": "flame2-rff-53137",
+      "right": "flame2-rff-53148",
+      "hamming_distance": 0
+    },
+    {
+      "left": "flame2-rff-53137",
+      "right": "flame2-rff-53164",
+      "hamming_distance": 1
+    },
+    {
+      "left": "flame2-rff-53148",
+      "right": "flame2-rff-53164",
+      "hamming_distance": 1
+    }
+  ],
+  "method": "64-bit grayscale difference hash, 9x8 Lanczos thumbnail; Hamming distance <=4",
+  "interpretation": "Candidates for review, not proof of duplication or independence; no automatic removal."
+}
