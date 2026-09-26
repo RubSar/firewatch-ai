@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "event_id": "example-grid.updated-001",
+  "event_type": "grid.updated",
+  "tenant_id": "tenant-01",
+  "mission_id": "mission-001",
+  "session_id": null,
+  "analysis_run_id": "live-run-001",
+  "region_epoch": 1,
+  "owner_epoch": 1,
+  "occurred_at": "2026-09-26T12:00:00.000Z",
+  "received_at": "2026-09-26T12:00:00.100Z",
+  "produced_at": "2026-09-26T12:00:00.200Z",
+  "source_sequence": null,
+  "trace_id": "example-trace-001",
+  "causation_id": null,
+  "payload": {
+    "grid_id": "thermal-image-grid",
+    "grid_version": "v1",
+    "tile_id": "image-1842",
+    "revision": 1,
+    "base_revision": 0,
+    "coordinate_system": "image_pixels",
+    "crs": null,
+    "geolocation_status": "unavailable",
+    "geometry_ref": null,
+    "cells": [
+      {
+        "cell_id": "r13c02",
+        "observed_at": "2026-09-26T12:00:00.000Z",
+        "temperature_c": {
+          "min": 20,
+          "mean": 118.4,
+          "p95": 402.1,
+          "max": 573,
+          "accuracy_c": null,
+          "valid_fraction": 1,
+          "saturated": false,
+          "calibration_id": null,
+          "status": "source_values"
+        },
+        "material_fractions": [],
+        "tree_species": null,
+        "coverage_fraction": 1,
+        "stale": false,
+        "evidence_ids": [
+          "thermal-1842"
+        ]
+      }
+    ],
+    "cells_ref": null,
+    "weather_snapshot_id": null,
+    "projection_version": null
+  }
+}

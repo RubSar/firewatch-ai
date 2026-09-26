@@ -1,0 +1,293 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:firewatch:frame.ready:v1",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "event_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "event_type": {
+      "const": "frame.ready"
+    },
+    "tenant_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "mission_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "session_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "analysis_run_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "region_epoch": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "owner_epoch": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "occurred_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "received_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "produced_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source_sequence": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "trace_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "causation_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "frame_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "sensor_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "capture_clock_status": {
+          "enum": [
+            "synchronized",
+            "estimated",
+            "unknown"
+          ]
+        },
+        "clock_uncertainty_ms": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "source_ref": {
+          "type": "object",
+          "properties": {
+            "object_key": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4096
+            },
+            "object_version": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4096
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "byte_length": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "content_type": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4096
+            },
+            "encoding": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4096
+            }
+          },
+          "required": [
+            "object_key",
+            "object_version",
+            "sha256",
+            "byte_length",
+            "content_type",
+            "encoding"
+          ],
+          "additionalProperties": false
+        },
+        "decode_dependencies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "object_key": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 4096
+              },
+              "object_version": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 4096
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "byte_length": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "content_type": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 4096
+              },
+              "encoding": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 4096
+              }
+            },
+            "required": [
+              "object_key",
+              "object_version",
+              "sha256",
+              "byte_length",
+              "content_type",
+              "encoding"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 120
+        },
+        "source_frame_index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "codec": {
+          "enum": [
+            "h264",
+            "h265",
+            "rgb888",
+            "thermal_float32_c",
+            "thermal_uint16"
+          ]
+        },
+        "calibration_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "paired_thermal_frame_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "pairing_skew_ms": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "pose_snapshot_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "analysis_profile": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "deadline_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "frame_id",
+        "sensor_id",
+        "capture_clock_status",
+        "clock_uncertainty_ms",
+        "width",
+        "height",
+        "source_ref",
+        "decode_dependencies",
+        "source_frame_index",
+        "codec",
+        "calibration_id",
+        "paired_thermal_frame_id",
+        "pairing_skew_ms",
+        "pose_snapshot_id",
+        "analysis_profile",
+        "deadline_at"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schema_version",
+    "event_id",
+    "event_type",
+    "tenant_id",
+    "mission_id",
+    "session_id",
+    "analysis_run_id",
+    "region_epoch",
+    "owner_epoch",
+    "occurred_at",
+    "received_at",
+    "produced_at",
+    "source_sequence",
+    "trace_id",
+    "causation_id",
+    "payload"
+  ],
+  "additionalProperties": false
+}

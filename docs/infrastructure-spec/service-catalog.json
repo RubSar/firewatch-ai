@@ -1,0 +1,587 @@
+[
+  {
+    "id": "C01",
+    "name": "Identity and API gateway",
+    "layer": "Control",
+    "inputs": [],
+    "outputs": [
+      "audit.event"
+    ],
+    "interfaces": "HTTPS /v1/*; OIDC user tokens; device mTLS; upstream tenant identity propagated in verified service credentials.",
+    "state": "External identity provider plus versioned device grants; no application-session affinity.",
+    "partition_key": "Stateless request / connection.",
+    "scaling": "HPA on in-flight requests, request latency and connection count; minimum two production replicas.",
+    "failure_policy": "Fail closed for new sessions if authorization cannot be established. Existing short-lived grants work only until expiry; revocation bounds documented.",
+    "proposed_budget": "20 ms internal gateway overhead; excludes identity-provider login.",
+    "acceptance": "Forged tenant header rejected; cross-tenant object/mission access denied; expired device grant cannot renew.",
+    "requirements": [
+      "Authenticate people and devices separately; users receive mission-scoped read/review/admin roles.",
+      "Reject oversized bodies, unapproved content types and invalid identifiers before queueing. Rate limits per tenant and device.",
+      "Device data channels cannot invoke aircraft controls. Operator review writes require scope and an audit entry.",
+      "Use workload mTLS internally. Secrets stay out of URLs, telemetry, evidence paths and logs."
+    ]
+  },
+  {
+    "id": "C02",
+    "name": "Mission, session and admission registry",
+    "layer": "Control",
+    "inputs": [
+      "session.command"
+    ],
+    "outputs": [
+      "session.changed",
+      "session.command",
+      "audit.event"
+    ],
+    "interfaces": "POST /v1/missions; POST /v1/missions/{id}/sessions; POST /v1/sessions/{id}/close; internal ClaimShard/HeartbeatShard RPC.",
+    "state": "PostgreSQL missions, sessions, capacity reservations, region directory, shard_leases and transactional outbox.",
+    "partition_key": "Tenant + mission; unique session IDs and service-specific shard leases.",
+    "scaling": "Stateless API replicas, transactional primary. Capacity reservations use CAS to avoid overbooking; DB sharding by tenant/mission when measured limits are reached.",
+    "failure_policy": "No new session when reservation/lease persistence unavailable. Existing workers retain cached policy only while their leases remain valid.",
+    "proposed_budget": "Session admission p95 <=500 ms excluding device authentication and model warmup.",
+    "acceptance": "Two simultaneous admissions cannot consume the same last capacity slot; expired old owner cannot commit state.",
+    "requirements": [
+      "Session admission negotiates exact source rates, frame accounting mode, calibration, model manifest and recovery policy.",
+      "Return NOT_READY with retry information when models/storage are not warm; never advertise unreserved every-frame capacity.",
+      "Increment mission region epoch on failover and owner epoch on stateful worker transfer.",
+      "Active sessions: STARTING, ACTIVE, DEGRADED, DRAINING, CLOSED; transitions are versioned and audited."
+    ]
+  },
+  {
+    "id": "C03",
+    "name": "Sensor calibration registry",
+    "layer": "Control",
+    "inputs": [],
+    "outputs": [
+      "calibration.changed",
+      "audit.event"
+    ],
+    "interfaces": "POST /v1/calibrations; GET /v1/calibrations/{id}; internal immutable GetCalibration.",
+    "state": "Immutable calibration metadata in PostgreSQL; calibration files in object storage.",
+    "partition_key": "Tenant + sensor + calibration version.",
+    "scaling": "Stateless replicas and immutable read caches; write workload small.",
+    "failure_policy": "Missing or incompatible calibration marks measurements/projection unavailable; never substitute another camera calibration.",
+    "proposed_budget": "Cache-hit lookup <=10 ms; not called remotely for every frame.",
+    "acceptance": "Wrong sensor serial, lens, gain mode or validity interval rejected; old results retain original calibration reference.",
+    "requirements": [
+      "Store camera intrinsics, distortion, inter-sensor extrinsics, gimbal/body transforms, time offsets and uncertainty.",
+      "Radiometry includes conversion definition, supported gain/range, emissivity assumptions, reflected/atmospheric settings and saturation values.",
+      "Approval creates a new immutable version; activation takes effect at a recorded frame boundary.",
+      "Retain field validation status; possession of a calibration file does not prove current measurement accuracy."
+    ]
+  },
+  {
+    "id": "C04",
+    "name": "Model and policy registry",
+    "layer": "Control",
+    "inputs": [],
+    "outputs": [
+      "deployment.changed",
+      "audit.event"
+    ],
+    "interfaces": "POST /v1/deployments; GET /v1/deployments/{id}; internal model readiness/status.",
+    "state": "Signed artifact manifests; object-store model weights; PostgreSQL approved deployments and evaluation links.",
+    "partition_key": "Model family + immutable version + hardware profile.",
+    "scaling": "Stateless control replicas; downloads cached per inference node; pre-warm bounded rollout waves.",
+    "failure_policy": "Retain previous approved model on failed rollout; no live fallback to random weights or unapproved model.",
+    "proposed_budget": "Off critical path; activation only after readiness and canary gates.",
+    "acceptance": "Artifact hash failure blocks activation; incompatible class map rejected; rollback restores exact preprocessing and model set.",
+    "requirements": [
+      "Manifest pins weights, runtime/container digest, class taxonomy, normalization, input shape, thresholds and license/provenance.",
+      "Temporal models require explicit state schema and sequence recovery support. Baseline models are stateless.",
+      "Switching versions creates a processing boundary; P05 resets incompatible state and reports the reset.",
+      "Species, smoke and flame models have independent availability and evaluation gates."
+    ]
+  },
+  {
+    "id": "I01",
+    "name": "Media session gateway",
+    "layer": "Ingestion",
+    "inputs": [
+      "session.changed"
+    ],
+    "outputs": [
+      "archive.request",
+      "media.segment.ready",
+      "stream.health",
+      "audit.event"
+    ],
+    "interfaces": "Vendor adapter / RTSP / RTMP / SRT as negotiated; internal session route; separate browser preview egress.",
+    "state": "Connection and codec state on one worker; durable session ownership in C02; local bounded spool.",
+    "partition_key": "Tenant + mission + session + RGB sensor.",
+    "scaling": "Add session workers based on admitted stream count, bitrate and measured decoder capacity. Existing connections drain; they are not moved by ordinary HTTP load balancing.",
+    "failure_policy": "Reconnect creates explicit sequence discontinuity. No arbitrary mid-GOP resume; request/await keyframe. Record source gaps and buffering age.",
+    "proposed_budget": "Ingress framing/dispatch allocation 100 ms; transport budget measured separately.",
+    "acceptance": "Worker termination yields a visible gap/reconnect; no two active writers under the same ownership epoch.",
+    "requirements": [
+      "Validate codec, dimensions, frame rates and decoder resource limits against the mission contract.",
+      "Pass the low-latency encoded stream to the assigned P01 decoder; evidence segments are committed through I04 before ready events.",
+      "Keep live display fan-out separate from analytical decoding so slow viewers cannot block analysis.",
+      "RTMP/RTSP alone does not establish live radiometric access; I03 uses its own capability negotiation."
+    ]
+  },
+  {
+    "id": "I02",
+    "name": "Telemetry and environmental ingress",
+    "layer": "Ingestion",
+    "inputs": [],
+    "outputs": [
+      "input.gap",
+      "stream.health",
+      "telemetry.normalized",
+      "audit.event"
+    ],
+    "interfaces": "MQTT/TLS device topics or SDK adapter; optional gRPC batch ingestion; ACK includes highest durably accepted sequence.",
+    "state": "Deduplication window and durable source-sequence index; Kafka normalized stream.",
+    "partition_key": "Tenant + mission + session + sensor.",
+    "scaling": "Replicas scale by messages/s, connections and broker lag; distributed MQTT broker or connection routing handles client placement.",
+    "failure_policy": "Reject impossible units/shape, preserve invalid measurement flags. Broker outage causes bounded gateway spool; acknowledge only durable acceptance.",
+    "proposed_budget": "Normalize and durable publish <=100 ms under admitted load.",
+    "acceptance": "Duplicate sequence is idempotent; boot-time clocks remain distinguishable from UTC; estimated wind cannot be labelled measured.",
+    "requirements": [
+      "Normalize pose, GNSS accuracy, gimbal attitude, velocity, air temperature, humidity and wind, preserving original vendor fields in evidence.",
+      "Specify coordinate conventions: NED/ENU/body axes, quaternion order, height datum and wind toward/from convention.",
+      "Maintain per-source clock mapping and uncertainty; report reset/wrap events instead of forcing monotonic wall-clock values.",
+      "No hard-coded relationship between API weather and local wind observations."
+    ]
+  },
+  {
+    "id": "I03",
+    "name": "Radiometric ingress",
+    "layer": "Ingestion",
+    "inputs": [],
+    "outputs": [
+      "archive.request",
+      "input.gap",
+      "stream.health",
+      "thermal.ready",
+      "audit.event"
+    ],
+    "interfaces": "Vendor radiometry SDK / USB-UVC Y16 gateway / authenticated binary gRPC; optional R-JPEG upload path explicitly labelled still-image mode.",
+    "state": "Immutable binary batches in hot store; sequence manifest and original sensor settings.",
+    "partition_key": "Tenant + mission + session + thermal sensor.",
+    "scaling": "CPU/I/O workers scale by pixels/s, ingest bandwidth and storage latency; stream order tracked per source.",
+    "failure_policy": "Unknown encoding or gain setting quarantines measurement conversion. Saturated/invalid pixels retain masks. Partial uploads never publish ready.",
+    "proposed_budget": "Batch dwell <=100 ms; durable upload/read publication within measured ingest budget.",
+    "acceptance": "Truncated payload and checksum mismatch rejected; colorized image cannot satisfy radiometric capability.",
+    "requirements": [
+      "Preserve original raw counts when supplied; derived Celsius arrays include exact conversion and calibration references.",
+      "Specify dtype, shape, row stride, endianness, compression, invalid-value mask and range/gain for every batch.",
+      "Support multipart/retried uploads by stable payload identity and digest; same ID with different bytes is an error.",
+      "Validate sensor-specific formats through adapters rather than one universal counts-to-Celsius formula."
+    ]
+  },
+  {
+    "id": "I04",
+    "name": "Evidence archive and lifecycle",
+    "layer": "Ingestion",
+    "inputs": [
+      "archive.request"
+    ],
+    "outputs": [
+      "evidence.ready",
+      "stream.health",
+      "audit.event"
+    ],
+    "interfaces": "Internal CommitEvidence / PinEvidence / ResolveEvidence; object read tokens issued through authorized API.",
+    "state": "Object store originals, immutable manifests, PostgreSQL retention pins and archive outbox.",
+    "partition_key": "Tenant + mission + session + segment ID.",
+    "scaling": "Stateless writers scale by bytes/s and upload age; lifecycle jobs shard by tenant/time prefix.",
+    "failure_policy": "Retry with the same object identity; media backlog is bounded and explicitly signalled. Durable object-write ACK is distinct from merely queued archive work.",
+    "proposed_budget": "Live short analysis batches do not await closed multi-second archive segments.",
+    "acceptance": "Object exists/checksum validated before ready event; retention cannot delete pinned evidence or active replay inputs.",
+    "requirements": [
+      "Keep original RGB encoded segments, raw thermal data, telemetry and mappings from frame IDs to source offsets.",
+      "Publish evidence state as pending, committed, unavailable or expired; never show a broken link as available evidence.",
+      "Archive high-water marks make recovery gaps visible; offsite replication has its own completion watermark.",
+      "Garbage-collect orphaned uploads only after a grace period and manifest reconciliation."
+    ]
+  },
+  {
+    "id": "P01",
+    "name": "Decode, frame accounting and synchronization",
+    "layer": "Processing",
+    "inputs": [
+      "media.segment.ready",
+      "thermal.ready",
+      "telemetry.normalized",
+      "input.gap"
+    ],
+    "outputs": [
+      "archive.request",
+      "frame.accounted",
+      "frame.ready",
+      "input.gap",
+      "audit.event"
+    ],
+    "interfaces": "Assigned live media channel from I01; consume source metadata; publish durable frame-batch references.",
+    "state": "Codec state, bounded event-time buffers, source indices, pose cache and checkpoint/outbox per shard.",
+    "partition_key": "Tenant + mission + session + analysis run.",
+    "scaling": "Scale sessions across CPU/media nodes; each decoder has measured codec/resolution capacity. GPU decode may use a distinct media pool.",
+    "failure_policy": "Wait up to configured synchronization deadline, then publish partial bundle with missing modalities. Late data enters revision/replay flow, never an unmarked old live update.",
+    "proposed_budget": "Proposed pairing tolerance 100 ms and wait cap 150 ms; both are configurable and must be validated against motion and camera timing.",
+    "acceptance": "Out-of-order telemetry pairs by capture time; pose outside interpolation bounds is unavailable; every RGB sequence has an accounting record.",
+    "requirements": [
+      "Decode all admitted RGB frames. Strict mode schedules fire/smoke inference for every received frame; vegetation sampling is separately declared.",
+      "Thermal reuse for nearby RGB frames carries its original timestamp, thermal frame ID and delta; reused data is not a new temperature measurement.",
+      "Nearest-frame and pose interpolation policies record temporal uncertainty and do not extrapolate across unbounded gaps.",
+      "Publish durable encoded-source frame references with keyframe dependency ranges; decoded tensors remain bounded transient cache entries. Cross-node tensor transfers are counted in capacity.py.",
+      "Live deadline failures produce explicit failed/late records. Deferred replay must not claim the original live deadline was met."
+    ]
+  },
+  {
+    "id": "P02",
+    "name": "Thermal measurement and hotspot candidates",
+    "layer": "Processing",
+    "inputs": [
+      "frame.ready"
+    ],
+    "outputs": [
+      "thermal.observation",
+      "audit.event"
+    ],
+    "interfaces": "Consume bundles with radiometric references; no LLM dependency.",
+    "state": "Stateless raster calculations; immutable thermal observation output and input deduplication ledger.",
+    "partition_key": "Thermal frame ID + calibration version + thermal algorithm version + analysis run.",
+    "scaling": "CPU workers scale on megapixels/s and queue age; vectorized NumPy/C++ implementation; GPU optional only after profiling.",
+    "failure_policy": "Calibration missing: preserve raw evidence and mark Celsius unavailable. Saturation produces bounds/flags, not a precise false maximum.",
+    "proposed_budget": "Thermal computation allocation <=50 ms per frame at benchmarked resolution.",
+    "acceptance": "Known raster fixtures reproduce cell statistics; invalid/saturated pixels and all-invalid cells handled explicitly.",
+    "requirements": [
+      "Calculate min, mean, p95, max, valid fraction and configurable anomaly masks; never replace raw measurements with VLM estimates.",
+      "Thresholds are versioned candidate-generation rules, not universal ignition temperatures.",
+      "Image-space cell aggregation covers every source pixel exactly once under a documented edge policy.",
+      "A thermal frame reused in six RGB bundles computes once; duplicate derived observations do not inflate persistence."
+    ]
+  },
+  {
+    "id": "P03",
+    "name": "Vision inference orchestration",
+    "layer": "Processing",
+    "inputs": [
+      "frame.ready"
+    ],
+    "outputs": [
+      "frame.accounted",
+      "vision.observation",
+      "audit.event"
+    ],
+    "interfaces": "Consumes tasks and invokes Triton HTTP/gRPC with immutable model ID, request ID and deadline.",
+    "state": "Stateless requests; durable idempotent output identity and accounting outbox.",
+    "partition_key": "Analysis run + model deployment + frame ID + tile ID.",
+    "scaling": "Worker replicas scale by remaining-deadline backlog; GPU serving capacity is separately controlled. Bound in-flight calls per GPU endpoint.",
+    "failure_policy": "One bounded retry only when enough deadline remains. Timeout yields failed inference state; never publish an empty successful detection set.",
+    "proposed_budget": "Combined vision queue/inference/postprocess allocation <=350 ms; model-dependent target, not benchmark result.",
+    "acceptance": "Delayed inference cannot overwrite newer observations; failed model does not become no-fire; tiling inverse transform checked.",
+    "requirements": [
+      "Fire/smoke fresh inference follows strict frame coverage contract; vegetation/species cadence is independently reported.",
+      "Preprocessing preserves aspect ratio, color space and inverse mapping into original pixels.",
+      "Merge overlapping tile detections/masks deterministically and record model score semantics.",
+      "Unsupported or out-of-distribution species identification returns unknown; preserve broad vegetation classes separately."
+    ]
+  },
+  {
+    "id": "P04",
+    "name": "GPU model serving",
+    "layer": "Processing",
+    "inputs": [],
+    "outputs": [
+      "audit.event"
+    ],
+    "interfaces": "Triton model inference endpoints; health/readiness/metrics; only approved P03 service identities.",
+    "state": "Loaded immutable weights, engines, GPU memory and bounded scheduler queues. No mission truth stored here.",
+    "partition_key": "Model version + hardware/shape profile; requests distributed among ready replicas.",
+    "scaling": "Dedicated GPU requests per pod; scale by deadline backlog, inference queue age and measured throughput. Warm minimum replicas and provision nodes before admission.",
+    "failure_policy": "OOM/unhealthy model instance removed from routing; drain endpoints before shutdown; failed calls return explicit error.",
+    "proposed_budget": "Batching delay initial ceiling 10 ms; tune from measured p95/p99 latency and throughput.",
+    "acceptance": "Real model warmup precedes readiness; loaded artifact hash matches registry; overload rejects promptly instead of unbounded queueing.",
+    "requirements": [
+      "Use dynamic batching for stateless models. Do not route sequence-dependent models as independent requests [S2].",
+      "No assumed linear scaling from GPU utilization alone; record memory, queue age, batch size and request rate.",
+      "Budget cold-start/model-download time in capacity reservations. Active critical deployments do not scale to zero.",
+      "TensorRT engines and precision changes require numerical and detection-quality regression evaluation."
+    ]
+  },
+  {
+    "id": "P05",
+    "name": "Evidence fusion and temporal tracking",
+    "layer": "Processing",
+    "inputs": [
+      "vision.observation",
+      "thermal.observation",
+      "input.gap"
+    ],
+    "outputs": [
+      "fused.observation",
+      "track.reset",
+      "audit.event"
+    ],
+    "interfaces": "Event consumer with result join by bundle/source IDs and bounded event-time reorder buffer.",
+    "state": "PostgreSQL checkpoint, tracker state blob, inbox and outbox under fenced shard ownership.",
+    "partition_key": "Tenant + mission + session + analysis run.",
+    "scaling": "One owner per session/run; scale across sessions. Batch transactions where safe; one hot session remains a measured limit.",
+    "failure_policy": "Join deadline produces partial result with missing evidence. Recovered tracker resets are explicit. Gap/stale evidence cannot clear an active fire candidate.",
+    "proposed_budget": "Fusion/reorder allowance <=150 ms; publish partial evidence without waiting for optional vegetation model.",
+    "acceptance": "Duplicate thermal reference does not count as repeated confirmation; camera motion is not reported as ground fire motion.",
+    "requirements": [
+      "Combine visual and thermal evidence without requiring both for every observation.",
+      "Track candidates across frames with source-specific timestamps and visibility; unknown/occluded is distinct from absent.",
+      "Correlated adjacent frames do not count as independent probability evidence; scores require calibration before probabilistic labels.",
+      "Checkpoint references model/calibration versions and next expected frame; late updates receive an observation revision."
+    ]
+  },
+  {
+    "id": "P06",
+    "name": "Georeferencing and footprint projection",
+    "layer": "Processing",
+    "inputs": [
+      "fused.observation"
+    ],
+    "outputs": [
+      "geo.observation",
+      "audit.event"
+    ],
+    "interfaces": "Consumes observations; reads immutable calibration, terrain and pose snapshots.",
+    "state": "Stateless projection tasks, bounded terrain/calibration caches and immutable results.",
+    "partition_key": "Observation ID + projection version + analysis run.",
+    "scaling": "CPU replicas scale by projection cost and terrain-cache hit rate; terrain tiles prefetched along mission AOI.",
+    "failure_policy": "Missing ground intersection, stale pose or excessive error returns image-space-only result and explicit reason.",
+    "proposed_budget": "Projection allowance <=100 ms on cached terrain.",
+    "acceptance": "Known surveyed targets verify error; degrees are never used as meters for area or distance; elevation datum mismatches rejected.",
+    "requirements": [
+      "Combine sensor intrinsics, gimbal/body transforms, GNSS/RTK pose and DEM/DSM; drone GPS alone is insufficient.",
+      "Record horizontal error estimate, calibration version, terrain version and geometry validity.",
+      "Image quadrants are not cardinal directions. Ground footprint can be null even with a valid thermal observation.",
+      "Use a suitable projected CRS for mission calculations; transform published GeoJSON into longitude/latitude order."
+    ]
+  },
+  {
+    "id": "P07",
+    "name": "Spatial grid materialization",
+    "layer": "Processing",
+    "inputs": [
+      "geo.observation",
+      "weather.snapshot",
+      "context.changed"
+    ],
+    "outputs": [
+      "grid.stale",
+      "grid.updated",
+      "audit.event"
+    ],
+    "interfaces": "Tile-keyed reducers; latest/history read projections served by D03.",
+    "state": "PostGIS tile/cell state, observation contribution index, revisions, inbox/outbox; large masks/raster tiles in object storage.",
+    "partition_key": "Tenant + mission + grid version + tile ID + analysis run.",
+    "scaling": "Scale reducers by occupied tile keys and queue age; fixed tile ownership; batch sparse deltas rather than per-cell DB roundtrips.",
+    "failure_policy": "Late contributions cannot regress current observation time. Missing coverage marks stale/unknown; version changes rebuild into a separate namespace.",
+    "proposed_budget": "Grid commit and outbox allowance <=100 ms per bounded delta batch.",
+    "acceptance": "Overlapping drones do not double-count area; stale packets cannot overwrite newer current cells; tile-edge objects retained.",
+    "requirements": [
+      "Preserve per-source contributions and uncertainty; max/mean temperature fusion must be explicitly defined and time-qualified.",
+      "Attach local weather references without inventing meter-scale wind from a kilometer-scale forecast.",
+      "Material fractions and material-specific temperatures require verified RGB/thermal registration; otherwise keep them separate.",
+      "Publish changed cells and coverage masks. All cells include observation age, footprint and grid resolution."
+    ]
+  },
+  {
+    "id": "X01",
+    "name": "Weather ingestion and cache",
+    "layer": "Context",
+    "inputs": [],
+    "outputs": [
+      "weather.snapshot",
+      "audit.event"
+    ],
+    "interfaces": "Provider HTTPS APIs; internal GetWeather for AOI/time; scheduled refresh with single-flight request deduplication.",
+    "state": "Versioned provider responses in object storage; PostGIS metadata by provider/grid/time; quota and refresh schedule.",
+    "partition_key": "Provider + source grid cell + model run + valid time.",
+    "scaling": "Workers scale by unique requested provider cells, not by drone count; shared requests amortized; honor provider quotas.",
+    "failure_policy": "Provider outage returns last available snapshot with age/stale flag. Forecast never relabelled as a local sensor observation.",
+    "proposed_budget": "Off per-frame critical path; cache lookup target <=20 ms.",
+    "acceptance": "Original issue/valid/fetch times preserved; historical replay cannot read a forecast issued after the replay decision time.",
+    "requirements": [
+      "Normalize wind vector/convention/height, air temperature, humidity, precipitation and available gusts.",
+      "Retain model resolution, provider, source licence/attribution and unit conversion version.",
+      "Refresh on actual provider publication cadence; polling every second does not generate new weather evidence [S8].",
+      "Local sensor disagreement is exposed; no silent averaging with forecast output."
+    ]
+  },
+  {
+    "id": "X02",
+    "name": "Terrain, fuel and reference-data catalog",
+    "layer": "Context",
+    "inputs": [],
+    "outputs": [
+      "context.changed",
+      "audit.event"
+    ],
+    "interfaces": "Internal immutable tile/reference retrieval; administrative dataset import and validation endpoints.",
+    "state": "Object-store terrain/fuel tiles; PostGIS footprint/version metadata and source attribution.",
+    "partition_key": "Dataset version + tile + coordinate/elevation reference system.",
+    "scaling": "Read replicas/cache/CDN for immutable tiles; imports separate from real-time serving.",
+    "failure_policy": "Missing/incompatible tiles produce unavailable context; never assume flat ground without explicit degraded-mode policy.",
+    "proposed_budget": "Prefetch outside hot path; cache-hit target <=20 ms.",
+    "acceptance": "Vertical datum and spatial resolution preserved; unlicensed/unapproved datasets cannot become active defaults.",
+    "requirements": [
+      "Terrain supports projection; vegetation/fuel maps provide contextual priors rather than current drone measurements.",
+      "Future ignition references distinguish material identity and test conditions; no universal ignition threshold is returned.",
+      "Dataset corrections create a version and optional backfill, not silent mutation of old evidence.",
+      "Expose uncertainty and date of collection so operators can distinguish outdated land cover."
+    ]
+  },
+  {
+    "id": "D01",
+    "name": "Incident correlation and decision rules",
+    "layer": "Delivery",
+    "inputs": [
+      "grid.updated",
+      "grid.stale",
+      "fused.observation",
+      "stream.health"
+    ],
+    "outputs": [
+      "incident.changed",
+      "notification.requested",
+      "audit.event"
+    ],
+    "interfaces": "POST /v1/incidents/{id}/reviews via gateway; mission-owned event processor; optimistic If-Match revision checks.",
+    "state": "Incident state/history, operator reviews, association/alias graph and outbox in PostgreSQL.",
+    "partition_key": "Tenant + mission + analysis run; one fenced decision owner per mission.",
+    "scaling": "Scale across missions. Coalesce repeated cell evidence before decision evaluation; validated per-mission throughput is an admission limit.",
+    "failure_policy": "Duplicate events are idempotent. Lost coverage marks uncertain/stale, not resolved. Rule/model failure cannot silently close incidents.",
+    "proposed_budget": "Immediate candidate publication <=100 ms after qualified input; confirmation may require a separate configured evidence window.",
+    "acceptance": "Repeated adjacent frames cannot create alert storms; mission-edge candidates deduplicated; stale/occluded region cannot auto-resolve.",
+    "requirements": [
+      "States: CANDIDATE, CORROBORATED, OPERATOR_CONFIRMED, MONITORING, RESOLVED, DISMISSED. Corroborated is not operator confirmed.",
+      "Store severity rationale and evidence independently of raw model score. Human reviews include author/time/revision.",
+      "Associate cross-drone evidence inside the mission; keep per-drone track IDs and canonical incident aliases.",
+      "No automatic dispatch of crews or flight commands. Future forecast results remain typed separately from observed boundaries."
+    ]
+  },
+  {
+    "id": "D02",
+    "name": "Notification dispatcher",
+    "layer": "Delivery",
+    "inputs": [
+      "notification.requested"
+    ],
+    "outputs": [
+      "notification.delivery",
+      "audit.event"
+    ],
+    "interfaces": "Signed customer webhooks; optional configured channels with tenant-approved destinations.",
+    "state": "Delivery attempts/receipts and unique delivery key in PostgreSQL; outbox state.",
+    "partition_key": "Tenant + incident ID + incident revision + channel + destination ID.",
+    "scaling": "Stateless dispatchers scale by pending delivery age; per-destination concurrency/rate limits.",
+    "failure_policy": "Retry transient failures with exponential backoff/jitter and TTL; terminal failures go to review. External exactly-once delivery cannot be guaranteed.",
+    "proposed_budget": "First delivery attempt p95 <=1 second after request; recipient network time tracked separately.",
+    "acceptance": "Crash after recipient ACK does not create a new event ID; retries use same idempotency key; replay cannot contact production endpoints.",
+    "requirements": [
+      "Sign body and timestamp; receiver can reject stale/replayed messages. Destinations configured by authorized tenant admin.",
+      "Include observation age and evidence link; do not promise a link before evidence is committed.",
+      "Persist request intent before sending. Support acknowledge/failure audit and rate-limited escalation policies.",
+      "Notification retry queues cannot backpressure ingestion or GPU analysis."
+    ]
+  },
+  {
+    "id": "D03",
+    "name": "Query, map and evidence API",
+    "layer": "Delivery",
+    "inputs": [],
+    "outputs": [
+      "audit.event"
+    ],
+    "interfaces": "GET /v1/missions/{id}/snapshot; GET /v1/missions/{id}/observations; GET /v1/incidents/{id}; GET /v1/evidence/{id}/access; map tile routes.",
+    "state": "Read projections from PostGIS/read replicas; version-aware caches. No direct ownership of processing state.",
+    "partition_key": "Tenant + mission + query/viewport; cache keys always include access scope and data version.",
+    "scaling": "Stateless replicas, database read replicas and bounded viewport queries. Limit time range, geometry size and page size.",
+    "failure_policy": "Replica lag and projection watermark returned to client. Stale cache never represented as current live data.",
+    "proposed_budget": "Snapshot p95 <=300 ms for bounded requested AOI under reference load.",
+    "acceptance": "Tenant-scoped access checked on every geometry/evidence link; oversized bbox/time queries rejected with useful error.",
+    "requirements": [
+      "Return GeoJSON only for validated geographic outputs; image-space evidence remains a different schema.",
+      "Use cursor pagination and revision-based conditional requests. Signed media access is short-lived and authorized at issuance.",
+      "Return data watermark, generated time, freshness and available coverage with every map snapshot.",
+      "Read-after-review uses primary/commit token when replicas have not reached the operator review revision."
+    ]
+  },
+  {
+    "id": "D04",
+    "name": "Live subscriptions and preview delivery",
+    "layer": "Delivery",
+    "inputs": [
+      "grid.updated",
+      "incident.changed",
+      "stream.health"
+    ],
+    "outputs": [
+      "audit.event"
+    ],
+    "interfaces": "WebSocket /v1/live; mission-scoped subscriptions with durable cursors; WebRTC preview via media gateway.",
+    "state": "Local connection buffers; durable change-log cursors and authorization context; no authoritative incident state.",
+    "partition_key": "Tenant + mission + connection; change-log source retains per-shard cursor components.",
+    "scaling": "Connection-sharded pods with a fan-out routing layer. A single consumer group cannot be assumed to broadcast every message to every pod.",
+    "failure_policy": "Slow client: coalesce replaceable grid updates, keep incident transitions, then send resync-required and disconnect at bounded buffer limit.",
+    "proposed_budget": "Update delivery p95 <=200 ms after read-model commit; preview latency measured independently.",
+    "acceptance": "Reconnect obtains coherent snapshot plus cursor and catches up without silently missing changes; token expiry closes access.",
+    "requirements": [
+      "Snapshot API returns a composite cursor at its projection watermark; subscribe replays later changes; expired cursors require a fresh snapshot.",
+      "Avoid unbounded per-client Kafka groups; use shared partition readers and route authorized mission events to pods with subscribers.",
+      "Reauthorize long-lived sessions on token refresh and mission access revocation.",
+      "Preview frame rate is independent from analytical frame coverage and is labelled accordingly."
+    ]
+  },
+  {
+    "id": "O01",
+    "name": "Replay, backfill and evaluation",
+    "layer": "Operations",
+    "inputs": [
+      "replay.request"
+    ],
+    "outputs": [
+      "replay.completed",
+      "replay.request",
+      "audit.event"
+    ],
+    "interfaces": "POST /v1/replays; GET /v1/replays/{id}; admin/evaluator scopes.",
+    "state": "Job manifests, evidence leases, isolated result namespaces and evaluation reports.",
+    "partition_key": "Tenant + replay run + mission segment; deterministic input identities retained.",
+    "scaling": "Separate CPU/GPU pools or hard reserved quota; batch jobs cannot consume reserved live capacity.",
+    "failure_policy": "Resume checkpointed work; incomplete evidence is reported in coverage denominator. No production notification credentials.",
+    "proposed_budget": "Throughput-oriented; no live latency SLO.",
+    "acceptance": "Same archive replay cannot alter live incidents; future-issued weather unavailable to historical decision; missing frames included in coverage report.",
+    "requirements": [
+      "Pin source assets, model/calibration versions, rules and environment digest; use original capture timeline.",
+      "Compare precision/recall, false alarms per camera-hour, time-to-detection, temperature accuracy where references exist and map error.",
+      "Record non-deterministic inference differences; replay idempotence does not imply bitwise identical floating-point outputs.",
+      "Training/evaluation dataset splits separate whole sites/incidents, not adjacent frames."
+    ]
+  },
+  {
+    "id": "O02",
+    "name": "Audit and operational health projection",
+    "layer": "Operations",
+    "inputs": [
+      "audit.event",
+      "stream.health",
+      "frame.accounted",
+      "notification.delivery"
+    ],
+    "outputs": [
+      "health.changed"
+    ],
+    "interfaces": "Internal OpenTelemetry metrics/logs/traces; tenant status API through D03; operator audit queries.",
+    "state": "Append-only audit archive, telemetry backend and health read projections.",
+    "partition_key": "Service/region for metrics; tenant + mission for health; audit retention independent from debug logs.",
+    "scaling": "Collectors and projections horizontally partitioned; enforce metric cardinality budgets and sampling.",
+    "failure_policy": "Telemetry sink outage buffers within limits; core processing does not depend on a remote log write. Security/decision audit intents use durable outbox.",
+    "proposed_budget": "Stale-input detection initial target <=5 seconds; thresholds depend on expected sensor cadence.",
+    "acceptance": "Source frame gaps and processing deadline misses visible separately; no tokens or imagery in ordinary logs.",
+    "requirements": [
+      "Measure capture-to-result, ingest-to-result, source clock quality, queue age, rejected/late frames, GPU warmup and archive durability watermarks.",
+      "Do not put frame IDs or cell IDs into metric labels; use trace/log correlation for individual evidence.",
+      "Track latency and coverage together: dropping slow frames must not falsely improve the service quality report.",
+      "Alerts distinguish link outage, modality loss, backlog, calibration failure, storage outage and model failure."
+    ]
+  }
+]

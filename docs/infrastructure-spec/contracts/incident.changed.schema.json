@@ -1,0 +1,274 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:firewatch:incident.changed:v1",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "event_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "event_type": {
+      "const": "incident.changed"
+    },
+    "tenant_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "mission_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "session_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "analysis_run_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "region_epoch": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "owner_epoch": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "occurred_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "received_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "produced_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source_sequence": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "trace_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "causation_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "incident_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "state": {
+          "enum": [
+            "CANDIDATE",
+            "CORROBORATED",
+            "OPERATOR_CONFIRMED",
+            "MONITORING",
+            "RESOLVED",
+            "DISMISSED"
+          ]
+        },
+        "first_seen_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "last_seen_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "severity": {
+          "enum": [
+            "unclassified",
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "evidence_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          },
+          "maxItems": 256
+        },
+        "evidence_status": {
+          "enum": [
+            "pending",
+            "committed",
+            "unavailable"
+          ]
+        },
+        "observed_boundary_ref": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "object_key": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4096
+                },
+                "object_version": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4096
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "byte_length": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "content_type": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4096
+                },
+                "encoding": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4096
+                }
+              },
+              "required": [
+                "object_key",
+                "object_version",
+                "sha256",
+                "byte_length",
+                "content_type",
+                "encoding"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "rule_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "supersedes_event_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "review": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "actor_id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4096
+                },
+                "reviewed_at": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "action": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4096
+                }
+              },
+              "required": [
+                "actor_id",
+                "reviewed_at",
+                "action"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "incident_id",
+        "revision",
+        "state",
+        "first_seen_at",
+        "last_seen_at",
+        "severity",
+        "rationale",
+        "evidence_ids",
+        "evidence_status",
+        "observed_boundary_ref",
+        "rule_version",
+        "supersedes_event_id",
+        "review"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schema_version",
+    "event_id",
+    "event_type",
+    "tenant_id",
+    "mission_id",
+    "session_id",
+    "analysis_run_id",
+    "region_epoch",
+    "owner_epoch",
+    "occurred_at",
+    "received_at",
+    "produced_at",
+    "source_sequence",
+    "trace_id",
+    "causation_id",
+    "payload"
+  ],
+  "additionalProperties": false
+}
