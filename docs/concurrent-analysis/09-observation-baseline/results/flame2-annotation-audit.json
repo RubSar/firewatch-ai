@@ -1,0 +1,76 @@
+{
+  "schema_version": "firewatch.research.annotation_audit.v1",
+  "created_at_utc": "2026-09-26T21:16:55.585358Z",
+  "inventory_sha256": "ad481bc20a878e69fdd42970edff10cc193e430932d32732b79f073871a2bcfa",
+  "source_archive_sha256": "0e9eab6e477ff1b784e5ab7115c1e922ed14a31a60cd926d51976bf04869e043",
+  "code_sha256": {
+    "audit_annotations.py": "91d25b0b7fe2d45a1d04b57b94408882aabcb1f6f491cdd20dd1bf23a5d05dd3",
+    "import_flame2.py": "050c2dacb3c60b799a643df21878d4ef8261b73488eb5548fcd1f0e92cb265aa",
+    "dataset.py": "c022091f84c6e948407c5df5c4bd007d3f6367fd6bf542520298eb4e1b66c802"
+  },
+  "sample_count": 992,
+  "incident_count": 1,
+  "dimensions_hw": {
+    "[254, 254]": 992
+  },
+  "source_modes": {
+    "{'rgb': 'RGB', 'ir': 'RGB', 'mask': 'RGBA'}": 992
+  },
+  "label_pixel_counts": {
+    "0": 35859807,
+    "1": 22365360,
+    "2": 5774705,
+    "255": 0
+  },
+  "images_with_class": {
+    "0": 942,
+    "1": 720,
+    "2": 755,
+    "255": 0
+  },
+  "images_without_fire_or_smoke": 237,
+  "exact_decoded_rgb_duplicate_groups": 0,
+  "near_duplicate_candidate_pairs": 1165,
+  "duplicates_sha256": "242d5cd49d4206a746e4427d78e5886200b683b6e523072881fe3d46755bac57",
+  "review_sample_ids": [
+    "flame2-rff-116",
+    "flame2-rff-3250",
+    "flame2-rff-6194",
+    "flame2-rff-9001",
+    "flame2-rff-12114",
+    "flame2-rff-14946",
+    "flame2-rff-17535",
+    "flame2-rff-20504",
+    "flame2-rff-22656",
+    "flame2-rff-25280",
+    "flame2-rff-28136",
+    "flame2-rff-31215",
+    "flame2-rff-34670",
+    "flame2-rff-37602",
+    "flame2-rff-40525",
+    "flame2-rff-42781",
+    "flame2-rff-44972",
+    "flame2-rff-47581",
+    "flame2-rff-50396",
+    "flame2-rff-53385",
+    "flame2-rff-47850",
+    "flame2-rff-35347",
+    "flame2-rff-31874",
+    "flame2-rff-46494",
+    "flame2-rff-13707"
+  ],
+  "review_status": "contact_sheets_prepared_not_independent_human_review",
+  "publisher_claim_sample_count": 995,
+  "sample_count_discrepancy": 3,
+  "split_lists_present_in_archive": false,
+  "all_records_assigned_to": "pilot",
+  "visible_flame_evaluation_ready": false,
+  "thermal_celsius_evaluation_ready": false,
+  "limitations": [
+    "Publisher fire is not verified equivalent to RGB-visible flame.",
+    "One incident; no unseen-incident train/validation/test evaluation.",
+    "No independent second annotations or inter-annotator agreement.",
+    "No verified timestamps, spatial registration or ground geometry.",
+    "Near-duplicate screening cannot establish independence."
+  ]
+}

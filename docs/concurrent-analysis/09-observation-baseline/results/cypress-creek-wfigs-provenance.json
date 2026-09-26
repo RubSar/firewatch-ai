@@ -1,0 +1,8 @@
+{
+  "retrieved_at_utc": "2026-09-26T22:05:11.5846209Z",
+  "query_url": "https://services3.arcgis.com/T4QMspbfLg3qTGWY/arcgis/rest/services/WFIGS_Interagency_Perimeters_YearToDate/FeatureServer/0/query?f=json&returnGeometry=true&outSR=4326&resultRecordCount=10&where=poly_IncidentName%3D%27Cypress%20Creek%27&outFields=poly_IncidentName%2Cpoly_MapMethod%2Cpoly_GISAcres%2Cpoly_FeatureStatus%2Cpoly_CreateDate%2Cpoly_DateCurrent%2Cpoly_PolygonDateTime%2Cpoly_IRWINID%2Cattr_ContainmentDateTime%2Cattr_IncidentSize%2Cattr_FireCause%2Cattr_FireDiscoveryDateTime%2Cattr_FireOutDateTime%2Cattr_IncidentName%2Cattr_IncidentTypeCategory%2Cattr_InitialLatitude%2Cattr_InitialLongitude%2Cattr_IrwinID%2Cattr_POOCity%2Cattr_POOCounty%2Cattr_POODispatchCenterID%2Cattr_POOFips%2Cattr_POOJurisdictionalAgency%2Cattr_POOJurisdictionalUnit%2Cattr_POOJurisdictUnitParentUnit%2Cattr_POOLandownerCategory%2Cattr_POOLandownerKind%2Cattr_POOLegalDescPrincipalMerid%2Cattr_POOLegalDescQtr%2Cattr_POOLegalDescQtrQtr%2Cattr_POOLegalDescRange%2Cattr_POOLegalDescSection%2Cattr_POOLegalDescTownship%2Cattr_POOPredictiveServiceAreaID%2Cattr_POOProtectingAgency%2Cattr_POOProtectingUnit%2Cattr_POOState",
+  "snapshot_sha256": "fbdfb6d085fed0f8082798a2a91bbf99a3c690b97274e77ca534781b573f48d8",
+  "records": 1,
+  "source": "NIFC WFIGS Interagency Perimeters YearToDate",
+  "purpose": "Public incident identity and perimeter provenance; not a drone pixel mask"
+}

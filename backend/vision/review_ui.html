@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FireWatch · Independent annotation</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f5f4;color:#1d302b;font:16px/1.5 system-ui,sans-serif}header{background:#183c32;color:white;padding:22px 32px;display:flex;justify-content:space-between;gap:24px}h1{font-size:24px;margin:0}header p{margin:3px 0;color:#cde6db}.badge{align-self:center;border:1px solid #789d8e;padding:6px 12px;border-radius:30px;font-size:14px;white-space:nowrap}main{max-width:1320px;margin:auto;padding:22px;display:grid;grid-template-columns:minmax(300px,1fr) 340px;gap:22px}section,aside{background:white;border:1px solid #d8e1dc;border-radius:12px;padding:20px}.toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:15px}label{display:block;font-size:14px;font-weight:600;margin:12px 0 5px}input[type=text],select,textarea{font:inherit;width:100%;border:1px solid #9daea6;border-radius:6px;padding:8px;background:white;color:#203c31}textarea{min-height:88px;resize:vertical}.toolbar select{width:auto;flex:1}button,.file-label{font:inherit;background:#fff;border:1px solid #a2b5ac;border-radius:7px;padding:8px 13px;cursor:pointer;color:#183c32}button:hover,.file-label:hover{background:#e9f1ec}button:disabled{opacity:.45;cursor:default}.primary{background:#185b43;color:white;border-color:#185b43}.primary:hover{background:#124631}button[aria-pressed=true]{outline:3px solid #183c32;outline-offset:1px}.brushes{display:flex;gap:8px;margin:10px 0}.brushes button{flex:1;font-size:14px;padding:8px}.positive{border-bottom:5px solid #ea732a}.negative{border-bottom:5px solid #7f9387}.unknown{border-bottom:5px solid #b457c2}#image-scroll{overflow:auto;max-height:75vh;background:#e4e9e6;border-radius:8px;padding:12px}#stage{position:relative;margin:auto;width:max-content;line-height:0}#rgb{display:block;image-rendering:pixelated}#mask{position:absolute;left:0;top:0;touch-action:none;image-rendering:pixelated;cursor:crosshair}input[type=range]{width:100%}.small{font-size:13px;color:#52685c}.notice{padding:10px 12px;background:#fff4dc;border-left:3px solid #d69727;font-size:14px}.check{display:flex;gap:8px;align-items:start;font-weight:400}.check input{margin-top:5px;flex:none}.divider{border-top:1px solid #d8e1dc;margin-top:18px;padding-top:10px}#message{min-height:27px;color:#185b43;font-weight:600}#message[data-error=true]{color:#ad2c19}.readout{font-variant-numeric:tabular-nums;font-size:13px;color:#435c4f}details{font-size:14px;margin:12px 0}summary{cursor:pointer;font-weight:600}h2{font-size:17px;margin:0 0 8px}.file-label{display:inline-block;margin:0;font-weight:400}.export-row{display:flex;gap:8px;flex-wrap:wrap}.file-label input{display:none}footer{max-width:1320px;margin:0 auto;padding:0 24px 24px;font-size:13px;color:#52685c}#progress{font-size:14px;font-weight:600}a{color:#185b43}@media(max-width:850px){main{grid-template-columns:1fr}header{padding:18px;flex-wrap:wrap}aside{grid-row:1}#image-scroll{max-height:65vh}}
+</style>
+</head>
+<body>
+<header><div><h1>FireWatch · Independent annotation</h1><p>RGB evidence · visible flame and smoke · pilot review</p></div><span id="slot" class="badge"></span></header>
+<main>
+<section aria-label="Image annotation">
+<div class="toolbar"><button id="prev" type="button">← Previous</button><select id="case" aria-label="Image case"></select><button id="next" type="button">Next →</button></div>
+<div id="image-scroll"><div id="stage"><img id="rgb" alt="RGB source image for independent annotation" draggable="false"><canvas id="mask" aria-label="Paint target labels over the RGB image"></canvas></div></div>
+<p id="counts" class="readout"></p>
+<div class="toolbar"><label class="check"><input id="overlay" type="checkbox" checked>Show mask overlay</label><label for="zoom">Zoom</label><select id="zoom"><option value="1">1× native</option><option value="2" selected>2×</option><option value="3">3×</option><option value="4">4×</option></select></div>
+<div id="message" role="status" aria-live="polite"></div>
+<details open><summary>What counts as a label?</summary><p><strong>Visible flame:</strong> flame directly visible in RGB. Keep smoke/canopy occlusion, ambiguous glow and unresolved edges unknown. Do not infer hidden fire.</p><p><strong>Smoke:</strong> visible smoke plume. Keep indistinguishable fog/cloud/dust and uncertain translucent edges unknown. Layers can overlap.</p><p>Every pixel starts <strong>unknown</strong>. Negative means you have inspected the pixel and found no visible evidence of the selected target. Add a note explaining any unknown pixels before marking the layer reviewed.</p></details>
+</section>
+<aside aria-label="Review controls">
+<h2 id="layer-heading">Annotation controls</h2><div id="progress"></div>
+<label for="target">Target layer</label><select id="target"><option value="visible_flame">Visible flame</option><option value="smoke">Smoke</option></select>
+<label>Paint pixels</label><div class="brushes"><button class="positive" data-code="1" aria-pressed="true">Positive</button><button class="negative" data-code="0" aria-pressed="false">Negative</button><button class="unknown" data-code="255" aria-pressed="false">Unknown</button></div>
+<label for="radius">Brush radius: <span id="radius-value">4</span> native pixels</label><input id="radius" type="range" min="1" max="24" value="4">
+<div class="toolbar"><button id="undo" type="button">Undo</button><button id="negative-all" type="button">All negative</button><button id="reset" type="button">All unknown</button></div>
+<label for="notes">Evidence / uncertainty notes</label><textarea id="notes" placeholder="Describe ambiguity, occlusion or reasons for unknown pixels."></textarea>
+<label class="check"><input id="reviewed" type="checkbox">I finished inspecting this image and target layer.</label>
+<p class="small">Changing a mask or notes clears its reviewed status. Undo applies to the current layer (last 20 actions).</p>
+<div class="divider"><label for="reviewer">Your reviewer ID</label><input id="reviewer" type="text" autocomplete="off" placeholder="Assigned ID; do not impersonate another reviewer">
+<label class="check"><input id="independent" type="checkbox">I labelled these RGB images independently, without viewing publisher masks, model predictions or the other review.</label>
+<p class="notice">Work stays in memory. Export JSON to save; import your own export to resume. Closing this page can lose unsaved changes.</p>
+<div class="export-row"><button id="export" type="button" class="primary">Export JSON</button><label class="file-label">Import JSON<input id="import" type="file" accept=".json,application/json"></label></div>
+<details id="export-fallback" hidden><summary>Save JSON manually</summary><p>If the download is unavailable, copy this entire text into a UTF-8 .json file. This snapshot changes only when you press Export JSON again.</p><textarea id="export-text" aria-label="Exported review JSON" readonly spellcheck="false"></textarea></details>
+<p class="small">Draft exports are allowed. The coordinator must verify human identity and independence. Saving does not approve labels or complete the benchmark.</p></div>
+</aside>
+</main>
+<footer><p id="provenance"></p><p>Original source: <a href="https://open.clemson.edu/all_data/3250/" target="_blank" rel="noreferrer">FLAME 2 dataset</a>. Images distributed in the <a href="https://github.com/dimfot3/RoboFireFuseNet/tree/f7fffecd9088b907698147eb9be1beca30da0014" target="_blank" rel="noreferrer">RoboFireFuseNet release</a> under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a> (publisher declaration). RGB bytes are unchanged; case names are anonymized and editable overlays are separate. Reviewers should defer visiting source pages until their independent annotations are complete.</p></footer>
+<script>
+/*PACKET_DATA*/
+/*REVIEW_CODE*/
+</script>
+</body>
+</html>

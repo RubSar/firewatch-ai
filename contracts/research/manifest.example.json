@@ -1,0 +1,26 @@
+{
+  "schema_version": "firewatch.research.dataset.v1",
+  "data_kind": "synthetic",
+  "dataset_id": "illustrative-only",
+  "dataset_version": 1,
+  "source_url": "synthetic:documentation-example",
+  "publisher_license": null,
+  "sampling": "Documentation example; no actual files",
+  "label_provenance": "Illustrative synthetic label",
+  "records": [{
+    "sample_id": "example-001",
+    "incident_id": "synthetic-example-incident",
+    "sequence_id": null,
+    "split": "pilot",
+    "capture_time_utc": null,
+    "relative_time_s": null,
+    "presence_label": true,
+    "rgb_path": "rgb/example-001.png",
+    "thermal_path": null,
+    "thermal_unit": null,
+    "registration": "not_applicable",
+    "mask_path": null,
+    "mask_semantics": null,
+    "sha256": {"rgb": "0000000000000000000000000000000000000000000000000000000000000000"}
+  }]
+}
