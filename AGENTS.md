@@ -70,6 +70,7 @@ cross-component integration tests before introducing a new test layout.
 
 ## Validate and hand off
 
+
 - Discover documented commands from the actual project configuration; never invent
   commands or claim checks passed without running them.
 - Run checks relevant to the change: API validation/tests for endpoints, LLM
