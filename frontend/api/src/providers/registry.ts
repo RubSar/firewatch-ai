@@ -14,12 +14,13 @@ import {
   assumedCanopy, densityValuesAtRisk, noBarriers, noBurnHistory,
   noObservations, proceduralDem, terrariumDem, topographyFuel,
 } from './tier1.ts'
-import { mockWeather, nfdrs1hMoisture, openMeteo, openMeteoWind, rhFuelMoisture, uniformWind } from './tier2.ts'
+import { mockWeather, nfdrs1hMoisture, openMeteoWind, rhFuelMoisture, uniformWind } from './tier2.ts'
 import { sentinelBurnHistory } from './burnhistory.ts'
 import { osmBarriers, osmValuesAtRisk } from './osm.ts'
 import { firmsPerimeter } from './firms.ts'
 import { learnedCanopy } from './canopy-learned.ts'
 import { fbfm40Fuel } from './landfire.ts'
+import { nwsWeather } from './nws.ts'
 
 export interface Registry {
   elevation: ElevationProvider
@@ -63,7 +64,14 @@ export function buildRegistry(cfg: Config): Registry {
     canopy: live ? learnedCanopy(cfg, { elevation, fuel }) : assumedCanopy,
     barriers: live ? osmBarriers(cfg) : noBarriers,
     burnHistory: live ? sentinelBurnHistory(cfg) : noBurnHistory,
-    weather: (presetId) => (live ? openMeteo(cfg, presetId) : mockWeather(presetId)),
+    /**
+     * NWS ahead of Open-Meteo, for LICENSING rather than accuracy: Open-Meteo's
+     * free tier is non-commercial and weather drives everything, so that one term
+     * blocked the whole product. api.weather.gov is US federal public domain and
+     * free for commercial use. Outside the US the /points lookup 404s and the
+     * chain falls back, with `degradedFrom` recording it.
+     */
+    weather: (presetId) => (live ? nwsWeather(cfg, presetId) : mockWeather(presetId)),
     wind: live ? openMeteoWind(cfg) : uniformWind,
     moisture: live ? nfdrs1hMoisture(cfg) : rhFuelMoisture,
     observer: live ? firmsPerimeter(cfg) : noObservations,
@@ -87,10 +95,14 @@ export function describe(r: Registry) {
   } as const
 }
 
-const MEASURED = new Set(['terrarium-dem', 'open-meteo', 'firms-perimeter', 'esa-worldcover'])
+const MEASURED = new Set([
+  'terrarium-dem', 'open-meteo', 'firms-perimeter', 'esa-worldcover',
+  // NWS ids carry the forecast office, e.g. 'nws-gridpoint:HNX'.
+  'nws-gridpoint',
+])
 /** Real input, assumed parameters on top of it: imagery colours, OSM tag widths. */
 const DERIVED = new Set([
-  'esri-imagery-fuel', 'osm-barriers', 'osm-buildings',
+  's2cloudless-visible-band-fuel', 'osm-barriers', 'osm-buildings',
   'open-meteo-windfield', 'nfdrs-1h-timelag', 'sentinel2-dnbr',
   // Learned, which is a kind of derived: real predictors, a fitted mapping, and
   // held-out error published in its provenance note. Never 'measured' — the
@@ -99,5 +111,8 @@ const DERIVED = new Set([
   // FBFM40 itself is operational, but a 40-to-7 crosswalk is derived from it.
   'landfire-fbfm40',
 ])
-const kindOf = (id: string): 'measured' | 'derived' | 'synthetic' =>
-  DERIVED.has(id) ? 'derived' : MEASURED.has(id) ? 'measured' : 'synthetic'
+const kindOf = (id: string): 'measured' | 'derived' | 'synthetic' => {
+  // Some ids carry an instance suffix after a colon (the NWS forecast office).
+  const base = id.split(':')[0]
+  return DERIVED.has(base) ? 'derived' : MEASURED.has(base) ? 'measured' : 'synthetic'
+}

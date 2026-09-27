@@ -34,9 +34,16 @@ const TILES = {
     maxZoom: 17,
   },
   satellite: {
-    url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-    attribution: 'Imagery &copy; Esri, Maxar, Earthstar Geographics',
-    maxZoom: 18,
+    /**
+     * Sentinel-2 cloudless (EOX, CC-BY-4.0) rather than Esri World Imagery,
+     * whose terms restrict use outside Esri/ArcGIS contexts without a licence.
+     * Attribution is a CC-BY condition — do not remove it.
+     */
+    url: 'https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2020_3857/default/g/{z}/{y}/{x}.jpg',
+    attribution:
+      'Sentinel-2 cloudless 2020 &copy; <a href="https://s2maps.eu">EOX IT Services</a> (CC-BY-4.0), ' +
+      'contains modified Copernicus Sentinel data',
+    maxZoom: 16,
   },
 }
 

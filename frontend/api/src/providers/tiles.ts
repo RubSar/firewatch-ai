@@ -130,5 +130,26 @@ export const toPixel = (m: Mosaic, lat: number, lng: number) => ({
 export const DEM_URL = (z: number, x: number, y: number) =>
   `https://s3.amazonaws.com/elevation-tiles-prod/terrarium/${z}/${x}/${y}.png`
 
+/**
+ * Sentinel-2 cloudless, EOX IT Services — CC-BY-4.0, free for commercial use
+ * with attribution.
+ *
+ * Replaced Esri World Imagery, whose terms restrict use outside Esri and ArcGIS
+ * contexts without a licence. That was a licensing blocker, not a quality
+ * problem, and it was the last one in the imagery path.
+ *
+ * Note the axis order: EOX's WMTS path is `/{z}/{row}/{col}`, so y precedes x —
+ * the same order Esri used, which is why the swap is a URL change and nothing
+ * more. An annual cloudless composite is also arguably BETTER for land-cover
+ * classification than an arbitrary recent scene, because it has no seasonal or
+ * cloud variation to classify around.
+ *
+ * ATTRIBUTION IS MANDATORY under CC-BY. The UI carries it in the Leaflet
+ * attribution control; do not remove it.
+ */
 export const IMAGERY_URL = (z: number, x: number, y: number) =>
-  `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${z}/${y}/${x}`
+  `https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2020_3857/default/g/${z}/${y}/${x}.jpg`
+
+/** Required wherever IMAGERY_URL tiles are shown or derived from. */
+export const IMAGERY_ATTRIBUTION =
+  'Sentinel-2 cloudless 2020 by EOX IT Services (CC-BY-4.0), contains modified Copernicus Sentinel data'

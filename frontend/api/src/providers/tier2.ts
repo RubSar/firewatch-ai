@@ -22,7 +22,7 @@ const FORECAST_START_HOUR = 13
  * afternoon without recharging dead fuels, so counting it would reset the
  * clock on a day that changed nothing.
  */
-const WETTING_MM = 2
+export const WETTING_MM = 2
 /**
  * How far back to look for that rain. `fuelMoisture()` saturates its drought
  * term at 60 days, so anything past this cannot change the model — the number
@@ -151,7 +151,7 @@ export function openMeteo(cfg: Config, presetId: string): WeatherProvider {
  * rows is ~1500 records of six variables to answer a question that 61 daily
  * sums answer in a few kilobytes.
  */
-async function droughtSince(
+export async function droughtSince(
   cfg: Config, lat: number, lng: number, signal?: AbortSignal
 ): Promise<{ days: number; capped: boolean }> {
   const url =

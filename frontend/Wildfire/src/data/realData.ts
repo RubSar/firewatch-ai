@@ -3,7 +3,7 @@
  *
  *  - Elevation: AWS "Terrarium" terrain tiles (Mapzen/Nextzen heritage, public,
  *    no key). Height is RGB-encoded: (R*256 + G + B/256) - 32768 metres.
- *  - Land cover: Esri World Imagery, classified into our fuel models from
+ *  - Land cover: Sentinel-2 cloudless (EOX, CC-BY-4.0), classified into our fuel models from
  *    visible-band greenness, brightness and local texture.
  *
  * Both services send `Access-Control-Allow-Origin: *`, so the tiles can be read
@@ -20,8 +20,11 @@ import { computeShade, localSlope, type Bounds, type Terrain } from '@firewatch/
 
 const DEM_URL = (z: number, x: number, y: number) =>
   `https://s3.amazonaws.com/elevation-tiles-prod/terrarium/${z}/${x}/${y}.png`
+// Sentinel-2 cloudless (EOX, CC-BY-4.0). Replaced Esri World Imagery, whose
+// terms restrict use without a licence. Axis order is /{z}/{row}/{col}, as Esri's
+// was. Attribution is carried by the Leaflet control in MapView.
 const IMAGERY_URL = (z: number, x: number, y: number) =>
-  `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${z}/${y}/${x}`
+  `https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2020_3857/default/g/${z}/${y}/${x}.jpg`
 
 const TILE = 256
 const MAX_TILES = 140
