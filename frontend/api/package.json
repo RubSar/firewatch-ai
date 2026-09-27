@@ -12,6 +12,9 @@
     "watercheck": "node src/watercheck.ts",
     "barriercheck": "node src/barriercheck.ts",
     "scarcheck": "node src/scarcheck.ts",
+    "canopy:sample": "node src/canopy/sample.ts",
+    "canopy:check": "node src/canopy/check.ts",
+    "canopy:train": "./.venv/bin/python src/canopy/train.py",
     "hindcast": "node src/hindcast.ts"
   },
   "dependencies": {
