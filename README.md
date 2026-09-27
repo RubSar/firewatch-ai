@@ -20,6 +20,18 @@ source evidence and explicit data gaps.
 The simulator is at `/`; the historical atlas is at `/history`. The atlas displays
 observations from the loaded pilot library; it does not run the spread simulator.
 
+## Demo
+
+Two screen recordings of the simulator running locally (no audio). Both show
+exploratory scenarios, not validated forecasts.
+
+| Recording | What it shows |
+| --- | --- |
+| [Weather scenarios and containment](assets/simulator-weather-and-containment.mp4) (1:29) | Placing an ignition on mountainous terrain with live DEM and imagery, switching between weather scenario presets, adjusting wind and fuel-moisture inputs, and running the fire out to roughly six simulated hours while containment and isochrones update. |
+| [Live inputs and map layers](assets/simulator-live-inputs-and-layers.mp4) (1:10) | A run over mixed agricultural and wildland–urban terrain with live providers reporting, switching among the fuel, terrain and satellite layers, and tinting the grid by fuel model while spotting and crown-fire counts develop. |
+
+GitHub shows these as file links; open one to play it inline.
+
 ## How it works
 
 The React/Leaflet app uses a shared TypeScript simulation kernel, running either in
@@ -90,6 +102,7 @@ it does not make external browser map tiles available offline.
 | [`backend/vision/`](backend/vision/README.md) | Separate experimental RGB/thermal and satellite observation research |
 | [`contracts/`](contracts/README.md) | Language-neutral historical and research data schemas |
 | [`docs/`](docs/) | Research, design documents and presentation materials |
+| [`assets/`](assets/) | Screen recordings and media used by the documentation |
 
 The Python research and enrichment tools have their own setup instructions; they
 are not required to launch the web app with its bundled historical library.
