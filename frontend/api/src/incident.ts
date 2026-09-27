@@ -10,7 +10,7 @@
 import { randomUUID } from 'node:crypto'
 import {
   EMPTY_STATS, attachCanopy, buildTerrain, computeShade, createSim, flamingTime, forecastAt,
-  getPreset, ignite, mockForecast, paintTreatment, recomputeStats, step,
+  getPreset, ignite, invalidateFront, mockForecast, paintTreatment, recomputeStats, step,
 } from '@firewatch/sim'
 import type { ForecastHour, Params, Scenario, Sim, Stats, Terrain, Weather } from '@firewatch/sim'
 import type {
@@ -306,6 +306,9 @@ export class Incident {
         break
       case 'clearTreatment':
         sim.treatment.fill(0)
+    // Clearing a line frees cells the queued arrival times were computed
+    // around, so discard them and let the next step re-derive the frontier.
+        invalidateFront(sim)
         sim.revision++
         break
       case 'params':

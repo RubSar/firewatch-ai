@@ -6,17 +6,23 @@
  * is wrong is the failure mode the document names, and it is invisible to
  * every check that does not measure behaviour directly.
  *
- * Two tests are marked `todo`. They encode the target, measure the real value,
- * and do not fail the suite — because the defect they catch is known,
- * quantified in §4, and fixing it is a kernel redesign rather than a patch.
- * Deleting them would be pretending; failing the build on them would block
- * every unrelated change.
+ * No test here is `todo` any more. Two were, for the whole life of this file:
+ * the front advanced at 4.45x the kernel's own nominal rate, and calm-wind
+ * spread disagreed with Rothermel by 5.6x. Both were the same defect — a
+ * per-step Bernoulli arrival draw, which let the front advance by first-passage
+ * percolation over competing paths instead of at the modelled rate. Finney
+ * (2002) Minimum Travel Time replaced it and both closed on their own.
+ *
+ * The lesson worth keeping: a `todo` that encodes a target and reports the real
+ * number is how a known defect stays visible without blocking unrelated work.
+ * Neither was ever tuned into passing.
  */
-import { describe, it, todo } from 'node:test'
+import { describe, it } from 'node:test'
 import assert from 'node:assert/strict'
 import { Fuel, FUELS } from '../src/fuels.ts'
 import {
-  Cell, Crown, attachCanopy, createSim, ignite, recomputeStats, step, windMultiplier,
+  Cell, Crown, Treatment, attachCanopy, createSim, ignite, paintTreatment, recomputeStats, step,
+  windMultiplier,
 } from '../src/model.ts'
 import { fuelMoisture } from '../src/weather.ts'
 import { MIDFLAME_WIND_FACTOR, rothermelSpread } from '../src/rothermel.ts'
@@ -68,13 +74,18 @@ describe('isotropy — flat ground, no wind', () => {
 })
 
 /**
- * Still `todo`, and now known to be unreachable by tuning — see the long note
- * above `burnDuration` in model.ts for the three fixes that were measured and
- * reverted. Closing this needs the §4 energy accumulator.
+ * PROMOTED FROM TODO. Measured 0.95-1.00x across the bench's 14 cases, having
+ * sat at 4.45x for this test's whole life.
+ *
+ * The cause was the arrival draw: `p = 1 - exp(-ROS dt / d)` gave every link an
+ * independent chance every step, so the front advanced by first-passage
+ * percolation over many competing paths rather than at the rate the kernel
+ * reported. Finney (2002) Minimum Travel Time replaced it with a deterministic
+ * shortest-arrival-time search, and the discrepancy went away rather than being
+ * calibrated out. Do not reintroduce a per-step probability of ignition.
  */
-todo(
-  'front advances at the kernel\'s own nominal ROS ' +
-    '(not calibratable — see model.ts; needs the §4 energy accumulator)',
+it(
+  'front advances at the kernel\'s own nominal ROS',
   () => {
     const t = flatTerrain()
     const params = calm()
@@ -319,7 +330,18 @@ describe('crown fire', () => {
     }
     const passes = runCrown({ wind: 20, cbh: blocked / 2, cbd: 0.1 })
     const fails = runCrown({ wind: 20, cbh: blocked, cbd: 0.1 })
-    assert.ok(passes.crownCells > 50, `only ${passes.crownCells} cells crowned below the threshold`)
+    // A FRACTION, not a count. This asserted `crownCells > 50`, which was
+    // calibrated against the arrival-draw overshoot: the front used to run 4.45x
+    // the kernel's own rate, so any run burnt more cells than it should have.
+    // MTT removed the overshoot and the same fire is now 45 cells, so a count
+    // threshold started failing while the behaviour under test got better.
+    // Every burnt cell crowns below the threshold and none above it, which is
+    // the sharpness being claimed and is independent of how big the fire is.
+    assert.ok(passes.burnedCells > 20, `fire too small to conclude anything: ${passes.burnedCells} cells`)
+    assert.ok(
+      passes.crownCells / passes.burnedCells > 0.8,
+      `only ${passes.crownCells} of ${passes.burnedCells} burnt cells crowned below the threshold`
+    )
     assert.equal(fails.crownCells, 0, `still crowning at a ${blocked} m crown base`)
   })
 
@@ -370,11 +392,23 @@ describe('crown fire', () => {
  * kernel's own formula — a model checked against its own opinion. Rothermel
  * shares no structure with it, so disagreement means something.
  *
- * Both are `todo`: they measure real, quantified gaps that need kernel work,
- * and failing the build on a known defect blocks every unrelated change.
  * `npm run bench` prints the full table.
  */
-todo('calm-wind spread matches Rothermel within a factor of two', () => {
+/**
+ * PROMOTED FROM TODO, and it is now testing what it always claimed to.
+ *
+ * It used to fail at 5.6x because the EMERGENT rate carried the arrival-draw
+ * overshoot on top of whatever the kernel's own rate was, so the two errors were
+ * indistinguishable. With MTT the emergent rate equals the nominal rate, and
+ * what is left is the nominal-vs-Rothermel offset alone — 1.14x for grass.
+ *
+ * Grass only. The per-fuel offsets range 0.24x-1.14x (see `npm run bench`) and
+ * are NOT the arrival draw: they come from `depth`, `sav` and `bulkDensity`
+ * being invented rather than measured. Widening this test to every fuel would
+ * hide that behind a loose bound; it needs real Anderson or Scott & Burgan bed
+ * parameters and multi-size-class Rothermel.
+ */
+it('calm-wind spread matches Rothermel within a factor of two', () => {
   const f = FUELS[Fuel.Grass]
   const params = calm({ temperature: 25, humidity: 25 })
   const reference = rothermelSpread({
@@ -415,4 +449,66 @@ it('matches Rothermel\'s wind response across the useful range', () => {
         `where Rothermel gives ${referenceGain.toFixed(1)}x`
     )
   }
+})
+
+describe('control lines stop a fire that is already coming', () => {
+  /**
+   * The behaviour minimum-travel-time propagation most endangers.
+   *
+   * MTT computes when the fire WILL reach a cell, so the moment a line is drawn
+   * the cells in front of it already hold arrival times calculated as though it
+   * were not there. The settle pass checks that a cell is still unburnt before
+   * igniting it, but a queued arrival knows nothing about a treatment applied
+   * after it was computed, so without `invalidateFront` a treated cell ignites
+   * off a stale arrival — and then relaxes its own links, seeding spread on the
+   * far side.
+   *
+   * THE LINE MUST GO DIRECTLY AGAINST THE FRONT. A first version drew it well
+   * ahead of the fire and passed with the invalidation removed, because nothing
+   * had been queued that far out yet: the frontier is only one ring deep, so
+   * that is the only place staleness can exist. One cell thick, for the same
+   * reason — a three-cell line absorbs the one-cell leak and hides the defect.
+   */
+  const runToLine = (o: { treat: boolean }) => {
+    const N = 121
+    const t = flatTerrain({ cols: N, rows: N, cellSize: 30 })
+    // Wind from the north, so the fire runs south into increasing rows.
+    const params = calm({ windSpeed: 25, windDir: 0 })
+    const sim = createSim(t, 3)
+    ignite(sim, 60, 40, 0)
+    for (let i = 0; i < 60; i++) step(sim, { params, weather: params, dt: 10 })
+
+    // Furthest row the fire has reached, so the line lands on cells whose
+    // arrival times are already in the queue.
+    let front = 0
+    for (let i = 0; i < sim.state.length; i++) {
+      if (sim.state[i] !== Cell.Unburned) front = Math.max(front, (i / N) | 0)
+    }
+    const line = front + 1
+    if (o.treat) for (let c = 0; c < N; c++) paintTreatment(sim, c, line, 0, Treatment.Dozer)
+
+    for (let i = 0; i < 400; i++) step(sim, { params, weather: params, dt: 10 })
+
+    let beyond = 0
+    let onLine = 0
+    for (let r = 0; r < N; r++) {
+      for (let c = 0; c < N; c++) {
+        if (sim.state[r * N + c] === Cell.Unburned) continue
+        if (r === line) onLine++
+        else if (r > line) beyond++
+      }
+    }
+    return { beyond, onLine, line }
+  }
+
+  it('crosses freely when there is no line', () => {
+    const { beyond, line } = runToLine({ treat: false })
+    assert.ok(beyond > 20, `only ${beyond} cells burnt past row ${line} — the control case never got there`)
+  })
+
+  it('never ignites a treated cell, and never gets past the line', () => {
+    const { beyond, onLine, line } = runToLine({ treat: true })
+    assert.equal(onLine, 0, `${onLine} cells burnt ON the dozer line at row ${line} — a stale arrival ignited a treated cell`)
+    assert.equal(beyond, 0, `${beyond} cells burnt beyond the dozer line — the front ignored it`)
+  })
 })

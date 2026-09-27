@@ -6,7 +6,7 @@
  * exercises deterministically.
  */
 import {
-  createSim, forecastAt, ignite, paintTreatment, recomputeStats, step,
+  createSim, forecastAt, ignite, invalidateFront, paintTreatment, recomputeStats, step,
 } from '@firewatch/sim'
 import type { Params, Sim, ForecastHour, Stats, Terrain, Weather } from '@firewatch/sim'
 import type { FireTransport, TransportStatus } from './types.ts'
@@ -66,6 +66,9 @@ export class LocalTransport implements FireTransport {
   clearTreatment() {
     this.userTreatments.length = 0
     this.sim.treatment.fill(0)
+    // Clearing a line frees cells the queued arrival times were computed
+    // around, so discard them and let the next step re-derive the frontier.
+    invalidateFront(this.sim)
     // The renderer only rebuilds geometry when the sim changes; while paused the
     // clock is frozen, so without this the cleared lines stay on screen.
     this.sim.revision++
