@@ -23,13 +23,12 @@ Run everything from the repo root: `npm run dev` (both), `npm run dev:web`, `npm
 `npm run build`, `npm run typecheck`, `npm run smoke`, `npm run smoke:api`.
 
 `README.md` documents the model and the data sources; it and some source comments still say "four
-regions" and mention Lake Sevan, but `SCENARIOS` in `src/sim/terrain.ts` holds three (Khosrov,
-Dilijan, Kapan). **`ARCHITECTURE.md` describes a
-different, future system** — a 10 m energy-accumulator kernel on GPU with GEE-derived fuel and
-IR assimilation. None of that is implemented here. Do not treat it as a description of
-`src/`; the shipped model is the probabilistic CA that `ARCHITECTURE.md` §4 argues against, and the
-`1+√2` front-speed error §4 quantifies is live in `src/sim/model.ts:230`. The doc carries a status
-banner saying so.
+regions" and mention Lake Sevan, but `SCENARIOS` in `frontend/sim/src/terrain.ts` holds three
+(Khosrov, Dilijan, Kapan). **`ARCHITECTURE.md` still describes a partly-future system** — a 10 m
+kernel on GPU, GEE-derived fuel, an ensemble and IR assimilation, none of which is implemented.
+Two of its arguments have since landed by other means: §4's `1+√2` front-speed error is FIXED, by
+Finney minimum-travel-time propagation rather than §4's energy accumulator, and §9's provider
+ports are fully implemented with all ten real. Its status banner and §9 matrix say so.
 
 `ARCHITECTURE.md` §9 is the exception worth acting on: it specifies a provider/port interface per
 component (`FuelProvider`, `WeatherProvider`, `SpreadKernel`, …) with a `Provided<T>` +
@@ -146,12 +145,14 @@ mainly because it throws embers.
   crown fire existed. A sim with no canopy can only burn on the surface — a test asserts it.
 - **Re-attach after `reset`.** A fresh sim has no canopy; without the re-attach, crowning
   works exactly once per incident.
-- **Active crowning is under-triggered on purpose.** Van Wagner's `R` is the real spread
-  rate, and the kernel's nominal ROS sits ~4.45x below its emergent rate (1.9-6.9 m/min
-  against 9-31, versus `R_0` = 15 for a realistic CBD of 0.2). Feeding emergent would fire
-  at plausible winds by multiplying in a defect's magnitude, and would break silently when
-  the §4 energy kernel removes it. A test asserts realistic canopy does NOT crown actively,
-  so that when the spread rate is fixed the test fails loudly and gets deleted.
+- **`cellHeadRos` feeds Van Wagner, `cellMaxRos` feeds suppression, and they must stay
+  different numbers.** Crowning used to be deliberately under-triggered because the front
+  advanced 4.45x above the kernel's nominal rate, so feeding the emergent rate into
+  `R >= 3.0/CBD` would have multiplied in a defect. MTT closed that to a few per cent and the head
+  rate is now fed directly. The split remains necessary for a different reason: the eight
+  lattice directions can sit 22.5 deg off the wind, where the Richards ellipse factor is only
+  0.6, so reading intensity off the lattice maximum would make a fire's reported intensity
+  depend on the wind's bearing relative to the grid.
 
 ### Hindcast — the first real accuracy numbers
 
@@ -164,24 +165,38 @@ the only number that says the physics is worth anything. All at 0% suppression:
 
 | fire | strategy | window | area ratio | Dice | circle | gap | model L/B (truth) |
 |---|---|---|---|---|---|---|---|
-| Anderson Bridge | **100% monitored** | 191 h | 4.67x | 0.351 | 0.318 | **+0.032** | 1.32 (2.17) |
-| Pineland Rd | 100% suppressed | 100 h | **1.07x** | 0.493 | 0.685 | -0.191 | 1.31 (2.42) |
-| Hwy 82 | 100% suppressed | 239 h | **0.84x** | **0.642** | 0.688 | -0.046 | 1.20 (2.45) |
-| Ballard | 100% suppressed | 41 h | 3.70x | 0.376 | 0.418 | -0.043 | 1.38 (2.56) |
-| 113 Incident | 100% suppressed | 22 h | **1.13x** | 0.305 | 0.853 | -0.549 | 1.45 (1.32) |
+| Anderson Bridge | **100% monitored** | 191 h | 6.87x | 0.253 | 0.332 | -0.079 | 1.02 (2.17) |
+| Pineland Rd | 100% suppressed | 100 h | 3.96x | 0.393 | 0.403 | -0.010 | 1.12 (2.42) |
+| Hwy 82 | 100% suppressed | 239 h | 7.32x | 0.239 | 0.243 | -0.004 | 1.07 (2.45) |
+| Ballard | 100% suppressed | 41 h | 5.33x | 0.308 | 0.321 | -0.013 | 1.22 (2.56) |
+| 113 Incident | 100% suppressed | 22 h | 1.42x | 0.324 | 0.795 | -0.472 | 1.25 (1.32) |
 
-**Area is now roughly calibrated and shape is the whole remaining error.** Three of
-five land within 16% of the true area, and mean Dice went 0.289 -> 0.433 when MTT landed.
-It does not over-predict consistently; the spread is dispersion, not bias.
+**These numbers got WORSE three times on purpose, and must not be optimised back.** Each
+step replaced something invented with something published and removed an error that had
+been cancelling against another: the hindcast's memoryless moisture formula (accidentally
+wet, hiding too-fast spread), invented `mx` values, an invented moisture-damping curve, and
+an 11-class land-cover proxy where operational FBFM40 exists. Every one cost accuracy. Two
+cancelling errors that produce a good number are worse than one visible error, because the
+good number stops anyone looking.
 
-**But the model still does not beat a circle on a fought fire, and the reason has
-changed.** An equal-area disc gets much stronger as the model's area gets closer to
-truth — Hwy 82's null went 0.098 to 0.688 on the same fire — so closing the area error
-raised the bar rather than clearing it. The honest reading is that area is largely
-solved and shape is not: modelled L/B sits at 1.20-1.45 against real perimeters of
-2.2-2.6, because these fires grow until they fill their fuel-connected region and a
-region-filling fire has no shape. Four of five are still alight when the replay ends,
-so what stops a fire is the next thing to look at, not how fast it spreads.
+**THE DEFECT IS THAT FIRES NEVER STOP, and the shape-through-time trace proves it.**
+Anderson Bridge at hour 10 is L/B **3.74 on bearing 140 deg** and 10.6 kha, against a real
+perimeter of 2.17 on **140 deg** and 6.97 kha — one degree of bearing error, and 1.5x on
+area. By hour 191 it has filled its fuel-connected region at L/B 1.02 and 47.5 kha. Shape,
+bearing and area are all approximately right EARLY; unbounded duration destroys all three.
+A fire that never pauses has no shape.
+
+Moisture of extinction is the only halt besides rain and running out of fuel, and sheltered
+timber still carries 189 of 191 hours on Anderson Bridge because that spring was genuinely
+dry — open fuel moisture median 10.2%. `SHELTER_RH_GAIN` was deliberately not raised to
+force a pause. So the remaining error is rate, not duration: the model reaches Anderson
+Bridge's true area in about eight hours where the real fire took eight days.
+
+**The single highest-value work outstanding is multi-size-class Rothermel plus Scott &
+Burgan bed parameters.** Timber `depth` is 0.65 m against FM8's published 0.061 and load
+5.5 kg/m2 against 1.121. That is why reading correct FBFM40 fuel made the scores worse:
+more correctly-identified timber gets a bed ten times too deep. No ML is involved or
+needed.
 
 **The one fire that was monitored rather than fought is the only one the model beats a
 circle on.** That is what `attr_FireStrategyMonitorPercent` is read for, and it is the
@@ -357,8 +372,18 @@ is how a model stays plausible and wrong:
 
 | | calm | 40 km/h |
 |---|---|---|
-| nominal / Rothermel | 0.96-1.14x (grass) | **0.03-0.06x** |
-| emergent / nominal | 4.45x | 1.8x |
+| nominal / Rothermel | 1.28x (grass), 0.22x (timber) | same — constant per fuel |
+| emergent / nominal | **0.95x** | **0.99x** |
+
+`emergent / nominal` was 4.45x and 1.8x before Finney MTT; it is now **0.94-1.00x on the
+twelve wind cases**, so the front advances at the rate the kernel reports. The two outliers
+are both measurement, not kernel: 1.09x on a calm agriculture run the bench itself flags as
+short, and 0.71x on the 30 deg slope case, where an equal-area radius averages a fast
+upslope head with crawling flanks. What remains is
+`nominal / Rothermel`, and **do not read that as `baseRos` being wrong** — timber's nominal
+0.49 m/min matches published BehavePlus FM8's 0.5. It is the single-particle reference
+over-predicting multi-class fuels, plus bed parameters that are invented: timber `depth` is
+0.65 m against FM8's published 0.061.
 
 **The wind term was the larger error and has been fixed.** `exp(0.115·U)` reached 3.6x
 at 40 km/h where Rothermel reaches 65x, so wind-driven spread — the dangerous case — was
@@ -392,11 +417,17 @@ Two things about them:
   purely so tests can. A single run is deterministic, so its lopsidedness is frozen and
   looks exactly like lattice bias: worst-direction deviation is 23% at one seed, 7.7% at
   eight, 5.2% at twenty-four. Asserting on one run tests the RNG, not the kernel.
-- **One test is `todo`, deliberately.** The front advances at **4.45x** the kernel's own
-  nominal ROS — the `1+sqrt(2)` per-link overshoot of §4 with percolation compounding it.
-  The test encodes the target and reports the real number without failing the suite,
-  because the fix is a kernel redesign and failing the build on it would block every
-  unrelated change. Delete the `todo` when the energy kernel lands, not before.
+- **There are no `todo` tests left, and that is recent.** Two were `todo` for this file's
+  whole life — the front advancing at 4.45x the nominal rate, and calm-wind spread
+  disagreeing with Rothermel by 5.6x. Both were the same defect, both closed on their own
+  when MTT landed, and neither was ever tuned into passing. The pattern is worth reusing: a
+  `todo` that encodes a target and prints the real number keeps a known defect visible
+  without blocking unrelated work.
+- **Step counts can be part of a claim.** `ISO_STEPS = 1200` because published `mx` plus
+  Rothermel's `eta_M` roughly halved calm grass spread, leaving the isotropy fire four cells
+  across where one cell of lattice quantisation is 25%. It failed at 29.3% while measuring
+  only its own resolution — the diagonal reach was exactly axis/sqrt(2), the signature of
+  integer cell counts. Check the fire's size before the kernel.
 
 There is **no linter**, and no unit tests outside the kernel. Two smoke tests are the whole suite, both linear
 scripts with no filtering — to run one case, comment the others out:
@@ -736,15 +767,17 @@ These are the interfaces designed to be swapped for real feeds, each marked `MOC
 
 | Seam | File | Replace with |
 |---|---|---|
-| `mockForecast()` / `Weather` | `src/sim/weather.ts` | NWS gridpoint or RAWS pull — same shape, same units |
-| `classifyFuel()` visible-band | `frontend/sim/src/classify.ts` | a LANDFIRE-equivalent fuel raster |
+| `mockForecast()` / `Weather` | `frontend/sim/src/weather.ts` | NWS gridpoint or RAWS pull — same shape, same units |
+| `classifyFuel()` visible-band | `frontend/sim/src/classify.ts` | **done** — LANDFIRE FBFM40 in CONUS, ESA WorldCover globally; this is now only the last fallback, kept because browser-only mode has nothing else |
 | Procedural terrain | `frontend/sim/src/terrain.ts` | superseded at runtime by real tiles; kept as the offline fallback |
 | Click-to-ignite | `App.tsx` | VIIRS / GOES active-fire detections |
 
 Server-side the same seams are formal §9 ports in `frontend/api/src/providers/`. `registry.ts` is
-the **only** file that names concrete implementations. Real today: Terrarium DEM, Esri imagery
-fuel, Open-Meteo weather, OSM barriers, OSM buildings, FIRMS observations. Mocked: canopy, burn
-history, wind field, fuel moisture. Every provider returns `Provided<T>` carrying `Provenance`, and the UI header chip
+the **only** file that names concrete implementations. **All ten ports are real in live mode** —
+Terrarium DEM, LANDFIRE FBFM40 / ESA WorldCover fuel, a LANDFIRE-trained canopy model, OSM
+barriers and buildings, Sentinel-2 dNBR burn history, Open-Meteo weather and wind field, NFDRS 1-h
+moisture, FIRMS observations — and offline mode swaps each for a procedural or null one. Every
+provider returns `Provided<T>` carrying `Provenance`, and the UI header chip
 lists which is which — "mock data presented as live" is meant to be a type error, so do not add a
 provider that returns bare data.
 

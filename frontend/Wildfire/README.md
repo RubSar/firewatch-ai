@@ -46,28 +46,45 @@ land in plausible ranges.
 is computed for the fuel being *entered*:
 
 ```
-ROS = baseROS(fuel) × moisture × heat × slope × wind
+ROS_head(θ=0) = baseROS(fuel) × η_M × heat × slope × (1 + φ_w)
+ROS(θ)        = ROS_head × (1 − e) / (1 − e·cos θ)
 ```
 
-- **Wind** is exponential in the component of wind along the spread direction,
-  `exp(0.115 · U · cos θ)`. The head races, the backing edge crawls — at 65 km/h
-  the head runs some 20× the backing rate.
+- **Wind** uses Rothermel's own `1 + φ_w` with per-fuel coefficients, evaluated
+  once at full alignment. It replaced `exp(0.115 · U)`, which reached 3.6× at
+  40 km/h where Rothermel reaches 65× — badly under-predicting the dangerous case.
+- **Direction** comes from Richards (1990) elliptical propagation, the
+  formulation under FARSITE and FlamMap: the head rate scaled onto a spread
+  ellipse whose length-to-breadth follows Anderson (1983). Feeding `φ_w` a
+  cosine-reduced wind instead returns the head rate of a *calmer* fire, which
+  made every fire come out circular at every wind speed.
 - **Slope** doubles the rate of spread per 10° of upslope, `exp(0.0693 · φ)`,
   the standard field rule of thumb. Fires run up canyons.
-- **Moisture** damps toward each fuel's *moisture of extinction*. Past it, that
-  fuel will not carry fire at all — grass quits long before timber does.
+- **Moisture** uses Rothermel's damping coefficient
+  `η_M = 1 − 2.59r + 5.11r² − 3.52r³`, `r = fmc / mx`, which is exactly zero at
+  the *moisture of extinction*. Past it that fuel will not carry at all — grass
+  quits at 12%, timber holds to 25%.
 
-Ignition is then drawn from an exponential arrival process,
-`p = 1 − exp(−ROS · Δt / distance)`, which makes spread rate independent of the
-step size and keeps fronts organically ragged instead of geometric.
+Arrival is then a **minimum-travel-time** search, Finney (2002): Dijkstra over
+the cell graph with link cost `distance / ROS(θ)`. It replaced a per-step
+Bernoulli draw, which let the front advance by first-passage percolation over
+competing paths at 4.45× the rate the model reported, and capped head-fire speed
+at `cellSize / Δt`. Spread is now deterministic and matches the kernel's own
+nominal rate to within 6% on every wind case the bench measures.
 
 **Fuels.** Seven simplified models after Anderson's 13, each with a spread rate,
-fuel load, moisture of extinction and ember production. Vegetation is placed by
-topography: cool north-facing slopes and high ground carry timber, hot south
-aspects and low ground carry grass and brush, lowlands carry the WUI.
+fuel load, moisture of extinction and ember production. Moisture of extinction is
+now taken from published Anderson (1982) values — grass 12% (FM1), shrub 20%
+(FM4), timber 25% (FM10); `depth`, `sav` and `bulkDensity` are still invented and
+need multi-size-class Rothermel before real ones can be used. Real fuel comes
+from LANDFIRE or WorldCover; the topographic placement below is the offline
+fallback only.
 
-**Fuel moisture** comes from humidity, temperature and drought, in the spirit of
-an NFDRS 1-hour timelag calculation. Rain puts it straight back.
+**Fuel moisture** is an NFDRS 1-hour timelag: Simard equilibrium moisture from
+temperature and humidity, stepped with a one-hour time constant over seven days
+of history, with rain driving fuels toward saturation far faster than drying
+returns them. Fuel under a canopy is cooler and sits in more humid air, so it
+carries a sheltering correction scaled by canopy cover (Rothermel 1983).
 
 **Spotting.** High-intensity cells loft embers downwind, up to roughly
 `90 × windspeed` metres, which is how fires cross the lines you draw.
@@ -82,8 +99,10 @@ Node APIs, so the identical stepping code runs in the browser and on the server.
 
 `ARCHITECTURE.md` describes a different and much larger design — a 10 m energy-
 accumulator kernel with crown fire and an ensemble. It is labelled as proposed
-and is **not** what this code does; §4 there argues against exactly the
-probabilistic formulation used here, and quantifies its `1+√2` front-speed error.
+and is **not** what this code does. §4 there argues against a probabilistic
+arrival formulation and quantifies its `1+√2` front-speed error — that defect is
+now fixed, by minimum-travel-time propagation rather than by §4's energy
+accumulator, so the front advances at the rate the model reports.
 
 ## Data
 
@@ -95,7 +114,8 @@ shows what the current scenario is running on.
 |---|---|---|
 | Elevation | AWS Terrarium terrain tiles | RGB-encoded height, public, no key |
 | Water & snow | **Sentinel-2 L2A Scene Classification**, AWS Open Data | keyless; measured, not inferred from colour |
-| Land cover → fuel model | Esri World Imagery | visible-band proxy **tuned on Armenian imagery**; water/snow come from SCL and travel, the vegetation split does not |
+| Fuel model | **LANDFIRE FBFM40** (CONUS) → **ESA WorldCover v200** (global) → Esri imagery | Scott & Burgan's 40 operational models where they exist, 11-class land cover elsewhere; the visible-band proxy is now only the last fallback |
+| Canopy structure | **model trained on LANDFIRE** CBH/CBD/CC/CH | gradient-boosted trees over Sentinel-2 + terrain; predictions, not measurements — see the caveat in `providers/canopy-learned.ts` |
 | Weather | real in server mode (Open-Meteo); mocked in browser mode — `frontend/sim/src/weather.ts` | `mockForecast()` and the live feed return the same shape |
 | Days since rain | **Open-Meteo** daily precipitation, 61 days back | measured, not carried from the preset; ≥2 mm counts as a wetting rain |
 | Barriers | **OpenStreetMap** roads and watercourses, via Overpass | keyless; server-side only. Geometry measured, widths assumed per tag |
@@ -142,16 +162,18 @@ Two transports, one renderer. `src/transport/` decides which:
 The remote transport mirrors the wire deltas into a real `Sim` object, so
 `MapView`, `fireGeometry` and `paint` are untouched and cannot tell which
 transport they were handed. The header chip names what is real and what is
-mocked — "6 of 10 sources live · 4 mocked" — because a provider that returns data
-without saying where it came from is the failure mode worth designing against.
+mocked — all ten ports now report `measured` or `derived` in live mode — because a
+provider that returns data without saying where it came from is the failure mode
+worth designing against.
 The chip names the real ports while they fit in a header and falls back to counts
 past four; the ⓘ opens the full per-port breakdown, provenance note and all.
 
 Server-side the data sources are formal provider ports (`ARCHITECTURE.md` §9) in
-`frontend/api/src/providers/`. Real today: Terrarium DEM, Esri imagery fuel,
-Open-Meteo weather, OSM barriers, OSM buildings, FIRMS observations. Mocked:
-canopy, burn history, wind field, fuel moisture. Swapping any one is a line in
-`registry.ts`.
+`frontend/api/src/providers/`. **Every port has a real implementation**: Terrarium
+DEM, LANDFIRE FBFM40 / ESA WorldCover fuel, a LANDFIRE-trained canopy model,
+Open-Meteo weather and wind, NFDRS 1-h moisture, OSM barriers and buildings,
+Sentinel-2 dNBR burn history, FIRMS observations. Offline mode swaps each for a
+procedural or null one. Swapping any is a line in `registry.ts`.
 
 ### Barriers
 
@@ -265,10 +287,14 @@ npm run watercheck   # classifier accuracy over six hard water bodies
 
 ### Classifying fuel from imagery
 
-There is no free global fuel-model raster, so fuel is inferred from visible-band
-satellite imagery per cell. It is a proxy, not a measurement — a production build
-would read a LANDFIRE-equivalent raster instead — but the thresholds were tuned
-against measured band statistics for these specific regions rather than guessed:
+**This is now the last fallback, not the primary path.** Live mode reads LANDFIRE
+FBFM40 inside CONUS and ESA WorldCover globally; the visible-band classifier only
+runs when both are unavailable, and offline mode uses topographic rules instead.
+It is kept because it needs no network beyond a basemap tile, which is what makes
+browser-only mode work.
+
+It is a proxy, not a measurement, but the thresholds were tuned against measured
+band statistics for these specific regions rather than guessed:
 
 - **Water** is found by *blueness*, not greenness. Lake Sevan is turquoise, so
   green sits far above red and a vegetation index confidently calls the lake
@@ -310,7 +336,11 @@ frontend/                     workspace root — run every script from here
     classify.ts               visible-band fuel classifier (shared both sides)
     geo.ts                    web-Mercator tile math (shared both sides)
     weather.ts                weather, fuel moisture, fire danger, mock forecast
-    model.ts                  the spread automaton and incident statistics
+    model.ts                  the kernel: MTT propagation, crown fire, statistics
+    heap.ts                   indexed min-heap for the minimum-travel-time front
+    rothermel.ts              independent Rothermel (1972) reference for the bench
+    shape.ts                  burn length-to-breadth and major-axis bearing
+    shelter.ts                canopy sheltering of dead fine fuel moisture
 
   contracts/src/              @firewatch/contracts · types and codec only
     providers.ts              the §9 provider ports, Provenance / Provided<T>
@@ -321,6 +351,8 @@ frontend/                     workspace root — run every script from here
     server.ts                 REST + WebSocket
     incident.ts               one fire: sim, clock, delta vs what clients saw
     providers/                registry.ts is the only file naming implementations
+    canopy/                   the canopy model: features, sampler, trainer, trees
+    hindcast.ts               replays real fires against mapped WFIGS perimeters
     smoke.ts                  boots the server and decodes the stream
 
   Wildfire/                   this app

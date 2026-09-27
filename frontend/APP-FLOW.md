@@ -120,8 +120,8 @@ path.
 | Port | live | offline |
 |---|---|---|
 | elevation | `terrarium-dem` | `procedural-dem` |
-| fuel | `esa-worldcover` (Sentinel-2 SCL authoritative for water/snow) | `topography-fuel` |
-| canopy | `assumed-canopy` (mock) | `assumed-canopy` |
+| fuel | `landfire-fbfm40` (CONUS) → `esa-worldcover` (Sentinel-2 SCL authoritative for water/snow) | `topography-fuel` |
+| canopy | `landfire-gbt-canopy` (trees trained on LANDFIRE CBH/CBD) | `assumed-canopy` |
 | barriers | `osm-barriers` (Overpass) | `no-barriers` |
 | burnHistory | `sentinel2-dnbr` | `no-burn-history` |
 | weather | `open-meteo` | `mock-forecast` |
@@ -398,7 +398,7 @@ assembled in `relax` (`sim/src/model.ts:610`). Each factor:
 | Term | Formula | Source |
 |---|---|---|
 | `baseRos` | tabulated per fuel, m/s | `sim/src/fuels.ts` — **invented, not measured** |
-| moisture damping `η_M` | `((M_x − M)/(M_x − 1.5))^1.5`, zero at or above extinction | `model.ts:493` |
+| moisture damping `η_M` | `1 − 2.59·r + 5.11·r² − 3.52·r³`, `r = min(M/M_x, 1)` — Rothermel's own, exactly zero at extinction | `model.ts` `moistureDamping` |
 | temperature `η_T` | `max(0.2, 1 + 0.018·(T − 20))` | `model.ts` |
 | slope `φ_slope` | `min(8, exp(0.0693·θ_deg))`, θ clamped to ±25° | `model.ts` |
 | wind `1 + φ_w` | Rothermel's own wind coefficient, below | `model.ts:395` |
@@ -495,11 +495,18 @@ CBD is in the denominator.
 
 Crown fuel burns out on a `residence` of 60 s (active) or 180 s (torching).
 
-**Active crowning is deliberately under-triggered.** Van Wagner's `R` is the fire's real spread
-rate; the kernel's nominal rate sits ~4.45× below its emergent rate, so feeding the emergent one
-would fire at plausible winds by multiplying in a defect's magnitude, and would break silently
-when that defect is fixed. A test asserts realistic canopy does *not* crown actively, so the
-test fails loudly when the spread rate is corrected.
+**Van Wagner's `R` is now the rate the kernel reports.** This used to be a problem: the front
+advanced at 4.45× the nominal rate, so feeding the emergent rate into `R ≥ 3.0/CBD` would have
+multiplied in a defect's magnitude, and a test asserted that realistic canopy must *not* crown
+actively. Minimum-travel-time propagation closed that gap to a few per cent, so `cellHeadRos` — the
+pre-ellipse head rate — is fed directly.
+
+`cellHeadRos` and `cellMaxRos` are deliberately different numbers. Byram intensity, Van Wagner
+crowning and the `peakRos` read-out use the head rate; suppression uses the fastest edge actually
+leaving the cell, because a crew holds the edge in front of them. Reading intensity off the
+lattice maximum instead would make a fire's reported intensity depend on the wind's bearing
+relative to the grid, since the eight directions can sit 22.5° off the wind where the ellipse
+factor is only 0.6.
 
 ## A.4 Spotting — stochastic
 
@@ -808,12 +815,12 @@ left in place:
 
 | Defect | Magnitude | Why it is still there |
 |---|---|---|
-| Emergent vs nominal spread rate | front advances at **4.45×** the ROS the kernel reports | Three fixes were implemented and measured; each traded a uniform error for a worse non-uniform one. The lattice sits near a percolation threshold, so slowing links does not slow fuels proportionally. A uniform characterised error is more useful than a non-uniform 1.7× one. `kernel.test.ts` keeps it visible as a `todo` |
+| Fires never stop | sheltered timber carries 189/191 replay hours | Moisture of extinction is the only halt besides rain, and that spring was genuinely dry. `SHELTER_RH_GAIN` was **not** raised to force a pause — nothing here is tuned against a Dice score. This is the largest open defect: shape decays from L/B 3.74 at hour 10 to 1.02 at hour 191 |
 | Elongation reaches ~half of Anderson's L/B | flank runs 4–10× nominal, head 0.5–1.0× | Lattice, not the ellipse: an isotropic arrival overshoot (~2.8×) composes with lateral leakage through the diagonals (3.2×); 3.2 × 2.2 = 7.0 against a measured 6.9 |
 | `MAX_LB = 8`, `MAX_WIND_FACTOR = 1000` | caps on unbounded formulas | Anderson's fit and Rothermel's `φ_w` both diverge outside their calibration range. The proper wind limit is a function of reaction intensity; the flat ceiling is a backstop |
 | Slope is per-direction, not folded into a wind-slope vector | departs from FARSITE | The one deliberate departure from the Richards reference formulation |
 | Rothermel reference is single-particle | exact for this kernel's fuels, invalid against real Anderson/Scott & Burgan models | Multi-size-class aggregation is the prerequisite for ever comparing against a real fuel model |
-| `baseRos`, `depth`, `sav`, `bulkDensity` | invented, not measured | Aligning them to Rothermel-applied-to-guesses would be false precision. Real Anderson or Scott & Burgan bed parameters are the honest fix |
+| `depth`, `sav`, `bulkDensity` | invented; timber depth is 0.65 m against FM8's published 0.061 | `mx` has been corrected to published Anderson values, but the bed parameters need multi-size-class Rothermel first — which is why reading operational FBFM40 fuel made the hindcast *worse*, not better. The highest-value work outstanding |
 | Foliar moisture fixed at 100% | enters Van Wagner's `I_0` directly | Nothing in the model tracks seasonal plant physiology. First assumption to replace if crown behaviour needs defending |
 | Barriers move Dice by < 0.003 | 30,000–46,000 blocked edges | Correct per the sub-cell design: `blockFrac` peaks near 0.6, so roads do not act as firebreaks at this resolution |
 

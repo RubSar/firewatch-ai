@@ -3,10 +3,18 @@
 Fuel extracted from satellite imagery, energy accounted for cell by cell, spread predicted on a
 rolling 5-minute horizon, and corrected against where the fire observably is.
 
-> **Status: proposed target design. Not implemented.** What ships in `src/` is a different and much
-> smaller thing — a probabilistic cellular automaton on a ~38 m grid, described in `README.md`. It is
-> specifically the design §4 argues against, and §4's `1+√2` error is live in
-> `src/sim/model.ts`. Read this as where the model is going, never as a description of the code.
+> **Status: proposed target design. Mostly not implemented.** What ships is a smaller thing: a
+> front-tracking kernel on a ~38 m grid in `frontend/sim/src/model.ts`, described in `README.md`.
+> Read this as where the model is going, never as a description of the code.
+>
+> **Two things here have since landed, by different means than §4 proposes.** §4's `1+√2`
+> front-speed error is fixed — not by an energy accumulator but by Finney (2002) minimum-travel-time
+> propagation, which made the front advance at the rate the kernel reports, within 6%. And
+> directional spread is Richards (1990) elliptical, not the cosine-scaled `φ_w` §4 criticises.
+> §9's provider ports are fully implemented and every one of the ten is now real.
+>
+> What remains proposed: the 10 m grid, GPU execution, GEE-derived fuel, the ensemble, and the
+> IR assimilation loop of §6.
 
 ## Four decisions this design commits to
 
@@ -235,7 +243,13 @@ Both sides show one unignited cell with three burning neighbours — the ordinar
 fire front. The left is quantifiable: with a per-link `p = 1 − exp(−ROS·Δt/d)`, the orthogonal
 neighbour contributes hazard `ROS/h` and the two diagonals `ROS/(h√2)` each, so the total is
 `(1 + 2/√2)·ROS/h = (1+√2)·ROS/h`. The front advances **2.414× the model's own nominal rate**, before
-percolation compounds it. This is not hypothetical: it is the formulation in `src/sim/model.ts`.
+percolation compounds it. This was not hypothetical — it was the formulation in the kernel, and
+measured at **4.45×** once percolation was included.
+
+> **This defect is fixed, and not by the accumulator below.** Finney (2002) minimum-travel-time
+> propagation replaced the per-step draw with a deterministic shortest-arrival search, and the
+> front now advances within 6% of the nominal rate on every wind case in the bench. The argument in this
+> section stands as a diagnosis; its proposed remedy was overtaken by a cheaper one.
 
 ### Honesty note: what the accumulator does and does not fix
 
@@ -658,7 +672,7 @@ over the holes. That fact currently dies inside the function; it belongs in the 
 
 ```ts
 export interface GridSpec {
-  bounds: Bounds            // from src/sim/terrain.ts
+  bounds: Bounds            // from frontend/sim/src/terrain.ts
   cols: number
   rows: number
   cellSize: number          // metres
@@ -675,7 +689,7 @@ export interface ElevationProvider extends Provider<GridSpec, ElevationGrid> {}
 
 /** Surface fuel. `fineLoad` vs `totalLoad` is load-bearing — see the Q_ig note in §4. */
 export type FuelGrid = {
-  fuelId: Uint8Array        // indexes FUELS in src/sim/fuels.ts
+  fuelId: Uint8Array        // indexes FUELS in frontend/sim/src/fuels.ts
   fineLoad: Float32Array    // kg/m², 1-h fraction — the Q_ig sink
   totalLoad: Float32Array   // kg/m², all size classes
   bulkDensity: Float32Array // kg/m³
@@ -712,7 +726,7 @@ export interface BurnHistoryProvider extends Provider<GridSpec, SeverityGrid> {}
 ### Tier 2 · Weather
 
 ```ts
-/** Matches Weather in src/sim/weather.ts — windDir is the direction wind blows FROM. */
+/** Matches Weather in frontend/sim/src/weather.ts — windDir is the direction wind blows FROM. */
 export type Observation = Weather & { at: Date }
 
 export interface WeatherProvider extends Provider<{ bounds: Bounds; hours: number }, {
@@ -743,7 +757,7 @@ any caller. Designing it out now is what forces a rewrite later.
 
 ### Tier 3 · Kernel, and the things that drive it
 
-`Bounds`, `Weather` and `Stats` are the existing types from `src/sim/terrain.ts`, `weather.ts` and
+`Bounds`, `Weather` and `Stats` are the existing types from `frontend/sim/src/terrain.ts`, `weather.ts` and
 `model.ts` — reused, not redefined. `KernelState` is deliberately opaque: each kernel owns its own
 layout (the current one is a bag of typed arrays; the energy kernel will be GPU buffers), and no
 caller may reach inside it. Everything the UI needs comes back through `arrivalTime()` and `stats()`.
@@ -822,30 +836,34 @@ export interface ValuesAtRisk extends Provider<GridSpec, {
 
 Each row is the same interface, three times over. The middle column is what exists now.
 
-| Port | Offline / mock today | Where it lives now | Real implementation |
+| Port | Offline implementation | Live implementation | Still ahead |
 |---|---|---|---|
-| `ElevationProvider` | `buildTerrain()` ridged-noise field | `src/sim/terrain.ts` | `TerrariumDem` (exists, `loadRealTerrain`) → `CopernicusDem` via GEE |
-| `FuelProvider` | topography rules in `buildTerrain()` | `src/sim/terrain.ts` | `classify()` visible-band (exists) → `WorldCoverCrosswalk` → `SegFormerFuel` |
-| `CanopyProvider` | **missing** — `assumed` all 1, per-`Fuel` constants | — | `GediCanopy` gap-filled against Sentinel-2 |
-| `BarrierProvider` | `NoBarriers` (all zeros) — offline only | `api/src/providers/osm.ts` | **`OsmBarriers` exists** — Overpass roads + watercourses, per-edge, widths assumed per tag |
-| `BurnHistoryProvider` | `NoBurnHistory` | — | `GeeDnbr` (§3) |
-| `WeatherProvider` | `mockForecast()` + `PRESETS` | `api/src/providers/tier2.ts` | **`OpenMeteo` exists** — hourly forecast plus 61 days of daily precipitation for days-since-rain |
-| `WindFieldProvider` | `UniformWind` + `gustAt()` | `src/sim/model.ts` | `WindNinjaField` at 100 m |
-| `FuelMoistureModel` | `fuelMoisture()` — RH formula, scalar | `src/sim/weather.ts` | `Nfdrs1hTimelag`, per-cell, stateful |
-| `IgnitionSource` | `UserClickIgnition` | `App.tsx` `onIgnite` | `ViirsFeed` / `GoesFeed` |
-| `SuppressionPlan` | user-drawn dozer / retardant | `paintTreatment()` | incident action plan import |
-| `PerimeterObserver` | `NoObservations` — offline only | `api/src/providers/firms.ts` | **`FirmsPerimeter` exists** — VIIRS/MODIS detections painted at their real footprint. `DroneIrPerimeter` is the upgrade |
-| `SpreadKernel` | `ProbabilisticCaKernel` — **has the `1+√2` bug** | `src/sim/model.ts` | `EnergyKernel` (§4); `Cell2FireAdapter` as the step-1 gate |
-| `ValuesAtRisk` | `STRUCTURES_PER_HA = 3` × burnt WUI area | `api/src/providers/osm.ts` | **`OsmBuildings` exists** — mapped footprints counted per cell. `YoloDetections` for what OSM is missing |
+| `ElevationProvider` | `proceduralDem` — ridged noise | **`terrariumDem`** — AWS Terrarium tiles | `CopernicusDem` via GEE |
+| `FuelProvider` | `topographyFuel` — aspect and elevation rules | **`fbfm40Fuel`** (Scott & Burgan 40-model, CONUS) → **`worldCoverFuel`** (ESA, global) → `imageryFuel` (visible-band) | Scott & Burgan *bed parameters*, which need multi-size-class Rothermel first |
+| `CanopyProvider` | `assumedCanopy` — per-`Fuel` constants | **`learnedCanopy`** — gradient-boosted trees trained on LANDFIRE CBH/CBD/CC/CH | GEDI L2B lidar profiles for CBD, which optical bands barely see |
+| `BarrierProvider` | `noBarriers` | **`osmBarriers`** — Overpass roads + watercourses, per-edge, widths assumed per tag | — |
+| `BurnHistoryProvider` | `noBurnHistory` | **`sentinelBurnHistory`** — dNBR across a Sentinel-2 scene pair | — |
+| `WeatherProvider` | `mockWeather` + `PRESETS` | **`openMeteo`** — hourly forecast plus 61 d of daily precipitation | RAWS / NWS gridpoint |
+| `WindFieldProvider` | `uniformWind` + `gustAt()` | **`openMeteoWind`** — spatial anomaly, not absolute | `WindNinjaField` at 100 m |
+| `FuelMoistureModel` | `rhFuelMoisture` — snapshot RH formula | **`nfdrs1hMoisture`** — Simard EMC, 1-h timelag over 7 d, plus canopy sheltering | — |
+| `IgnitionSource` | `UserClickIgnition` | **`firmsPerimeter`** doubles as one — click a detection to ignite there | `ViirsFeed` / `GoesFeed` push |
+| `SuppressionPlan` | user-drawn dozer / retardant | same | incident action plan import |
+| `PerimeterObserver` | `noObservations` | **`firmsPerimeter`** — VIIRS/MODIS at their real 375 m footprint | `DroneIrPerimeter`, and §6's assimilation loop, which has no consumer yet |
+| `SpreadKernel` | — | `model.ts` — Rothermel `φ_w`, Richards ellipse, Finney MTT | the 10 m grid and GPU execution of §4 |
+| `ValuesAtRisk` | `densityValuesAtRisk` — 3 structures/ha | **`osmValuesAtRisk`** — mapped footprints counted per cell | `YoloDetections` for what OSM is missing |
 
-Five rows have no mock at all today. Those are the gaps, and writing the trivial null implementation
-(`NoBarriers`, `NoObservations`, `NoBurnHistory`) is worth doing immediately: it forces the call sites
-to exist, so adding the real provider later touches one line of composition instead of the kernel.
+**Every port now has a live implementation, and none returns invented data in live
+mode.** `GET /api/health` reports `measured` or `derived` for all ten. That is the
+claim this section existed to make true, and it is worth stating plainly because
+the interesting half is what it did *not* buy: see the note on the canopy model in
+`providers/canopy-learned.ts`, which is a real trained model that changes
+end-to-end accuracy by −0.0004 Dice.
 
-That claim has since been tested on `BarrierProvider`: with `NoBarriers` and its call site already
-in place, the real Overpass provider was one line in `registry.ts` plus two in the kernel — the
-kernel lines only because the probabilistic CA had no per-edge term at all. `blockFrac` scales the
-spread rate through each edge, which is the §5 sub-cell treatment and not the accumulator of §4.
+The prediction that writing null implementations first would make each real
+provider one line of composition has now been tested three times. `BarrierProvider`
+cost one line in `registry.ts` plus two in the kernel, the kernel lines only
+because there was no per-edge term at all. `CanopyProvider` and `FuelProvider` each
+cost one line plus a fallback entry. The pattern held.
 
 ### Composition
 
@@ -867,7 +885,7 @@ export function buildIncident(env: 'offline' | 'live'): Incident {
     weather: env === 'live' ? new OpenMeteo() : new MockForecast(),
     wind: new UniformWind(),              // until WindNinja
     moisture: new RhFuelMoisture(),
-    kernel: new ProbabilisticCaKernel(),  // until EnergyKernel passes the step-1 gate
+    kernel: mttKernel(),                  // Rothermel phi_w + Richards ellipse + Finney MTT
     observer: new NoObservations(),
   })
 }
