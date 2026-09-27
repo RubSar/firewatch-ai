@@ -389,27 +389,31 @@ export default function App() {
             />
           )}
 
-          <div className="hud hud-tl">
-            <MapTools
-              tool={tool}
-              onTool={setTool}
-              onClearLines={clearLines}
-              hasLines={hasLines}
-              thermal={layers.thermal}
-              onThermal={(v) => setLayers((l) => ({ ...l, thermal: v }))}
-              isochrones={layers.isochrones}
-              onIsochrones={(v) => setLayers((l) => ({ ...l, isochrones: v }))}
-              activeFires={layers.activeFires}
-              onActiveFires={(v) => setLayers((l) => ({ ...l, activeFires: v }))}
-              canShowActiveFires={Boolean(API_URL)}
-            />
-          </div>
-
-          {params.followForecast && forecast.length > 0 && (
-            <div className="hud hud-top">
-              <ForecastStrip forecast={forecast} simHours={hours} />
+          {/* Palette and forecast strip share the top-left corner, so they
+              stack in one column rather than landing on top of each other. */}
+          <div className="hud-stack">
+            <div className="hud hud-tl">
+              <MapTools
+                tool={tool}
+                onTool={setTool}
+                onClearLines={clearLines}
+                hasLines={hasLines}
+                thermal={layers.thermal}
+                onThermal={(v) => setLayers((l) => ({ ...l, thermal: v }))}
+                isochrones={layers.isochrones}
+                onIsochrones={(v) => setLayers((l) => ({ ...l, isochrones: v }))}
+                activeFires={layers.activeFires}
+                onActiveFires={(v) => setLayers((l) => ({ ...l, activeFires: v }))}
+                canShowActiveFires={Boolean(API_URL)}
+              />
             </div>
-          )}
+
+            {params.followForecast && forecast.length > 0 && (
+              <div className="hud hud-top">
+                <ForecastStrip forecast={forecast} simHours={hours} />
+              </div>
+            )}
+          </div>
 
           <div className="hud hud-tr">
             <StatsPanel

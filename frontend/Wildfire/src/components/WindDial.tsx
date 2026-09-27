@@ -23,9 +23,11 @@ export function WindDial({ dir, speed, gust, disabled, onChange }: Props) {
       const b = el.getBoundingClientRect()
       const dx = e.clientX - (b.left + b.width / 2)
       const dy = e.clientY - (b.top + b.height / 2)
-      // Screen angle -> compass bearing of the point the user grabbed.
+      // Screen angle -> compass bearing of the point the user grabbed. The
+      // arrow head follows the pointer there, and the head is the TO bearing,
+      // so the FROM bearing this component reports is the opposite one.
       const deg = (Math.atan2(dx, -dy) * 180) / Math.PI
-      onChange(Math.round((deg + 360) % 360))
+      onChange(Math.round((deg + 540) % 360))
     },
     [onChange, disabled]
   )
@@ -51,6 +53,10 @@ export function WindDial({ dir, speed, gust, disabled, onChange }: Props) {
   const tipY = R - Math.cos(rad) * len
   const tailX = R - Math.sin(rad) * (len * 0.55)
   const tailY = R + Math.cos(rad) * (len * 0.55)
+  // Barbs sit back along the shaft, splayed either side of it, so the head
+  // points the same way the shaft does.
+  const barb = (spread: number) =>
+    `${tipX - Math.sin(rad + spread) * 9},${tipY + Math.cos(rad + spread) * 9}`
 
   return (
     <svg
@@ -111,12 +117,7 @@ export function WindDial({ dir, speed, gust, disabled, onChange }: Props) {
         <animate attributeName="r" values={`7;${7 + gust * 13};7`} dur={`${2.6 - gust * 1.4}s`} repeatCount="indefinite" />
       </circle>
       <line x1={tailX} y1={tailY} x2={tipX} y2={tipY} stroke="#ff6b1a" strokeWidth="3" strokeLinecap="round" />
-      <polygon
-        points={`${tipX},${tipY} ${tipX - Math.sin(rad - 2.5) * 9},${tipY + Math.cos(rad - 2.5) * 9} ${
-          tipX - Math.sin(rad + 2.5) * 9
-        },${tipY + Math.cos(rad + 2.5) * 9}`}
-        fill="#ff6b1a"
-      />
+      <polygon points={`${tipX},${tipY} ${barb(-0.5)} ${barb(0.5)}`} fill="#ff6b1a" />
       <circle cx={R} cy={R} r="3.5" fill="#ffd24d" />
       <title>{`Wind from ${compassLabel(dir)} (${Math.round(dir)} deg) — drag to change`}</title>
     </svg>
