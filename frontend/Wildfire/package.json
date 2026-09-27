@@ -12,6 +12,7 @@
     "typecheck": "tsc -b"
   },
   "dependencies": {
+    "@firewatch/visualization": "*",
     "@firewatch/contracts": "*",
     "@firewatch/sim": "*",
     "d3-contour": "^4.0.2",

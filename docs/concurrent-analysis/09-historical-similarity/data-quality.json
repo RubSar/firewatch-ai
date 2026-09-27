@@ -1,0 +1,335 @@
+{
+  "cfsds": {
+    "imported": {
+      "situations": 82108,
+      "distinct_fires": 4164,
+      "by_year": {
+        "2002": 1515,
+        "2003": 4600,
+        "2004": 6845,
+        "2005": 2172,
+        "2006": 2823,
+        "2007": 1725,
+        "2008": 1887,
+        "2009": 1707,
+        "2010": 3869,
+        "2011": 2144,
+        "2012": 5571,
+        "2013": 5978,
+        "2014": 6513,
+        "2015": 6509,
+        "2016": 1947,
+        "2017": 8065,
+        "2018": 5313,
+        "2019": 2502,
+        "2020": 372,
+        "2021": 10051
+      },
+      "by_region": {
+        "10": 66,
+        "11": 2253,
+        "12": 8979,
+        "13": 475,
+        "14": 12705,
+        "15": 2709,
+        "25": 1355,
+        "26": 2423,
+        "3": 86,
+        "4": 12220,
+        "5": 12569,
+        "6": 17957,
+        "7": 2,
+        "9": 8273,
+        "unknown": 36
+      }
+    },
+    "complete_matching_cohort": {
+      "situations": 76919,
+      "distinct_fires": 3999,
+      "by_year": {
+        "2002": 1335,
+        "2003": 4274,
+        "2004": 6533,
+        "2005": 1934,
+        "2006": 2607,
+        "2007": 1577,
+        "2008": 1752,
+        "2009": 1557,
+        "2010": 3645,
+        "2011": 1986,
+        "2012": 5298,
+        "2013": 5736,
+        "2014": 6189,
+        "2015": 6054,
+        "2016": 1830,
+        "2017": 7662,
+        "2018": 4955,
+        "2019": 2363,
+        "2020": 333,
+        "2021": 9299
+      },
+      "by_region": {
+        "10": 45,
+        "11": 2141,
+        "12": 8545,
+        "13": 444,
+        "14": 11756,
+        "15": 2540,
+        "25": 1173,
+        "26": 2161,
+        "3": 79,
+        "4": 11584,
+        "5": 11939,
+        "6": 16875,
+        "7": 1,
+        "9": 7606,
+        "unknown": 30
+      }
+    },
+    "import_exclusions": {},
+    "incomplete_matching_rows": 5189,
+    "missing_fields": {
+      "wind.direction_deg": 82108,
+      "state.previous_growth_ha": 4164,
+      "weather.fine_fuel_moisture_code": 930,
+      "weather.duff_moisture_code": 1098,
+      "weather.drought_code": 930,
+      "weather.temperature_max_c": 11,
+      "weather.relative_humidity_pct": 11,
+      "weather.precipitation_mm": 11,
+      "weather.vpd_kpa": 11,
+      "wind.speed_m_s": 11
+    },
+    "flags": {
+      "outcome_footprint_covariates": 82108,
+      "reconstructed_progression": 82108,
+      "missing_previous_interval": 4164,
+      "zero_growth_covariates_may_use_future_location": 41655
+    },
+    "zero_growth_rows": 41655
+  },
+  "gofer": {
+    "imported": {
+      "situations": 20273,
+      "distinct_fires": 28,
+      "by_year": {
+        "2019": 325,
+        "2020": 9948,
+        "2021": 10000
+      },
+      "by_region": {
+        "California": 20273
+      }
+    },
+    "complete_matching_cohort": {
+      "situations": 0,
+      "distinct_fires": 0,
+      "by_year": {},
+      "by_region": {}
+    },
+    "import_exclusions": {
+      "first_snapshot_no_interval": 28
+    },
+    "incomplete_matching_rows": 20273,
+    "missing_fields": {
+      "terrain.elevation_m": 20273,
+      "terrain.slope_deg": 20273,
+      "terrain.aspect_deg": 20273,
+      "terrain.wetness_index": 20273,
+      "fuels.biomass_t_ha": 20273,
+      "fuels.canopy_cover_pct": 20273,
+      "fuels.conifer_pct": 20273,
+      "fuels.peat_fraction": 20273,
+      "fuels.nonfuel_fraction_1km": 20273,
+      "weather.temperature_max_c": 20273,
+      "weather.relative_humidity_pct": 20273,
+      "weather.precipitation_mm": 20273,
+      "weather.vpd_kpa": 20273,
+      "weather.fine_fuel_moisture_code": 20273,
+      "weather.duff_moisture_code": 20273,
+      "weather.drought_code": 20273,
+      "wind.speed_m_s": 20273,
+      "state.previous_growth_ha": 28
+    },
+    "flags": {
+      "reconstructed_progression": 20273,
+      "environment_not_enriched": 20273,
+      "missing_previous_interval": 28
+    },
+    "zero_growth_rows": 15628
+  },
+  "splits": {
+    "train": {
+      "all": {
+        "situations": 53858,
+        "distinct_fires": 2879,
+        "by_year": {
+          "2002": 1515,
+          "2003": 4600,
+          "2004": 6845,
+          "2005": 2172,
+          "2006": 2823,
+          "2007": 1725,
+          "2008": 1887,
+          "2009": 1707,
+          "2010": 3869,
+          "2011": 2144,
+          "2012": 5571,
+          "2013": 5978,
+          "2014": 6513,
+          "2015": 6509
+        },
+        "by_region": {
+          "10": 11,
+          "11": 1430,
+          "12": 6634,
+          "13": 247,
+          "14": 5181,
+          "15": 2157,
+          "25": 1171,
+          "26": 2123,
+          "3": 86,
+          "4": 9492,
+          "5": 9314,
+          "6": 10870,
+          "9": 5140,
+          "unknown": 2
+        }
+      },
+      "complete": {
+        "situations": 50477,
+        "distinct_fires": 2758,
+        "by_year": {
+          "2002": 1335,
+          "2003": 4274,
+          "2004": 6533,
+          "2005": 1934,
+          "2006": 2607,
+          "2007": 1577,
+          "2008": 1752,
+          "2009": 1557,
+          "2010": 3645,
+          "2011": 1986,
+          "2012": 5298,
+          "2013": 5736,
+          "2014": 6189,
+          "2015": 6054
+        },
+        "by_region": {
+          "10": 3,
+          "11": 1354,
+          "12": 6305,
+          "13": 236,
+          "14": 4715,
+          "15": 2025,
+          "25": 1026,
+          "26": 1897,
+          "3": 79,
+          "4": 9005,
+          "5": 8885,
+          "6": 10210,
+          "9": 4736,
+          "unknown": 1
+        }
+      }
+    },
+    "validation": {
+      "all": {
+        "situations": 15325,
+        "distinct_fires": 716,
+        "by_year": {
+          "2016": 1947,
+          "2017": 8065,
+          "2018": 5313
+        },
+        "by_region": {
+          "11": 590,
+          "12": 941,
+          "13": 228,
+          "14": 4355,
+          "15": 425,
+          "25": 117,
+          "26": 255,
+          "4": 1776,
+          "5": 2294,
+          "6": 3252,
+          "7": 2,
+          "9": 1078,
+          "unknown": 12
+        }
+      },
+      "complete": {
+        "situations": 14447,
+        "distinct_fires": 695,
+        "by_year": {
+          "2016": 1830,
+          "2017": 7662,
+          "2018": 4955
+        },
+        "by_region": {
+          "11": 567,
+          "12": 884,
+          "13": 208,
+          "14": 4108,
+          "15": 395,
+          "25": 88,
+          "26": 228,
+          "4": 1688,
+          "5": 2177,
+          "6": 3100,
+          "7": 1,
+          "9": 995,
+          "unknown": 8
+        }
+      }
+    },
+    "test": {
+      "all": {
+        "situations": 12925,
+        "distinct_fires": 569,
+        "by_year": {
+          "2019": 2502,
+          "2020": 372,
+          "2021": 10051
+        },
+        "by_region": {
+          "10": 55,
+          "11": 233,
+          "12": 1404,
+          "14": 3169,
+          "15": 127,
+          "25": 67,
+          "26": 45,
+          "4": 952,
+          "5": 961,
+          "6": 3835,
+          "9": 2055,
+          "unknown": 22
+        }
+      },
+      "complete": {
+        "situations": 11995,
+        "distinct_fires": 546,
+        "by_year": {
+          "2019": 2363,
+          "2020": 333,
+          "2021": 9299
+        },
+        "by_region": {
+          "10": 42,
+          "11": 220,
+          "12": 1356,
+          "14": 2933,
+          "15": 120,
+          "25": 59,
+          "26": 36,
+          "4": 891,
+          "5": 877,
+          "6": 3565,
+          "9": 1875,
+          "unknown": 21
+        }
+      }
+    }
+  }
+}

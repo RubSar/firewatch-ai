@@ -1,0 +1,2860 @@
+{
+  "schema_version": "1.0",
+  "event_id": "gofer:2020:Creek",
+  "interval_id": "gofer:2020:Creek/2020-09-07T13:00:00+00:00/2020-09-07T14:00:00+00:00",
+  "interval": {
+    "start": "2020-09-07T13:00:00+00:00",
+    "end": "2020-09-07T14:00:00+00:00",
+    "resolution": "hourly",
+    "time_basis": "UTC"
+  },
+  "original": {
+    "summary_sha256": "2db846c1fbfec1af858dcf244f9b1f88405b49ab9b101c3a27991b4f3315e3d3",
+    "archive_sha256": "96eca2e18529eb274ca94af9a730bcf1c9c6da597fb04a9b5cf9167aada451c2",
+    "summary_raw": {
+      "fname": "Creek",
+      "fyear": "2020",
+      "tUTC": "2020-09-07 14:00:00",
+      "tLocal": "2020-09-07 07:00:00",
+      "tLocalGMT": "2020-09-07 06:00:00",
+      "timestep": "61",
+      "timestep_hh": "60.5",
+      "farea": "484.864",
+      "fareaPer": "30.0227431889629",
+      "fperim": "99.523",
+      "rflinelen": "21.109",
+      "cflinelen5": "87.116",
+      "cflinelen10": "82.933",
+      "cflinelen25": "63.467",
+      "cflinelen50": "29.251",
+      "cflinelen75": "11.836",
+      "cflinelen90": "1.411",
+      "rfline_fstate": "1",
+      "cfline5_fstate": "1",
+      "cfline10_fstate": "1",
+      "cfline25_fstate": "1",
+      "cfline50_fstate": "1",
+      "cfline75_fstate": "1",
+      "cfline90_fstate": "1",
+      "dfarea": "0.484",
+      "maefspread": "0.425",
+      "awefspread": "0.148"
+    },
+    "growth_ha": 48.399999999998045
+  },
+  "footprint": {
+    "kind": "newly_burned",
+    "crs": "EPSG:4326",
+    "geometry": {
+      "type": "MultiPolygon",
+      "coordinates": [
+        [
+          [
+            [
+              -119.44976140696173,
+              37.246260475659085
+            ],
+            [
+              -119.44840476551535,
+              37.247494643620335
+            ],
+            [
+              -119.45010481695874,
+              37.24594805881499
+            ],
+            [
+              -119.44976140696173,
+              37.246260475659085
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              -119.30137461005592,
+              37.389698926106654
+            ],
+            [
+              -119.29962855368596,
+              37.3894800884725
+            ],
+            [
+              -119.3074151766468,
+              37.3904557976428
+            ],
+            [
+              -119.30137461005592,
+              37.389698926106654
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              -119.29607995927374,
+              37.38927191107396
+            ],
+            [
+              -119.29533219518135,
+              37.38922803000727
+            ],
+            [
+              -119.29612586347744,
+              37.38927460403252
+            ],
+            [
+              -119.29607995927374,
+              37.38927191107396
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              -119.27075018880043,
+              37.29131890995712
+            ],
+            [
+              -119.2695945914016,
+              37.29032891495073
+            ],
+            [
+              -119.27101906456006,
+              37.291549246151476
+            ],
+            [
+              -119.27075018880043,
+              37.29131890995712
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              -119.25928528271879,
+              37.284275124215625
+            ],
+            [
+              -119.25828977522761,
+              37.28377758560307
+            ],
+            [
+              -119.25988687009152,
+              37.284575780666366
+            ],
+            [
+              -119.25928528271879,
+              37.284275124215625
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              -119.21662503150046,
+              37.185018836791215
+            ],
+            [
+              -119.21601846176338,
+              37.18701253519511
+            ],
+            [
+              -119.21529272446057,
+              37.189397723566955
+            ],
+            [
+              -119.21662503150046,
+              37.185018836791215
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              -119.21856592052356,
+              37.17183776494632
+            ],
+            [
+              -119.21722838040424,
+              37.182989459147876
+            ],
+            [
+              -119.21711659654758,
+              37.183403140540705
+            ],
+            [
+              -119.216848871025,
+              37.18428311181927
+            ],
+            [
+              -119.21856592052356,
+              37.17183776494632
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              -119.21766513666006,
+              37.146233677318094
+            ],
+            [
+              -119.21901626607979,
+              37.144886965956665
+            ],
+            [
+              -119.22395694128483,
+              37.14354035159532
+            ],
+            [
+              -119.22485325312823,
+              37.14264408815314
+            ],
+            [
+              -119.23069462338933,
+              37.14174336518643
+            ],
+            [
+              -119.23334550060562,
+              37.14224854954123
+            ],
+            [
+              -119.22979391264869,
+              37.142644073555516
+            ],
+            [
+              -119.22440283647934,
+              37.14533737061305
+            ],
+            [
+              -119.22215995597189,
+              37.147584741376406
+            ],
+            [
+              -119.22036294905446,
+              37.15521869914915
+            ],
+            [
+              -119.22029501118811,
+              37.15718325922252
+            ],
+            [
+              -119.21766513666006,
+              37.146233677318094
+            ]
+          ]
+        ]
+      ]
+    },
+    "area_ha": 48.43445238653267,
+    "method": "GOFERC P_end minus P_start; EPSG:3310 areas"
+  },
+  "ignition_context": {
+    "geometry": {
+      "type": "MultiPoint",
+      "coordinates": [
+        [
+          -119.27917776394362,
+          37.203499922720276
+        ]
+      ]
+    },
+    "source_record": {
+      "fname": "Creek",
+      "fyear": 2020,
+      "tUTC": "2020-09-05 06:00:00",
+      "tLocal": "2020-09-04 23:00:00",
+      "tLocalGMT": "2020-09-04 22:00:00",
+      "timestep": 5.0,
+      "ignitions": 1.0
+    }
+  },
+  "measurements": [
+    {
+      "field": "aspect_deg",
+      "value": 242.98939546749446,
+      "unit": "degree",
+      "kind": "calculated",
+      "source": {
+        "id": "USGS/3DEP/10m_collection",
+        "version": "Earth Engine catalog snapshot at retrieval",
+        "tiles": [
+          {
+            "system:index": "USGS_13_n37w120",
+            "system:time_end": 1697155200000,
+            "system:time_start": -1420070400000
+          },
+          {
+            "system:index": "USGS_13_n38w119",
+            "system:time_end": 1605830400000,
+            "system:time_start": -504921600000
+          },
+          {
+            "system:index": "USGS_13_n38w120",
+            "system:time_end": 1697155200000,
+            "system:time_start": -788918400000
+          }
+        ],
+        "grid": {
+          "type": "Projection",
+          "crs": "EPSG:4269",
+          "transform": [
+            9.259259269220167e-05,
+            0,
+            -120.00055555639324,
+            0,
+            -9.259259269220167e-05,
+            37.00055555609492
+          ]
+        }
+      },
+      "original": {
+        "aspect_cos_count": 6179,
+        "aspect_cos_mean": -0.1363631654393627,
+        "aspect_sin_count": 6179,
+        "aspect_sin_mean": -0.26750537167002775,
+        "elevation_m_count": 6179,
+        "elevation_m_mean": 2204.34026278098,
+        "slope_deg_count": 6179,
+        "slope_deg_mean": 13.76220545274264,
+        "valid_fraction": 1
+      },
+      "time_window": {
+        "start": null,
+        "end": null,
+        "convention": "acquisition_date_unverified"
+      },
+      "spatial_support": {
+        "kind": "newly_burned",
+        "raster_valid_fraction": 1
+      },
+      "method": "Native grid mean; ee.Terrain slope; circular aspect mean excluding flat pixels",
+      "quality_flags": [
+        "pixel_acquisition_date_unverified",
+        "retrospective_terrain_snapshot",
+        "source_date_range_extends_after_event"
+      ],
+      "evidence": [],
+      "review_status": "pending",
+      "conflicts": []
+    },
+    {
+      "field": "canopy_base_height_m",
+      "value": 1.272807017543859,
+      "unit": "m",
+      "kind": "reconstructed",
+      "source": {
+        "id": "LANDFIRE LF2016 Remap/LF2016_CBH_CONUS",
+        "version": "LF2016 Remap",
+        "independence_group": "LANDFIRE_LF2016",
+        "url": "https://lfps.usgs.gov/arcgis/rest/services/Landfire_LF2016/LF2016_CBH_CONUS/ImageServer",
+        "native_resolution_m": 30,
+        "source_date": "2016",
+        "pixel_size": 30,
+        "native_unit": "meters * 10",
+        "unit_conversion_factor": 0.1
+      },
+      "original": {
+        "statistics": [
+          {
+            "min": 0,
+            "max": 34,
+            "mean": 12.72807017543859,
+            "standardDeviation": 7.650407581546477,
+            "median": 14,
+            "mode": 0,
+            "skipX": 1,
+            "skipY": 1,
+            "count": 570,
+            "covariances": "0.000000",
+            "sum": 7254.999999999996
+          }
+        ],
+        "histograms": [
+          {
+            "size": 256,
+            "min": 0,
+            "max": 34,
+            "counts": [
+              108,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              9,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              8,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              5,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              6,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              4,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              12,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              11,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              13,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              18,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              36,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              75,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              9,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              61,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              64,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              21,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              25,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              16,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              19,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              21,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              26,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              1
+            ]
+          }
+        ]
+      },
+      "time_window": {
+        "start": null,
+        "end": null,
+        "convention": "static_layer_representing_2016"
+      },
+      "spatial_support": {
+        "kind": "newly_burned",
+        "pixel_count": 570,
+        "sample_count": null,
+        "simplification_tolerance_m": 15,
+        "query_crs": "EPSG:5070"
+      },
+      "method": "LANDFIRE ImageServer computeStatisticsHistograms over interval footprint",
+      "quality_flags": [
+        "prefire_snapshot_older_than_event"
+      ],
+      "evidence": [],
+      "review_status": "pending",
+      "conflicts": []
+    },
+    {
+      "field": "canopy_bulk_density_kg_m3",
+      "value": 0.07515789473684212,
+      "unit": "kg/m3",
+      "kind": "reconstructed",
+      "source": {
+        "id": "LANDFIRE LF2016 Remap/LF2016_CBD_CONUS",
+        "version": "LF2016 Remap",
+        "independence_group": "LANDFIRE_LF2016",
+        "url": "https://lfps.usgs.gov/arcgis/rest/services/Landfire_LF2016/LF2016_CBD_CONUS/ImageServer",
+        "native_resolution_m": 30,
+        "source_date": "2016",
+        "pixel_size": 30,
+        "native_unit": "kg/m3 * 100",
+        "unit_conversion_factor": 0.01
+      },
+      "original": {
+        "statistics": [
+          {
+            "min": 0,
+            "max": 22,
+            "mean": 7.515789473684212,
+            "standardDeviation": 4.658902677235517,
+            "median": 7.9372549019607845,
+            "mode": 7.9372549019607845,
+            "skipX": 1,
+            "skipY": 1,
+            "count": 570,
+            "covariances": "0.000000",
+            "sum": 4284.000000000001
+          }
+        ],
+        "histograms": [
+          {
+            "size": 256,
+            "min": 0,
+            "max": 22,
+            "counts": [
+              108,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              6,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              102,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              150,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              50,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              48,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              60,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              38,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              6
+            ]
+          }
+        ]
+      },
+      "time_window": {
+        "start": null,
+        "end": null,
+        "convention": "static_layer_representing_2016"
+      },
+      "spatial_support": {
+        "kind": "newly_burned",
+        "pixel_count": 570,
+        "sample_count": null,
+        "simplification_tolerance_m": 15,
+        "query_crs": "EPSG:5070"
+      },
+      "method": "LANDFIRE ImageServer computeStatisticsHistograms over interval footprint",
+      "quality_flags": [
+        "prefire_snapshot_older_than_event"
+      ],
+      "evidence": [],
+      "review_status": "pending",
+      "conflicts": []
+    },
+    {
+      "field": "canopy_cover_pct",
+      "value": 40.736842105263214,
+      "unit": "%",
+      "kind": "reconstructed",
+      "source": {
+        "id": "LANDFIRE LF2016 Remap/LF2016_CC_CONUS",
+        "version": "LF2016 Remap",
+        "independence_group": "LANDFIRE_LF2016",
+        "url": "https://lfps.usgs.gov/arcgis/rest/services/Landfire_LF2016/LF2016_CC_CONUS/ImageServer",
+        "native_resolution_m": 30,
+        "source_date": "2016",
+        "pixel_size": 30,
+        "native_unit": "percent",
+        "unit_conversion_factor": 1
+      },
+      "original": {
+        "statistics": [
+          {
+            "min": 0,
+            "max": 75,
+            "mean": 40.736842105263214,
+            "standardDeviation": 22.34261598675142,
+            "median": 45,
+            "mode": 45,
+            "skipX": 1,
+            "skipY": 1,
+            "count": 570,
+            "covariances": "0.000000",
+            "sum": 23220.000000000033
+          }
+        ],
+        "histograms": [
+          {
+            "size": 256,
+            "min": 0,
+            "max": 75,
+            "counts": [
+              108,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              13,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              62,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              186,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              97,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              78,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              26
+            ]
+          }
+        ]
+      },
+      "time_window": {
+        "start": null,
+        "end": null,
+        "convention": "static_layer_representing_2016"
+      },
+      "spatial_support": {
+        "kind": "newly_burned",
+        "pixel_count": 570,
+        "sample_count": null,
+        "simplification_tolerance_m": 15,
+        "query_crs": "EPSG:5070"
+      },
+      "method": "LANDFIRE ImageServer computeStatisticsHistograms over interval footprint",
+      "quality_flags": [
+        "prefire_snapshot_older_than_event"
+      ],
+      "evidence": [],
+      "review_status": "pending",
+      "conflicts": []
+    },
+    {
+      "field": "canopy_height_m",
+      "value": 22.129824561403506,
+      "unit": "m",
+      "kind": "reconstructed",
+      "source": {
+        "id": "LANDFIRE LF2016 Remap/LF2016_CH_CONUS",
+        "version": "LF2016 Remap",
+        "independence_group": "LANDFIRE_LF2016",
+        "url": "https://lfps.usgs.gov/arcgis/rest/services/Landfire_LF2016/LF2016_CH_CONUS/ImageServer",
+        "native_resolution_m": 30,
+        "source_date": "2016",
+        "pixel_size": 30,
+        "native_unit": "meters * 10",
+        "unit_conversion_factor": 0.1
+      },
+      "original": {
+        "statistics": [
+          {
+            "min": 0,
+            "max": 390,
+            "mean": 221.29824561403504,
+            "standardDeviation": 120.32497953419488,
+            "median": 269.17647058823525,
+            "mode": 269.17647058823525,
+            "skipX": 1,
+            "skipY": 1,
+            "count": 570,
+            "covariances": "0.000000",
+            "sum": 126139.99999999997
+          }
+        ],
+        "histograms": [
+          {
+            "size": 256,
+            "min": 0,
+            "max": 390,
+            "counts": [
+              108,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              3,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              5,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              9,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              50,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              81,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              147,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              84,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              55,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              28
+            ]
+          }
+        ]
+      },
+      "time_window": {
+        "start": null,
+        "end": null,
+        "convention": "static_layer_representing_2016"
+      },
+      "spatial_support": {
+        "kind": "newly_burned",
+        "pixel_count": 570,
+        "sample_count": null,
+        "simplification_tolerance_m": 15,
+        "query_crs": "EPSG:5070"
+      },
+      "method": "LANDFIRE ImageServer computeStatisticsHistograms over interval footprint",
+      "quality_flags": [
+        "prefire_snapshot_older_than_event"
+      ],
+      "evidence": [],
+      "review_status": "pending",
+      "conflicts": []
+    },
+    {
+      "field": "dewpoint_c",
+      "value": 2.0989471435547102,
+      "unit": "degC",
+      "kind": "calculated",
+      "source": {
+        "id": "ECMWF/ERA5_LAND/HOURLY",
+        "version": "Earth Engine catalog snapshot at retrieval",
+        "independence_group": "ECMWF_ERA5_LAND",
+        "band": "dewpoint_temperature_2m",
+        "native_unit": "K",
+        "native_units": {
+          "dewpoint_temperature_2m": "K"
+        },
+        "grid": {
+          "type": "Projection",
+          "crs": "EPSG:4326",
+          "transform": [
+            0.1,
+            0,
+            -180.05,
+            0,
+            -0.1,
+            90.05
+          ]
+        },
+        "native_nominal_resolution_m": 11132
+      },
+      "original": {
+        "dewpoint_temperature_2m": 275.2489471435547
+      },
+      "time_window": {
+        "start": "2020-09-07T13:00:00+00:00",
+        "end": "2020-09-07T13:00:00+00:00",
+        "convention": "instantaneous_at_interval_start"
+      },
+      "spatial_support": {
+        "kind": "ignition_point_context",
+        "pixel_center_count": 1,
+        "raster_valid_fraction": 1
+      },
+      "method": "Native grid fraction-weighted mean, deterministic unit conversion",
+      "quality_flags": [
+        "context_only_not_footprint_summary"
+      ],
+      "evidence": [],
+      "review_status": "pending",
+      "conflicts": []
+    },
+    {
+      "field": "dewpoint_c",
+      "value": 0.5462127685547102,
+      "unit": "degC",
+      "kind": "calculated",
+      "source": {
+        "id": "ECMWF/ERA5_LAND/HOURLY",
+        "version": "Earth Engine catalog snapshot at retrieval",
+        "independence_group": "ECMWF_ERA5_LAND",
+        "band": "dewpoint_temperature_2m",
+        "native_unit": "K",
+        "native_units": {
+          "dewpoint_temperature_2m": "K"
+        },
+        "grid": {
+          "type": "Projection",
+          "crs": "EPSG:4326",
+          "transform": [
+            0.1,
+            0,
+            -180.05,
+            0,
+            -0.1,
+            90.05
+          ]
+        },
+        "native_nominal_resolution_m": 11132
+      },
+      "original": {
+        "dewpoint_temperature_2m": 273.6962127685547
+      },
+      "time_window": {
+        "start": "2020-09-07T13:00:00+00:00",
+        "end": "2020-09-07T13:00:00+00:00",
+        "convention": "instantaneous_at_interval_start"
+      },
+      "spatial_support": {
+        "kind": "newly_burned",
+        "pixel_center_count": 1,
+        "raster_valid_fraction": 1
+      },
+      "method": "Native grid fraction-weighted mean, deterministic unit conversion",
+      "quality_flags": [],
+      "evidence": [],
+      "review_status": "pending",
+      "conflicts": []
+    },
+    {
+      "field": "elevation_m",
+      "value": 2204.34026278098,
+      "unit": "m",
+      "kind": "reconstructed",
+      "source": {
+        "id": "USGS/3DEP/10m_collection",
+        "version": "Earth Engine catalog snapshot at retrieval",
+        "tiles": [
+          {
+            "system:index": "USGS_13_n37w120",
+            "system:time_end": 1697155200000,
+            "system:time_start": -1420070400000
+          },
+          {
+            "system:index": "USGS_13_n38w119",
+            "system:time_end": 1605830400000,
+            "system:time_start": -504921600000
+          },
+          {
+            "system:index": "USGS_13_n38w120",
+            "system:time_end": 1697155200000,
+            "system:time_start": -788918400000
+          }
+        ],
+        "grid": {
+          "type": "Projection",
+          "crs": "EPSG:4269",
+          "transform": [
+            9.259259269220167e-05,
+            0,
+            -120.00055555639324,
+            0,
+            -9.259259269220167e-05,
+            37.00055555609492
+          ]
+        }
+      },
+      "original": {
+        "aspect_cos_count": 6179,
+        "aspect_cos_mean": -0.1363631654393627,
+        "aspect_sin_count": 6179,
+        "aspect_sin_mean": -0.26750537167002775,
+        "elevation_m_count": 6179,
+        "elevation_m_mean": 2204.34026278098,
+        "slope_deg_count": 6179,
+        "slope_deg_mean": 13.76220545274264,
+        "valid_fraction": 1
+      },
+      "time_window": {
+        "start": null,
+        "end": null,
+        "convention": "acquisition_date_unverified"
+      },
+      "spatial_support": {
+        "kind": "newly_burned",
+        "raster_valid_fraction": 1
+      },
+      "method": "Native grid mean; ee.Terrain slope; circular aspect mean excluding flat pixels",
+      "quality_flags": [
+        "pixel_acquisition_date_unverified",
+        "retrospective_terrain_snapshot",
+        "source_date_range_extends_after_event"
+      ],
+      "evidence": [],
+      "review_status": "pending",
+      "conflicts": []
+    },
+    {
+      "field": "fuel_model_40",
+      "value": {
+        "class_sample_counts": {
+          "184": 1
+        },
+        "class_sample_proportions": {
+          "184": 1.0
+        },
+        "mode": "184",
+        "sample_count": 1,
+        "nodata_sample_count": 0
+      },
+      "unit": "LANDFIRE FBFM40 code",
+      "kind": "reconstructed",
+      "source": {
+        "id": "LANDFIRE LF2016 Remap/LF2016_FBFM40_CONUS",
+        "version": "LF2016 Remap",
+        "independence_group": "LANDFIRE_LF2016",
+        "url": "https://lfps.usgs.gov/arcgis/rest/services/Landfire_LF2016/LF2016_FBFM40_CONUS/ImageServer",
+        "native_resolution_m": 30,
+        "source_date": "2016",
+        "pixel_size": 30,
+        "native_unit": "class code",
+        "unit_conversion_factor": 1
+      },
+      "original": {
+        "samples": [
+          {
+            "location": {
+              "x": -2022611.4767037085,
+              "y": 1815875.377376268,
+              "spatialReference": {
+                "wkid": 5070,
+                "latestWkid": 5070
+              }
+            },
+            "locationId": 0,
+            "value": "184",
+            "rasterId": 1,
+            "resolution": 30
+          }
+        ]
+      },
+      "time_window": {
+        "start": null,
+        "end": null,
+        "convention": "static_layer_representing_2016"
+      },
+      "spatial_support": {
+        "kind": "newly_burned",
+        "pixel_count": null,
+        "sample_count": 1,
+        "simplification_tolerance_m": 15,
+        "query_crs": "EPSG:5070"
+      },
+      "method": "LANDFIRE 30 m ImageServer spatial sample (up to 1,000 raster pixel centers)",
+      "quality_flags": [
+        "sample_not_exhaustive_full_pixel_distribution",
+        "prefire_snapshot_older_than_event"
+      ],
+      "evidence": [],
+      "review_status": "pending",
+      "conflicts": []
+    },
+    {
+      "field": "precipitation_mm",
+      "value": 0,
+      "unit": "mm",
+      "kind": "calculated",
+      "source": {
+        "id": "ECMWF/ERA5_LAND/HOURLY",
+        "version": "Earth Engine catalog snapshot at retrieval",
+        "independence_group": "ECMWF_ERA5_LAND",
+        "band": "total_precipitation_hourly",
+        "native_unit": "m",
+        "native_units": {
+          "total_precipitation_hourly": "m"
+        },
+        "grid": {
+          "type": "Projection",
+          "crs": "EPSG:4326",
+          "transform": [
+            0.1,
+            0,
+            -180.05,
+            0,
+            -0.1,
+            90.05
+          ]
+        },
+        "native_nominal_resolution_m": 11132
+      },
+      "original": {
+        "total_precipitation_hourly": 0
+      },
+      "time_window": {
+        "start": "2020-09-07T13:00:00+00:00",
+        "end": "2020-09-07T14:00:00+00:00",
+        "convention": "accumulation_ending_at_end"
+      },
+      "spatial_support": {
+        "kind": "ignition_point_context",
+        "pixel_center_count": 1,
+        "raster_valid_fraction": 1
+      },
+      "method": "Native grid fraction-weighted mean, deterministic unit conversion",
+      "quality_flags": [
+        "context_only_not_footprint_summary"
+      ],
+      "evidence": [],
+      "review_status": "pending",
+      "conflicts": []
+    },
+    {
+      "field": "precipitation_mm",
+      "value": 0,
+      "unit": "mm",
+      "kind": "calculated",
+      "source": {
+        "id": "ECMWF/ERA5_LAND/HOURLY",
+        "version": "Earth Engine catalog snapshot at retrieval",
+        "independence_group": "ECMWF_ERA5_LAND",
+        "band": "total_precipitation_hourly",
+        "native_unit": "m",
+        "native_units": {
+          "total_precipitation_hourly": "m"
+        },
+        "grid": {
+          "type": "Projection",
+          "crs": "EPSG:4326",
+          "transform": [
+            0.1,
+            0,
+            -180.05,
+            0,
+            -0.1,
+            90.05
+          ]
+        },
+        "native_nominal_resolution_m": 11132
+      },
+      "original": {
+        "total_precipitation_hourly": 0
+      },
+      "time_window": {
+        "start": "2020-09-07T13:00:00+00:00",
+        "end": "2020-09-07T14:00:00+00:00",
+        "convention": "accumulation_ending_at_end"
+      },
+      "spatial_support": {
+        "kind": "newly_burned",
+        "pixel_center_count": 1,
+        "raster_valid_fraction": 1
+      },
+      "method": "Native grid fraction-weighted mean, deterministic unit conversion",
+      "quality_flags": [],
+      "evidence": [],
+      "review_status": "pending",
+      "conflicts": []
+    },
+    {
+      "field": "relative_humidity_pct",
+      "value": 38.623155003357866,
+      "unit": "%",
+      "kind": "calculated",
+      "source": {
+        "id": "ECMWF/ERA5_LAND/HOURLY",
+        "version": "Earth Engine catalog snapshot at retrieval",
+        "independence_group": "ECMWF_ERA5_LAND",
+        "band": "relative_humidity_pct",
+        "native_unit": "formula input bands",
+        "native_units": {
+          "temperature_2m": "K",
+          "dewpoint_temperature_2m": "K"
+        },
+        "grid": {
+          "type": "Projection",
+          "crs": "EPSG:4326",
+          "transform": [
+            0.1,
+            0,
+            -180.05,
+            0,
+            -0.1,
+            90.05
+          ]
+        },
+        "native_nominal_resolution_m": 11132
+      },
+      "original": {
+        "temperature_2m": 289.3631134033203,
+        "dewpoint_temperature_2m": 275.2489471435547
+      },
+      "time_window": {
+        "start": "2020-09-07T13:00:00+00:00",
+        "end": "2020-09-07T13:00:00+00:00",
+        "convention": "instantaneous_at_interval_start"
+      },
+      "spatial_support": {
+        "kind": "ignition_point_context",
+        "pixel_center_count": 1,
+        "raster_valid_fraction": 1
+      },
+      "method": "Native grid fraction-weighted mean; derived humidity/VPD/speed computed per pixel",
+      "quality_flags": [
+        "context_only_not_footprint_summary"
+      ],
+      "evidence": [],
+      "review_status": "pending",
+      "conflicts": []
+    },
+    {
+      "field": "relative_humidity_pct",
+      "value": 36.176099870847494,
+      "unit": "%",
+      "kind": "calculated",
+      "source": {
+        "id": "ECMWF/ERA5_LAND/HOURLY",
+        "version": "Earth Engine catalog snapshot at retrieval",
+        "independence_group": "ECMWF_ERA5_LAND",
+        "band": "relative_humidity_pct",
+        "native_unit": "formula input bands",
+        "native_units": {
+          "temperature_2m": "K",
+          "dewpoint_temperature_2m": "K"
+        },
+        "grid": {
+          "type": "Projection",
+          "crs": "EPSG:4326",
+          "transform": [
+            0.1,
+            0,
+            -180.05,
+            0,
+            -0.1,
+            90.05
+          ]
+        },
+        "native_nominal_resolution_m": 11132
+      },
+      "original": {
+        "temperature_2m": 288.6443634033203,
+        "dewpoint_temperature_2m": 273.6962127685547
+      },
+      "time_window": {
+        "start": "2020-09-07T13:00:00+00:00",
+        "end": "2020-09-07T13:00:00+00:00",
+        "convention": "instantaneous_at_interval_start"
+      },
+      "spatial_support": {
+        "kind": "newly_burned",
+        "pixel_center_count": 1,
+        "raster_valid_fraction": 1
+      },
+      "method": "Native grid fraction-weighted mean; derived humidity/VPD/speed computed per pixel",
+      "quality_flags": [],
+      "evidence": [],
+      "review_status": "pending",
+      "conflicts": []
+    },
+    {
+      "field": "slope_deg",
+      "value": 13.76220545274264,
+      "unit": "degree",
+      "kind": "calculated",
+      "source": {
+        "id": "USGS/3DEP/10m_collection",
+        "version": "Earth Engine catalog snapshot at retrieval",
+        "tiles": [
+          {
+            "system:index": "USGS_13_n37w120",
+            "system:time_end": 1697155200000,
+            "system:time_start": -1420070400000
+          },
+          {
+            "system:index": "USGS_13_n38w119",
+            "system:time_end": 1605830400000,
+            "system:time_start": -504921600000
+          },
+          {
+            "system:index": "USGS_13_n38w120",
+            "system:time_end": 1697155200000,
+            "system:time_start": -788918400000
+          }
+        ],
+        "grid": {
+          "type": "Projection",
+          "crs": "EPSG:4269",
+          "transform": [
+            9.259259269220167e-05,
+            0,
+            -120.00055555639324,
+            0,
+            -9.259259269220167e-05,
+            37.00055555609492
+          ]
+        }
+      },
+      "original": {
+        "aspect_cos_count": 6179,
+        "aspect_cos_mean": -0.1363631654393627,
+        "aspect_sin_count": 6179,
+        "aspect_sin_mean": -0.26750537167002775,
+        "elevation_m_count": 6179,
+        "elevation_m_mean": 2204.34026278098,
+        "slope_deg_count": 6179,
+        "slope_deg_mean": 13.76220545274264,
+        "valid_fraction": 1
+      },
+      "time_window": {
+        "start": null,
+        "end": null,
+        "convention": "acquisition_date_unverified"
+      },
+      "spatial_support": {
+        "kind": "newly_burned",
+        "raster_valid_fraction": 1
+      },
+      "method": "Native grid mean; ee.Terrain slope; circular aspect mean excluding flat pixels",
+      "quality_flags": [
+        "pixel_acquisition_date_unverified",
+        "retrospective_terrain_snapshot",
+        "source_date_range_extends_after_event"
+      ],
+      "evidence": [],
+      "review_status": "pending",
+      "conflicts": []
+    },
+    {
+      "field": "temperature_c",
+      "value": 16.213113403320335,
+      "unit": "degC",
+      "kind": "calculated",
+      "source": {
+        "id": "ECMWF/ERA5_LAND/HOURLY",
+        "version": "Earth Engine catalog snapshot at retrieval",
+        "independence_group": "ECMWF_ERA5_LAND",
+        "band": "temperature_2m",
+        "native_unit": "K",
+        "native_units": {
+          "temperature_2m": "K"
+        },
+        "grid": {
+          "type": "Projection",
+          "crs": "EPSG:4326",
+          "transform": [
+            0.1,
+            0,
+            -180.05,
+            0,
+            -0.1,
+            90.05
+          ]
+        },
+        "native_nominal_resolution_m": 11132
+      },
+      "original": {
+        "temperature_2m": 289.3631134033203
+      },
+      "time_window": {
+        "start": "2020-09-07T13:00:00+00:00",
+        "end": "2020-09-07T13:00:00+00:00",
+        "convention": "instantaneous_at_interval_start"
+      },
+      "spatial_support": {
+        "kind": "ignition_point_context",
+        "pixel_center_count": 1,
+        "raster_valid_fraction": 1
+      },
+      "method": "Native grid fraction-weighted mean, deterministic unit conversion",
+      "quality_flags": [
+        "context_only_not_footprint_summary"
+      ],
+      "evidence": [],
+      "review_status": "pending",
+      "conflicts": []
+    },
+    {
+      "field": "temperature_c",
+      "value": 15.494363403320335,
+      "unit": "degC",
+      "kind": "calculated",
+      "source": {
+        "id": "ECMWF/ERA5_LAND/HOURLY",
+        "version": "Earth Engine catalog snapshot at retrieval",
+        "independence_group": "ECMWF_ERA5_LAND",
+        "band": "temperature_2m",
+        "native_unit": "K",
+        "native_units": {
+          "temperature_2m": "K"
+        },
+        "grid": {
+          "type": "Projection",
+          "crs": "EPSG:4326",
+          "transform": [
+            0.1,
+            0,
+            -180.05,
+            0,
+            -0.1,
+            90.05
+          ]
+        },
+        "native_nominal_resolution_m": 11132
+      },
+      "original": {
+        "temperature_2m": 288.6443634033203
+      },
+      "time_window": {
+        "start": "2020-09-07T13:00:00+00:00",
+        "end": "2020-09-07T13:00:00+00:00",
+        "convention": "instantaneous_at_interval_start"
+      },
+      "spatial_support": {
+        "kind": "newly_burned",
+        "pixel_center_count": 1,
+        "raster_valid_fraction": 1
+      },
+      "method": "Native grid fraction-weighted mean, deterministic unit conversion",
+      "quality_flags": [],
+      "evidence": [],
+      "review_status": "pending",
+      "conflicts": []
+    },
+    {
+      "field": "vegetation_cover_class_codes",
+      "value": {
+        "class_sample_counts": {
+          "143": 1
+        },
+        "class_sample_proportions": {
+          "143": 1.0
+        },
+        "mode": "143",
+        "sample_count": 1,
+        "nodata_sample_count": 0
+      },
+      "unit": "LANDFIRE EVC code",
+      "kind": "reconstructed",
+      "source": {
+        "id": "LANDFIRE LF2016 Remap/LF2016_EVC_CONUS",
+        "version": "LF2016 Remap",
+        "independence_group": "LANDFIRE_LF2016",
+        "url": "https://lfps.usgs.gov/arcgis/rest/services/Landfire_LF2016/LF2016_EVC_CONUS/ImageServer",
+        "native_resolution_m": 30,
+        "source_date": "2016",
+        "pixel_size": 30,
+        "native_unit": "class code",
+        "unit_conversion_factor": 1
+      },
+      "original": {
+        "samples": [
+          {
+            "location": {
+              "x": -2022611.4767037085,
+              "y": 1815875.377376268,
+              "spatialReference": {
+                "wkid": 5070,
+                "latestWkid": 5070
+              }
+            },
+            "locationId": 0,
+            "value": "143",
+            "rasterId": 1,
+            "resolution": 30
+          }
+        ]
+      },
+      "time_window": {
+        "start": null,
+        "end": null,
+        "convention": "static_layer_representing_2016"
+      },
+      "spatial_support": {
+        "kind": "newly_burned",
+        "pixel_count": null,
+        "sample_count": 1,
+        "simplification_tolerance_m": 15,
+        "query_crs": "EPSG:5070"
+      },
+      "method": "LANDFIRE 30 m ImageServer spatial sample (up to 1,000 raster pixel centers)",
+      "quality_flags": [
+        "sample_not_exhaustive_full_pixel_distribution",
+        "prefire_snapshot_older_than_event"
+      ],
+      "evidence": [],
+      "review_status": "pending",
+      "conflicts": []
+    },
+    {
+      "field": "vegetation_height_class_codes",
+      "value": {
+        "class_sample_counts": {
+          "125": 1
+        },
+        "class_sample_proportions": {
+          "125": 1.0
+        },
+        "mode": "125",
+        "sample_count": 1,
+        "nodata_sample_count": 0
+      },
+      "unit": "LANDFIRE EVH code",
+      "kind": "reconstructed",
+      "source": {
+        "id": "LANDFIRE LF2016 Remap/LF2016_EVH_CONUS",
+        "version": "LF2016 Remap",
+        "independence_group": "LANDFIRE_LF2016",
+        "url": "https://lfps.usgs.gov/arcgis/rest/services/Landfire_LF2016/LF2016_EVH_CONUS/ImageServer",
+        "native_resolution_m": 30,
+        "source_date": "2016",
+        "pixel_size": 30,
+        "native_unit": "class code",
+        "unit_conversion_factor": 1
+      },
+      "original": {
+        "samples": [
+          {
+            "location": {
+              "x": -2022611.4767037085,
+              "y": 1815875.377376268,
+              "spatialReference": {
+                "wkid": 5070,
+                "latestWkid": 5070
+              }
+            },
+            "locationId": 0,
+            "value": "125",
+            "rasterId": 1,
+            "resolution": 30
+          }
+        ]
+      },
+      "time_window": {
+        "start": null,
+        "end": null,
+        "convention": "static_layer_representing_2016"
+      },
+      "spatial_support": {
+        "kind": "newly_burned",
+        "pixel_count": null,
+        "sample_count": 1,
+        "simplification_tolerance_m": 15,
+        "query_crs": "EPSG:5070"
+      },
+      "method": "LANDFIRE 30 m ImageServer spatial sample (up to 1,000 raster pixel centers)",
+      "quality_flags": [
+        "sample_not_exhaustive_full_pixel_distribution",
+        "prefire_snapshot_older_than_event"
+      ],
+      "evidence": [],
+      "review_status": "pending",
+      "conflicts": []
+    },
+    {
+      "field": "vegetation_type_code",
+      "value": {
+        "class_sample_counts": {
+          "7032": 1
+        },
+        "class_sample_proportions": {
+          "7032": 1.0
+        },
+        "mode": "7032",
+        "sample_count": 1,
+        "nodata_sample_count": 0
+      },
+      "unit": "LANDFIRE EVT code",
+      "kind": "reconstructed",
+      "source": {
+        "id": "LANDFIRE LF2016 Remap/LF2016_EVT_CONUS",
+        "version": "LF2016 Remap",
+        "independence_group": "LANDFIRE_LF2016",
+        "url": "https://lfps.usgs.gov/arcgis/rest/services/Landfire_LF2016/LF2016_EVT_CONUS/ImageServer",
+        "native_resolution_m": 30,
+        "source_date": "2016",
+        "pixel_size": 30,
+        "native_unit": "class code",
+        "unit_conversion_factor": 1
+      },
+      "original": {
+        "samples": [
+          {
+            "location": {
+              "x": -2022611.4767037085,
+              "y": 1815875.377376268,
+              "spatialReference": {
+                "wkid": 5070,
+                "latestWkid": 5070
+              }
+            },
+            "locationId": 0,
+            "value": "7032",
+            "rasterId": 1,
+            "resolution": 30
+          }
+        ]
+      },
+      "time_window": {
+        "start": null,
+        "end": null,
+        "convention": "static_layer_representing_2016"
+      },
+      "spatial_support": {
+        "kind": "newly_burned",
+        "pixel_count": null,
+        "sample_count": 1,
+        "simplification_tolerance_m": 15,
+        "query_crs": "EPSG:5070"
+      },
+      "method": "LANDFIRE 30 m ImageServer spatial sample (up to 1,000 raster pixel centers)",
+      "quality_flags": [
+        "sample_not_exhaustive_full_pixel_distribution",
+        "prefire_snapshot_older_than_event"
+      ],
+      "evidence": [],
+      "review_status": "pending",
+      "conflicts": []
+    },
+    {
+      "field": "vpd_kpa",
+      "value": 1.1290022259418584,
+      "unit": "kPa",
+      "kind": "calculated",
+      "source": {
+        "id": "ECMWF/ERA5_LAND/HOURLY",
+        "version": "Earth Engine catalog snapshot at retrieval",
+        "independence_group": "ECMWF_ERA5_LAND",
+        "band": "vpd_kpa",
+        "native_unit": "formula input bands",
+        "native_units": {
+          "temperature_2m": "K",
+          "dewpoint_temperature_2m": "K"
+        },
+        "grid": {
+          "type": "Projection",
+          "crs": "EPSG:4326",
+          "transform": [
+            0.1,
+            0,
+            -180.05,
+            0,
+            -0.1,
+            90.05
+          ]
+        },
+        "native_nominal_resolution_m": 11132
+      },
+      "original": {
+        "temperature_2m": 289.3631134033203,
+        "dewpoint_temperature_2m": 275.2489471435547
+      },
+      "time_window": {
+        "start": "2020-09-07T13:00:00+00:00",
+        "end": "2020-09-07T13:00:00+00:00",
+        "convention": "instantaneous_at_interval_start"
+      },
+      "spatial_support": {
+        "kind": "ignition_point_context",
+        "pixel_center_count": 1,
+        "raster_valid_fraction": 1
+      },
+      "method": "Native grid fraction-weighted mean; derived humidity/VPD/speed computed per pixel",
+      "quality_flags": [
+        "context_only_not_footprint_summary"
+      ],
+      "evidence": [],
+      "review_status": "pending",
+      "conflicts": []
+    },
+    {
+      "field": "vpd_kpa",
+      "value": 1.1213064417066154,
+      "unit": "kPa",
+      "kind": "calculated",
+      "source": {
+        "id": "ECMWF/ERA5_LAND/HOURLY",
+        "version": "Earth Engine catalog snapshot at retrieval",
+        "independence_group": "ECMWF_ERA5_LAND",
+        "band": "vpd_kpa",
+        "native_unit": "formula input bands",
+        "native_units": {
+          "temperature_2m": "K",
+          "dewpoint_temperature_2m": "K"
+        },
+        "grid": {
+          "type": "Projection",
+          "crs": "EPSG:4326",
+          "transform": [
+            0.1,
+            0,
+            -180.05,
+            0,
+            -0.1,
+            90.05
+          ]
+        },
+        "native_nominal_resolution_m": 11132
+      },
+      "original": {
+        "temperature_2m": 288.6443634033203,
+        "dewpoint_temperature_2m": 273.6962127685547
+      },
+      "time_window": {
+        "start": "2020-09-07T13:00:00+00:00",
+        "end": "2020-09-07T13:00:00+00:00",
+        "convention": "instantaneous_at_interval_start"
+      },
+      "spatial_support": {
+        "kind": "newly_burned",
+        "pixel_center_count": 1,
+        "raster_valid_fraction": 1
+      },
+      "method": "Native grid fraction-weighted mean; derived humidity/VPD/speed computed per pixel",
+      "quality_flags": [],
+      "evidence": [],
+      "review_status": "pending",
+      "conflicts": []
+    },
+    {
+      "field": "wind_from_direction_deg",
+      "value": 53.132499294597736,
+      "unit": "degree",
+      "kind": "calculated",
+      "source": {
+        "id": "ECMWF/ERA5_LAND/HOURLY",
+        "version": "Earth Engine catalog snapshot at retrieval",
+        "independence_group": "ECMWF_ERA5_LAND",
+        "native_units": {
+          "u_component_of_wind_10m": "m/s",
+          "v_component_of_wind_10m": "m/s"
+        }
+      },
+      "original": {
+        "u_m_s": -2.0426177978515625,
+        "v_m_s": -1.531829833984375
+      },
+      "time_window": {
+        "start": "2020-09-07T13:00:00+00:00",
+        "end": "2020-09-07T13:00:00+00:00",
+        "convention": "instantaneous_at_interval_start"
+      },
+      "spatial_support": {
+        "kind": "ignition_point_context"
+      },
+      "method": "atan2(-mean(u),-mean(v)) modulo 360; meteorological FROM, true north; calm<0.1m/s=null",
+      "quality_flags": [
+        "direction_of_mean_vector_not_mean_of_angles"
+      ],
+      "evidence": [],
+      "review_status": "pending",
+      "conflicts": []
+    },
+    {
+      "field": "wind_from_direction_deg",
+      "value": 52.97835416323402,
+      "unit": "degree",
+      "kind": "calculated",
+      "source": {
+        "id": "ECMWF/ERA5_LAND/HOURLY",
+        "version": "Earth Engine catalog snapshot at retrieval",
+        "independence_group": "ECMWF_ERA5_LAND",
+        "native_units": {
+          "u_component_of_wind_10m": "m/s",
+          "v_component_of_wind_10m": "m/s"
+        }
+      },
+      "original": {
+        "u_m_s": -1.9107818603515625,
+        "v_m_s": -1.441009521484375
+      },
+      "time_window": {
+        "start": "2020-09-07T13:00:00+00:00",
+        "end": "2020-09-07T13:00:00+00:00",
+        "convention": "instantaneous_at_interval_start"
+      },
+      "spatial_support": {
+        "kind": "newly_burned"
+      },
+      "method": "atan2(-mean(u),-mean(v)) modulo 360; meteorological FROM, true north; calm<0.1m/s=null",
+      "quality_flags": [
+        "direction_of_mean_vector_not_mean_of_angles"
+      ],
+      "evidence": [],
+      "review_status": "pending",
+      "conflicts": []
+    },
+    {
+      "field": "wind_speed_m_s",
+      "value": 2.5531921409060785,
+      "unit": "m/s",
+      "kind": "calculated",
+      "source": {
+        "id": "ECMWF/ERA5_LAND/HOURLY",
+        "version": "Earth Engine catalog snapshot at retrieval",
+        "independence_group": "ECMWF_ERA5_LAND",
+        "band": "wind_speed_m_s",
+        "native_unit": "formula input bands",
+        "native_units": {
+          "u_component_of_wind_10m": "m/s",
+          "v_component_of_wind_10m": "m/s"
+        },
+        "grid": {
+          "type": "Projection",
+          "crs": "EPSG:4326",
+          "transform": [
+            0.1,
+            0,
+            -180.05,
+            0,
+            -0.1,
+            90.05
+          ]
+        },
+        "native_nominal_resolution_m": 11132
+      },
+      "original": {
+        "u_component_of_wind_10m": -2.0426177978515625,
+        "v_component_of_wind_10m": -1.531829833984375
+      },
+      "time_window": {
+        "start": "2020-09-07T13:00:00+00:00",
+        "end": "2020-09-07T13:00:00+00:00",
+        "convention": "instantaneous_at_interval_start"
+      },
+      "spatial_support": {
+        "kind": "ignition_point_context",
+        "pixel_center_count": 1,
+        "raster_valid_fraction": 1
+      },
+      "method": "Native grid fraction-weighted mean; derived humidity/VPD/speed computed per pixel",
+      "quality_flags": [
+        "context_only_not_footprint_summary"
+      ],
+      "evidence": [],
+      "review_status": "pending",
+      "conflicts": []
+    },
+    {
+      "field": "wind_speed_m_s",
+      "value": 2.393239594954338,
+      "unit": "m/s",
+      "kind": "calculated",
+      "source": {
+        "id": "ECMWF/ERA5_LAND/HOURLY",
+        "version": "Earth Engine catalog snapshot at retrieval",
+        "independence_group": "ECMWF_ERA5_LAND",
+        "band": "wind_speed_m_s",
+        "native_unit": "formula input bands",
+        "native_units": {
+          "u_component_of_wind_10m": "m/s",
+          "v_component_of_wind_10m": "m/s"
+        },
+        "grid": {
+          "type": "Projection",
+          "crs": "EPSG:4326",
+          "transform": [
+            0.1,
+            0,
+            -180.05,
+            0,
+            -0.1,
+            90.05
+          ]
+        },
+        "native_nominal_resolution_m": 11132
+      },
+      "original": {
+        "u_component_of_wind_10m": -1.9107818603515625,
+        "v_component_of_wind_10m": -1.441009521484375
+      },
+      "time_window": {
+        "start": "2020-09-07T13:00:00+00:00",
+        "end": "2020-09-07T13:00:00+00:00",
+        "convention": "instantaneous_at_interval_start"
+      },
+      "spatial_support": {
+        "kind": "newly_burned",
+        "pixel_center_count": 1,
+        "raster_valid_fraction": 1
+      },
+      "method": "Native grid fraction-weighted mean; derived humidity/VPD/speed computed per pixel",
+      "quality_flags": [],
+      "evidence": [],
+      "review_status": "pending",
+      "conflicts": []
+    },
+    {
+      "field": "wind_u_m_s",
+      "value": -2.0426177978515625,
+      "unit": "m/s",
+      "kind": "reconstructed",
+      "source": {
+        "id": "ECMWF/ERA5_LAND/HOURLY",
+        "version": "Earth Engine catalog snapshot at retrieval",
+        "independence_group": "ECMWF_ERA5_LAND",
+        "band": "u_component_of_wind_10m",
+        "native_unit": "m/s",
+        "native_units": {
+          "u_component_of_wind_10m": "m/s"
+        },
+        "grid": {
+          "type": "Projection",
+          "crs": "EPSG:4326",
+          "transform": [
+            0.1,
+            0,
+            -180.05,
+            0,
+            -0.1,
+            90.05
+          ]
+        },
+        "native_nominal_resolution_m": 11132
+      },
+      "original": {
+        "u_component_of_wind_10m": -2.0426177978515625
+      },
+      "time_window": {
+        "start": "2020-09-07T13:00:00+00:00",
+        "end": "2020-09-07T13:00:00+00:00",
+        "convention": "instantaneous_at_interval_start"
+      },
+      "spatial_support": {
+        "kind": "ignition_point_context",
+        "pixel_center_count": 1,
+        "raster_valid_fraction": 1
+      },
+      "method": "Native grid fraction-weighted mean, deterministic unit conversion",
+      "quality_flags": [
+        "context_only_not_footprint_summary"
+      ],
+      "evidence": [],
+      "review_status": "pending",
+      "conflicts": []
+    },
+    {
+      "field": "wind_u_m_s",
+      "value": -1.9107818603515625,
+      "unit": "m/s",
+      "kind": "reconstructed",
+      "source": {
+        "id": "ECMWF/ERA5_LAND/HOURLY",
+        "version": "Earth Engine catalog snapshot at retrieval",
+        "independence_group": "ECMWF_ERA5_LAND",
+        "band": "u_component_of_wind_10m",
+        "native_unit": "m/s",
+        "native_units": {
+          "u_component_of_wind_10m": "m/s"
+        },
+        "grid": {
+          "type": "Projection",
+          "crs": "EPSG:4326",
+          "transform": [
+            0.1,
+            0,
+            -180.05,
+            0,
+            -0.1,
+            90.05
+          ]
+        },
+        "native_nominal_resolution_m": 11132
+      },
+      "original": {
+        "u_component_of_wind_10m": -1.9107818603515625
+      },
+      "time_window": {
+        "start": "2020-09-07T13:00:00+00:00",
+        "end": "2020-09-07T13:00:00+00:00",
+        "convention": "instantaneous_at_interval_start"
+      },
+      "spatial_support": {
+        "kind": "newly_burned",
+        "pixel_center_count": 1,
+        "raster_valid_fraction": 1
+      },
+      "method": "Native grid fraction-weighted mean, deterministic unit conversion",
+      "quality_flags": [],
+      "evidence": [],
+      "review_status": "pending",
+      "conflicts": []
+    },
+    {
+      "field": "wind_v_m_s",
+      "value": -1.531829833984375,
+      "unit": "m/s",
+      "kind": "reconstructed",
+      "source": {
+        "id": "ECMWF/ERA5_LAND/HOURLY",
+        "version": "Earth Engine catalog snapshot at retrieval",
+        "independence_group": "ECMWF_ERA5_LAND",
+        "band": "v_component_of_wind_10m",
+        "native_unit": "m/s",
+        "native_units": {
+          "v_component_of_wind_10m": "m/s"
+        },
+        "grid": {
+          "type": "Projection",
+          "crs": "EPSG:4326",
+          "transform": [
+            0.1,
+            0,
+            -180.05,
+            0,
+            -0.1,
+            90.05
+          ]
+        },
+        "native_nominal_resolution_m": 11132
+      },
+      "original": {
+        "v_component_of_wind_10m": -1.531829833984375
+      },
+      "time_window": {
+        "start": "2020-09-07T13:00:00+00:00",
+        "end": "2020-09-07T13:00:00+00:00",
+        "convention": "instantaneous_at_interval_start"
+      },
+      "spatial_support": {
+        "kind": "ignition_point_context",
+        "pixel_center_count": 1,
+        "raster_valid_fraction": 1
+      },
+      "method": "Native grid fraction-weighted mean, deterministic unit conversion",
+      "quality_flags": [
+        "context_only_not_footprint_summary"
+      ],
+      "evidence": [],
+      "review_status": "pending",
+      "conflicts": []
+    },
+    {
+      "field": "wind_v_m_s",
+      "value": -1.441009521484375,
+      "unit": "m/s",
+      "kind": "reconstructed",
+      "source": {
+        "id": "ECMWF/ERA5_LAND/HOURLY",
+        "version": "Earth Engine catalog snapshot at retrieval",
+        "independence_group": "ECMWF_ERA5_LAND",
+        "band": "v_component_of_wind_10m",
+        "native_unit": "m/s",
+        "native_units": {
+          "v_component_of_wind_10m": "m/s"
+        },
+        "grid": {
+          "type": "Projection",
+          "crs": "EPSG:4326",
+          "transform": [
+            0.1,
+            0,
+            -180.05,
+            0,
+            -0.1,
+            90.05
+          ]
+        },
+        "native_nominal_resolution_m": 11132
+      },
+      "original": {
+        "v_component_of_wind_10m": -1.441009521484375
+      },
+      "time_window": {
+        "start": "2020-09-07T13:00:00+00:00",
+        "end": "2020-09-07T13:00:00+00:00",
+        "convention": "instantaneous_at_interval_start"
+      },
+      "spatial_support": {
+        "kind": "newly_burned",
+        "pixel_center_count": 1,
+        "raster_valid_fraction": 1
+      },
+      "method": "Native grid fraction-weighted mean, deterministic unit conversion",
+      "quality_flags": [],
+      "evidence": [],
+      "review_status": "pending",
+      "conflicts": []
+    }
+  ],
+  "quality_flags": [],
+  "final_perimeter_reference": "2020-11-09T20:00:00+00:00"
+}

@@ -1,0 +1,149 @@
+{
+  "type": "FeatureCollection",
+  "schema_version": "fuel-index/1.0",
+  "generated_at": "2026-09-26T16:20:14.064719Z",
+  "start_date": "2025-07-01",
+  "end_date": "2025-08-01",
+  "cell_size_m": 5000,
+  "analysis_resolution_m": 20,
+  "grid_crs": "EPSG:32610",
+  "method": {
+    "id": "dw-ndmi-experimental-v2",
+    "calibrated": false,
+    "vegetation_classes": [
+      "trees",
+      "grass",
+      "flooded_vegetation",
+      "crops",
+      "shrub_and_scrub"
+    ],
+    "ndmi_formula": "(B8 - B11) / (B8 + B11)",
+    "dryness_formula": "clamp((0.4 - vegetation_weighted_ndmi) / 0.6, 0, 1)",
+    "score_formula": "round(100 * fuel_vegetation_probability * dryness_proxy, 1)",
+    "ndmi_dry_anchor": -0.2,
+    "ndmi_wet_anchor": 0.4,
+    "minimum_valid_coverage": 0.7,
+    "minimum_dw_top1_probability": 0.6,
+    "unsupported_built_threshold": 0.2,
+    "fuel_gate": "DW native labels 1..5 only; Sentinel-2 SCL water (6) vetoes fuel",
+    "non_vegetated_rule": "zero classified vegetation support on common-valid observations",
+    "water_rule": "water contributes zero fuel and no vegetation NDMI; remains in coverage",
+    "temporal_reducer": "mean over same-acquisition common-valid observations",
+    "spatial_reducer": "pixel-area-weighted mean on common-valid support"
+  },
+  "provenance": {
+    "provider": "google_earth_engine",
+    "synthetic": false,
+    "dynamic_world_collection": "GOOGLE/DYNAMICWORLD/V1",
+    "sentinel2_collection": "COPERNICUS/S2_SR_HARMONIZED",
+    "dynamic_world_native_resolution_m": 10,
+    "ndmi_effective_resolution_m": 20,
+    "acquisition_pairs": [
+      {
+        "acquired_at": "2025-07-03T19:21:53Z",
+        "dynamic_world_id": "20250703T190941_20250703T191836_T10TCT",
+        "sentinel2_id": "20250703T190941_20250703T191836_T10TCT"
+      },
+      {
+        "acquired_at": "2025-07-16T19:31:51Z",
+        "dynamic_world_id": "20250716T191931_20250716T192938_T10TCT",
+        "sentinel2_id": "20250716T191931_20250716T192938_T10TCT"
+      },
+      {
+        "acquired_at": "2025-07-28T19:21:32Z",
+        "dynamic_world_id": "20250728T190919_20250728T191622_T10TCT",
+        "sentinel2_id": "20250728T190919_20250728T191622_T10TCT"
+      },
+      {
+        "acquired_at": "2025-07-28T19:31:46Z",
+        "dynamic_world_id": "20250728T192841_20250728T192837_T10TCT",
+        "sentinel2_id": "20250728T192841_20250728T192837_T10TCT"
+      }
+    ],
+    "pair_count": 4,
+    "retrieved_at": "2026-09-26T16:20:10.960277+00:00",
+    "attribution": "This dataset is produced for the Dynamic World Project by Google in partnership with National Geographic Society and the World Resources Institute. Contains modified Copernicus Sentinel data.",
+    "sources": [
+      "https://developers.google.com/earth-engine/datasets/catalog/GOOGLE_DYNAMICWORLD_V1",
+      "https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2_SR_HARMONIZED"
+    ],
+    "asset_scope": "Candidate matched acquisitions across the request region; not all assets contribute to every cell"
+  },
+  "limitations": [
+    "Experimental relative fuel score, not official Burning Index, FWI, burn probability or spread forecast.",
+    "NDMI is a spectral vegetation moisture proxy, not measured live/dead fuel moisture.",
+    "NDMI anchors and classification/coverage thresholds are unvalidated demo assumptions.",
+    "Dynamic World probability means are not measured land-cover area fractions.",
+    "Canopy can hide surface fuel; deadwood, wind, weather, slope and fuel load are not modeled.",
+    "Temporal averages can hide change. Source acquisitions may be old or partly cloudy.",
+    "Cells aggregate 20 m observations; finer output does not create finer source detail.",
+    "A mixed shoreline cell can score for vegetation; its score does not describe each point of water.",
+    "Classified observation fractions are spatial/temporal averages, not verified permanent cover."
+  ],
+  "summary": {
+    "cell_count": 1,
+    "scored_cell_count": 1,
+    "total_area_m2": 25012904.123620033,
+    "scored_cell_area_m2": 25012904.124,
+    "unscored_cell_area_m2": 0.0,
+    "observed_scored_area_m2": 25012904.124,
+    "mean_score": 0.0
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -124.39259894518581,
+              47.43998579457513
+            ],
+            [
+              -124.3914133096498,
+              47.39500856495537
+            ],
+            [
+              -124.45764952897514,
+              47.39418532746021
+            ],
+            [
+              -124.45889155730917,
+              47.43916126764439
+            ],
+            [
+              -124.39259894518581,
+              47.43998579457513
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "cell_id": "32610-78-1050",
+        "area_m2": 25012904.124,
+        "status": "non_vegetated",
+        "score": 0.0,
+        "landcover_probabilities": {
+          "water": 0.7190653682311382,
+          "trees": 0.0467631947322977,
+          "grass": 0.026722848530199295,
+          "flooded_vegetation": 0.049674874721163706,
+          "crops": 0.02787236658102912,
+          "shrub_and_scrub": 0.03395456889699045,
+          "built": 0.023254937173597716,
+          "bare": 0.03602804505770717,
+          "snow_and_ice": 0.036663796075876595
+        },
+        "vegetation_probability": 0.18498785346168028,
+        "fuel_vegetation_probability": 0.0,
+        "vegetation_observation_fraction": 0.0,
+        "water_observation_fraction": 1.0,
+        "ndmi": null,
+        "dryness_proxy": null,
+        "valid_coverage": 1.0,
+        "observation_count_mean": 3.640546424859512
+      }
+    }
+  ]
+}

@@ -39,11 +39,13 @@ cross-component integration tests before introducing a new test layout.
 5. Do not invent named owners. Until ownership is recorded in `CODEOWNERS` or team
    documentation, identify responsibility by component and flag missing assignments.
 
-## Work in isolated checkouts
+## Work directly on main
 
-- Use a short-lived branch per task, normally `codex/<short-task-name>`.
-- Concurrent Codex chats on the same machine should use separate worktrees/checkouts.
-  Component folders alone do not isolate Git state or simultaneous file edits.
+- User preference: use `/Users/rubenpersonal/WebstormProjects/firewatch-ai` and make
+  changes directly on `main`, using `main` as the source for new work.
+- Do not create task branches, additional worktrees, or sibling project directories
+  unless the user explicitly requests them.
+- Coordinate concurrent edits in the existing checkout and preserve all existing work.
 - Inspect or fetch the latest remote state before starting when access is available.
   Never discard local work to synchronize. Report unavailable remote access.
 - Keep commits and PRs focused. Avoid unrelated formatting, generated-file churn,

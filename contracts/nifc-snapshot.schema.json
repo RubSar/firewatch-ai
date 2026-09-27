@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NIFC historical perimeter snapshot (not a growth interval)",
+  "type": "object",
+  "required": ["schema_version", "kind", "id", "event_id", "observed_at", "source_updated_at", "reported_area_ha", "polygon_area_ha", "growth_ha", "newly_burned", "perimeter", "source", "original", "measurements", "flags"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "kind": {"const": "perimeter_snapshot"},
+    "id": {"type": "string"}, "event_id": {"type": "string"},
+    "observed_at": {"type": ["string", "null"], "format": "date-time", "description": "poly_PolygonDateTime; never replaced with edit/retrieval/discovery time."},
+    "source_updated_at": {"type": ["string", "null"], "format": "date-time"},
+    "reported_area_ha": {"type": ["number", "null"], "minimum": 0},
+    "polygon_area_ha": {"type": ["number", "null"], "minimum": 0},
+    "growth_ha": {"type": "null"}, "newly_burned": {"type": "null"},
+    "perimeter": {"type": "object", "required": ["type", "coordinates"], "properties": {"type": {"enum": ["Polygon", "MultiPolygon"]}}, "description": "Unmodified source GeoJSON longitude,latitude EPSG:4326."},
+    "source": {"type": "object", "required": ["id", "url", "retrieved_at", "sha256"]},
+    "original": {"type": "object"},
+    "measurements": {"type": "array", "items": {"type": "object", "required": ["field", "value", "unit", "source", "original", "time_window", "spatial_support", "method", "quality_flags", "review_status"]}},
+    "flags": {"type": "array", "items": {"type": "string"}}
+  }
+}

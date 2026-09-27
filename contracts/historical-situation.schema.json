@@ -1,0 +1,359 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://firewatch.local/contracts/historical-situation.schema.json",
+  "title": "Historical fire situation (research only)",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "dataset": {
+      "enum": [
+        "CFSDS",
+        "GOFER"
+      ]
+    },
+    "dataset_version": {
+      "type": "string"
+    },
+    "event_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "year": {
+      "type": "integer"
+    },
+    "region": {
+      "type": "string"
+    },
+    "interval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "start",
+        "end",
+        "resolution",
+        "time_basis"
+      ],
+      "properties": {
+        "start": {
+          "type": "string"
+        },
+        "end": {
+          "type": "string"
+        },
+        "resolution": {
+          "enum": [
+            "daily",
+            "hourly"
+          ]
+        },
+        "time_basis": {
+          "enum": [
+            "source_burning_day",
+            "UTC"
+          ]
+        }
+      }
+    },
+    "features": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "terrain",
+        "fuels",
+        "weather",
+        "wind"
+      ],
+      "properties": {
+        "terrain": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "value",
+              "unit",
+              "source_field",
+              "retrospective"
+            ],
+            "properties": {
+              "value": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "unit": {
+                "type": "string"
+              },
+              "source_field": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "retrospective": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "fuels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "value",
+              "unit",
+              "source_field",
+              "retrospective"
+            ],
+            "properties": {
+              "value": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "unit": {
+                "type": "string"
+              },
+              "source_field": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "retrospective": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "weather": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "value",
+              "unit",
+              "source_field",
+              "retrospective"
+            ],
+            "properties": {
+              "value": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "unit": {
+                "type": "string"
+              },
+              "source_field": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "retrospective": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "wind": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "value",
+              "unit",
+              "source_field",
+              "retrospective"
+            ],
+            "properties": {
+              "value": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "unit": {
+                "type": "string"
+              },
+              "source_field": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "retrospective": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "starting_area_ha",
+        "previous_growth_ha"
+      ],
+      "properties": {
+        "starting_area_ha": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "previous_growth_ha": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        }
+      }
+    },
+    "outcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "growth_ha",
+        "proportional_growth"
+      ],
+      "properties": {
+        "growth_ha": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "proportional_growth": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        }
+      }
+    },
+    "quality_flags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "file",
+        "sha256",
+        "raw",
+        "interpretation"
+      ],
+      "properties": {
+        "file": {
+          "type": "string"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "raw": {
+          "type": "object"
+        },
+        "interpretation": {
+          "const": "retrospective_association_only"
+        }
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "dataset",
+    "dataset_version",
+    "event_id",
+    "year",
+    "region",
+    "interval",
+    "features",
+    "state",
+    "outcome",
+    "quality_flags",
+    "provenance"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "dataset": {
+            "const": "CFSDS"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "interval": {
+            "properties": {
+              "resolution": {
+                "const": "daily"
+              },
+              "time_basis": {
+                "const": "source_burning_day"
+              },
+              "start": {
+                "format": "date"
+              },
+              "end": {
+                "format": "date"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "dataset": {
+            "const": "GOFER"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "interval": {
+            "properties": {
+              "resolution": {
+                "const": "hourly"
+              },
+              "time_basis": {
+                "const": "UTC"
+              },
+              "start": {
+                "format": "date-time"
+              },
+              "end": {
+                "format": "date-time"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

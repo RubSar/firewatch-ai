@@ -1,0 +1,33 @@
+CFSDS version history
+quinn.barber@nrcan-rncan.gc.ca
+
+V1. Submission to Nature Scientific Data. See associated metadata with publication.
+
+V1_01. Bug fix: multiple zero-growth day records for the same physical location and day-of-burning have been resolved to a single record.
+New covariate: peattype. peatland class as identified in Pontone et al. (2024) dataset. https://doi.org/10.1002/rse2.384
+
+V1_1. Release June 12, 2025. Changes:
+- Resolution is now 90 m, increased from 180m.
+- Includes all fires >500 ha, increased from >1000 ha.
+- Added 2022, 2023, and 2024 fires.
+- peatCl and peatProb are now depreciated. They have been replaced with peattype and peatprop.
+	>peattype. pixel type as predicted by Pontone et al. (2023) (https://doi.org/10.1002/rse2.384). In the groups file where each row represents a single burning day, the mode of the values is reported.
+		1: Bog
+		2: Rich Fen
+		3: Poor Fen
+		4: Peatland Permafrost Complex
+		5: Mineral Wetlands
+		6: Water
+		7: Uplands
+		8: Agriculture
+		9: Urban
+	>peatprop. Reported in the groups file. The proportion of a days' burning which occurred in classes Bog, Rich Fen, Poor Fen, or Peatland Permafrost Complex combined.
+- new covariates: nonfuel1k, nonfuel2k, nonfuel5k, nonfuel10k. These represent the proportion of the landscape that is represented by nonfuel in the National Terrestrial Ecosystem Monitoring System for Canada, found at https://opendata.nfis.org/mapserver/nfis-change_eng.html. Hermosilla et al. (2022) (doi.org/10.1016/j.rse.2022.112904). Nonfuel includes all classes:
+		20  = water
+		31  = snow_ice
+		32  = rock_rubble
+		33  = exposed_barren_land
+		40  = bryoids
+
+NOTE: the June 12 release is a beta version, any errors or bugs please report to qbarber@ualberta.ca. A bugfix version will be completed later in summer 2025.
+NOTE (KNOWN ERRORS): Due to some topology errors we had unpredictable missing pieces of fires. The fire interpolations have been fixed. The points files are updating and will be available in July, 2025.

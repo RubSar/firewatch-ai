@@ -1,0 +1,43 @@
+{
+  "source": {
+    "id": "NIFC/WFIGS",
+    "url": "https://services3.arcgis.com/T4QMspbfLg3qTGWY/arcgis/rest/services/WFIGS_Interagency_Perimeters/FeatureServer/0/query?f=geojson&where=attr_UniqueFireIdentifier+IN+%28%272026-TXTXF-000138%27%2C%272026-COELX-000171%27%29&outFields=%2A&returnGeometry=true&outSR=4326",
+    "retrieved_at": "2026-09-26T21:59:19.789408+00:00",
+    "sha256": "fa3f76cad2def8c3caeaf78f04e64aceb7fd6200f9709147db4f6291aacf2f86"
+  },
+  "records": 2,
+  "distinct_fires": 2,
+  "hourly_growth_observations": 0,
+  "interpretation": "One service query, not an exhaustive search of all progression archives.",
+  "events": [
+    {
+      "event_id": "nifc:2026-COELX-000171",
+      "observed_at": "2026-02-18T19:34:00.593000+00:00",
+      "reported_area_ha": 2260.57399755264,
+      "polygon_area_ha": 2265.6383967347842,
+      "nonnull_measurements": 16,
+      "measurement_count": 17,
+      "flags": [
+        "growth_history_unavailable",
+        "perimeter_context_not_newly_burned",
+        "perimeter_not_assumed_final",
+        "pending_review",
+        "reported_and_polygon_area_disagree"
+      ]
+    },
+    {
+      "event_id": "nifc:2026-TXTXF-000138",
+      "observed_at": "2026-02-27T11:20:00+00:00",
+      "reported_area_ha": 2733.24682768896,
+      "polygon_area_ha": 2733.22339410725,
+      "nonnull_measurements": 16,
+      "measurement_count": 17,
+      "flags": [
+        "growth_history_unavailable",
+        "perimeter_context_not_newly_burned",
+        "perimeter_not_assumed_final",
+        "pending_review"
+      ]
+    }
+  ]
+}
