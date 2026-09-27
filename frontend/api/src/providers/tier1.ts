@@ -124,7 +124,7 @@ function fillHoles(elev: Float32Array, cols: number, rows: number) {
 // --- fuel ---------------------------------------------------------------
 
 /** Expands fuel ids into the per-cell bed properties the kernel needs. */
-function expand(fuelId: Uint8Array): FuelGrid {
+export function expand(fuelId: Uint8Array): FuelGrid {
   const n = fuelId.length
   const g: FuelGrid = {
     fuelId,
