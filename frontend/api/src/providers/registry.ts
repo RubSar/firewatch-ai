@@ -18,6 +18,7 @@ import { mockWeather, nfdrs1hMoisture, openMeteo, openMeteoWind, rhFuelMoisture,
 import { sentinelBurnHistory } from './burnhistory.ts'
 import { osmBarriers, osmValuesAtRisk } from './osm.ts'
 import { firmsPerimeter } from './firms.ts'
+import { learnedCanopy } from './canopy-learned.ts'
 
 export interface Registry {
   elevation: ElevationProvider
@@ -34,10 +35,22 @@ export interface Registry {
 
 export function buildRegistry(cfg: Config): Registry {
   const live = cfg.mode === 'live'
+  const elevation = live ? terrariumDem(cfg) : proceduralDem
+  const fuel = live ? worldCoverFuel(cfg) : topographyFuel
   return {
-    elevation: live ? terrariumDem(cfg) : proceduralDem,
-    fuel: live ? worldCoverFuel(cfg) : topographyFuel,
-    canopy: assumedCanopy,
+    elevation,
+    fuel,
+    /**
+     * The learned canopy model takes the elevation and fuel PORTS, not their
+     * resolved data — the only dependency-injected provider here. It needs both
+     * as predictors, and resolving them itself keeps canopy as one slot in
+     * `Incident.create`'s Promise.all rather than serialising behind them. Both
+     * are tile-cached, so the second read is cheap.
+     *
+     * Offline mode stays on the assumption: there is no Sentinel-2 to predict
+     * from, and a procedural grid would feed the model features it never saw.
+     */
+    canopy: live ? learnedCanopy(cfg, { elevation, fuel }) : assumedCanopy,
     barriers: live ? osmBarriers(cfg) : noBarriers,
     burnHistory: live ? sentinelBurnHistory(cfg) : noBurnHistory,
     weather: (presetId) => (live ? openMeteo(cfg, presetId) : mockWeather(presetId)),
@@ -69,6 +82,10 @@ const MEASURED = new Set(['terrarium-dem', 'open-meteo', 'firms-perimeter', 'esa
 const DERIVED = new Set([
   'esri-imagery-fuel', 'osm-barriers', 'osm-buildings',
   'open-meteo-windfield', 'nfdrs-1h-timelag', 'sentinel2-dnbr',
+  // Learned, which is a kind of derived: real predictors, a fitted mapping, and
+  // held-out error published in its provenance note. Never 'measured' — the
+  // numbers are predictions, and LANDFIRE is the label source, not the input.
+  'landfire-gbt-canopy',
 ])
 const kindOf = (id: string): 'measured' | 'derived' | 'synthetic' =>
   DERIVED.has(id) ? 'derived' : MEASURED.has(id) ? 'measured' : 'synthetic'

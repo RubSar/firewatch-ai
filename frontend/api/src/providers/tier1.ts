@@ -309,36 +309,67 @@ async function resolveElevation(cfg: Config, q: TerrainQuery, signal?: AbortSign
 // ARCHITECTURE.md §9: writing the null implementation now forces the call site
 // to exist, so the real provider later is one line of composition.
 
-/** Per-class assumptions until GEDI-derived rasters exist (§4, §7). */
-export const assumedCanopy: CanopyProvider = {
-  id: 'assumed-canopy',
-  fallbacks: [],
-  async fetch(q: TerrainQuery) {
-    const t = buildTerrain(q.scenario)
-    const n = t.cols * t.rows
-    const d: CanopyGrid = {
-      canopyLoad: new Float32Array(n),
-      cbh: new Float32Array(n),
-      cbd: new Float32Array(n),
-      cover: new Float32Array(n),
-      assumed: new Uint8Array(n).fill(1),
-    }
-    for (let i = 0; i < n; i++) {
-      const timber = t.fuel[i] === 4
-      const shrub = t.fuel[i] === 3
-      d.canopyLoad[i] = timber ? 1.2 : shrub ? 0.3 : 0
-      d.cbh[i] = timber ? 5 : shrub ? 1 : 0
-      d.cbd[i] = timber ? 0.1 : shrub ? 0.05 : 0
-      d.cover[i] = timber ? 0.7 : shrub ? 0.35 : 0
-    }
-    return {
-      data: d,
-      provenance: synthetic(
-        'per-class-assumption',
-        'Canopy assumed per fuel class — no CBH/CBD measurement (§4 names this the weakest input)'
-      ),
-    }
-  },
+/**
+ * Per-class canopy constants over whatever fuel grid it is handed.
+ *
+ * Extracted because WHICH fuel map the constants are applied to turned out to
+ * matter enormously. `assumedCanopy` builds its own procedural terrain, and in
+ * live mode that disagrees with the real WorldCover classification the rest of
+ * the incident runs on — so it draped canopy over invented forest. Measured on
+ * the hindcast: it crowned 64,457 cells on Ballard and 28,071 on 113 Incident,
+ * both of which WorldCover calls grass and cropland, where the real fuel map
+ * supports 72 and 3. As a fallback behind a live provider, or as a control in a
+ * comparison, it has to read the same fuel everything else does.
+ */
+function assumedCanopyOver(
+  id: string,
+  note: string,
+  fuelFor: (q: TerrainQuery, signal?: AbortSignal) => Promise<Uint8Array>
+): CanopyProvider {
+  return {
+    id,
+    fallbacks: [],
+    async fetch(q: TerrainQuery, signal?: AbortSignal) {
+      const fuel = await fuelFor(q, signal)
+      const n = fuel.length
+      const d: CanopyGrid = {
+        canopyLoad: new Float32Array(n),
+        cbh: new Float32Array(n),
+        cbd: new Float32Array(n),
+        cover: new Float32Array(n),
+        assumed: new Uint8Array(n).fill(1),
+      }
+      for (let i = 0; i < n; i++) {
+        const timber = fuel[i] === 4
+        const shrub = fuel[i] === 3
+        d.canopyLoad[i] = timber ? 1.2 : shrub ? 0.3 : 0
+        d.cbh[i] = timber ? 5 : shrub ? 1 : 0
+        d.cbd[i] = timber ? 0.1 : shrub ? 0.05 : 0
+        d.cover[i] = timber ? 0.7 : shrub ? 0.35 : 0
+      }
+      return { data: d, provenance: synthetic('per-class-assumption', note) }
+    },
+  }
+}
+
+/**
+ * Per-class assumptions on the PROCEDURAL fuel map — the dependency-free
+ * last-resort fallback, and what offline mode runs, where procedural fuel is the
+ * fuel. In live mode prefer `assumedCanopyFrom(realFuelProvider)`.
+ */
+export const assumedCanopy: CanopyProvider = assumedCanopyOver(
+  'assumed-canopy',
+  'Canopy assumed per fuel class, over procedural fuel — no CBH/CBD measurement (§4 names this the weakest input)',
+  async (q) => buildTerrain(q.scenario).fuel
+)
+
+/** The same constants, over whatever fuel map the incident is actually using. */
+export function assumedCanopyFrom(fuel: FuelProvider): CanopyProvider {
+  return assumedCanopyOver(
+    'assumed-canopy-live-fuel',
+    'Canopy assumed per fuel class, over the live fuel map — no CBH/CBD measurement (§4 names this the weakest input)',
+    async (q, signal) => (await fuel.fetch(q, signal)).data.fuelId
+  )
 }
 
 /** No observations — the assimilation loop of §6 has nothing to assimilate yet. */

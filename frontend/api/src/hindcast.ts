@@ -26,12 +26,13 @@
  * neither can be quoted as the other. No number here is operational accuracy.
  */
 import { buildTerrain, scenarioAt } from '@firewatch/sim/terrain'
-import { Cell, createSim, ignite, recomputeStats, step } from '@firewatch/sim/model'
+import { Cell, attachCanopy, createSim, ignite, recomputeStats, step } from '@firewatch/sim/model'
 import { FUELS } from '@firewatch/sim/fuels'
 import { andersonLB, lengthToBreadth } from '@firewatch/sim/shape'
 import type { Params } from '@firewatch/sim/weather'
 import { loadConfig } from './config.ts'
 import { buildRegistry } from './providers/registry.ts'
+import { assumedCanopyFrom } from './providers/tier1.ts'
 import { resolve } from './providers/provenance.ts'
 import type { Config } from './config.ts'
 
@@ -403,6 +404,47 @@ async function run(p: Perimeter, cfg: Config) {
     console.log(`  barriers: FAILED — ${(err as Error).message}`)
     return null
   })
+
+  /**
+   * Canopy, both ways, because until now this replay attached none at all.
+   *
+   * That made the hindcast a surface-fire measurement and meant the canopy port
+   * could not affect the only end-to-end accuracy number in the project — a
+   * learned canopy model with no way to show it helps is decoration. Resolving
+   * the registry's provider AND the per-class assumption lets the sweep run on
+   * the real one while a single extra unsuppressed run isolates what the model
+   * is actually worth.
+   */
+  const [canopyLearned, canopyAssumed] = await Promise.all([
+    resolve(reg.canopy, { grid, scenario: sc }).catch((err) => {
+      console.log(`  canopy: FAILED — ${(err as Error).message}`)
+      return null
+    }),
+    // Over the SAME fuel map the learned provider uses. The first version of
+    // this control used the procedural-fuel `assumedCanopy`, so it was scored
+    // against a different forest than the thing it was controlling for — it
+    // crowned 64,457 cells on Ballard where the real fuel map supports 72.
+    resolve(assumedCanopyFrom(reg.fuel), { grid, scenario: sc }).catch(() => null),
+  ])
+  const canopyLayerOf = (c: typeof canopyLearned) =>
+    c ? { load: c.data.canopyLoad, cbh: c.data.cbh, cbd: c.data.cbd } : null
+  if (canopyLearned) {
+    const d = canopyLearned.data
+    let woody = 0
+    let sumCbh = 0
+    let sumCbd = 0
+    for (let i = 0; i < d.cbd.length; i++) {
+      if (d.cover[i] <= 0) continue
+      woody++
+      sumCbh += d.cbh[i]
+      sumCbd += d.cbd[i]
+    }
+    console.log(
+      `  canopy: ${canopyLearned.provenance.kind} · ${woody.toLocaleString()} cells with canopy · ` +
+      `mean CBH ${(sumCbh / Math.max(1, woody)).toFixed(2)} m, CBD ${(sumCbd / Math.max(1, woody)).toFixed(3)} kg/m3` +
+      `${canopyLearned.provenance.degradedFrom ? ` (degraded from ${canopyLearned.provenance.degradedFrom})` : ''}`
+    )
+  }
   const edges = cols * rows * 8
   const blockFrac =
     barriers && barriers.data.blockFrac.length === edges &&
@@ -502,11 +544,29 @@ async function run(p: Perimeter, cfg: Config) {
    */
   const LEVELS = [0, 10, 25, 50, 100]
   const DT = 10
-  interface Row { level: number; ha: number; ratio: number; dice: number; disc: number; active: number }
+  interface Row {
+    level: number; ha: number; ratio: number; dice: number; disc: number
+    active: number; crown: number
+  }
   const sweep: Row[] = []
+  let control: { dice: number; ratio: number; crown: number } | null = null
 
-  for (const level of LEVELS) {
+  /**
+   * The sweep runs on the registry's canopy; `variants` adds one control run at
+   * zero suppression with the per-class assumption instead, so the canopy model's
+   * contribution is a single subtraction rather than a separate invocation of the
+   * whole harness.
+   */
+  const variants: { level: number; canopy: typeof canopyLearned; tag: string }[] = [
+    ...LEVELS.map((level) => ({ level, canopy: canopyLearned, tag: '' })),
+    ...(canopyAssumed && canopyLearned ? [{ level: 0, canopy: canopyAssumed, tag: 'assumed-canopy' }] : []),
+  ]
+
+  for (const variant of variants) {
+    const level = variant.level
     const sim = createSim(terrain, 7)
+    const layer = canopyLayerOf(variant.canopy)
+    if (layer) attachCanopy(sim, layer)
     ignite(sim, ic, ir, 1)
     /**
      * Shape through time, on the unsuppressed run only.
@@ -518,7 +578,7 @@ async function run(p: Perimeter, cfg: Config) {
      * the domain. These two want opposite fixes, and the distinction is visible
      * in whether L/B starts high and decays.
      */
-    const marks = level === 0
+    const marks = level === 0 && !variant.tag
       ? [0.05, 0.1, 0.25, 0.5, 1].map((f) => Math.max(1, Math.round(f * weather.length)))
       : []
     const trace: string[] = []
@@ -563,7 +623,7 @@ async function run(p: Perimeter, cfg: Config) {
     const precision = d.inter / Math.max(1, d.bCells)
     const gap = d.dice - nullModel.dice
     console.log(
-      `  suppression ${String(level).padStart(3)}%: ` +
+      `  ${variant.tag ? variant.tag.padEnd(15) : `suppression ${String(level).padStart(3)}%:`} ` +
       `${(d.bCells * haPerCell).toFixed(0).padStart(6)} ha  ` +
       `${(d.bCells / d.aCells).toFixed(2).padStart(5)}x  ` +
       `DICE ${d.dice.toFixed(3)}  circle ${nullModel.dice.toFixed(3)}  ` +
@@ -572,10 +632,15 @@ async function run(p: Perimeter, cfg: Config) {
       `L/B ${shape.lb.toFixed(2)}@${shape.bearing.toFixed(0)}deg  ` +
       `${sim.active.length === 0 ? 'burnt out' : `${sim.active.length} alight`}`
     )
-    sweep.push({
-      level, ha: d.bCells * haPerCell, ratio: d.bCells / d.aCells,
-      dice: d.dice, disc: nullModel.dice, active: sim.active.length,
-    })
+    if (variant.tag) {
+      control = { dice: d.dice, ratio: d.bCells / d.aCells, crown: sim.crownCells }
+    } else {
+      sweep.push({
+        level, ha: d.bCells * haPerCell, ratio: d.bCells / d.aCells,
+        dice: d.dice, disc: nullModel.dice, active: sim.active.length,
+        crown: sim.crownCells,
+      })
+    }
   }
 
   /**
@@ -602,6 +667,14 @@ async function run(p: Perimeter, cfg: Config) {
     `gap ${gap0 >= 0 ? '+' : ''}${gap0.toFixed(3)} -> physics ` +
     (gap0 > MARGIN ? 'BEATS a circle' : gap0 < -MARGIN ? 'LOSES to a circle' : 'is indistinguishable from a circle')
   )
+  if (control) {
+    const base = sweep[0]
+    console.log(
+      `  -> canopy: learned DICE ${base.dice.toFixed(3)} / ${base.ratio.toFixed(2)}x / ${base.crown.toLocaleString()} crowned` +
+      `  vs assumed ${control.dice.toFixed(3)} / ${control.ratio.toFixed(2)}x / ${control.crown.toLocaleString()} crowned` +
+      `  -> DICE ${base.dice - control.dice >= 0 ? '+' : ''}${(base.dice - control.dice).toFixed(3)}`
+    )
+  }
   console.log(
     `  -> fitted to the answer (best of ${sweep.length} levels, NOT a forecast): ` +
     `DICE ${best.dice.toFixed(3)} at ${best.level}%; closest area ${closest.ratio.toFixed(2)}x at ${closest.level}%`

@@ -66,6 +66,74 @@ FIREWATCH_MODE=offline npm run barriercheck   # geometry and kernel only, no Ove
 From inside `frontend/Wildfire/`: `npm run calibrate` renders `calibrate.html` to
 `shots/calibrate.png` with band percentiles (needs a dev server).
 
+### The learned canopy model, and its null result
+
+`canopy` was the last synthetic port. `assumedCanopy` handed every timber cell
+CBH 5 m and CBD 0.1 — the entire input to Van Wagner's criteria, so crown fire ran
+on two invented constants. It is now `landfire-gbt-canopy`, and **every one of the
+ten ports reports `measured` or `derived`**.
+
+- **Labels: LANDFIRE LF2023** CBH/CBD/CC/CH, 30 m CONUS, keyless over their
+  ArcGIS ImageServer (`lfps.usgs.gov`). Directly the two quantities the kernel
+  consumes — no allometry from canopy height.
+- **Model: scikit-learn `GradientBoostingRegressor`**, 250 trees, depth 3, one per
+  target. Trained offline (`npm run canopy:train`, venv at `api/.venv`), exported
+  to `model.json` (415 kB) and walked in plain TypeScript at 11 us/cell. **No
+  PyTorch, no runtime ML dependency** — that is deliberate and worth keeping.
+- **Why a model and not the raster:** LANDFIRE stops at the US border and this app
+  simulates anywhere. A LANDFIRE-direct provider for CONUS does not exist yet and
+  would be strictly better inside it.
+
+Held out by whole region, against the constants it replaces:
+
+| | model MAE | assumed MAE | RMSE gain |
+|---|---|---|---|
+| cover | 0.140 | 0.205 | 28% |
+| height | 4.65 m | 5.63 m | 18% |
+| CBH | 2.54 m | 3.96 m | 14% |
+| CBD | 0.048 | 0.051 | **4%** |
+
+**IT CHANGES THE HINDCAST BY NOTHING.** Learned vs assumed canopy, over the same
+fuel map, at 0% suppression: +0.008, -0.010, +0.000, +0.000, +0.000 Dice — mean
+-0.0004, and three of the five are bit-identical down to the crowned-cell count.
+Canopy structure is **not** the binding constraint on this model's accuracy.
+
+Act on that rather than re-deriving it. Do NOT spend effort on GEDI lidar, a CNN,
+or PyTorch for canopy until something else changes and this measurement moves;
+the link from canopy accuracy to fire accuracy is currently unmeasurable, which
+makes any improvement to it unfalsifiable. The binding constraints are elsewhere
+— fires that never stop, and L/B 1.2-1.5 against real perimeters of 2.2-2.6.
+
+What the exercise was actually worth:
+
+- **The hindcast now attaches canopy at all.** It never did, so it was a
+  surface-fire measurement and the canopy port could not affect the only
+  end-to-end number in the project.
+- **It found a live bug.** `assumedCanopy` builds its own procedural terrain, so
+  in live mode it applied canopy to a different forest than the rest of the
+  incident — it crowned 64,457 cells on Ballard and 28,071 on 113 Incident where
+  the real WorldCover fuel map supports 72 and 3. `assumedCanopyFrom(fuel)` is the
+  variant that reads the live fuel map, and it is what the learned provider falls
+  back to and what the hindcast controls against. Plain `assumedCanopy` stays for
+  offline mode, where procedural fuel *is* the fuel.
+- **CBD is a sensor limit, not a model limit.** Optical reflectance sees the top of
+  a canopy; bulk density is a property of its interior. 4% over a constant is
+  close to no signal, and `R >= 3.0/CBD` is what active crowning turns on. The
+  provenance note says not to read it as measurement and must keep saying so.
+
+Three rules for this path:
+
+- **`features.ts` is shared by the sampler and the provider.** Train/serve skew is
+  invisible — the held-out score stays good while production degrades. `model.json`
+  carries the feature list it was trained with and the provider throws on drift.
+- **CV is blocked by region, never random.** Neighbouring 30 m pixels are
+  near-duplicates; a random split scores interpolation inside a forest the model
+  already saw, which is not the question.
+- **`npm run canopy:check` proves the TypeScript tree walk reproduces sklearn.**
+  Two implementations of one tree walk, and a wrong one looks entirely plausible.
+  It agrees to 8e-9 on three targets; one row in 120 differs on `height` because
+  float32 lands the other side of a split, which is expected and documented.
+
 ### Crown fire
 
 Van Wagner's two criteria, in `sim/src/model.ts`: initiation
