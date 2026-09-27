@@ -253,6 +253,41 @@ cell obstructs part of an edge rather than severing it, so the flux is reduced a
 stochastic draw still gets through. Correct per §5, and it means roads do not act as
 firebreaks at this resolution.
 
+### Fuel: LANDFIRE FBFM40 in CONUS, and why it cost accuracy
+
+`fbfm40Fuel` (`api/src/providers/landfire.ts`) reads the Scott & Burgan 40-model
+set from LANDFIRE's keyless ArcGIS ImageServer and sits AHEAD of WorldCover in the
+fuel chain. Inside CONUS it resolves 25-27 distinct models; outside, the service
+returns nothing, the provider throws, and `resolve` drops to WorldCover with
+`degradedFrom` set. Nothing has to know where CONUS is. It matters beyond US
+domains because **every hindcast fire is in CONUS**, so the project's only
+end-to-end measurement now runs on operational fuel data.
+
+**It made mean Dice worse — 0.338 to 0.303 — and that is expected, not a bug.**
+Pineland Rd went 2.20x to 3.96x and Hwy 82 5.43x to 7.32x, because FBFM40 calls
+more of the US South timber (TL litter 54% at Angelina) and this kernel's timber
+bed is wrong: depth 0.65 m against FM8's published 0.061, load 5.5 kg/m2 against
+1.121. More correctly-classified timber therefore means more over-prediction. The
+40-to-7 crosswalk discards exactly the load and depth distinctions that would pay
+for itself — GR1 and GR9 differ twentyfold in load and both land on `Fuel.Grass`.
+
+Kept anyway, on the same grounds as the WorldCover swap: being right is the point,
+not closing the gap. But do not read it as an improvement yet, and do not chase
+the regression by reverting it — **the payoff is Scott & Burgan bed parameters,
+and its prerequisite is multi-size-class Rothermel in the kernel.** That is the
+single highest-value piece of physics work outstanding.
+
+Two things to preserve:
+
+- **Nearest-neighbour resampling is not optional.** FBFM40 is categorical;
+  interpolating averages code numbers, and halfway between GR2 (102) and TL4 (184)
+  is 143, which is SH3 — a real fuel model that resembles neither. Bilinear would
+  invent fuels along every class boundary.
+- **`exportImage`, not `getSamples`.** A 400x400 grid is 160,000 cells and the
+  point endpoint caps at a few hundred per call. An out-of-extent request answers
+  200 with a JSON body rather than a TIFF, so the content-type check is what turns
+  that into a clean fallback instead of a parse exception.
+
 ### Off-axis spread: fixed, and what it left behind
 
 Six candidates were tested and eliminated: rate, duration, reachability, fuel

@@ -12,13 +12,14 @@ import type {
 import type { Config } from '../config.ts'
 import {
   assumedCanopy, densityValuesAtRisk, noBarriers, noBurnHistory,
-  noObservations, proceduralDem, terrariumDem, topographyFuel, worldCoverFuel,
+  noObservations, proceduralDem, terrariumDem, topographyFuel,
 } from './tier1.ts'
 import { mockWeather, nfdrs1hMoisture, openMeteo, openMeteoWind, rhFuelMoisture, uniformWind } from './tier2.ts'
 import { sentinelBurnHistory } from './burnhistory.ts'
 import { osmBarriers, osmValuesAtRisk } from './osm.ts'
 import { firmsPerimeter } from './firms.ts'
 import { learnedCanopy } from './canopy-learned.ts'
+import { fbfm40Fuel } from './landfire.ts'
 
 export interface Registry {
   elevation: ElevationProvider
@@ -36,7 +37,16 @@ export interface Registry {
 export function buildRegistry(cfg: Config): Registry {
   const live = cfg.mode === 'live'
   const elevation = live ? terrariumDem(cfg) : proceduralDem
-  const fuel = live ? worldCoverFuel(cfg) : topographyFuel
+  /**
+   * FBFM40 first, WorldCover behind it via the fallback chain.
+   *
+   * Inside CONUS this is the operational fuel model the US fire agencies run;
+   * outside it the service returns nothing, the provider throws, and `resolve`
+   * drops to WorldCover with `degradedFrom` recording that it happened. So the
+   * order encodes "use the authoritative source where it exists" without anything
+   * having to know where CONUS is.
+   */
+  const fuel = live ? fbfm40Fuel(cfg) : topographyFuel
   return {
     elevation,
     fuel,
@@ -86,6 +96,8 @@ const DERIVED = new Set([
   // held-out error published in its provenance note. Never 'measured' — the
   // numbers are predictions, and LANDFIRE is the label source, not the input.
   'landfire-gbt-canopy',
+  // FBFM40 itself is operational, but a 40-to-7 crosswalk is derived from it.
+  'landfire-fbfm40',
 ])
 const kindOf = (id: string): 'measured' | 'derived' | 'synthetic' =>
   DERIVED.has(id) ? 'derived' : MEASURED.has(id) ? 'measured' : 'synthetic'
