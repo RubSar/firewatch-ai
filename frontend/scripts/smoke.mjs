@@ -10,7 +10,7 @@ import { chromium } from 'playwright'
 const OUT = process.env.SHOT_DIR ?? 'shots'
 const URL = process.env.APP_URL ?? 'http://localhost:5173/'
 
-const browser = await chromium.launch()
+const browser = await chromium.launch({ channel: process.env.PLAYWRIGHT_CHANNEL ?? 'chrome' })
 const page = await browser.newPage({ viewport: { width: 1600, height: 950 } })
 
 const errors = []

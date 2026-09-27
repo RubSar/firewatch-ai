@@ -85,7 +85,7 @@ From `backend/api`, using the existing authenticated Earth Engine project:
   --data-dir .research-data/enrichment-pilot/data \
   --archive .research-data/GOFER-v02.zip \
   --nifc-dir .research-data/nifc-pilot \
-  --output ../../frontend/Wildfire/public/data/historical-pilot.json
+  --output ../../frontend/public/data/historical-pilot.json
 ./.venv/bin/python -m pytest tests/historical_fire/test_nifc.py -q
 ```
 

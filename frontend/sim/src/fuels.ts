@@ -85,8 +85,6 @@ export const FUELS: FuelModel[] = [
   { id: Fuel.Urban, name: 'Urban / WUI', baseRos: 0.007, load: 2.4, fineLoad: 0.6, bulkDensity: 4.0, depth: 0.6, sav: 1200, mx: 22, spotting: 0.5, color: [141, 138, 145] },
 ]
 
-export const isBurnable = (f: number) => FUELS[f].load > 0
-
 /**
  * Rothermel's wind coefficients, precomputed per fuel.
  *

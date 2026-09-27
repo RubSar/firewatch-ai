@@ -3,7 +3,7 @@
 How a run of this application actually proceeds, end to end: what happens on load, where the
 fire is computed, what data is fetched, how state reaches the screen, and what a click does.
 
-This describes the **shipped code** under `frontend/`. It is not `Wildfire/ARCHITECTURE.md`,
+This describes the **shipped code** under `frontend/`. It is not `ARCHITECTURE.md`,
 which specifies a different, unimplemented system (10 m energy-accumulator kernel, GEE fuels,
 IR assimilation). Where the two disagree, this document follows `src/`.
 
@@ -11,12 +11,12 @@ IR assimilation). Where the two disagree, this document follows `src/`.
 
 | Package | Path | Role in the flow |
 |---|---|---|
-| `wildfire-sim` | `frontend/Wildfire/` | The app: React UI, Leaflet map, canvas rendering, browser tile loading |
+| `firewatch-frontend` | `frontend/` | The app: React UI, Leaflet map, canvas rendering, browser tile loading |
 | `@firewatch/sim` | `frontend/sim/` | The kernel: fire spread, fuels, terrain, weather, classifier. DOM-free — identical code runs in the browser and in Node |
 | `@firewatch/contracts` | `frontend/contracts/` | Wire protocol, binary codec, provider ports. Types only, no runtime logic |
 | `@firewatch/api` | `frontend/api/` | Fastify server that runs the kernel server-side, resolves real data providers, and streams state |
 
-One npm workspace rooted at `frontend/`. Dependencies point one way: `Wildfire` and `api` both
+One npm workspace rooted at `frontend/`. Dependencies point one way: the root app and `api` both
 depend on `sim` and `contracts`; `sim` depends on nothing.
 
 ## 1. Two modes, one code path
@@ -32,14 +32,14 @@ Both are first-class. Local mode needs no server and no network at all — that 
 app work offline and what the UI smoke test exercises deterministically. If a remote connect
 fails, the app logs a warning and falls back to local rather than failing.
 
-The seam is `frontend/Wildfire/src/transport/`. Both transports expose a real `Sim` object;
+The seam is `frontend/src/transport/`. Both transports expose a real `Sim` object;
 `RemoteTransport` mirrors wire deltas into it rather than stepping it. Everything downstream
 (`MapView`, `fireGeometry`, `paint`) reads `sim.state`, `sim.ignitedAt` and `sim.treatment` and
 cannot tell which transport produced them.
 
 ## 2. Boot
 
-1. `Wildfire/src/main.tsx` mounts `App`.
+1. `src/main.tsx` mounts `App`.
 2. `App` holds a `Scenario` **value** in state, initialised to `SCENARIOS[0]` (Khosrov Forest
    Reserve). The three Armenian scenarios in `sim/src/terrain.ts` are bookmarks, not the
    available set — every data source is global.
@@ -71,7 +71,7 @@ buildTerrain(scenario)              procedural terrain, synchronous
 - **Adoption retires the old transport immediately**, so a scenario change never leaves two
   clocks running.
 
-### Local path — `loadRealTerrain` (`Wildfire/src/data/realData.ts`)
+### Local path — `loadRealTerrain` (`src/data/realData.ts`)
 
 Fetched straight from the browser, because both services send CORS headers:
 
@@ -232,7 +232,7 @@ corrupted fire rather than an error.
 The server never clears its shadow arrays on reset — leaving them stale is what makes the next
 delta emit every burnt cell as unburned.
 
-## 8. Rendering — `Wildfire/src/render/` + `MapView`
+## 8. Rendering — `src/render/` + `MapView`
 
 Leaflet draws basemap tiles; a canvas positioned **over** the map draws the fire.
 
@@ -309,8 +309,7 @@ Run from `frontend/`:
 
 Hindcast numbers are research measurements, not operational accuracy: ignition is the reported
 point of origin or the perimeter centroid, the replay is scored against fires that were mostly
-fought, and the model does not yet beat an equal-area disc on a suppressed fire. See
-the project notes for the current table and its caveats.
+fought, and the model does not yet beat an equal-area disc on a suppressed fire.
 
 ## 12. Constraints the flow depends on
 
@@ -798,7 +797,7 @@ T  =  T_amb + 0.34·ΔT                    smouldering
 T  =  T_amb + (T_peak − T_amb)·exp(−Δt/1800)   burnt, cooling
 ```
 
-`Wildfire/src/render/thermal.ts:65`. Saturating rather than scaling, because flame temperature is
+`src/render/thermal.ts:65`. Saturating rather than scaling, because flame temperature is
 buffered by radiative loss and entrainment — it does not climb indefinitely with intensity. This
 is `ARCHITECTURE.md` §4's `T_f` map; the two must stay in sync. The scale is fixed to
 ambient→ambient+1050 K rather than tracking each frame's maximum, so apparent brightness tracks

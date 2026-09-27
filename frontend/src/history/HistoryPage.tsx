@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { HistoricalMap } from '@firewatch/visualization/historical-map'
+import { HistoricalMap } from '../visualization/HistoricalMap'
 import { SPECS, dateLabel, display, eventAvailability, hectares, measurement, sortByAvailability, value } from './model'
 import type { FireEvent, Interval, Library, Measurement, Spec } from './model'
 import './history.css'

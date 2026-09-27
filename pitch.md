@@ -178,7 +178,7 @@ flowchart LR
         canopydir["canopy/<br/>features, sampler, trainer, model.json"]
     end
 
-    subgraph app["wildfire-sim · the app"]
+    subgraph app["firewatch-frontend · the app"]
         transport["transport/<br/>local | remote"]
         render["render/<br/>fireGeometry, paint, thermal"]
         components["components/<br/>MapView, MapTools, StatsPanel"]
@@ -202,7 +202,7 @@ flowchart LR
 | `@firewatch/sim` | `frontend/sim/` | the kernel. **DOM-free** — identical in browser and Node |
 | `@firewatch/contracts` | `frontend/contracts/` | wire protocol, binary codec, provider ports. No runtime logic |
 | `@firewatch/api` | `frontend/api/` | Fastify server, all provider implementations, harnesses |
-| `wildfire-sim` | `frontend/Wildfire/` | UI, rendering, browser tile loading |
+| `firewatch-frontend` | `frontend/` | UI, rendering, browser tile loading |
 
 Node runs the backend TypeScript **directly** — no build step. That means type-stripping
 only: no TS `enum`, `namespace`, parameter properties or decorators. `erasableSyntaxOnly`
@@ -863,8 +863,8 @@ npm run canopy:check --workspace=@firewatch/api       # TS inference == sklearn
 | Document | Covers |
 |---|---|
 | `frontend/APP-FLOW.md` | end-to-end flow with every equation and its source line |
-| `frontend/Wildfire/ARCHITECTURE.md` | the proposed target design — **read as direction, not description** |
-| `frontend/Wildfire/README.md` | the model and data sources, narrative |
+| `frontend/ARCHITECTURE.md` | the proposed target design — **read as direction, not description** |
+| `frontend/README.md` | the model and data sources, narrative |
 | `frontend/api/README.md` | provider ports, protocol, diagnostics |
 
 ---

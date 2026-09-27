@@ -150,5 +150,3 @@ export function thermalColour(t: number): string {
 export const THERMAL_CSS_GRADIENT = STOPS.map(
   (c, i) => `rgb(${c.join(',')}) ${((i / (STOPS.length - 1)) * 100).toFixed(0)}%`
 ).join(', ')
-
-export const kToC = (k: number) => k - 273.15

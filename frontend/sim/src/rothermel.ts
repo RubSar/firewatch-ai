@@ -78,6 +78,26 @@ export interface RothermelResult {
  * `R = I_R · ξ · (1 + φ_w + φ_s) / (ρ_b · ε · Q_ig)` — reaction intensity
  * times the fraction of it that propagates, over the heat needed to bring the
  * fuel ahead to ignition.
+ *
+ * SINGLE FUEL PARTICLE ONLY — the limitation that decides what this can check.
+ *
+ * Rothermel's full model weights load and SAV across size classes (1-h, 10-h,
+ * 100-h, live) before entering the heat balance. This implementation treats
+ * the bed as one particle, which is exact for a fuel model that is essentially
+ * all fine dead fuel and wrong for one that is not. Measured against published
+ * BehavePlus output at 8% moisture and 8 km/h midflame:
+ *
+ *   FM1  short grass, ~all 1-h     26.97 vs 26.0 m/min    4% — valid
+ *   FM2  timber grass + understorey 23.12 vs 12.0         multi-class, invalid
+ *   FM8  closed timber litter        1.99 vs  0.5         multi-class, invalid
+ *   FM10 timber + understorey       13.15 vs  2.4         multi-class, invalid
+ *
+ * That is not a transcription error — FM1 validating to 4% is what rules that
+ * out. It is the missing size-class aggregation, and it matters here only
+ * because this kernel's own FUELS are also single-load, single-SAV models. So
+ * the comparison is like for like, and the reference is sound for exactly the
+ * fuels it is being used on. Adding multi-class support is the prerequisite
+ * for ever comparing against a real Anderson or Scott & Burgan model.
  */
 export function rothermelSpread(input: RothermelInput): RothermelResult {
   const { fuel, moisture, windKmh, slopeTan } = input
@@ -133,36 +153,6 @@ export function rothermelSpread(input: RothermelInput): RothermelResult {
     slopeFactor,
     extinguished,
   }
-}
-
-/**
- * SINGLE FUEL PARTICLE ONLY — the limitation that decides what this can check.
- *
- * Rothermel's full model weights load and SAV across size classes (1-h, 10-h,
- * 100-h, live) before entering the heat balance. This implementation treats
- * the bed as one particle, which is exact for a fuel model that is essentially
- * all fine dead fuel and wrong for one that is not. Measured against published
- * BehavePlus output at 8% moisture and 8 km/h midflame:
- *
- *   FM1  short grass, ~all 1-h     26.97 vs 26.0 m/min    4% — valid
- *   FM2  timber grass + understorey 23.12 vs 12.0         multi-class, invalid
- *   FM8  closed timber litter        1.99 vs  0.5         multi-class, invalid
- *   FM10 timber + understorey       13.15 vs  2.4         multi-class, invalid
- *
- * That is not a transcription error — FM1 validating to 4% is what rules that
- * out. It is the missing size-class aggregation, and it matters here only
- * because this kernel's own FUELS are also single-load, single-SAV models. So
- * the comparison is like for like, and the reference is sound for exactly the
- * fuels it is being used on. Adding multi-class support is the prerequisite
- * for ever comparing against a real Anderson or Scott & Burgan model.
- */
-export const ANDERSON_FUELS: Record<string, RothermelFuel> = {
-  /** Short grass — nearly all 1-h fine fuel, so the single-particle form holds. */
-  fm1: { load: 0.166, depth: 0.305, sav: 3500, moistureOfExtinction: 0.12 },
-  /** Multi-class. Present for the validation table above, NOT a usable reference. */
-  fm2: { load: 0.897, depth: 0.305, sav: 3000, moistureOfExtinction: 0.15 },
-  fm8: { load: 1.121, depth: 0.061, sav: 2000, moistureOfExtinction: 0.30 },
-  fm10: { load: 2.694, depth: 0.305, sav: 2000, moistureOfExtinction: 0.25 },
 }
 
 /**
