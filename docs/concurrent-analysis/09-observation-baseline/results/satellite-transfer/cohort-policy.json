@@ -1,0 +1,18 @@
+{
+  "schema_version": "firewatch.research.transfer-policy.v1",
+  "purpose": "Two geographically separated incident transfer cases, without threshold tuning; reference audit precedes scoring.",
+  "candidate_window_utc": ["2026-01-01T00:00:00Z", "2026-06-30T23:59:59Z"],
+  "candidate_geography": {"west": -96, "east": -90, "south": 25, "north": 49},
+  "geography_reason": "A bounded first transfer cohort within UTM 15N, supported by the frozen Cypress runner. No national representativeness claim.",
+  "min_reported_polygon_acres": 1200,
+  "max_reported_polygon_acres": 10000,
+  "case_count": 2,
+  "min_origin_separation_km": 100,
+  "selection_order": ["discovery time ascending", "incident UUID ascending"],
+  "eligibility": "WF only, unique UUID, not Cypress Creek or a complex child, valid closed-ring polygon, positive discovery and containment times in order, non-null polygon timestamp after discovery and not beyond containment plus 15 days, origin present, full 20 m grid <=400000 cells. Select first two with >=100 km origin separation from Cypress and each earlier selected case. No replacement after imagery/quality results.",
+  "pre_days": 14,
+  "post_days": 15,
+  "algorithm": {"dnbr_threshold": 0.1, "pre_nbr_floor": 0.1, "resolution_m": 20, "buffer_m": 1000, "max_scene_cloud_percent": 60, "max_candidates_per_window": 4, "valid_scl_classes": [4,5,6], "cloud_buffer_pixels": 1, "min_joint_valid_fraction": 0.95},
+  "reference_policy": "Preserve dated source evidence but do not promote WFIGS daily snapshots or attribute timestamps to independent observation times. Scores remain exploratory until target/time evidence is resolved.",
+  "independence_limit": "Distinct incident UUIDs, separation and non-overlapping geometries are structural screening, not proof of independent fire regimes or reference creation. This is a transfer pilot, not a frozen ML test set."
+}

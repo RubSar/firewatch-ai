@@ -1,0 +1,244 @@
+{
+  "schema_version": "firewatch.research.mosaic-result.v1",
+  "created_at_utc": "2026-09-26T23:10:09.777259Z",
+  "case_id": "84284851-f0f8-4253-b5bc-da7771e0150d-transfer-v1",
+  "role": "fixed-rule transfer pilot; not an untouched ML test set",
+  "config": {
+    "schema_version": "firewatch.research.satellite-case.v1",
+    "case_id": "84284851-f0f8-4253-b5bc-da7771e0150d-transfer-v1",
+    "incident_id": "84284851-f0f8-4253-b5bc-da7771e0150d",
+    "snapshot_sha256": "3a88ae91910f1bfcb90c37c959306fe0020dd529673471f80b8d5c9e9792b773",
+    "collection": "sentinel-2-c1-l2a",
+    "pre_window": [
+      "2026-02-03T20:48:00Z",
+      "2026-02-17T20:47:59Z"
+    ],
+    "post_window": [
+      "2026-02-19T22:00:00Z",
+      "2026-03-06T22:00:00Z"
+    ],
+    "epsg": 32613,
+    "resolution_m": 20,
+    "buffer_m": 1000,
+    "max_pixels": 400000,
+    "max_scene_cloud_percent": 60,
+    "max_candidates_per_window": 4,
+    "valid_scl_classes": [
+      4,
+      5,
+      6
+    ],
+    "cloud_buffer_pixels": 1,
+    "min_joint_valid_fraction": 0.95,
+    "dnbr_threshold": 0.1,
+    "pre_nbr_floor": 0.1,
+    "reference_time_verified": false,
+    "reference_time_note": "Operational mapped extent; timestamp fields and mapping method do not independently verify observation time or burned-pixel target. Transfer overlap remains exploratory.",
+    "selection_rule": "Within each window rank by proximity to fire (latest pre, earliest post), then scene ID; shortlist four with tile cloud <=60% and full AOI footprint. Pick the pair with maximum joint SCL-valid AOI coverage, ties by shortlist order. Never use dNBR or reference overlap for selection.",
+    "threshold_rationale": "Unchanged Cypress thresholds frozen before transfer imagery. No post-result tuning or case replacement.",
+    "case_name": "County Rd 169",
+    "research_role": "fixed-rule transfer pilot; not an untouched ML test set"
+  },
+  "grid": {
+    "crs": "EPSG:32613",
+    "bounds": [
+      595420,
+      4328940,
+      613120,
+      4334020
+    ],
+    "width": 885,
+    "height": 254,
+    "transform": [
+      20.0,
+      0.0,
+      595420.0,
+      0.0,
+      -20.0,
+      4334020.0
+    ],
+    "resolution_m": 20,
+    "aoi_wgs84": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            -103.69177819477373,
+            39.10226746193327
+          ],
+          [
+            -103.6909312473554,
+            39.1480322026903
+          ],
+          [
+            -103.89572372192833,
+            39.150152766443846
+          ],
+          [
+            -103.89643824340457,
+            39.10438459054963
+          ],
+          [
+            -103.69177819477373,
+            39.10226746193327
+          ]
+        ]
+      ]
+    },
+    "bbox_wgs84": [
+      -103.89643824340457,
+      39.10226746193327,
+      -103.6909312473554,
+      39.150152766443846
+    ],
+    "coordinate_order": "longitude, latitude for WGS84; easting, northing metres for UTM"
+  },
+  "selected": {
+    "pre": {
+      "time_start_utc": "2026-02-06T17:53:28.805000Z",
+      "time_end_utc": "2026-02-06T17:53:31.996000Z",
+      "datatake_id": "GS2A_20260206T175321_055508_N05.12",
+      "members": [
+        {
+          "id": "S2A_T13SED_20260206T175316_L2A",
+          "datetime": "2026-02-06T17:53:31.996000Z",
+          "processing_baseline": "05.12"
+        },
+        {
+          "id": "S2A_T13SFD_20260206T175316_L2A",
+          "datetime": "2026-02-06T17:53:28.805000Z",
+          "processing_baseline": "05.12"
+        }
+      ]
+    },
+    "post": {
+      "time_start_utc": "2026-03-03T17:53:06.864000Z",
+      "time_end_utc": "2026-03-03T17:53:10.281000Z",
+      "datatake_id": "GS2C_20260303T174231_007790_N05.12",
+      "members": [
+        {
+          "id": "S2C_T13SED_20260303T175037_L2A",
+          "datetime": "2026-03-03T17:53:10.281000Z",
+          "processing_baseline": "05.12"
+        },
+        {
+          "id": "S2C_T13SFD_20260303T175037_L2A",
+          "datetime": "2026-03-03T17:53:06.864000Z",
+          "processing_baseline": "05.12"
+        }
+      ]
+    }
+  },
+  "coverage": {
+    "aoi_fraction": 0.9893055740913742,
+    "reference_fraction": 1.0,
+    "reference_pixels": 56605,
+    "excluded_reference_pixels": 0,
+    "aoi_pixels": 224790,
+    "excluded_aoi_pixels": 2404
+  },
+  "quality_gate_passed": true,
+  "time_matched_validation_allowed": false,
+  "time_matched_metrics": null,
+  "time_matched_metrics_reason": "Operational mapped extent; timestamp fields and mapping method do not independently verify observation time or burned-pixel target. Transfer overlap remains exploratory.",
+  "exploratory_overlap": {
+    "dnbr_only": {
+      "tp": 39704,
+      "fp": 964,
+      "fn": 16901,
+      "tn": 164817,
+      "valid_pixels": 222386,
+      "iou": 0.6896767357431951,
+      "dice": 0.8163416364253184,
+      "precision": 0.976295859152159,
+      "recall": 0.7014221358537231,
+      "candidate_area_ha_on_valid": 1626.72,
+      "reference_area_ha_on_valid": 2264.2000000000003,
+      "area_bias_ha_on_valid": -637.48,
+      "area_bias_fraction_on_valid": -0.28154756646939316
+    },
+    "dnbr_with_pre_nbr_floor": {
+      "tp": 199,
+      "fp": 76,
+      "fn": 56406,
+      "tn": 165705,
+      "valid_pixels": 222386,
+      "iou": 0.0035108766606093754,
+      "dice": 0.0069971870604782,
+      "precision": 0.7236363636363636,
+      "recall": 0.003515590495539263,
+      "candidate_area_ha_on_valid": 11.0,
+      "reference_area_ha_on_valid": 2264.2000000000003,
+      "area_bias_ha_on_valid": -2253.2000000000003,
+      "area_bias_fraction_on_valid": -0.9951417719282749
+    },
+    "all_negative": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 56605,
+      "tn": 165781,
+      "valid_pixels": 222386,
+      "iou": 0.0,
+      "dice": 0.0,
+      "precision": null,
+      "recall": 0.0,
+      "candidate_area_ha_on_valid": 0.0,
+      "reference_area_ha_on_valid": 2264.2000000000003,
+      "area_bias_ha_on_valid": -2264.2000000000003,
+      "area_bias_fraction_on_valid": -1.0
+    },
+    "oracle_area_origin_disc": {
+      "tp": 10950,
+      "fp": 38573,
+      "fn": 45655,
+      "tn": 127208,
+      "valid_pixels": 222386,
+      "iou": 0.11504759503246549,
+      "dice": 0.2063545906829489,
+      "precision": 0.22110938351876905,
+      "recall": 0.1934458086741454,
+      "candidate_area_ha_on_valid": 1980.92,
+      "reference_area_ha_on_valid": 2264.2000000000003,
+      "area_bias_ha_on_valid": -283.28000000000003,
+      "area_bias_fraction_on_valid": -0.12511262255984454
+    }
+  },
+  "reference_area_ha_projected": 2264.4259154132437,
+  "reference_area_ha_raster": 2264.2000000000003,
+  "times": {
+    "attr_FireDiscoveryDateTime": "2026-02-17T20:48:00Z",
+    "poly_PolygonDateTime": "2026-02-18T19:34:00.593000Z",
+    "poly_DateCurrent": "2026-04-17T20:41:27.845000Z",
+    "attr_ContainmentDateTime": "2026-02-19T22:00:00Z",
+    "attr_FireOutDateTime": "2026-02-19T22:10:00Z"
+  },
+  "limitations": [
+    "Conditional overlap with an operational perimeter; not pixel-level truth.",
+    "Same-overpass tiles have distinct capture UTCs within a 300 second cap; no temporal mixing across datatakes.",
+    "Automatic cloud screening can miss residual thin cloud, haze or smoke.",
+    "Cohort selected by metadata, not a random sample. No training or threshold tuning.",
+    "Oracle-area disc uses reference area and is clipped to the evaluation AOI."
+  ],
+  "input_sha256": {
+    "catalog": "d8dc337488450188fe9160ff8b2b79428b7be3595962fe93e615a73e39d86917",
+    "acquisition": "e1e36bcea43647f0955c6f8eed441a79d4e89ad2bfd221277e98ed4180c2e2c8",
+    "mosaic_code": "c550421866c15c6b87091c2bc97f1ac3cfc34aea38e484d898c4ddcd551c4355",
+    "baseline_code": "59bc0a34defc525df1a6dd797c24ce89377f2bd0bc2c45dfed715bf480bad6fa"
+  },
+  "environment": {
+    "numpy": "2.3.5",
+    "rasterio": "1.4.3",
+    "gdal": "3.9.3"
+  },
+  "outputs": {
+    "candidate.tif": "8db2f9063dd92b026ae568d359de1c43431090ca06202dc70bcf682070266cf8",
+    "dnbr.tif": "b9fb1babee9629fc682e7627fec3301832336d3e2afe3193ec23d7098ac8a27f",
+    "overview.png": "7dcb4fb5e000d49321e55ad7999a8046beaf1d3e589bfe70c6727a3c99171e45",
+    "post-nbr.tif": "35a7035518563eb8ab682d9b3a6df6902c36832002363368c493589a845548f7",
+    "post-tile-choice.tif": "10b9c141f129be9c8ee2031f894db1d8977ac0575dbccb21075d9fb50ddd1fd2",
+    "pre-nbr.tif": "4fe011598ffdaa5d401396c0a19756f030db888ec1d3b00f518958e33aafb569",
+    "pre-tile-choice.tif": "10b9c141f129be9c8ee2031f894db1d8977ac0575dbccb21075d9fb50ddd1fd2",
+    "reference.tif": "3c14512169c6748dbeb78d26b3c6e6544b6b8e0d1ee82c08802087d9ceb7637f",
+    "valid.tif": "cfa49453ef34619af2b759c5246490faf8cef766814346de8b684e9dfe487f9b"
+  }
+}

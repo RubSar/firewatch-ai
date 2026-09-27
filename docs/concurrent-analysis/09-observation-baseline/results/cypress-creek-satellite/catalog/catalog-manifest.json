@@ -1,0 +1,85 @@
+{
+  "schema_version": "firewatch.research.satellite-catalog.v1",
+  "created_at_utc": "2026-09-26T22:36:29.228235Z",
+  "config_sha256": "e4834cced216a77b771695646b84b2d7af76520df61f00bc59ec4ed41aaa374f",
+  "grid_sha256": "41de5d41046ed18ebe007659dc71249327a0dacaec00a25cdbd9f4cbcb0dfaf2",
+  "snapshot_sha256": "fbdfb6d085fed0f8082798a2a91bbf99a3c690b97274e77ca534781b573f48d8",
+  "requests": [
+    {
+      "url": "https://earth-search.aws.element84.com/v1/search?collections=sentinel-2-c1-l2a&bbox=-94.40278219832747%2C31.034056001174132%2C-94.30476246945857%2C31.104172501824902&datetime=2026-02-10T00%3A00%3A00Z%2F2026-02-24T18%3A29%3A59Z&limit=100",
+      "retrieved_at_utc": "2026-09-26T22:36:27.970397Z",
+      "path": "pre-catalog.json",
+      "sha256": "179d650a3ec43d8158c524f0a6a74c1e676c1bc2031f66ae855d199cb76e2b4d"
+    },
+    {
+      "url": "https://earth-search.aws.element84.com/v1/search?collections=sentinel-2-c1-l2a&bbox=-94.40278219832747%2C31.034056001174132%2C-94.30476246945857%2C31.104172501824902&datetime=2026-03-09T19%3A18%3A00Z%2F2026-03-24T23%3A59%3A59Z&limit=100",
+      "retrieved_at_utc": "2026-09-26T22:36:29.200761Z",
+      "path": "post-catalog.json",
+      "sha256": "508d728347917524bba2a90a1cb75d681b5bc428639707182da81e7c9f11b3b5"
+    }
+  ],
+  "selection": {
+    "pre": {
+      "all_scenes": [
+        {
+          "id": "S2B_T15RUQ_20260221T170122_L2A",
+          "datetime": "2026-02-21T17:05:05.295000Z",
+          "cloud_percent": 88.290936,
+          "eligible": false
+        },
+        {
+          "id": "S2C_T15RUQ_20260216T170151_L2A",
+          "datetime": "2026-02-16T17:05:10.189000Z",
+          "cloud_percent": 9.068601,
+          "eligible": true
+        },
+        {
+          "id": "S2B_T15RUQ_20260211T170229_L2A",
+          "datetime": "2026-02-11T17:05:01.761000Z",
+          "cloud_percent": 34.994081,
+          "eligible": true
+        }
+      ],
+      "shortlist": [
+        "S2C_T15RUQ_20260216T170151_L2A",
+        "S2B_T15RUQ_20260211T170229_L2A"
+      ]
+    },
+    "post": {
+      "all_scenes": [
+        {
+          "id": "S2B_T15RUQ_20260323T170202_L2A",
+          "datetime": "2026-03-23T17:05:05.097000Z",
+          "cloud_percent": 35.568109,
+          "eligible": true
+        },
+        {
+          "id": "S2C_T15RUQ_20260318T170445_L2A",
+          "datetime": "2026-03-18T17:05:10.575000Z",
+          "cloud_percent": 18.192071,
+          "eligible": true
+        },
+        {
+          "id": "S2B_T15RUQ_20260313T170110_L2A",
+          "datetime": "2026-03-13T17:05:05.448000Z",
+          "cloud_percent": 0.880209,
+          "eligible": true
+        }
+      ],
+      "shortlist": [
+        "S2B_T15RUQ_20260313T170110_L2A",
+        "S2C_T15RUQ_20260318T170445_L2A",
+        "S2B_T15RUQ_20260323T170202_L2A"
+      ]
+    }
+  },
+  "projected_reference_area_ha": 2732.158519985597,
+  "times": {
+    "attr_FireDiscoveryDateTime": "2026-02-24T18:30:00Z",
+    "poly_PolygonDateTime": "2026-02-27T11:20:00Z",
+    "poly_DateCurrent": "2026-03-01T22:20:53Z",
+    "attr_ContainmentDateTime": "2026-03-09T19:18:00Z",
+    "attr_FireOutDateTime": "2026-05-06T13:00:00Z"
+  },
+  "code_sha256": "7d7145d8bf0203ee57ae8d8008f20bbb7516245cb68001cb9746bd7bcf9cad99"
+}

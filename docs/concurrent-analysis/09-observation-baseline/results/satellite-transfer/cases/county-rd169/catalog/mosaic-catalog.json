@@ -1,0 +1,109 @@
+{
+  "schema_version": "firewatch.research.mosaic-catalog.v1",
+  "config_sha256": "89927311295dbe7fa652e4c4c5563014203a1c5b29fe502cc5c4f98cf130af6a",
+  "snapshot_sha256": "3a88ae91910f1bfcb90c37c959306fe0020dd529673471f80b8d5c9e9792b773",
+  "grid_sha256": "45f3c54c73dab3b90b298107b8cf3317acfd8ba3b2f0e3825bb6665f6df05784",
+  "requests": [
+    {
+      "url": "https://earth-search.aws.element84.com/v1/search?collections=sentinel-2-c1-l2a&bbox=-103.89643824340457%2C39.10226746193327%2C-103.6909312473554%2C39.150152766443846&datetime=2026-02-03T20%3A48%3A00Z%2F2026-02-17T20%3A47%3A59Z&limit=100",
+      "retrieved_at_utc": "2026-09-26T23:09:34.688602Z",
+      "path": "pre-catalog.json",
+      "sha256": "01f27364c6c892d6b184072fd68a2e229352aa55b83fc963099e25a2e08c5a1b"
+    },
+    {
+      "url": "https://earth-search.aws.element84.com/v1/search?collections=sentinel-2-c1-l2a&bbox=-103.89643824340457%2C39.10226746193327%2C-103.6909312473554%2C39.150152766443846&datetime=2026-02-19T22%3A00%3A00Z%2F2026-03-06T22%3A00%3A00Z&limit=100",
+      "retrieved_at_utc": "2026-09-26T23:09:35.907826Z",
+      "path": "post-catalog.json",
+      "sha256": "3b0caf37e758d8b44e1769baef3876e88e1205273d7005c0096e0a0abacf05e2"
+    }
+  ],
+  "groups": {
+    "pre": [
+      {
+        "platform": "sentinel-2a",
+        "datatake_id": "GS2A_20260216T175321_055651_N05.12",
+        "time_start_utc": "2026-02-16T17:53:30.149000Z",
+        "time_end_utc": "2026-02-16T17:53:33.070000Z",
+        "members": [
+          "S2A_T13SED_20260216T175318_L2A",
+          "S2A_T13SFD_20260216T175318_L2A"
+        ]
+      },
+      {
+        "platform": "sentinel-2b",
+        "datatake_id": "GS2B_20260216T174309_046742_N05.12",
+        "time_start_utc": "2026-02-16T17:53:02.148000Z",
+        "time_end_utc": "2026-02-16T17:53:05.547000Z",
+        "members": [
+          "S2B_T13SED_20260216T175133_L2A",
+          "S2B_T13SFD_20260216T175133_L2A"
+        ]
+      },
+      {
+        "platform": "sentinel-2a",
+        "datatake_id": "GS2A_20260206T175321_055508_N05.12",
+        "time_start_utc": "2026-02-06T17:53:28.805000Z",
+        "time_end_utc": "2026-02-06T17:53:31.996000Z",
+        "members": [
+          "S2A_T13SED_20260206T175316_L2A",
+          "S2A_T13SFD_20260206T175316_L2A"
+        ]
+      },
+      {
+        "platform": "sentinel-2b",
+        "datatake_id": "GS2B_20260206T174419_046599_N05.12",
+        "time_start_utc": "2026-02-06T17:53:01.075000Z",
+        "time_end_utc": "2026-02-06T17:53:04.472000Z",
+        "members": [
+          "S2B_T13SED_20260206T174757_L2A",
+          "S2B_T13SFD_20260206T174757_L2A"
+        ]
+      }
+    ],
+    "post": [
+      {
+        "platform": "sentinel-2c",
+        "datatake_id": "GS2C_20260221T174341_007647_N05.12",
+        "time_start_utc": "2026-02-21T17:53:08.489000Z",
+        "time_end_utc": "2026-02-21T17:53:11.907000Z",
+        "members": [
+          "S2C_T13SED_20260221T174652_L2A",
+          "S2C_T13SFD_20260221T174652_L2A"
+        ]
+      },
+      {
+        "platform": "sentinel-2b",
+        "datatake_id": "GS2B_20260226T174159_046885_N05.12",
+        "time_start_utc": "2026-02-26T17:53:04.588000Z",
+        "time_end_utc": "2026-02-26T17:53:07.994000Z",
+        "members": [
+          "S2B_T13SED_20260226T174321_L2A",
+          "S2B_T13SFD_20260226T174321_L2A"
+        ]
+      },
+      {
+        "platform": "sentinel-2a",
+        "datatake_id": "GS2A_20260226T175531_055794_N05.12",
+        "time_start_utc": "2026-02-26T17:55:41.172000Z",
+        "time_end_utc": "2026-02-26T17:55:44.533000Z",
+        "members": [
+          "S2A_T13SED_20260226T175529_L2A",
+          "S2A_T13SFD_20260226T175529_L2A"
+        ]
+      },
+      {
+        "platform": "sentinel-2c",
+        "datatake_id": "GS2C_20260303T174231_007790_N05.12",
+        "time_start_utc": "2026-03-03T17:53:06.864000Z",
+        "time_end_utc": "2026-03-03T17:53:10.281000Z",
+        "members": [
+          "S2C_T13SED_20260303T175037_L2A",
+          "S2C_T13SFD_20260303T175037_L2A"
+        ]
+      }
+    ]
+  },
+  "created_at_utc": "2026-09-26T23:09:35.936709Z",
+  "code_sha256": "c550421866c15c6b87091c2bc97f1ac3cfc34aea38e484d898c4ddcd551c4355",
+  "baseline_code_sha256": "59bc0a34defc525df1a6dd797c24ce89377f2bd0bc2c45dfed715bf480bad6fa"
+}

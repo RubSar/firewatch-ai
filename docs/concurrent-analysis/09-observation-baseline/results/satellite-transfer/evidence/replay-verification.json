@@ -1,0 +1,41 @@
+{
+  "verified_at_utc": "2026-09-26T23:11:01.973423Z",
+  "runs": [
+    {
+      "case_id": "cypress-creek-2026-development-v1",
+      "original_report_sha256": "28f6073d81e4c3a0dd8e77139eab912f4ceacb6f211e5f063d3dfe3f045b5703",
+      "replay_report_sha256": "1e175d736df2971c8f0b35caf1279b00e915b7e2a29be2a870379fa854cd541b",
+      "identical_fields": [
+        "coverage",
+        "exploratory_overlap",
+        "outputs"
+      ],
+      "output_count": 7
+    },
+    {
+      "case_id": "d05cf942-a3e3-425d-bfe1-0c994ec8956a-transfer-v1",
+      "original_report_sha256": "3b0a76a76fd1cb71a68101c4b70e2ac8e0bf24eaa187dd3752cd82ca09d342b9",
+      "replay_report_sha256": "db2038c6e205bfa7b719955fa367ebc210c79e556a3f40d4bb7f1f50c581fed4",
+      "identical_fields": [
+        "coverage",
+        "exploratory_overlap",
+        "outputs"
+      ],
+      "output_count": 7
+    },
+    {
+      "case_id": "84284851-f0f8-4253-b5bc-da7771e0150d-transfer-v1",
+      "original_report_sha256": "d0b4a06535e9753e9c1004624ddbb06c1f9776153a6b8ee1cfc783097cd2dee0",
+      "replay_report_sha256": "70b70f95d5ec15aa9358c5dcdb6e89f22c130de5725ca8acbf0cb59b82fb3c79",
+      "identical_fields": [
+        "coverage",
+        "exploratory_overlap",
+        "outputs"
+      ],
+      "output_count": 9
+    }
+  ],
+  "note": "Timestamps and source code hashes legitimately differ from earlier reports; numerical outputs and every raster/PNG byte hash match.",
+  "baseline_code_sha256": "59bc0a34defc525df1a6dd797c24ce89377f2bd0bc2c45dfed715bf480bad6fa",
+  "mosaic_code_sha256": "c550421866c15c6b87091c2bc97f1ac3cfc34aea38e484d898c4ddcd551c4355"
+}

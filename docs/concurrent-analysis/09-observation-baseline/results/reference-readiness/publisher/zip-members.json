@@ -1,0 +1,275 @@
+{
+  "record_id": 20279621,
+  "archive": {
+    "id": "e4ca0479-6738-4029-ad80-f1f489967394",
+    "key": "v2026.2.zip",
+    "size": 696606018,
+    "checksum": "md5:16cf5468873ad79ef4deb45f38cf6aff",
+    "links": {
+      "self": "https://zenodo.org/api/records/20279621/files/v2026.2.zip/content"
+    }
+  },
+  "members": [
+    {
+      "name": "v2026.2/",
+      "size": 0,
+      "compressed_size": 0,
+      "crc32": 0,
+      "offset": 0
+    },
+    {
+      "name": "v2026.2/data_term_of_use.md",
+      "size": 2941,
+      "compressed_size": 1323,
+      "crc32": 1910743349,
+      "offset": 66
+    },
+    {
+      "name": "v2026.2/LICENSE",
+      "size": 11021,
+      "compressed_size": 3957,
+      "crc32": 1024224611,
+      "offset": 1474
+    },
+    {
+      "name": "v2026.2/DATA_LICENSES/",
+      "size": 0,
+      "compressed_size": 0,
+      "crc32": 0,
+      "offset": 5504
+    },
+    {
+      "name": "v2026.2/DATA_LICENSES/NIFC.txt",
+      "size": 307,
+      "compressed_size": 195,
+      "crc32": 3069446776,
+      "offset": 5584
+    },
+    {
+      "name": "v2026.2/DATA_LICENSES/LANDFIRE.txt",
+      "size": 467,
+      "compressed_size": 304,
+      "crc32": 282244493,
+      "offset": 5867
+    },
+    {
+      "name": "v2026.2/DATA_LICENSES/ravg.txt",
+      "size": 382,
+      "compressed_size": 253,
+      "crc32": 235997714,
+      "offset": 6263
+    },
+    {
+      "name": "v2026.2/DATA_LICENSES/calfire.txt",
+      "size": 609,
+      "compressed_size": 357,
+      "crc32": 2599144577,
+      "offset": 6604
+    },
+    {
+      "name": "v2026.2/DATA_LICENSES/mtbs.txt",
+      "size": 343,
+      "compressed_size": 233,
+      "crc32": 4125648125,
+      "offset": 7052
+    },
+    {
+      "name": "v2026.2/CHANGELOG.md",
+      "size": 776,
+      "compressed_size": 439,
+      "crc32": 619041036,
+      "offset": 7373
+    },
+    {
+      "name": "v2026.2/Caldor.h5",
+      "size": 696390401,
+      "compressed_size": 693784375,
+      "crc32": 1781847855,
+      "offset": 7890
+    },
+    {
+      "name": "v2026.2/kml/",
+      "size": 0,
+      "compressed_size": 0,
+      "crc32": 0,
+      "offset": 693792340
+    },
+    {
+      "name": "v2026.2/kml/Caldor_2021_08_30T21_09_07_00.kml",
+      "size": 574546,
+      "compressed_size": 204238,
+      "crc32": 4231038900,
+      "offset": 693792410
+    },
+    {
+      "name": "v2026.2/kml/Caldor_2021_08_19T20_45_07_00.kml",
+      "size": 207763,
+      "compressed_size": 54965,
+      "crc32": 993233671,
+      "offset": 693996751
+    },
+    {
+      "name": "v2026.2/kml/Caldor_2021_09_01T21_12_07_00.kml",
+      "size": 415952,
+      "compressed_size": 127832,
+      "crc32": 3171723998,
+      "offset": 694051819
+    },
+    {
+      "name": "v2026.2/kml/Caldor_2021_08_29T22_32_07_00.kml",
+      "size": 490476,
+      "compressed_size": 175086,
+      "crc32": 2862415617,
+      "offset": 694179754
+    },
+    {
+      "name": "v2026.2/kml/Caldor_2021_09_04T23_29_07_00.kml",
+      "size": 519279,
+      "compressed_size": 187389,
+      "crc32": 4136422794,
+      "offset": 694354943
+    },
+    {
+      "name": "v2026.2/kml/Caldor_perimeter_mtbs.kml",
+      "size": 146932,
+      "compressed_size": 49736,
+      "crc32": 1118128126,
+      "offset": 694542435
+    },
+    {
+      "name": "v2026.2/kml/Caldor_2021_09_08T22_33_07_00.kml",
+      "size": 601199,
+      "compressed_size": 214020,
+      "crc32": 3399999632,
+      "offset": 694592266
+    },
+    {
+      "name": "v2026.2/kml/Caldor_2021_08_27T00_22_06_00.kml",
+      "size": 425176,
+      "compressed_size": 103551,
+      "crc32": 975753638,
+      "offset": 694806389
+    },
+    {
+      "name": "v2026.2/kml/Caldor_2021_09_10T23_34_07_00.kml",
+      "size": 612551,
+      "compressed_size": 217812,
+      "crc32": 3139307880,
+      "offset": 694910043
+    },
+    {
+      "name": "v2026.2/kml/Caldor_2021_08_18T20_30_07_00.kml",
+      "size": 232118,
+      "compressed_size": 62279,
+      "crc32": 3618411509,
+      "offset": 695127958
+    },
+    {
+      "name": "v2026.2/kml/Caldor_2021_08_20T20_20_07_00.kml",
+      "size": 125548,
+      "compressed_size": 40233,
+      "crc32": 1441283749,
+      "offset": 695190340
+    },
+    {
+      "name": "v2026.2/kml/Caldor_2021_08_26T22_15_06_00.kml",
+      "size": 373087,
+      "compressed_size": 65789,
+      "crc32": 1266615596,
+      "offset": 695230676
+    },
+    {
+      "name": "v2026.2/kml/Caldor_2021_09_03T00_40_07_00.kml",
+      "size": 575295,
+      "compressed_size": 205367,
+      "crc32": 1422323257,
+      "offset": 695296568
+    },
+    {
+      "name": "v2026.2/kml/Caldor_2021_09_06T23_09_07_00.kml",
+      "size": 575962,
+      "compressed_size": 205527,
+      "crc32": 2330609390,
+      "offset": 695502038
+    },
+    {
+      "name": "v2026.2/kml/Caldor_2021_09_07T22_40_07_00.kml",
+      "size": 585240,
+      "compressed_size": 208368,
+      "crc32": 1645499688,
+      "offset": 695707668
+    },
+    {
+      "name": "v2026.2/kml/Caldor_2021_08_17T20_20_07_00.kml",
+      "size": 183391,
+      "compressed_size": 50434,
+      "crc32": 1762123509,
+      "offset": 695916139
+    },
+    {
+      "name": "v2026.2/kml/Caldor_2021_08_26T03_30_06_00.kml",
+      "size": 217714,
+      "compressed_size": 53643,
+      "crc32": 371507446,
+      "offset": 695966676
+    },
+    {
+      "name": "v2026.2/kml/Caldor_2021_08_21T21_15_07_00.kml",
+      "size": 134335,
+      "compressed_size": 40920,
+      "crc32": 3237913555,
+      "offset": 696020422
+    },
+    {
+      "name": "v2026.2/kml/Caldor_2021_08_31T21_08_07_00.kml",
+      "size": 524476,
+      "compressed_size": 186331,
+      "crc32": 2545762318,
+      "offset": 696061445
+    },
+    {
+      "name": "v2026.2/kml/Caldor_2021_08_28T21_30_06_00.kml",
+      "size": 390890,
+      "compressed_size": 94667,
+      "crc32": 655692024,
+      "offset": 696247879
+    },
+    {
+      "name": "v2026.2/kml/Caldor_2021_08_24T22_07_07_00.kml",
+      "size": 249266,
+      "compressed_size": 76046,
+      "crc32": 1557476136,
+      "offset": 696342649
+    },
+    {
+      "name": "v2026.2/kml/Caldor_2021_09_05T23_41_07_00.kml",
+      "size": 511123,
+      "compressed_size": 183455,
+      "crc32": 862518018,
+      "offset": 696418798
+    }
+  ],
+  "requests": [
+    {
+      "start": 696605996,
+      "end": 696606017,
+      "bytes": 22,
+      "etag": null,
+      "sha256": "493be6cb7086f0721888579d03090ce4665d03b06d4c4fa90931e5fa0e861dad"
+    },
+    {
+      "start": 696605976,
+      "end": 696605995,
+      "bytes": 20,
+      "etag": null,
+      "sha256": "e57e0062edcab0561e3581ba640e8b640c40702927547a2d8dd32921b3187e4e"
+    },
+    {
+      "start": 696602356,
+      "end": 696605995,
+      "bytes": 3640,
+      "etag": null,
+      "sha256": "85d4ec48803b87aad40d4cf4d3124f653fa2386b3cfc37d86eb225c73d624fae"
+    }
+  ]
+}

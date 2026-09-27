@@ -1,0 +1,18 @@
+{
+  "incident_id": "d05cf942-a3e3-425d-bfe1-0c994ec8956a",
+  "origin_inside_reference": false,
+  "origin_distance_to_reference_m": 22.24151486178052,
+  "origin_projected": [
+    337633.6554685128,
+    4425158.94015305
+  ],
+  "grid_bounds": [
+    336640,
+    4420860,
+    344420,
+    4426420
+  ],
+  "reported_polygon_acres": 1521,
+  "area_ha_projected": 640.7789142139989,
+  "interpretation": "Source origin and area attributes are not repaired. Disc baseline uses the reported origin and projected area; evaluate only its common valid AOI support."
+}
