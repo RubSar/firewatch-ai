@@ -1,0 +1,32 @@
+{
+  "created_at_utc": "2026-09-26T23:11:02.017640Z",
+  "cases": [
+    {
+      "case_id": "d05cf942-a3e3-425d-bfe1-0c994ec8956a",
+      "post_hoc_descriptive_only": true,
+      "valid_reference_pre_nbr_quantiles": {
+        "p05": -0.09688680246472359,
+        "p25": -0.04076802544295788,
+        "p50": -0.014229384250938892,
+        "p75": 0.015927057713270187,
+        "p95": 0.10389896109700203
+      },
+      "plain_positive_reference_pixels": 3241,
+      "plain_positive_reference_pixels_removed_by_fixed_floor": 3032
+    },
+    {
+      "case_id": "84284851-f0f8-4253-b5bc-da7771e0150d",
+      "post_hoc_descriptive_only": true,
+      "valid_reference_pre_nbr_quantiles": {
+        "p05": -0.16464287638664246,
+        "p25": -0.14000698924064636,
+        "p50": -0.11249149590730667,
+        "p75": -0.07313723117113113,
+        "p95": 0.0054846636950969495
+      },
+      "plain_positive_reference_pixels": 39704,
+      "plain_positive_reference_pixels_removed_by_fixed_floor": 39505
+    }
+  ],
+  "interpretation": "Observed after fixed-rule evaluation; does not validate vegetation type, optimize a new threshold or create test labels."
+}

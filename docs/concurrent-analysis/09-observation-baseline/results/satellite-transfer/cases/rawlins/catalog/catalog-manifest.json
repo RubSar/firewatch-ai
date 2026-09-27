@@ -1,0 +1,70 @@
+{
+  "schema_version": "firewatch.research.satellite-catalog.v1",
+  "created_at_utc": "2026-09-26T22:52:22.621598Z",
+  "config_sha256": "f2adf784b01c4c2173f351ab8e6b3407e3e2b0a17ee4dc2e05256f76b4565194",
+  "grid_sha256": "f89a369c63a217860a66ab4911fdff42f97e4b26903a7491e09af1d4ba655a53",
+  "snapshot_sha256": "acd196d89c08578ae24887830677e06075becaca35cce3916213759f03a12ac0",
+  "requests": [
+    {
+      "url": "https://earth-search.aws.element84.com/v1/search?collections=sentinel-2-c1-l2a&bbox=-100.91294430498847%2C39.92209729464039%2C-100.82055689082681%2C39.9736317382253&datetime=2026-02-03T20%3A45%3A00Z%2F2026-02-17T20%3A44%3A59Z&limit=100",
+      "retrieved_at_utc": "2026-09-26T22:52:21.564710Z",
+      "path": "pre-catalog.json",
+      "sha256": "d26e9fac617554018553c8b8358b019e3486a73d9e252543a926d2505c8ebba1"
+    },
+    {
+      "url": "https://earth-search.aws.element84.com/v1/search?collections=sentinel-2-c1-l2a&bbox=-100.91294430498847%2C39.92209729464039%2C-100.82055689082681%2C39.9736317382253&datetime=2026-02-17T21%3A00%3A00Z%2F2026-03-04T21%3A00%3A00Z&limit=100",
+      "retrieved_at_utc": "2026-09-26T22:52:22.608213Z",
+      "path": "post-catalog.json",
+      "sha256": "7eaa50efa6bbc7bf176d8059a7d368ff064c64354c6d0b0ff1354810d2ee6b96"
+    }
+  ],
+  "selection": {
+    "pre": {
+      "all_scenes": [
+        {
+          "id": "S2C_T14TLK_20260208T173501_L2A",
+          "datetime": "2026-02-08T17:42:48.953000Z",
+          "cloud_percent": 22.21846,
+          "eligible": true
+        }
+      ],
+      "shortlist": [
+        "S2C_T14TLK_20260208T173501_L2A"
+      ]
+    },
+    "post": {
+      "all_scenes": [
+        {
+          "id": "S2C_T14TLK_20260228T174146_L2A",
+          "datetime": "2026-02-28T17:42:49.080000Z",
+          "cloud_percent": 0.000713,
+          "eligible": true
+        },
+        {
+          "id": "S2B_T14TLK_20260223T173920_L2A",
+          "datetime": "2026-02-23T17:42:45.589000Z",
+          "cloud_percent": 80.408639,
+          "eligible": false
+        },
+        {
+          "id": "S2C_T14TLK_20260218T173802_L2A",
+          "datetime": "2026-02-18T17:42:50.064000Z",
+          "cloud_percent": 100,
+          "eligible": false
+        }
+      ],
+      "shortlist": [
+        "S2C_T14TLK_20260228T174146_L2A"
+      ]
+    }
+  },
+  "projected_reference_area_ha": 640.7789142139989,
+  "times": {
+    "attr_FireDiscoveryDateTime": "2026-02-17T20:45:00Z",
+    "poly_PolygonDateTime": "2026-03-03T16:32:50.972000Z",
+    "poly_DateCurrent": "2026-07-03T14:35:58.579000Z",
+    "attr_ContainmentDateTime": "2026-02-17T21:00:00Z",
+    "attr_FireOutDateTime": "2026-02-17T21:10:00Z"
+  },
+  "code_sha256": "59bc0a34defc525df1a6dd797c24ce89377f2bd0bc2c45dfed715bf480bad6fa"
+}

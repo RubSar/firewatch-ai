@@ -1,0 +1,212 @@
+[
+  {
+    "url": "https://raw.githubusercontent.com/wirc-sjsu/firebench/82c233cff702699335c6b8e88fb79596b98775de/src/firebench/benchmarks/c001_caldor_config.py",
+    "retrieved_at_utc": "2026-09-26T23:23:57.603303+00:00",
+    "status": 200,
+    "final_url": "https://raw.githubusercontent.com/wirc-sjsu/firebench/82c233cff702699335c6b8e88fb79596b98775de/src/firebench/benchmarks/c001_caldor_config.py",
+    "content_type": "text/plain; charset=utf-8",
+    "path": "c001_caldor_config.py",
+    "bytes": 7059,
+    "sha256": "2f5fd4aeec7180190f1f2a00b0e40b480603b7ef76e303e32a9c36d4cb77868f"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/wirc-sjsu/firebench/82c233cff702699335c6b8e88fb79596b98775de/src/firebench/benchmarks/c001_caldor_discovery.py",
+    "retrieved_at_utc": "2026-09-26T23:23:57.118793+00:00",
+    "status": 200,
+    "final_url": "https://raw.githubusercontent.com/wirc-sjsu/firebench/82c233cff702699335c6b8e88fb79596b98775de/src/firebench/benchmarks/c001_caldor_discovery.py",
+    "content_type": "text/plain; charset=utf-8",
+    "path": "c001_caldor_discovery.py",
+    "bytes": 1598,
+    "sha256": "3df9aab317179ce8d9abcc3e8a888c6f9c207fec9360c9ee737beaed8ba1c320"
+  },
+  {
+    "url": "https://firebench.readthedocs.io/en/0.8.0/benchmarks/California/01_Caldor.html",
+    "retrieved_at_utc": "2026-09-26T23:22:34.683833+00:00",
+    "status": 200,
+    "final_url": "https://firebench.readthedocs.io/en/0.8.0/benchmarks/California/01_Caldor.html",
+    "content_type": "text/html; charset=utf-8",
+    "path": "firebench-caldor.html",
+    "bytes": 150297,
+    "sha256": "11ed4f17fa8d75c8dc17f129ce866de726a45c7e4aabbb927a58ec13fb467619"
+  },
+  {
+    "url": "https://api.github.com/repos/wirc-sjsu/firebench/commits/main",
+    "retrieved_at_utc": "2026-09-26T23:23:15.018557+00:00",
+    "status": 200,
+    "final_url": "https://api.github.com/repos/wirc-sjsu/firebench/commits/main",
+    "content_type": "application/json; charset=utf-8",
+    "path": "firebench-commit.json",
+    "bytes": 4132,
+    "sha256": "806e39ddb944b7559c579452dd220c8aeb3bd458b07284eef8bd24f9ae6f46b4"
+  },
+  {
+    "url": "https://firebench.readthedocs.io/en/0.8.0/",
+    "retrieved_at_utc": "2026-09-26T23:22:34.311735+00:00",
+    "status": 200,
+    "final_url": "https://firebench.readthedocs.io/en/0.8.0/",
+    "content_type": "text/html; charset=utf-8",
+    "path": "firebench-home.html",
+    "bytes": 14440,
+    "sha256": "bb92ef62998ff787df2000d7aea49ee366f882ec5c72e887dde34f6984789545"
+  },
+  {
+    "url": "https://api.github.com/repos/wirc-sjsu/firebench",
+    "retrieved_at_utc": "2026-09-26T23:22:54.617145+00:00",
+    "status": 200,
+    "final_url": "https://api.github.com/repos/wirc-sjsu/firebench",
+    "content_type": "application/json; charset=utf-8",
+    "path": "firebench-repo.json",
+    "bytes": 6354,
+    "sha256": "d413c1994db25b79da25da4cc5ae816a975d3f274498ada2b990cc5255a28092"
+  },
+  {
+    "url": "https://api.github.com/repos/wirc-sjsu/firebench/contents",
+    "retrieved_at_utc": "2026-09-26T23:22:55.161403+00:00",
+    "status": 200,
+    "final_url": "https://api.github.com/repos/wirc-sjsu/firebench/contents",
+    "content_type": "application/json; charset=utf-8",
+    "path": "firebench-root.json",
+    "bytes": 12956,
+    "sha256": "a5d5466d1144d3940312d389bbeb723e825cb512d48773356070c94bd17c61fc"
+  },
+  {
+    "url": "https://api.github.com/repos/wirc-sjsu/firebench/git/trees/82c233cff702699335c6b8e88fb79596b98775de?recursive=1",
+    "retrieved_at_utc": "2026-09-26T23:23:15.749289+00:00",
+    "status": 200,
+    "final_url": "https://api.github.com/repos/wirc-sjsu/firebench/git/trees/82c233cff702699335c6b8e88fb79596b98775de?recursive=1",
+    "content_type": "application/json; charset=utf-8",
+    "path": "firebench-tree.json",
+    "bytes": 126522,
+    "sha256": "aa8413e35ff96313edc7d06d7513d7154dd8df50b175b6bc17819d7fb5304145"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/wirc-sjsu/firebench/82c233cff702699335c6b8e88fb79596b98775de/LICENSE",
+    "retrieved_at_utc": "2026-09-26T23:23:58.069298+00:00",
+    "status": 200,
+    "final_url": "https://raw.githubusercontent.com/wirc-sjsu/firebench/82c233cff702699335c6b8e88fb79596b98775de/LICENSE",
+    "content_type": "text/plain; charset=utf-8",
+    "path": "LICENSE",
+    "bytes": 11021,
+    "sha256": "6189e0ef13b28c38c9f353cddad19e51a7574dc7536084541c9891114749daf2"
+  },
+  {
+    "url": "https://ftp.wildfire.gov/public/incident_specific_maps/rocky_mtn/2026/",
+    "retrieved_at_utc": "2026-09-26T23:23:13.640586+00:00",
+    "status": 200,
+    "final_url": "https://ftp.wildfire.gov/public/incident_specific_maps/rocky_mtn/2026/",
+    "content_type": "text/html;charset=UTF-8",
+    "path": "maps-rocky-2026.html",
+    "bytes": 9443,
+    "sha256": "da11a8531eda14d96f04348e97d55f23007b118abb38e2c468ed013acb53e665"
+  },
+  {
+    "url": "https://ftp.wildfire.gov/public/incident_specific_maps/rocky_mtn/",
+    "retrieved_at_utc": "2026-09-26T23:22:55.661633+00:00",
+    "status": 200,
+    "final_url": "https://ftp.wildfire.gov/public/incident_specific_maps/rocky_mtn/",
+    "content_type": "text/html;charset=UTF-8",
+    "path": "maps-rocky.html",
+    "bytes": 1397,
+    "sha256": "71b07e37d0b2c8b96354da7706eaff2285f35d4ed4ba6211fa50a23ef506538e"
+  },
+  {
+    "url": "https://ftp.wildfire.gov/public/incident_specific_maps/southern/2026/",
+    "retrieved_at_utc": "2026-09-26T23:23:14.344345+00:00",
+    "status": 200,
+    "final_url": "https://ftp.wildfire.gov/public/incident_specific_maps/southern/2026/",
+    "content_type": "text/html;charset=UTF-8",
+    "path": "maps-southern-2026.html",
+    "bytes": 1848,
+    "sha256": "d13081d7973781aa48ec6d6a97ee9b7e58bf4a1cd5fdda88ee28430a20ec9e2b"
+  },
+  {
+    "url": "https://ftp.wildfire.gov/public/incident_specific_maps/southern/",
+    "retrieved_at_utc": "2026-09-26T23:22:56.304294+00:00",
+    "status": 200,
+    "final_url": "https://ftp.wildfire.gov/public/incident_specific_maps/southern/",
+    "content_type": "text/html;charset=UTF-8",
+    "path": "maps-southern.html",
+    "bytes": 2177,
+    "sha256": "0dd61a096d923f86f9b5e59d3fb7084393c69535d93832be5b590e9914ae58ee"
+  },
+  {
+    "url": "https://data.mendeley.com/datasets/95rj5d379g/1",
+    "retrieved_at_utc": "2026-09-26T23:22:35.129831+00:00",
+    "status": 200,
+    "final_url": "https://data.mendeley.com/datasets/95rj5d379g/1",
+    "content_type": "text/html; charset=utf-8",
+    "path": "mendeley.html",
+    "bytes": 140576,
+    "sha256": "2edd856cb99354eb84ff22a36946eda8fc7076ab67af8633a47efcd26dd43de3"
+  },
+  {
+    "url": "https://www.mtbs.gov/data-availability",
+    "retrieved_at_utc": "2026-09-26T23:22:37.652272+00:00",
+    "status": 200,
+    "final_url": "https://www.mtbs.gov/data-availability",
+    "content_type": "text/html; charset=UTF-8",
+    "path": "mtbs-availability.html",
+    "bytes": 21655,
+    "sha256": "cb7a0178360c95bf8b37b0c2a0f17daa677defd1009f1ef2fd253112dd672f05"
+  },
+  {
+    "url": "https://www.mtbs.gov/mapping-methods",
+    "retrieved_at_utc": "2026-09-26T23:22:36.037263+00:00",
+    "status": 200,
+    "final_url": "https://www.mtbs.gov/mapping-methods",
+    "content_type": "text/html; charset=UTF-8",
+    "path": "mtbs-methods.html",
+    "bytes": 30493,
+    "sha256": "d9125854f195313a02b5adb67f52477e1f22659b0be9ff2cd7089d33f2969d46"
+  },
+  {
+    "url": "https://ftp.wildfire.gov/",
+    "retrieved_at_utc": "2026-09-26T23:22:32.988765+00:00",
+    "status": 200,
+    "final_url": "https://ftp.wildfire.gov/",
+    "content_type": "text/html",
+    "path": "nifc-share.html",
+    "bytes": 6289,
+    "sha256": "6756fb5601b3577e5efb979f549ef67a2d2a19574a4ac64c03ce6efe17233e19"
+  },
+  {
+    "url": "https://ftp.wildfire.gov/public/incident_specific_maps/",
+    "retrieved_at_utc": "2026-09-26T23:22:33.662143+00:00",
+    "status": 200,
+    "final_url": "https://ftp.wildfire.gov/public/incident_specific_maps/",
+    "content_type": "text/html;charset=UTF-8",
+    "path": "public-maps.html",
+    "bytes": 2964,
+    "sha256": "edb13afcdf6da335827ffd1a2200288d600d4d274bd82baaced07f47ece5b502"
+  },
+  {
+    "url": "https://earth-search.aws.element84.com/v1/search?collections=sentinel-2-c1-l2a&bbox=-120.668584149%2C38.5568220727492%2C-119.908811185836%2C38.8908203586041&datetime=2021-08-17T03%3A20%3A00Z%2F2021-09-12T06%3A34%3A00Z&limit=100",
+    "retrieved_at_utc": "2026-09-26T23:28:59.472701+00:00",
+    "status": 200,
+    "final_url": "https://earth-search.aws.element84.com/v1/search?collections=sentinel-2-c1-l2a&bbox=-120.668584149%2C38.5568220727492%2C-119.908811185836%2C38.8908203586041&datetime=2021-08-17T03%3A20%3A00Z%2F2021-09-12T06%3A34%3A00Z&limit=100",
+    "content_type": "application/geo+json; charset=utf-8",
+    "path": "sentinel-timing-catalog.json",
+    "bytes": 1153247,
+    "sha256": "7147e360834c0a3be63aa2805979343979d528acb4306d3a5463ea17c4065498"
+  },
+  {
+    "url": "https://zenodo.org/api/records/18250104",
+    "retrieved_at_utc": "2026-09-26T23:23:58.506117+00:00",
+    "status": 200,
+    "final_url": "https://zenodo.org/api/records/18250104",
+    "content_type": "application/json",
+    "path": "zenodo-caldor.json",
+    "bytes": 5739,
+    "sha256": "53cbcd1fe0a04993b9c357b49c6fddae05fb5692ffbae407ecc5dcc8cb2f7352"
+  },
+  {
+    "url": "https://zenodo.org/api/records/18250104/versions/latest",
+    "retrieved_at_utc": "2026-09-26T23:24:25.543207+00:00",
+    "status": 200,
+    "final_url": "https://zenodo.org/api/records/20279621",
+    "content_type": "application/json",
+    "path": "zenodo-latest.json",
+    "bytes": 5925,
+    "sha256": "4d2db95583217e1eb49545105834991bcf9423ba685324f9c6cb0ed5e5c1246a"
+  }
+]

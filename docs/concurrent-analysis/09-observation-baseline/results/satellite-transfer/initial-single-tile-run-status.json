@@ -1,0 +1,18 @@
+{
+  "selection_sha256": "e936d04a55c75ec057d29ea95bf228389d0920042513721df857661486cc02bc",
+  "cases": [
+    {
+      "incident_id": "d05cf942-a3e3-425d-bfe1-0c994ec8956a",
+      "name": "Rawlins Co TP",
+      "state": "evaluated",
+      "quality_gate_passed": false,
+      "report_sha256": "3b0a76a76fd1cb71a68101c4b70e2ac8e0bf24eaa187dd3752cd82ca09d342b9"
+    },
+    {
+      "incident_id": "84284851-f0f8-4253-b5bc-da7771e0150d",
+      "name": "County Rd 169",
+      "state": "failed",
+      "error": "No eligible pre scenes; inspect preserved catalogue"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+Usage Restrictions
+
+All information that is posted to ftp.wildfire.gov must be:
+
+    Public: Information that is non-sensitive, unclassified, not copyrighted, and viewable by everyone.
+    Official: Only official information directly related to wildland fire may be posted.
+
+From: https://ftp.wildfire.gov/

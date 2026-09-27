@@ -1,0 +1,28 @@
+[
+  {
+    "url": "https://ftp.wildfire.gov/public/incident_specific_data/southern/Texas/2026_FIRES/",
+    "path": "cypress-archive-index.html",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "url": "https://www.arcgis.com/sharing/rest/search?f=json&q=orgid%3AT4QMspbfLg3qTGWY+Cypress&num=100",
+    "path": "arcgis-cypress-search.json",
+    "retrieved_at_utc": "2026-09-26T22:46:07.234840+00:00",
+    "sha256": "37a62880bdb2589050db17da948ffd2d5158eeab4e1763afd93ce9be8a05a438",
+    "bytes": 10517
+  },
+  {
+    "url": "https://www.arcgis.com/sharing/rest/search?f=json&q=orgid%3AT4QMspbfLg3qTGWY+title%3A%22Perimeters%22&num=100",
+    "path": "arcgis-history-search.json",
+    "retrieved_at_utc": "2026-09-26T22:46:09.173421+00:00",
+    "sha256": "22a5f3bb5043e699270aa474bd94d01cc0db9722228255e86b4efb562922f09d",
+    "bytes": 392019
+  },
+  {
+    "url": "https://services3.arcgis.com/T4QMspbfLg3qTGWY/arcgis/rest/services/WFIGS_Interagency_Perimeters_YearToDate/FeatureServer/0?f=json",
+    "path": "year-layer.json",
+    "retrieved_at_utc": "2026-09-26T22:46:09.787261+00:00",
+    "sha256": "c2339919e478c5483470a2866c06c68214971b52e1a22649ae0c29697be04b16",
+    "bytes": 40657
+  }
+]

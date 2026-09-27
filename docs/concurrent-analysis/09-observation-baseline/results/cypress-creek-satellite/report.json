@@ -1,0 +1,246 @@
+{
+  "schema_version": "firewatch.research.satellite-result.v1",
+  "created_at_utc": "2026-09-26T22:38:06.602935Z",
+  "case_id": "cypress-creek-2026-development-v1",
+  "role": "development; single inspected incident",
+  "target": "spectral burned-area candidate vs mapped incident extent; not active flame",
+  "config": {
+    "schema_version": "firewatch.research.satellite-case.v1",
+    "case_id": "cypress-creek-2026-development-v1",
+    "incident_id": "8432b888-2a01-4825-8eb6-c74589de24fc",
+    "snapshot_sha256": "fbdfb6d085fed0f8082798a2a91bbf99a3c690b97274e77ca534781b573f48d8",
+    "collection": "sentinel-2-c1-l2a",
+    "pre_window": [
+      "2026-02-10T00:00:00Z",
+      "2026-02-24T18:29:59Z"
+    ],
+    "post_window": [
+      "2026-03-09T19:18:00Z",
+      "2026-03-24T23:59:59Z"
+    ],
+    "epsg": 32615,
+    "resolution_m": 20,
+    "buffer_m": 1000,
+    "max_pixels": 400000,
+    "max_scene_cloud_percent": 60,
+    "max_candidates_per_window": 4,
+    "valid_scl_classes": [
+      4,
+      5,
+      6
+    ],
+    "cloud_buffer_pixels": 1,
+    "min_joint_valid_fraction": 0.95,
+    "dnbr_threshold": 0.1,
+    "pre_nbr_floor": 0.1,
+    "reference_time_verified": false,
+    "reference_time_note": "Mixed-method perimeter dated 2026-02-27, date-current 2026-03-01; relationship to final extent and exact segment observation times unresolved. Post window begins at containment; overlap is descriptive only.",
+    "selection_rule": "Within each window rank by proximity to fire (latest pre, earliest post), then scene ID; shortlist four with tile cloud <=60% and full AOI footprint. Pick the pair with maximum joint SCL-valid AOI coverage, ties by shortlist order. Never use dNBR or reference overlap for selection.",
+    "threshold_rationale": "Freeze the existing prototype's dNBR >=0.1 and pre-NBR >=0.1 rules before reading these satellite pixels; also report plain dNBR >=0.1. No threshold tuning on this inspected case."
+  },
+  "grid": {
+    "crs": "EPSG:32615",
+    "bounds": [
+      366220,
+      3434220,
+      375480,
+      3441880
+    ],
+    "width": 463,
+    "height": 383,
+    "transform": [
+      20.0,
+      0.0,
+      366220.0,
+      0.0,
+      -20.0,
+      3441880.0
+    ],
+    "resolution_m": 20,
+    "aoi_wgs84": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            -94.30476246945857,
+            31.035073340877556
+          ],
+          [
+            -94.30570640198108,
+            31.104172501824902
+          ],
+          [
+            -94.40278219832747,
+            31.10315239738171
+          ],
+          [
+            -94.40176814102934,
+            31.034056001174132
+          ],
+          [
+            -94.30476246945857,
+            31.035073340877556
+          ]
+        ]
+      ]
+    },
+    "bbox_wgs84": [
+      -94.40278219832747,
+      31.034056001174132,
+      -94.30476246945857,
+      31.104172501824902
+    ],
+    "coordinate_order": "longitude, latitude for WGS84; easting, northing metres for UTM"
+  },
+  "selected": {
+    "pre": {
+      "id": "S2C_T15RUQ_20260216T170151_L2A",
+      "datetime": "2026-02-16T17:05:10.189000Z",
+      "processing_baseline": "05.12",
+      "cloud_percent": 9.068601,
+      "radiometry": {
+        "nir": {
+          "scale": 0.0001,
+          "offset": -0.1,
+          "nodata": 0.0
+        },
+        "swir22": {
+          "scale": 0.0001,
+          "offset": -0.1,
+          "nodata": 0.0
+        }
+      }
+    },
+    "post": {
+      "id": "S2B_T15RUQ_20260313T170110_L2A",
+      "datetime": "2026-03-13T17:05:05.448000Z",
+      "processing_baseline": "05.12",
+      "cloud_percent": 0.880209,
+      "radiometry": {
+        "nir": {
+          "scale": 0.0001,
+          "offset": -0.1,
+          "nodata": 0.0
+        },
+        "swir22": {
+          "scale": 0.0001,
+          "offset": -0.1,
+          "nodata": 0.0
+        }
+      }
+    }
+  },
+  "times": {
+    "attr_FireDiscoveryDateTime": "2026-02-24T18:30:00Z",
+    "poly_PolygonDateTime": "2026-02-27T11:20:00Z",
+    "poly_DateCurrent": "2026-03-01T22:20:53Z",
+    "attr_ContainmentDateTime": "2026-03-09T19:18:00Z",
+    "attr_FireOutDateTime": "2026-05-06T13:00:00Z"
+  },
+  "coverage": {
+    "aoi_fraction": 0.9788697844120251,
+    "reference_fraction": 0.9981408285756111,
+    "reference_pixels": 68310,
+    "excluded_reference_pixels": 127,
+    "aoi_pixels": 177329,
+    "excluded_aoi_pixels": 3747
+  },
+  "quality_gate_passed": true,
+  "time_matched_validation_allowed": false,
+  "time_matched_metrics": null,
+  "time_matched_metrics_reason": "Mixed-method perimeter dated 2026-02-27, date-current 2026-03-01; relationship to final extent and exact segment observation times unresolved. Post window begins at containment; overlap is descriptive only.",
+  "exploratory_overlap": {
+    "dnbr_only": {
+      "tp": 43929,
+      "fp": 2554,
+      "fn": 24254,
+      "tn": 102845,
+      "valid_pixels": 173582,
+      "iou": 0.621018703083252,
+      "dice": 0.7662079430694364,
+      "precision": 0.9450551814641912,
+      "recall": 0.6442808324655706,
+      "candidate_area_ha_on_valid": 1859.32,
+      "reference_area_ha_on_valid": 2727.32,
+      "area_bias_ha_on_valid": -868.0,
+      "area_bias_fraction_on_valid": -0.31826115014006423
+    },
+    "dnbr_with_pre_nbr_floor": {
+      "tp": 43871,
+      "fp": 2440,
+      "fn": 24312,
+      "tn": 102959,
+      "valid_pixels": 173582,
+      "iou": 0.6211998923863331,
+      "dice": 0.7663458347162296,
+      "precision": 0.9473127334758481,
+      "recall": 0.6434301805435373,
+      "candidate_area_ha_on_valid": 1852.44,
+      "reference_area_ha_on_valid": 2727.32,
+      "area_bias_ha_on_valid": -874.88,
+      "area_bias_fraction_on_valid": -0.3207837730812666
+    },
+    "all_negative": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 68183,
+      "tn": 105399,
+      "valid_pixels": 173582,
+      "iou": 0.0,
+      "dice": 0.0,
+      "precision": null,
+      "recall": 0.0,
+      "candidate_area_ha_on_valid": 0.0,
+      "reference_area_ha_on_valid": 2727.32,
+      "area_bias_ha_on_valid": -2727.32,
+      "area_bias_fraction_on_valid": -1.0
+    },
+    "oracle_area_origin_disc": {
+      "tp": 46976,
+      "fp": 18979,
+      "fn": 21207,
+      "tn": 86420,
+      "valid_pixels": 173582,
+      "iou": 0.5389504600628714,
+      "dice": 0.7004130074997391,
+      "precision": 0.7122431961185657,
+      "recall": 0.6889693911972192,
+      "candidate_area_ha_on_valid": 2638.2000000000003,
+      "reference_area_ha_on_valid": 2727.32,
+      "area_bias_ha_on_valid": -89.12,
+      "area_bias_fraction_on_valid": -0.032676766936039776
+    }
+  },
+  "reference_area_ha_projected": 2732.158519985597,
+  "reference_area_ha_raster": 2732.4,
+  "aoi_area_ha": 7093.16,
+  "baseline_note": "Oracle-area disc uses mapped reference area and reported origin. It is a descriptive geometric comparator, not an operational predictor.",
+  "limitations": [
+    "One development case; no independent incidents or threshold optimization.",
+    "SCL cloud screening is automatic; residual thin cloud, smoke, shadows or misregistration remain possible.",
+    "Mapped perimeter interiors can include unburned islands; overlap is not burn-pixel accuracy.",
+    "Time mismatch, vegetation phenology, nearby burns and non-fire changes are unresolved confounders.",
+    "No human drone reviews, M1 acceptance, trained model or simulator calibration are implied."
+  ],
+  "input_sha256": {
+    "catalog_manifest": "a7279649379275b2d532a97bdf82f4ab04a9c8a798e3379f74142e6cf71e8498",
+    "acquisition_manifest": "5975bf343a61a731904b2a63fab86ee1e3602261dcc367682f372134c680c1a5",
+    "code": "7d7145d8bf0203ee57ae8d8008f20bbb7516245cb68001cb9746bd7bcf9cad99"
+  },
+  "environment": {
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "rasterio": "1.4.3",
+    "gdal": "3.9.3",
+    "shapely": "2.1.2"
+  },
+  "outputs": {
+    "candidate.tif": "4ba1017a7a9797119e7ac42322ce6167bdd26cb509745ad26a7b756b79a55b3b",
+    "dnbr.tif": "b18a1eaa68dac8334d05c3147503cb07e5ef540a08cc64a75e66ff6cda928089",
+    "overview.png": "ee0bc3aa6519f7d9bf24ffdfc16d32c1ef333ab4db64af6fe8f4c645f20d1ce9",
+    "post-nbr.tif": "abe8002943105f0ab18a24e7d484554cfe096b6bd9536f1ae14ecf55b292f74c",
+    "pre-nbr.tif": "d51698aeaca42d23a3212c85ac119305cd328d69454a72eef19ec2e33192eef6",
+    "reference.tif": "83130507edaaba65b23a6a2a78e09d170cf42c39a65e3a3e5db66c91c6af86bf",
+    "valid.tif": "38ca892b0965b71d6e96a6a9561d0663dc36f014c53d95b05a34f27843aebc7f"
+  }
+}
