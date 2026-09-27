@@ -91,17 +91,37 @@ mainly because it throws embers.
 the **WFIGS interagency perimeter** — an authoritative polygon for one named incident,
 with a discovery time — plus Open-Meteo's archive for the weather as it actually was.
 
-First results, on the three of four that passed self-validation:
+Current results. `gap` is Dice minus an equal-area disc at the same ignition point —
+the only number that says the physics is worth anything. All at 0% suppression:
 
-| fire | truth | modelled | Dice | area ratio |
-|---|---|---|---|---|
-| Cypress Creek | 2,723 ha | 4,274 ha | **0.388** | 1.57x |
-| 113 Incident | 2,062 ha | 4,771 ha | **0.398** | 2.31x |
-| County Rd 169 | 2,247 ha | 30,492 ha | 0.092 | 13.6x |
+| fire | strategy | window | area ratio | Dice | circle | gap | model L/B (truth) |
+|---|---|---|---|---|---|---|---|
+| Anderson Bridge | **100% monitored** | 191 h | 4.67x | 0.351 | 0.318 | **+0.032** | 1.32 (2.17) |
+| Pineland Rd | 100% suppressed | 100 h | **1.07x** | 0.493 | 0.685 | -0.191 | 1.31 (2.42) |
+| Hwy 82 | 100% suppressed | 239 h | **0.84x** | **0.642** | 0.688 | -0.046 | 1.20 (2.45) |
+| Ballard | 100% suppressed | 41 h | 3.70x | 0.376 | 0.418 | -0.043 | 1.38 (2.56) |
+| 113 Incident | 100% suppressed | 22 h | **1.13x** | 0.305 | 0.853 | -0.549 | 1.45 (1.32) |
 
-**It over-predicts, consistently.** Partly expected — the replay models no suppression
-and every one of these fires was fought — but the 4.45x arrival-draw overshoot is now
-unmasked rather than cancelling against the old weak wind term.
+**Area is now roughly calibrated and shape is the whole remaining error.** Three of
+five land within 16% of the true area, and mean Dice went 0.289 -> 0.433 when MTT landed.
+It does not over-predict consistently; the spread is dispersion, not bias.
+
+**But the model still does not beat a circle on a fought fire, and the reason has
+changed.** An equal-area disc gets much stronger as the model's area gets closer to
+truth — Hwy 82's null went 0.098 to 0.688 on the same fire — so closing the area error
+raised the bar rather than clearing it. The honest reading is that area is largely
+solved and shape is not: modelled L/B sits at 1.20-1.45 against real perimeters of
+2.2-2.6, because these fires grow until they fill their fuel-connected region and a
+region-filling fire has no shape. Four of five are still alight when the replay ends,
+so what stops a fire is the next thing to look at, not how fast it spreads.
+
+**The one fire that was monitored rather than fought is the only one the model beats a
+circle on.** That is what `attr_FireStrategyMonitorPercent` is read for, and it is the
+strongest evidence so far that the model carries real shape information. Do not
+over-read it: n=1, and Anderson Bridge's ignition point is 8.2 km from the perimeter
+centroid, so the null disc is badly offset while the model is a 98%-recall blob that
+covers the truth. Suggestive, not settled — more monitored fires are the way to settle
+it, and WFIGS yields about one in fourteen.
 
 Three things that must stay:
 
@@ -112,10 +132,27 @@ Three things that must stay:
   0.8-1.25x of the acreage WFIGS reports, or the run is skipped. Two of the first four
   disagreed by 100x, and a wrong rasterisation yields a Dice score that looks exactly
   like a measurement.
-- **The caveats are not decoration.** Ignition is the perimeter centroid, which is
-  generous — a real forecast starts from a detection at the edge of a young fire. No
-  suppression is modelled. These numbers are not operational accuracy and must not be
-  quoted as such.
+- **The replay ends at `poly_PolygonDateTime`, not at containment.** The perimeter is a
+  snapshot carrying its own timestamp; running past it scores a longer simulation than
+  the ground truth describes. This was wrong for the harness's whole life and affected
+  every fire in both directions — Cypress Creek got 313 h against a polygon mapped at
+  65 h, while 113 Incident reports containment *before* its polygon date, which an old
+  `max(6, ...)` floor turned into a 6 h run against a 22 h polygon.
+- **Report the suppression strategy with every score.** A free-growth replay scored
+  against a fully suppressed fire is partly measuring the fire service.
+  `attr_FireStrategyFullSuppPrcnt` / `MonitorPercent` are populated and the runner ranks
+  monitored fires first. `attr_InitialResponseDateTime`/`Acres` would bound the
+  free-growth window exactly but are empty on every current-year record — read and
+  reported when present, never relied on.
+- **Verdicts come from the unfitted run, never the best of the sweep.** Taking the
+  maximum model-minus-circle gap over five suppression levels announced "physics BEATS
+  a circle" on gaps of +0.000 and +0.002 — which is just selection over five noisy
+  numbers. The swept best is printed, labelled as fitted to the answer, and must never
+  be quoted as a forecast.
+- **The caveats are not decoration.** Ignition is the reported point of origin where
+  WFIGS has one and the perimeter centroid otherwise, which is generous — a real
+  forecast starts from a detection at the edge of a young fire. These numbers are not
+  operational accuracy and must not be quoted as such.
 
 ### What the hindcast says is actually wrong
 
@@ -148,10 +185,61 @@ cell obstructs part of an edge rather than severing it, so the flux is reduced a
 stochastic draw still gets through. Correct per §5, and it means roads do not act as
 firebreaks at this resolution.
 
-So five candidates have now been tested and none is the dominant error: rate, duration,
-reachability, fuel classification, barriers. The one left untested is **suppression**,
-which the replay models none of while all three fires were actively fought — Cypress
-Creek took thirteen days to contain. Test that before building anything large.
+### Off-axis spread: fixed, and what it left behind
+
+Six candidates were tested and eliminated: rate, duration, reachability, fuel
+classification, barriers, and **suppression** — swept 0-100% flat from hour zero, which
+bounds what it could ever explain, and it moved area by 4-25% while making Dice *worse*
+on most fires. Every level lost recall faster than it gained precision, the signature of
+a fire in the wrong place rather than one of the wrong size.
+
+That pointed at shape, and `sim/src/shape.ts` (L/B plus major-axis bearing) found the
+cause: `step()` fed Rothermel's `phi_w` the wind *component* along each of the 8 spread
+directions. `phi_w` is a **heading** term — a reduced wind returns the head rate of a
+calmer fire, not the flank rate of this one. At 40 km/h the 45-degree direction got 0.59
+of full `phi_w` where the ellipse says 0.065, so off-axis spread ran ~9x too fast and
+every fire came out round (L/B 1.27 at 25 km/h, 1.38 at 65) and inflated.
+
+**Replaced with Richards (1990) elliptical propagation**, the formulation under FARSITE,
+FlamMap, Prometheus and Cell2Fire. `windMultiplier` is now called only with `align` = 1
+and all directional variation comes from `ellipseShape(e, cos theta)` =
+`(1 - e) / (1 - e cos theta)`, with `e` from `ellipseEccentricity` via Anderson (1983).
+Calm air gives L/B 1 exactly, hence e = 0 and a circle, which is why every calm-wind
+test is untouched.
+
+Emergent L/B now responds to wind — 1.24 / 1.33 / 1.93 at 0 / 15 / 25 km/h where it used
+to be flat — and on Anderson Bridge the modelled bearing lands within 3 degrees of the
+real perimeter's with precision at 98%. Three things to know:
+
+- **`cellMaxRos` and `cellHeadRos` are now different numbers and the distinction
+  matters.** Byram intensity, Van Wagner crowning and the `peakRos` read-out use
+  `cellHeadRos`, the pre-ellipse head rate. Suppression uses `cellMaxRos`, the fastest
+  edge actually leaving the cell, because a crew holds the edge in front of them. Reading
+  intensity off the lattice maximum would make a fire's reported intensity depend on the
+  wind's bearing relative to the grid, since the eight directions can sit 22.5 deg off
+  the wind where `ellipseShape` is only 0.6.
+- **`MAX_LB` = 8 caps the ellipse.** Anderson's fit is calibrated to about 10 mi/h
+  midflame and diverges above it — 65 km/h gives L/B 56 and a backing rate of 1/12,500
+  of the head. Real perimeters here measure L/B 1.3-2.6.
+- **Elongation reaches only about half of Anderson's L/B, and the cause is the lattice,
+  not the ellipse.** Measured: the flank runs 4-10x its nominal rate while the head runs
+  0.5-1.0x. Two effects compose — an isotropic arrival-draw overshoot (~2.8x, visible in
+  calm air where the shape stays round) and lateral leakage through the diagonals, where
+  reaching a cell off to the side via 45-degree steps uses `ellipseShape(45 deg)` = 0.084
+  instead of the flank's 0.026, 3.2x faster, and first-passage percolation always finds
+  that path. 3.2 x 2.2 = 7.0 against a measured 6.9.
+
+**The head is also capped at `cellSize / dt`.** Emergent head rate is about
+`p * cellSize / dt` for `p = 1 - exp(-ROS dt / cellSize)`, which saturates at 3 m/s on a
+30 m grid at DT = 10. Nominal head exceeds that above ~30 km/h, so `emrg/nom` in
+`npm run bench` falls from 5.04x calm to 0.83x at 40 km/h. That is why four of five
+hindcasts now under-predict extent.
+
+Both remaining errors are what **Finney (2002) Minimum Travel Time** fixes, by computing
+minimum arrival time over the node network with the elliptical template instead of
+drawing per-link Bernoulli arrivals. That is the next kernel change, not the §4 energy
+accumulator. No usable JS/TS library exists, so port rather than depend; `pyretechnics`
+(Python) and `firelib`/BehavePlus (USFS, public domain) are readable references.
 
 ### Benchmark against Rothermel
 
