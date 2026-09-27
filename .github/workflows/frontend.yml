@@ -41,15 +41,11 @@ jobs:
 
       - run: npm ci
 
-      - name: Typecheck all workspaces
-        run: npm run typecheck --workspaces --if-present
+      - name: Typecheck app and workspaces
+        run: npm run typecheck
 
-      - name: Kernel physics tests
+      - name: History and kernel tests
         run: npm test
-        # Isotropy, wind, slope, moisture of extinction, determinism and the
-        # bookkeeping invariants. One test is `todo` on purpose: the front
-        # advances at 4.45x its own nominal ROS and that is a known, recorded
-        # defect needing the §4 energy accumulator, not a regression.
 
       - name: Build
         run: npm run build
