@@ -10,6 +10,30 @@ more than one whose strengths are asserted.
 
 ---
 
+## Contents
+
+ 1. [What it is, in one paragraph](#1-what-it-is-in-one-paragraph)
+ 2. [Claims — what holds up and what does not](#2-claims--what-holds-up-and-what-does-not)
+ 3. [High-level architecture](#3-high-level-architecture)
+ 4. [Components](#4-components)
+ 5. [Application flow](#5-application-flow)
+ 6. [Physics — every equation, with its source](#6-physics--every-equation-with-its-source)
+ 7. [What the physics does not model at all](#7-what-the-physics-does-not-model-at-all)
+ 8. [Machine learning — exactly what, and exactly how well](#8-machine-learning--exactly-what-and-exactly-how-well)
+ 9. [Verification — three independent harnesses](#9-verification--three-independent-harnesses)
+10. [Data sources — all ten ports, all real](#10-data-sources--all-ten-ports-all-real)
+11. [Licensing and commercial terms](#11-licensing-and-commercial-terms)
+12. [Performance, scale and cost](#12-performance-scale-and-cost)
+13. [How this compares](#13-how-this-compares)
+14. [Production readiness](#14-production-readiness)
+15. [Repository context](#15-repository-context)
+16. [Known defects — measured, characterised, and still there](#16-known-defects--measured-characterised-and-still-there)
+17. [What we would build next, in order](#17-what-we-would-build-next-in-order)
+18. [Running it](#18-running-it)
+19. [Glossary](#19-glossary)
+
+---
+
 ## 1. What it is, in one paragraph
 
 An interactive wildfire spread simulator that runs **anywhere on earth**. Pick a point,
@@ -37,11 +61,11 @@ This section exists because the difference matters more than the technology.
 | "Fuel, water and canopy derive from ML-classified satellite products" | ✅ true across four ports |
 | "All ten data sources are real — none returns invented data" | ✅ `GET /api/health` proves it |
 | "Runs anywhere on earth" | ✅ every source is global or degrades to one that is |
-| "Validated against real fires with published accuracy numbers" | ✅ see §8, and read the caveats |
+| "Validated against real fires with published accuracy numbers" | ✅ see §9, and read the caveats |
 | "Deep learning" / "neural network" | ❌ gradient-boosted trees, no neural network anywhere |
 | "AI-powered wildfire prediction" | ❌ the prediction is a 1972 heat balance; the ML is upstream of it |
 | "AI improves our accuracy" | ❌ **measured at −0.0004 Dice.** It does not |
-| Any operational accuracy figure | ❌ every number in §8 is free-growth replay, not a forecast |
+| Any operational accuracy figure | ❌ every number in §9 is free-growth replay, not a forecast |
 
 **The question that catches people:** *"So what does your model predict?"* The honest
 answer — "canopy base height and bulk density per cell, which feed Van Wagner's crown
@@ -51,6 +75,23 @@ forecast itself was learned.
 **What is actually rare here** is not the ML. It is a fire model with a reproducible
 accuracy harness that has repeatedly disproved its own authors, and a provenance system
 that makes "mock data presented as live" a type error.
+
+### What this is NOT for
+
+Stated plainly because this is a fire product and the failure mode is someone acting on
+it.
+
+- **Not for evacuation, deployment or life-safety decisions.** Nothing here is validated,
+  certified or reviewed to any operational standard.
+- **Not a forecast.** Every number in the verification section is a *replay* of a fire
+  whose outcome was already known, under weather that was already recorded. A forecast
+  faces unknown weather and an unknown ignition.
+- **Not calibrated for suppression.** The replay models a fire nobody fights. Real
+  perimeters are the outcome of a fire service doing its job.
+- **Not a substitute for FARSITE, FlamMap or a qualified analyst.** Those are the
+  authoritative tools; see the comparison section for where this sits relative to them.
+- **Not tested outside the fuels it models.** Seven simplified fuel classes cannot
+  represent peat, permafrost, agricultural residue burning, or urban conflagration.
 
 ---
 
@@ -275,7 +316,7 @@ crowning (torching), which matters mainly because it throws embers.
 | Burn severity | `dNBR = NBR_pre − NBR_post`, `NBR = (NIR − SWIR2)/(NIR + SWIR2)` | Key & Benson |
 | Fire danger | Chandler Burning Index from T and RH | standard scale |
 | Barriers | `blockFrac[i·8 + d]` scales flux across each of 8 edges; capped below 1 | ARCHITECTURE.md §5 sub-cell treatment |
-| Accuracy score | `Dice = 2|A∩B| / (|A| + |B|)` | Sørensen–Dice |
+| Accuracy score | `Dice = 2·\|A∩B\| / (\|A\| + \|B\|)` | Sørensen–Dice |
 | Reachability | flood fill over fuel-connected cells | first-passage bound |
 
 ### 6.7 Fuels
@@ -300,9 +341,28 @@ weakness.**
 
 ---
 
-## 7. Machine learning — exactly what, and exactly how well
+## 7. What the physics does not model at all
 
-### 7.1 Our own model: `landfire-gbt-canopy`
+Distinct from the defects section: these are not errors, they are absences. Each is a
+real mechanism in real fires that this model contains no representation of.
+
+| Absent | Consequence |
+|---|---|
+| **Fire–atmosphere coupling** | no plume dynamics, no indraft, no column collapse. A real plume modifies the wind that drives the fire; here wind is an input only |
+| **Long-range spotting** | embers are thrown, but range is a simple function of wind and intensity, unvalidated against observation. Real spotting jumps kilometres and starts fires ahead of the front |
+| **Diurnal inversion layers** | fires in mountain terrain behave very differently under a stable nocturnal inversion. Nothing here knows about atmospheric stability |
+| **Fuel moisture in classes above 1-hour** | 10-h, 100-h and 1000-h fuels, and live fuel moisture, are not tracked. Only the fine fuel that carries the flaming front |
+| **Seasonal plant physiology** | foliar moisture is fixed at 100%, and it enters Van Wagner's `I_0` directly |
+| **Multi-size-class fuel beds** | each fuel is a single load at a single surface-area-to-volume ratio. Real Anderson and Scott & Burgan models are multi-class, which is why the benchmark reference is only valid for the fuels it is applied to here |
+| **Terrain-following flame geometry** | the model is 2D. Flame tilt, canyon channelling and lee-slope eddies are absent |
+| **Suppression as a resource problem** | crews, aircraft, water and time are one scalar "suppression effort" |
+| **Smoke** | not modelled, and smoke extent must never be substituted for fire extent |
+
+---
+
+## 8. Machine learning — exactly what, and exactly how well
+
+### 8.1 Our own model: `landfire-gbt-canopy`
 
 | | |
 |---|---|
@@ -334,7 +394,7 @@ not. And CBD is the one that matters most, because active crowning is `R ≥ 3.0
 simulates anywhere; the bookmarked scenarios are Armenian. Inside CONUS, reading LANDFIRE
 directly would be strictly better and that provider does not exist yet.
 
-### 7.2 Three rules that keep it honest
+### 8.2 Three rules that keep it honest
 
 1. **`features.ts` is shared by the training sampler and the inference provider.**
    Train/serve skew is invisible — the held-out score stays good while production
@@ -348,14 +408,14 @@ directly would be strictly better and that provider does not exist yet.
    **8×10⁻⁹** on three targets; one row in 120 differs on `height` because float32 lands
    the far side of a split.
 
-### 7.3 ML we consume rather than train
+### 8.3 ML we consume rather than train
 
 ESA WorldCover, Sentinel-2's Scene Classification Layer, and LANDFIRE's own layers are
 all classifier or regression-tree products over satellite stacks. So *"our fuel, water and
 canopy inputs derive from machine-learned satellite products"* is true across four ports
 independently of our own training.
 
-### 7.4 The measured null result
+### 8.4 The measured null result
 
 **Learned canopy versus per-class constants, over the same fuel map, unsuppressed:**
 
@@ -368,7 +428,7 @@ nobody spends weeks on GEDI, a CNN or PyTorch for canopy before that measurement
 the link from canopy accuracy to fire accuracy is currently unmeasurable, which makes any
 improvement to it unfalsifiable.
 
-### 7.5 What ML is deliberately *not* used for
+### 8.5 What ML is deliberately *not* used for
 
 **Spread.** A model trained on the residual between predicted and observed perimeters is
 where most "AI wildfire" products live. With five fires it would memorise them, and it
@@ -380,9 +440,9 @@ would destroy the one property that makes a physics kernel defensible, stated at
 
 ---
 
-## 8. Verification — three independent harnesses
+## 9. Verification — three independent harnesses
 
-### 8.1 Kernel physics tests
+### 9.1 Kernel physics tests
 
 `npm test` — Node's built-in runner, no dependency, TypeScript stripped natively.
 
@@ -407,7 +467,7 @@ Two tests were `todo` for this file's whole life — the front advancing at 4.45
 and calm-wind spread disagreeing with Rothermel by 5.6×. Both were the same defect, both
 closed **on their own** when MTT landed, and neither was ever tuned into passing.
 
-### 8.2 Benchmark against Rothermel
+### 9.2 Benchmark against Rothermel
 
 `npm run bench` — compares the kernel against an independent Rothermel (1972)
 implementation, validated to **4% against published BehavePlus output for FM1**.
@@ -430,7 +490,7 @@ equal-area radius averages a fast upslope head with crawling flanks.
 nominal 0.49 m/min matches published BehavePlus FM8's 0.5. It is the single-particle
 reference over-predicting multi-class fuels, plus bed parameters that are invented.
 
-### 8.3 Hindcast — the only end-to-end accuracy number
+### 9.3 Hindcast — the only end-to-end accuracy number
 
 `npm run hindcast` replays real fires against their mapped perimeters. Ground truth is the
 **WFIGS interagency perimeter** — an authoritative polygon for one named incident with a
@@ -484,7 +544,38 @@ zero, which bounds what it could ever explain — it moves area by 4–25% and m
   gap over five suppression levels announced "physics BEATS a circle" on gaps of +0.000
   and +0.002 — pure selection.
 
-### 8.4 Other harnesses
+### 9.4 How reproducible are these numbers?
+
+Honestly: **the kernel numbers are exactly reproducible and the hindcast numbers are
+not.** Anyone quoting §9.3 needs to know why.
+
+| Harness | Reproducible? | Why |
+|---|---|---|
+| kernel tests | ✅ exactly | seeded RNG, synthetic terrain, no network. `createSim(terrain, seed)` exists so tests can pin it |
+| benchmark | ✅ exactly | same |
+| canopy parity | ✅ exactly | fixture committed alongside the model |
+| canopy held-out metrics | ✅ from the committed table | `training.jsonl` is committed; re-running the sampler hits live Sentinel-2 and will draw different scenes |
+| **hindcast** | ❌ **not** | see below |
+
+Three independent reasons the hindcast drifts:
+
+1. **WFIGS is a *year-to-date* service.** The endpoint is
+   `WFIGS_Interagency_Perimeters_YearToDate`, so the set of fires between 5k and 60k acres
+   grows through the season and perimeters are revised in place. Run it a month from now
+   and you get a partly different set of fires.
+2. **Perimeters and their attributes are edited after the fact.** Acreage, containment
+   times and geometry all change; the harness already skips records whose rasterised area
+   disagrees with their own reported acreage by more than 25%, which caught four such
+   records.
+3. **Sentinel-2 scene selection is "least cloudy recent"**, so fuel, canopy and burn
+   history depend on when you ask.
+
+**What this means in practice:** treat §9.3 as a measurement taken on a stated date
+against a stated fire set, not as a benchmark score. Comparisons across code changes are
+valid only when run back to back, which is how every before/after pair in this document
+was produced.
+
+### 9.5 Other harnesses
 
 | Command | Checks |
 |---|---|
@@ -496,7 +587,7 @@ zero, which bounds what it could ever explain — it moves area by 4–25% and m
 
 ---
 
-## 9. Data sources — all ten ports, all real
+## 10. Data sources — all ten ports, all real
 
 Every provider returns `Provided<T>` = data **plus** `Provenance` (`measured` / `derived`
 / `synthetic`, native resolution, observation time, coverage, note). *"Mock data presented
@@ -540,7 +631,134 @@ system runs with no network and the header chip says so.
 
 ---
 
-## 10. Known defects — measured, characterised, and still there
+## 11. Licensing and commercial terms
+
+**This section is the largest untested commercial risk in the project and nothing in the
+repository documented it before now.** Nothing here is legal advice; every row needs
+confirming by counsel before revenue.
+
+| Source | Believed terms | Commercial risk |
+|---|---|---|
+| **LANDFIRE** (FBFM40, CBH/CBD) | US federal work — public domain | 🟢 low |
+| **WFIGS** perimeters | US federal — public domain | 🟢 low |
+| **NASA FIRMS** | US federal — public domain, attribution requested | 🟢 low |
+| **Sentinel-2 / Copernicus** | free and open, attribution required | 🟢 low |
+| **ESA WorldCover v200** | CC-BY-4.0 — attribution required | 🟢 low, attribution is mandatory |
+| **AWS Terrarium terrain tiles** | open data, derived from public DEMs; attribution expected | 🟢 low |
+| **OpenStreetMap** (barriers, buildings) | **ODbL 1.0** | 🟠 **share-alike on a derived database.** Counting footprints per cell may constitute a derived database. Needs a considered position, not an assumption |
+| **Open-Meteo** | free tier is **non-commercial**; data CC-BY-4.0 | 🔴 **commercial use requires a paid plan.** This is a load-bearing source — weather drives everything |
+| **Esri World Imagery** | restricted to Esri/ArcGIS contexts without a licence | 🔴 **already flagged in the codebase as unexamined.** Used as basemap and last-resort fuel classifier |
+| **OpenTopoMap** tiles | CC-BY-SA | 🟠 share-alike; also a courtesy tile server, not a CDN |
+
+**Two of these block commercialisation as currently wired:**
+
+1. **Open-Meteo** — the weather port. A commercial plan, or a swap to NWS/RAWS (US federal,
+   public domain), resolves it. The provider port design means that is one line in
+   `registry.ts`.
+2. **Esri World Imagery** — the basemap. Swappable for OpenStreetMap raster, Esri under
+   licence, or a commercial tile provider.
+
+**One deserves a real decision:** OSM's ODbL. Attribution is easy; the share-alike
+obligation on derived databases is the part that needs thought.
+
+**Also relevant, and already recorded by the team:** ELMFIRE is AGPLv3 plus Commons Clause
+(`docs/concurrent-analysis/09-observation-baseline/external-models-cypress-creek.md`), and
+Ultralytics YOLO is AGPL-3.0 — both matter if `backend/vision/` ever ships.
+
+---
+
+## 12. Performance, scale and cost
+
+| Measure | Value | Source |
+|---|---|---|
+| Grid | 400 × 400 = 160,000 cells, ~38 m over a 15 km domain | `TARGET_COLS` in `terrain.ts` |
+| Simulation speed | up to 30 simulated minutes per real second | speed control |
+| Kernel step | fixed `DT = 10` simulated seconds | `model.ts` |
+| Render | **50 fps** with a large fire, geometry rebuilt at ~20 Hz, DOM at 5 Hz | `npm run smoke` |
+| Wire traffic | **~1–3 kB per frame** at 10 Hz, against 132 kB for a full grid | `npm run smoke:api` |
+| Incident creation | ~0.5 s offline, ~7 s live (dominated by concurrent tile and COG reads) | `smoke:api` |
+| Canopy inference | **11 µs/cell**, ~1.8 s for a full grid | `npm run canopy:check` |
+| Canopy model size | 415 kB JSON, no runtime ML dependency | `model.json` |
+| Concurrent incidents | `MAX_INCIDENTS` = 32, idle reaped after 60 s | `config.ts` |
+| Marginal data cost | **zero** — every source is keyless and free at current volume | §10 |
+| Infrastructure | one Node process; no GPU, no database, no queue | — |
+
+**The cost story is a genuine strength.** There is no per-query data bill, no GPU, and no
+database. The binding cost is CPU for the kernel and disk for the tile cache. The
+trade-off is that everything lives in memory and dies with the process.
+
+---
+
+## 13. How this compares
+
+Positioned honestly, because overstating it invites comparison against the wrong
+competitors.
+
+| | What it is | Where it beats us | Where we differ |
+|---|---|---|---|
+| **FARSITE / FlamMap** (USFS) | the authoritative operational tools, free, desktop | validated physics, multi-size-class fuels, decades of field use, trusted in court | they need prepared LANDFIRE landscape files and a trained analyst; we run anywhere on earth from a click, in a browser |
+| **ELMFIRE** | open, fast, ensemble-capable | proper operational model | AGPLv3 + Commons Clause; needs a build toolchain we could not stand up |
+| **Cell2Fire** | research C++ implementation | multi-class Rothermel done properly | research code, not a product |
+| **Technosylva** | commercial, operational, used by utilities | validated, supported, insured | closed, expensive, US-centric, no self-serve |
+| **Pano AI, Alchera** | camera-based detection | genuinely excellent at *detecting* fires | they detect; they do not predict spread |
+
+**What is actually differentiated here:**
+
+1. **Zero setup, anywhere on earth.** No landscape file, no data preparation, no install.
+   Click a point in Armenia and it simulates.
+2. **Provenance as a type.** Every input carries where it came from and how good it is, and
+   the UI surfaces it. "Mock data presented as live" is a compile error.
+3. **An accuracy harness that argues with us.** Six candidate explanations tested and
+   eliminated; four changes kept that made the headline numbers worse because they were
+   correct.
+
+**What is not differentiated:** the physics. It is a faithful but simplified
+implementation of published work, with invented bed parameters, and FARSITE does it better.
+
+---
+
+## 14. Production readiness
+
+| | State |
+|---|---|
+| Authentication | ❌ none |
+| Authorisation | ❌ none — any caller can create, drive or delete any incident by id |
+| Persistence | ❌ none. Incidents are an in-memory `Map`; a restart loses everything |
+| CORS | 🟠 deliberately permissive, for a local dev UI on another port |
+| Rate limiting | ❌ none. `MAX_INCIDENTS` = 32 is the only backstop, and Overpass/COG reads are triggered by user-supplied coordinates |
+| Deployment | ❌ no container, no CI deploy, no infrastructure |
+| Secrets | 🟢 none to leak — every source is keyless |
+| CI | 🟢 typecheck, kernel tests and smoke tests run on GitHub Actions |
+| Linting | ❌ no linter. `strict`, `noUnusedLocals` and `noUnusedParameters` are the enforcement |
+| Observability | ❌ console logging only |
+| Liability position | ❌ undecided, and §2's "not for life-safety decisions" is not a substitute for one |
+
+**Honest summary:** this is a well-tested simulation engine with a validation harness. It
+is not a service. The gap is auth, persistence, deployment and a liability position — none
+of which is physics, and none of which has been started.
+
+---
+
+## 15. Repository context
+
+This document describes `frontend/`. Three other areas belong to other workstreams and are
+untouched by it:
+
+| Path | What |
+|---|---|
+| `backend/api/` | endpoints, request validation, application logic — scaffold |
+| `backend/llm/` | prompts, model integrations, evaluations — scaffold |
+| `backend/vision/` | **fire observation research** — offline reproducible RGB/thermal rules (M0), with a documented path to learned detection. This is where PyTorch belongs |
+| `contracts/` (repo root) | shared API schemas and example payloads — scaffold, distinct from `frontend/contracts/` |
+| `docs/concurrent-analysis/` | market, product and dataset research, including the external-model and dataset licensing audits |
+| `docs/infrastructure-spec/` | proposed service catalogue and operations |
+
+`AGENTS.md` at the repository root is the cross-team guide and the authoritative decision
+log.
+
+---
+
+## 16. Known defects — measured, characterised, and still there
 
 | Defect | Magnitude | Status |
 |---|---|---|
@@ -576,7 +794,7 @@ Errors that were only found because an external reference disagreed:
 
 ---
 
-## 11. What we would build next, in order
+## 17. What we would build next, in order
 
 1. **Multi-size-class Rothermel + Scott & Burgan bed parameters.** No ML. Published
    numbers. Fixes the depth-0.65-against-0.061 problem, makes the benchmark reference
@@ -594,7 +812,7 @@ Errors that were only found because an external reference disagreed:
 
 ---
 
-## 12. Running it
+## 18. Running it
 
 ```bash
 npm install                 # in frontend/ — the workspace root
@@ -625,6 +843,37 @@ npm run canopy:check --workspace=@firewatch/api       # TS inference == sklearn
 
 ---
 
-*Every figure in this document was produced by a command listed in §12 against the code
+---
+
+## 19. Glossary
+
+Terms used above without explanation, because a reader outside fire science should not
+have to guess.
+
+| Term | Meaning |
+|---|---|
+| **CBH** | canopy base height, m — how far the flames must reach to enter the crowns |
+| **CBD** | canopy bulk density, kg/m³ — how densely packed the crown fuel is. Decides whether a crown fire sustains itself |
+| **M_x / mx** | moisture of extinction, % — above this a fuel will not carry fire at all |
+| **SAV / σ** | surface-area-to-volume ratio, ft²/ft³ — fine fuels have high SAV and ignite readily |
+| **1-hour fuel** | dead fine fuel that equilibrates with the air in about an hour. It is what carries the flaming front |
+| **fine load vs total load** | the 1-hour fraction versus all size classes. Applying the ignition heat sink to total load makes heavy fuels non-ignitable — a real bug |
+| **ROS** | rate of spread, m/min or m/s |
+| **head / flank / backing** | the downwind edge, the sides, and the upwind edge of a fire |
+| **L/B** | length-to-breadth ratio — how elongated a fire is. 1 is a circle |
+| **FBFM40** | the Scott & Burgan (2005) 40 Fire Behavior Fuel Models, the US operational set |
+| **FM1, FM8, FM10** | Anderson (1982) 13-model set: short grass, closed timber litter, timber with understorey |
+| **MTT** | minimum travel time — Finney's shortest-arrival formulation of fire spread |
+| **dNBR** | differenced Normalised Burn Ratio, the standard burn-severity index from NIR and SWIR bands |
+| **SCL** | Sentinel-2 Scene Classification Layer — per-pixel water, cloud, snow, vegetation |
+| **EMC** | equilibrium moisture content — the moisture a dead fuel tends toward in given air |
+| **Dice** | overlap score, `2·\|A∩B\|/(\|A\|+\|B\|)`. 1 is perfect, 0 is no overlap |
+| **recall / precision** | fraction of the real fire we caught / fraction of our prediction that was real |
+| **null model** | here, a disc at the ignition point with the same area the model produced. The bar the physics must clear |
+| **hindcast** | replaying a fire whose outcome is already known, to score the model |
+| **WUI** | wildland–urban interface |
+| **provenance** | the record of where a data value came from and how good it is, carried with the value |
+
+*Every figure in this document was produced by a command listed in §18 against the code
 in this repository. If a number here disagrees with the code, the code is right and this
 document is a bug.*
