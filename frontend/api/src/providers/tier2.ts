@@ -410,6 +410,31 @@ interface History {
 const historyCache = new Map<string, History>()
 const historyInflight = new Map<string, Promise<History | null>>()
 
+/**
+ * One hour of 1-h fuel moisture, stepped toward equilibrium.
+ *
+ * Exported because the hindcast has to run the SAME model the product runs.
+ * It could not simply call `nfdrs1hMoisture`: that seeds itself from
+ * `warmMoistureHistory`, which fetches `past_days=7` relative to NOW, so
+ * replaying a fire from March would settle its fuels against September weather.
+ * The hindcast has correctly dated archive hours of its own and needs only the
+ * integrator, so the integrator is what is shared.
+ *
+ * Rain drives fine fuels toward saturation far faster than drying returns them —
+ * wetting is minutes, drying is hours — hence the two time constants.
+ */
+export function stepOneHourMoisture(
+  prev: number,
+  tempC: number,
+  rh: number,
+  precipMm: number
+): number {
+  const wet = precipMm > 0.1
+  const target = wet ? Math.min(RAIN_SATURATION, 10 + precipMm * 12) : equilibriumMoisture(tempC, rh)
+  const tau = wet ? 0.3 : 1.0
+  return target + (prev - target) * Math.exp(-1 / tau)
+}
+
 /** Simard's equilibrium moisture content. T in Celsius, RH in %. */
 export function equilibriumMoisture(tempC: number, rh: number): number {
   const t = tempC * 1.8 + 32
@@ -450,9 +475,7 @@ async function fetchHistory(bounds: Bounds, cfg: Config): Promise<History | null
       const rain = h.precipitation[i] ?? 0
       // Rain drives 1-h fuels toward saturation far faster than drying
       // returns them: wetting is minutes, drying is hours.
-      const target = rain > 0.1 ? Math.min(RAIN_SATURATION, 10 + rain * 12) : equilibriumMoisture(h.temperature_2m[i] ?? 20, h.relative_humidity_2m[i] ?? 40)
-      const tau = rain > 0.1 ? 0.3 : 1.0
-      m = target + (m - target) * Math.exp(-1 / tau)
+      m = stepOneHourMoisture(m, h.temperature_2m[i] ?? 20, h.relative_humidity_2m[i] ?? 40, rain)
       if (rain > 0.1) {
         hoursSinceRain = 0
         sawRain = true
@@ -512,11 +535,8 @@ export function nfdrs1hMoisture(cfg: Config): FuelMoistureModel {
       // block. The warm call fills the cache for the next evaluation.
       void warmMoistureHistory(bounds, cfg)
 
-      const emcNow = equilibriumMoisture(weather.temperature, weather.humidity)
-      const wet = weather.precipitation > 0.1
-      const target = wet ? Math.min(RAIN_SATURATION, 10 + weather.precipitation * 12) : emcNow
       const base = hist
-        ? target + (hist.settled - target) * Math.exp(-1 / (wet ? 0.3 : 1.0))
+        ? stepOneHourMoisture(hist.settled, weather.temperature, weather.humidity, weather.precipitation)
         : fuelMoisture(weather as Weather)
 
       const midLat = (bounds.north + bounds.south) / 2
