@@ -28,6 +28,7 @@
 import { buildTerrain, scenarioAt } from '@firewatch/sim/terrain'
 import { Cell, attachCanopy, createSim, ignite, recomputeStats, step } from '@firewatch/sim/model'
 import { FUELS, Fuel } from '@firewatch/sim/fuels'
+import { blendByCover, shelteredHumidity } from '@firewatch/sim/shelter'
 import { andersonLB, lengthToBreadth } from '@firewatch/sim/shape'
 import type { Params } from '@firewatch/sim/weather'
 import { equilibriumMoisture, stepOneHourMoisture } from './providers/tier2.ts'
@@ -166,8 +167,10 @@ const MOISTURE_PREROLL_DAYS = 7
 
 interface ReplayHour {
   params: Params
-  /** Dead fine fuel moisture, %, from the shared NFDRS 1-h integrator. */
+  /** Dead fine fuel moisture in the open, %, from the shared NFDRS 1-h integrator. */
   fmc: number
+  /** The same, under full canopy. Cells in between are interpolated by cover. */
+  fmcSheltered: number
 }
 
 async function archiveWeather(
@@ -207,21 +210,35 @@ async function archiveWeather(
      * registry.
      */
     let fmc = equilibriumMoisture(h.temperature_2m[0] ?? 20, h.relative_humidity_2m[0] ?? 40)
+    /**
+     * A second series under full canopy, integrated in parallel.
+     *
+     * Two scalar integrations plus a per-cell interpolation, rather than 160,000
+     * integrations an hour — exact at zero and full cover, monotone between.
+     */
+    let fmcSh = fmc
     let dry = 30
     for (let i = 0; i < start; i++) {
       const rain = h.precipitation[i] ?? 0
+      const t = h.temperature_2m[i] ?? 20
+      const rh = h.relative_humidity_2m[i] ?? 40
       dry = rain > 0.2 ? 0 : dry + 1 / 24
-      fmc = stepOneHourMoisture(fmc, h.temperature_2m[i] ?? 20, h.relative_humidity_2m[i] ?? 40, rain)
+      fmc = stepOneHourMoisture(fmc, t, rh, rain)
+      fmcSh = stepOneHourMoisture(fmcSh, t, shelteredHumidity(rh, 1), rain)
     }
 
     const out: ReplayHour[] = []
     for (let k = 0; k < hours && start + k < h.time.length; k++) {
       const i = start + k
       const rain = h.precipitation[i] ?? 0
+      const t = h.temperature_2m[i] ?? 20
+      const rh = h.relative_humidity_2m[i] ?? 40
       dry = rain > 0.2 ? 0 : dry + 1 / 24
-      fmc = stepOneHourMoisture(fmc, h.temperature_2m[i] ?? 20, h.relative_humidity_2m[i] ?? 40, rain)
+      fmc = stepOneHourMoisture(fmc, t, rh, rain)
+      fmcSh = stepOneHourMoisture(fmcSh, t, shelteredHumidity(rh, 1), rain)
       out.push({
         fmc,
+        fmcSheltered: fmcSh,
         params: {
           temperature: h.temperature_2m[i] ?? 20,
           humidity: h.relative_humidity_2m[i] ?? 40,
@@ -450,15 +467,19 @@ async function run(p: Perimeter, cfg: Config) {
     for (const w of weather) {
       if (w.fmc < FUELS[Fuel.Timber].mx) { run++; longest = Math.max(longest, run) } else run = 0
     }
+    const sh = weather.map((w) => w.fmcSheltered).sort((a, b) => a - b)
+    const qs = (p: number) => sh[Math.floor(p * (sh.length - 1))]
     console.log(
       `  fuel moisture (NFDRS 1-h, ${MOISTURE_PREROLL_DAYS} d pre-roll): ` +
-      `min ${q(0).toFixed(1)} median ${q(0.5).toFixed(1)} max ${q(1).toFixed(1)}%`
+      `open min ${q(0).toFixed(1)} median ${q(0.5).toFixed(1)} max ${q(1).toFixed(1)}%` +
+      ` · under canopy median ${qs(0.5).toFixed(1)} max ${qs(1).toFixed(1)}%`
     )
+    const carriesSh = (mx: number) => weather.filter((w) => w.fmcSheltered < mx).length
     console.log(
-      `  hours able to carry: grass ${carries(FUELS[Fuel.Grass].mx)}/${weather.length}` +
-      ` · shrub ${carries(FUELS[Fuel.Shrub].mx)}/${weather.length}` +
-      ` · timber ${carries(FUELS[Fuel.Timber].mx)}/${weather.length}` +
-      ` · longest unbroken timber stretch ${longest} h`
+      `  hours able to carry (open / sheltered): grass ${carries(FUELS[Fuel.Grass].mx)}/${carriesSh(FUELS[Fuel.Grass].mx)}` +
+      ` · shrub ${carries(FUELS[Fuel.Shrub].mx)}/${carriesSh(FUELS[Fuel.Shrub].mx)}` +
+      ` · timber ${carries(FUELS[Fuel.Timber].mx)}/${carriesSh(FUELS[Fuel.Timber].mx)}` +
+      ` of ${weather.length} h · longest unbroken open-timber stretch ${longest} h`
     )
   }
 
@@ -662,9 +683,19 @@ async function run(p: Perimeter, cfg: Config) {
      * kernel off its memoryless `fuelMoisture()` fallback.
      */
     const moisture = new Float32Array(cols * rows)
+    const cover = variant.canopy?.data.cover ?? null
     for (let h = 0; h < weather.length; h++) {
       const hour = weather[h].params
-      moisture.fill(weather[h].fmc)
+      if (cover) {
+        // Sheltered where there is canopy above, open where there is not. This is
+        // what gives the canopy `cover` field a path to affecting fire behaviour
+        // at all — before it, cover was resolved and never read.
+        const open = weather[h].fmc
+        const sh = weather[h].fmcSheltered
+        for (let i = 0; i < moisture.length; i++) moisture[i] = blendByCover(open, sh, cover[i])
+      } else {
+        moisture.fill(weather[h].fmc)
+      }
       const hp = level === 0 ? hour : { ...hour, suppression: level }
       for (let s = 0; s < 3600 / DT; s++) {
         step(sim, { params: hp, weather: hour, dt: DT, moisture, ...(blockFrac ? { blockFrac } : {}) })

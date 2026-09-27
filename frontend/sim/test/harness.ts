@@ -8,7 +8,7 @@
  * failure means the kernel is wrong rather than the terrain being awkward.
  */
 import { Fuel, FUELS } from '../src/fuels.ts'
-import { Cell, createSim, ignite, step, type Sim } from '../src/model.ts'
+import { Cell, createSim, ignite, moistureDamping, step, type Sim } from '../src/model.ts'
 import type { Terrain } from '../src/terrain.ts'
 import type { Params, Weather } from '../src/weather.ts'
 
@@ -142,9 +142,17 @@ export function equivalentRadius(sim: Sim): number {
  * conditions, m/s. This is the number the front SHOULD advance at, derived the
  * same way `step` derives it, minus the neighbour loop.
  */
+/**
+ * Calls the kernel's own `moistureDamping` rather than restating it.
+ *
+ * It DID restate it, with the pre-Rothermel invented curve, and that made this
+ * helper report a 1.88x front-speed error the moment the kernel adopted
+ * Rothermel's published eta_M — a disagreement entirely inside the test harness.
+ * Same failure the bench had once: a harness holding its own copy of the formula
+ * stops measuring the thing it is measuring.
+ */
 export function nominalRos(fuelId: number, params: Params, fmc: number): number {
   const f = FUELS[fuelId]
-  const damping = f.load <= 0 || fmc >= f.mx ? 0 : Math.pow((f.mx - fmc) / (f.mx - 1.5), 1.5)
   const heat = Math.max(0.2, 1 + 0.018 * (params.temperature - 20))
-  return f.baseRos * damping * heat
+  return f.baseRos * moistureDamping(f, fmc) * heat
 }

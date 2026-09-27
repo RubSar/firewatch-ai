@@ -43,9 +43,22 @@ const SEEDS = [1, 2, 3, 4, 5, 6, 7, 8]
 
 const pct = (a: number, b: number) => (Math.abs(a - b) / Math.max(a, b)) * 100
 
+/**
+ * STEP COUNT IS PART OF THE CLAIM HERE.
+ *
+ * 400 steps was enough until `mx` moved to published Anderson values and damping
+ * to Rothermel's eta_M, which roughly halved calm grass spread and left the fire
+ * four cells across. One cell of lattice quantisation is then 25%, so the test
+ * failed at 29.3% while measuring nothing but its own resolution — the diagonal
+ * reach was exactly axis/sqrt(2), the signature of integer cell counts rather
+ * than of bias. 1200 steps puts the front out past ten cells, where a cell is
+ * under 10%. If this fails again, check the fire's size before the kernel.
+ */
+const ISO_STEPS = 1200
+
 describe('isotropy — flat ground, no wind', () => {
   it('spreads within 10% along axes and diagonals', () => {
-    const r = meanReachByDirection(flatTerrain(), calm(), { steps: 400, seeds: SEEDS })
+    const r = meanReachByDirection(flatTerrain(), calm(), { steps: ISO_STEPS, seeds: SEEDS })
     // DIRECTIONS alternates axis, diagonal, axis, ...
     const axis = r.filter((_, i) => i % 2 === 0)
     const diag = r.filter((_, i) => i % 2 === 1)
@@ -60,7 +73,7 @@ describe('isotropy — flat ground, no wind', () => {
   })
 
   it('favours no compass direction once the seeded noise is averaged out', () => {
-    const rs = meanReachByDirection(flatTerrain(), calm(), { steps: 400, seeds: SEEDS })
+    const rs = meanReachByDirection(flatTerrain(), calm(), { steps: ISO_STEPS, seeds: SEEDS })
     const mean = rs.reduce((a, b) => a + b) / rs.length
     rs.forEach((r, i) => {
       const dev = (Math.abs(r - mean) / mean) * 100

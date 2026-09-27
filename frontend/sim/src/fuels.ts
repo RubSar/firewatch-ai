@@ -36,7 +36,23 @@ export interface FuelModel {
   depth: number
   /** Characteristic surface-area-to-volume ratio, ft^2/ft^3 — drives eps = exp(-138/sav). */
   sav: number
-  /** Moisture of extinction (% dead fuel moisture): above this it will not carry fire. */
+  /**
+   * Moisture of extinction (% dead fuel moisture): above this it will not carry.
+   *
+   * PUBLISHED Anderson (1982) values, unlike `depth`, `sav` and `bulkDensity` on
+   * this table, which are still invented. Moisture of extinction is a single
+   * property per fuel model rather than a size-class aggregate, so it can be
+   * taken from the literature without multi-size-class Rothermel first — which is
+   * why it is the one column here that is real.
+   *
+   * It was invented too, and too high: grass 20, shrub 26, timber 30,
+   * agriculture 32. Simard's equilibrium moisture saturates near 27% at 100% RH,
+   * so timber's 30 made extinction UNREACHABLE by humidity and timber carried
+   * 191 of 191 replay hours on Anderson Bridge. A fuel that never stops produces
+   * a fire that fills its fuel-connected region, and such a fire has no shape:
+   * measured L/B decayed from 3.69 at hour 10 to 1.00 at hour 191 against a real
+   * perimeter of 2.17.
+   */
   mx: number
   /** Relative ember production, drives long-range spotting. */
   spotting: number
@@ -44,13 +60,28 @@ export interface FuelModel {
 }
 
 /** Indexed by Fuel id. */
+/**
+ * Moisture of extinction, mapped to the closest Anderson (1982) fuel model:
+ *
+ *   Grass / annual      -> FM1  short grass                     12%
+ *   Chaparral / shrub   -> FM4  chaparral                       20%
+ *   Timber / conifer    -> FM10 timber litter + understorey      25%
+ *   Agriculture         -> FM1-like cured herbaceous            12%
+ *   Urban / WUI         -> no Anderson analogue; 22% is assumed
+ *
+ * FM10 rather than FM8 for timber. FM8 is closed timber litter with no
+ * understorey and its 30% is genuinely published — but it is also the one
+ * Anderson model whose extinction humidity cannot be reached from open-air EMC,
+ * and a WorldCover "tree cover" pixel is far more often timber WITH understorey.
+ * Picking FM8 for a generic tree class was what made timber unstoppable.
+ */
 export const FUELS: FuelModel[] = [
   { id: Fuel.Water, name: 'Water', baseRos: 0, load: 0, fineLoad: 0, bulkDensity: 0, depth: 0, sav: 0, mx: 0, spotting: 0, color: [44, 84, 122] },
   { id: Fuel.Barren, name: 'Rock / barren', baseRos: 0, load: 0, fineLoad: 0, bulkDensity: 0, depth: 0, sav: 0, mx: 0, spotting: 0, color: [150, 142, 130] },
-  { id: Fuel.Grass, name: 'Grass / annual', baseRos: 0.062, load: 0.8, fineLoad: 0.8, bulkDensity: 2.67, depth: 0.3, sav: 3500, mx: 20, spotting: 0.2, color: [188, 166, 98] },
-  { id: Fuel.Shrub, name: 'Chaparral / shrub', baseRos: 0.034, load: 3.2, fineLoad: 1.2, bulkDensity: 2.46, depth: 1.3, sav: 1500, mx: 26, spotting: 0.8, color: [112, 128, 76] },
-  { id: Fuel.Timber, name: 'Timber / conifer', baseRos: 0.013, load: 5.5, fineLoad: 0.9, bulkDensity: 8.46, depth: 0.65, sav: 1700, mx: 30, spotting: 1.0, color: [58, 88, 62] },
-  { id: Fuel.Agriculture, name: 'Agriculture', baseRos: 0.021, load: 1.1, fineLoad: 1.0, bulkDensity: 3.14, depth: 0.35, sav: 2000, mx: 32, spotting: 0.1, color: [158, 178, 104] },
+  { id: Fuel.Grass, name: 'Grass / annual', baseRos: 0.062, load: 0.8, fineLoad: 0.8, bulkDensity: 2.67, depth: 0.3, sav: 3500, mx: 12, spotting: 0.2, color: [188, 166, 98] },
+  { id: Fuel.Shrub, name: 'Chaparral / shrub', baseRos: 0.034, load: 3.2, fineLoad: 1.2, bulkDensity: 2.46, depth: 1.3, sav: 1500, mx: 20, spotting: 0.8, color: [112, 128, 76] },
+  { id: Fuel.Timber, name: 'Timber / conifer', baseRos: 0.013, load: 5.5, fineLoad: 0.9, bulkDensity: 8.46, depth: 0.65, sav: 1700, mx: 25, spotting: 1.0, color: [58, 88, 62] },
+  { id: Fuel.Agriculture, name: 'Agriculture', baseRos: 0.021, load: 1.1, fineLoad: 1.0, bulkDensity: 3.14, depth: 0.35, sav: 2000, mx: 12, spotting: 0.1, color: [158, 178, 104] },
   { id: Fuel.Urban, name: 'Urban / WUI', baseRos: 0.007, load: 2.4, fineLoad: 0.6, bulkDensity: 4.0, depth: 0.6, sav: 1200, mx: 22, spotting: 0.5, color: [141, 138, 145] },
 ]
 
