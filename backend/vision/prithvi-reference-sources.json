@@ -1,0 +1,29 @@
+{
+  "assets": [
+    {
+      "filename": "legacy-geospatial_fm_geospatial_fm.py",
+      "url": "https://raw.githubusercontent.com/NASA-IMPACT/hls-foundation-os/3b6d401f3b4527059af0e44bd640225285e1933d/geospatial_fm/geospatial_fm.py",
+      "sha256": "5e16a033253c358d5fac09f2a0b98164335a2737d81bc3ec8dd4c73ef975bb31"
+    },
+    {
+      "filename": "timm-v0.4.12-vit.py",
+      "url": "https://raw.githubusercontent.com/huggingface/pytorch-image-models/v0.4.12/timm/models/vision_transformer.py",
+      "sha256": "948b1de82dfb8ebcc439b7ae5df03d4f9d089121ebba493cb587109f7e59b8af"
+    },
+    {
+      "filename": "timm-v0.4.12-mlp.py",
+      "url": "https://raw.githubusercontent.com/huggingface/pytorch-image-models/v0.4.12/timm/models/layers/mlp.py",
+      "sha256": "9aaef8df464caee2e0d8241c4ebe47521d1a3b73ab42b8ea5fffba43cfbbf4cb"
+    },
+    {
+      "filename": "mmseg-fcn_head.py",
+      "url": "https://raw.githubusercontent.com/open-mmlab/mmsegmentation/186572a3ce64ac9b6b37e66d58c76515000c3280/mmseg/models/decode_heads/fcn_head.py",
+      "sha256": "04edeaad1a30d6ba57787ebc5830935d842fc60442843d9723508288e56f3038"
+    },
+    {
+      "filename": "mmseg-decode_head.py",
+      "url": "https://raw.githubusercontent.com/open-mmlab/mmsegmentation/186572a3ce64ac9b6b37e66d58c76515000c3280/mmseg/models/decode_heads/decode_head.py",
+      "sha256": "141f9463e3eaa240a7687dd9e7d2360c24a8753c2acb2e7d513126177b7b90d0"
+    }
+  ]
+}

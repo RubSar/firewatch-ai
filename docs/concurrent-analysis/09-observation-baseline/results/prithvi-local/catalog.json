@@ -1,0 +1,210 @@
+{
+  "schema_version": "firewatch.research.prithvi-hls-catalog.v1",
+  "created_at_utc": "2026-09-27T07:05:46.049694+00:00",
+  "experiment_id": "cypress-creek-prithvi-hls-v1",
+  "endpoint": "https://cmr.earthdata.nasa.gov/search/granules.umm_json",
+  "config_sha256": "2ccaf3159b3966eabcbfdc3fda12fc880a0165f5ae4d92627d2c842270067162",
+  "aoi_source_sha256": "28f6073d81e4c3a0dd8e77139eab912f4ceacb6f211e5f063d3dfe3f045b5703",
+  "bbox_wgs84": [
+    -94.40278219832747,
+    31.034056001174132,
+    -94.30476246945857,
+    31.104172501824902
+  ],
+  "queries": [
+    {
+      "params": {
+        "short_name": "HLSS30",
+        "version": "2.0",
+        "page_size": 2000,
+        "bounding_box": "-94.40278219832747,31.034056001174132,-94.30476246945857,31.104172501824902",
+        "temporal": "2026-02-10T00:00:00Z,2026-02-24T18:29:59Z"
+      },
+      "granule_count": 3,
+      "file": "pre-HLSS30-cmr.json",
+      "sha256": "7ce91223f51585d943d048a81af79fed009dc618ea135b240b98b921b06cdea8"
+    },
+    {
+      "params": {
+        "short_name": "HLSL30",
+        "version": "2.0",
+        "page_size": 2000,
+        "bounding_box": "-94.40278219832747,31.034056001174132,-94.30476246945857,31.104172501824902",
+        "temporal": "2026-02-10T00:00:00Z,2026-02-24T18:29:59Z"
+      },
+      "granule_count": 2,
+      "file": "pre-HLSL30-cmr.json",
+      "sha256": "82f714cd4c41897b61c08412f00418245f1c215029ced0bfe34214cc1439d6cd"
+    },
+    {
+      "params": {
+        "short_name": "HLSS30",
+        "version": "2.0",
+        "page_size": 2000,
+        "bounding_box": "-94.40278219832747,31.034056001174132,-94.30476246945857,31.104172501824902",
+        "temporal": "2026-03-09T19:18:00Z,2026-03-24T23:59:59Z"
+      },
+      "granule_count": 3,
+      "file": "post-HLSS30-cmr.json",
+      "sha256": "98c9287038e93cde77ef700dd9da13fca76c0968c074705c38aabf844f0cba8b"
+    },
+    {
+      "params": {
+        "short_name": "HLSL30",
+        "version": "2.0",
+        "page_size": 2000,
+        "bounding_box": "-94.40278219832747,31.034056001174132,-94.30476246945857,31.104172501824902",
+        "temporal": "2026-03-09T19:18:00Z,2026-03-24T23:59:59Z"
+      },
+      "granule_count": 2,
+      "file": "post-HLSL30-cmr.json",
+      "sha256": "91566830d2096851dc2ca38d6b6e0fe48171004d52b988aa967093cca0e08242"
+    }
+  ],
+  "groups": [
+    {
+      "product": "HLSS30",
+      "phase": "pre",
+      "sensing_utc": "2026-02-11T17:05:01.761000Z",
+      "granules": [
+        {
+          "granule_id": "HLS.S30.T15RUQ.2026042T165319.v2.0",
+          "concept_id": "G4023659032-LPCLOUD",
+          "cmr_revision_id": 1
+        }
+      ],
+      "fmask_valid_fraction": null,
+      "accepted": false
+    },
+    {
+      "product": "HLSS30",
+      "phase": "pre",
+      "sensing_utc": "2026-02-16T17:05:10.189000Z",
+      "granules": [
+        {
+          "granule_id": "HLS.S30.T15RUQ.2026047T165401.v2.0",
+          "concept_id": "G4045871118-LPCLOUD",
+          "cmr_revision_id": 2
+        }
+      ],
+      "fmask_valid_fraction": null,
+      "accepted": false
+    },
+    {
+      "product": "HLSS30",
+      "phase": "pre",
+      "sensing_utc": "2026-02-21T17:05:05.295000Z",
+      "granules": [
+        {
+          "granule_id": "HLS.S30.T15RUQ.2026052T165209.v2.0",
+          "concept_id": "G4046726995-LPCLOUD",
+          "cmr_revision_id": 1
+        }
+      ],
+      "fmask_valid_fraction": null,
+      "accepted": false
+    },
+    {
+      "product": "HLSL30",
+      "phase": "pre",
+      "sensing_utc": "2026-02-10T16:50:15.360000Z",
+      "granules": [
+        {
+          "granule_id": "HLS.L30.T15RUQ.2026041T165015.v2.0",
+          "concept_id": "G4020509589-LPCLOUD",
+          "cmr_revision_id": 1
+        }
+      ],
+      "fmask_valid_fraction": null,
+      "accepted": false
+    },
+    {
+      "product": "HLSL30",
+      "phase": "pre",
+      "sensing_utc": "2026-02-18T16:50:23.201000Z",
+      "granules": [
+        {
+          "granule_id": "HLS.L30.T15RUQ.2026049T165023.v2.0",
+          "concept_id": "G4045496123-LPCLOUD",
+          "cmr_revision_id": 2
+        }
+      ],
+      "fmask_valid_fraction": null,
+      "accepted": false
+    },
+    {
+      "product": "HLSS30",
+      "phase": "post",
+      "sensing_utc": "2026-03-13T17:05:05.448000Z",
+      "granules": [
+        {
+          "granule_id": "HLS.S30.T15RUQ.2026072T164959.v2.0",
+          "concept_id": "G4081833148-LPCLOUD",
+          "cmr_revision_id": 1
+        }
+      ],
+      "fmask_valid_fraction": null,
+      "accepted": false
+    },
+    {
+      "product": "HLSS30",
+      "phase": "post",
+      "sensing_utc": "2026-03-18T17:05:10.575000Z",
+      "granules": [
+        {
+          "granule_id": "HLS.S30.T15RUQ.2026077T165021.v2.0",
+          "concept_id": "G4101519068-LPCLOUD",
+          "cmr_revision_id": 1
+        }
+      ],
+      "fmask_valid_fraction": null,
+      "accepted": false
+    },
+    {
+      "product": "HLSS30",
+      "phase": "post",
+      "sensing_utc": "2026-03-23T17:05:05.097000Z",
+      "granules": [
+        {
+          "granule_id": "HLS.S30.T15RUQ.2026082T164849.v2.0",
+          "concept_id": "G4104225858-LPCLOUD",
+          "cmr_revision_id": 1
+        }
+      ],
+      "fmask_valid_fraction": null,
+      "accepted": false
+    },
+    {
+      "product": "HLSL30",
+      "phase": "post",
+      "sensing_utc": "2026-03-14T16:50:03.334000Z",
+      "granules": [
+        {
+          "granule_id": "HLS.L30.T15RUQ.2026073T165003.v2.0",
+          "concept_id": "G4083623184-LPCLOUD",
+          "cmr_revision_id": 1
+        }
+      ],
+      "fmask_valid_fraction": null,
+      "accepted": false
+    },
+    {
+      "product": "HLSL30",
+      "phase": "post",
+      "sensing_utc": "2026-03-22T16:50:10.362000Z",
+      "granules": [
+        {
+          "granule_id": "HLS.L30.T15RUQ.2026081T165010.v2.0",
+          "concept_id": "G4103286248-LPCLOUD",
+          "cmr_revision_id": 1
+        }
+      ],
+      "fmask_valid_fraction": null,
+      "accepted": false
+    }
+  ],
+  "status": "metadata_only_pending_authenticated_acquisition_and_quality_screen",
+  "selected_pair": null,
+  "imagery_downloaded": false,
+  "coverage_gate_passed": false
+}

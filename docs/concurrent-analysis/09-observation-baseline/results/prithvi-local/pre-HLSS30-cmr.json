@@ -1,0 +1,1718 @@
+[
+  {
+    "hits": 3,
+    "took": 92,
+    "items": [
+      {
+        "meta": {
+          "concept-type": "granule",
+          "concept-id": "G4023659032-LPCLOUD",
+          "revision-id": 1,
+          "native-id": "HLS.S30.T15RUQ.2026042T165319.v2.0",
+          "collection-concept-id": "C2021957295-LPCLOUD",
+          "provider-id": "LPCLOUD",
+          "format": "application/echo10+xml",
+          "revision-date": "2026-02-13T01:05:42.930Z"
+        },
+        "umm": {
+          "TemporalExtent": {
+            "RangeDateTime": {
+              "BeginningDateTime": "2026-02-11T17:05:01.761Z",
+              "EndingDateTime": "2026-02-11T17:05:01.761Z"
+            }
+          },
+          "GranuleUR": "HLS.S30.T15RUQ.2026042T165319.v2.0",
+          "AdditionalAttributes": [
+            {
+              "Name": "PRODUCT_URI",
+              "Values": [
+                "S2B_MSIL1C_20260211T165319_N0512_R026_T15RUQ_20260211T220105.SAFE"
+              ]
+            },
+            {
+              "Name": "CLOUD_COVERAGE",
+              "Values": [
+                "49"
+              ]
+            },
+            {
+              "Name": "MGRS_TILE_ID",
+              "Values": [
+                "15RUQ"
+              ]
+            },
+            {
+              "Name": "SPATIAL_COVERAGE",
+              "Values": [
+                "98"
+              ]
+            },
+            {
+              "Name": "SPATIAL_RESOLUTION",
+              "Values": [
+                "30.0"
+              ]
+            },
+            {
+              "Name": "HLS_PROCESSING_TIME",
+              "Values": [
+                "2026-02-13T01:00:54Z"
+              ]
+            },
+            {
+              "Name": "SENSING_TIME",
+              "Values": [
+                "2026-02-11T17:05:01.761519Z"
+              ]
+            },
+            {
+              "Name": "HORIZONTAL_CS_CODE",
+              "Values": [
+                "EPSG:32615"
+              ]
+            },
+            {
+              "Name": "HORIZONTAL_CS_NAME",
+              "Values": [
+                "WGS84 / UTM zone 15N"
+              ]
+            },
+            {
+              "Name": "ULX",
+              "Values": [
+                "300000.0"
+              ]
+            },
+            {
+              "Name": "ULY",
+              "Values": [
+                "3500040.0"
+              ]
+            },
+            {
+              "Name": "SPATIAL_RESAMPLING_ALG",
+              "Values": [
+                "Area Weighted Average"
+              ]
+            },
+            {
+              "Name": "ADD_OFFSET",
+              "Values": [
+                "0"
+              ]
+            },
+            {
+              "Name": "REF_SCALE_FACTOR",
+              "Values": [
+                "0.0001"
+              ]
+            },
+            {
+              "Name": "ANG_SCALE_FACTOR",
+              "Values": [
+                "0.01"
+              ]
+            },
+            {
+              "Name": "FILLVALUE",
+              "Values": [
+                "-9999"
+              ]
+            },
+            {
+              "Name": "QA_FILLVALUE",
+              "Values": [
+                "255"
+              ]
+            },
+            {
+              "Name": "NCOLS",
+              "Values": [
+                "3660"
+              ]
+            },
+            {
+              "Name": "NROWS",
+              "Values": [
+                "3660"
+              ]
+            },
+            {
+              "Name": "MEAN_SUN_AZIMUTH_ANGLE",
+              "Values": [
+                "151.73626876"
+              ]
+            },
+            {
+              "Name": "MEAN_SUN_ZENITH_ANGLE",
+              "Values": [
+                "49.60178238"
+              ]
+            },
+            {
+              "Name": "MEAN_VIEW_AZIMUTH_ANGLE",
+              "Values": [
+                "104.69858181"
+              ]
+            },
+            {
+              "Name": "MEAN_VIEW_ZENITH_ANGLE",
+              "Values": [
+                "7.36340698"
+              ]
+            },
+            {
+              "Name": "NBAR_SOLAR_ZENITH",
+              "Values": [
+                "50.29404513"
+              ]
+            },
+            {
+              "Name": "MSI_BAND_01_BANDPASS_ADJUSTMENT_SLOPE_AND_OFFSET",
+              "Values": [
+                "0.9959",
+                "-0.0002"
+              ]
+            },
+            {
+              "Name": "MSI_BAND_02_BANDPASS_ADJUSTMENT_SLOPE_AND_OFFSET",
+              "Values": [
+                "0.9778",
+                "-0.004"
+              ]
+            },
+            {
+              "Name": "MSI_BAND_03_BANDPASS_ADJUSTMENT_SLOPE_AND_OFFSET",
+              "Values": [
+                "1.0075",
+                "-0.0008"
+              ]
+            },
+            {
+              "Name": "MSI_BAND_04_BANDPASS_ADJUSTMENT_SLOPE_AND_OFFSET",
+              "Values": [
+                "0.9761",
+                "0.001"
+              ]
+            },
+            {
+              "Name": "MSI_BAND_11_BANDPASS_ADJUSTMENT_SLOPE_AND_OFFSET",
+              "Values": [
+                "1.0",
+                "-0.0003"
+              ]
+            },
+            {
+              "Name": "MSI_BAND_12_BANDPASS_ADJUSTMENT_SLOPE_AND_OFFSET",
+              "Values": [
+                "0.9867",
+                "0.0004"
+              ]
+            },
+            {
+              "Name": "MSI_BAND_8A_BANDPASS_ADJUSTMENT_SLOPE_AND_OFFSET",
+              "Values": [
+                "0.9966",
+                "0.0"
+              ]
+            },
+            {
+              "Name": "AROP_AVE_XSHIFT(METERS)",
+              "Values": [
+                "0.0"
+              ]
+            },
+            {
+              "Name": "AROP_AVE_YSHIFT(METERS)",
+              "Values": [
+                "0.0"
+              ]
+            },
+            {
+              "Name": "AROP_NCP",
+              "Values": [
+                "0"
+              ]
+            },
+            {
+              "Name": "AROP_RMSE(METERS)",
+              "Values": [
+                "0.0"
+              ]
+            },
+            {
+              "Name": "AROP_S2_REFIMG",
+              "Values": [
+                "NONE"
+              ]
+            },
+            {
+              "Name": "ACCODE",
+              "Values": [
+                "LaSRC v3.5.1.0"
+              ]
+            },
+            {
+              "Name": "PROCESSING_BASELINE",
+              "Values": [
+                "05.12"
+              ]
+            },
+            {
+              "Name": "IDENTIFIER_PRODUCT_DOI",
+              "Values": [
+                "10.5067/HLS/HLSS30.002"
+              ]
+            },
+            {
+              "Name": "IDENTIFIER_PRODUCT_DOI_AUTHORITY",
+              "Values": [
+                "https://doi.org"
+              ]
+            }
+          ],
+          "SpatialExtent": {
+            "HorizontalSpatialDomain": {
+              "Geometry": {
+                "GPolygons": [
+                  {
+                    "Boundary": {
+                      "Points": [
+                        {
+                          "Longitude": -95.08670609,
+                          "Latitude": 30.62807084
+                        },
+                        {
+                          "Longitude": -93.94131389,
+                          "Latitude": 30.64141078
+                        },
+                        {
+                          "Longitude": -93.95114948,
+                          "Latitude": 31.6320042
+                        },
+                        {
+                          "Longitude": -95.00038599,
+                          "Latitude": 31.61987553
+                        },
+                        {
+                          "Longitude": -95.09992481,
+                          "Latitude": 31.23457293
+                        },
+                        {
+                          "Longitude": -95.08670609,
+                          "Latitude": 30.62807084
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "ProviderDates": [
+            {
+              "Date": "2026-02-13T01:01:56.807Z",
+              "Type": "Insert"
+            },
+            {
+              "Date": "2026-02-13T01:01:56.807Z",
+              "Type": "Update"
+            }
+          ],
+          "CollectionReference": {
+            "EntryTitle": "HLS Sentinel-2 Multi-spectral Instrument Surface Reflectance Daily Global 30m v2.0"
+          },
+          "RelatedUrls": [
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.B10.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026042T165319.v2.0.B10.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.B02.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026042T165319.v2.0.B02.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.B11.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026042T165319.v2.0.B11.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.B05.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026042T165319.v2.0.B05.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.B01.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026042T165319.v2.0.B01.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.B08.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026042T165319.v2.0.B08.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.Fmask.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026042T165319.v2.0.Fmask.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.VZA.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026042T165319.v2.0.VZA.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.B03.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026042T165319.v2.0.B03.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.B09.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026042T165319.v2.0.B09.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.B8A.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026042T165319.v2.0.B8A.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.B12.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026042T165319.v2.0.B12.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.VAA.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026042T165319.v2.0.VAA.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.B06.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026042T165319.v2.0.B06.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.B07.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026042T165319.v2.0.B07.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.SAA.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026042T165319.v2.0.SAA.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.SZA.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026042T165319.v2.0.SZA.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.B04.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026042T165319.v2.0.B04.tif"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.B10.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.B02.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.B11.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.B05.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.B01.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.B08.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.Fmask.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.VZA.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.B03.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.B09.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.B8A.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.B12.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.VAA.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.B06.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.B07.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.SAA.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.SZA.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.B04.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-public/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0_stac.json",
+              "Type": "VIEW RELATED INFORMATION",
+              "Description": "Download HLS.S30.T15RUQ.2026042T165319.v2.0_stac.json"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.cmr.xml",
+              "Type": "VIEW RELATED INFORMATION",
+              "Description": "Download HLS.S30.T15RUQ.2026042T165319.v2.0.cmr.xml"
+            },
+            {
+              "URL": "s3://lp-prod-public/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0_stac.json",
+              "Type": "VIEW RELATED INFORMATION",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.cmr.xml",
+              "Type": "VIEW RELATED INFORMATION",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/s3credentials",
+              "Type": "VIEW RELATED INFORMATION",
+              "Description": "api endpoint to retrieve temporary credentials valid for same-region direct s3 access"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-public/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.jpg",
+              "Type": "GET RELATED VISUALIZATION",
+              "Description": "Download HLS.S30.T15RUQ.2026042T165319.v2.0.jpg"
+            },
+            {
+              "URL": "s3://lp-prod-public/HLSS30.020/HLS.S30.T15RUQ.2026042T165319.v2.0/HLS.S30.T15RUQ.2026042T165319.v2.0.jpg",
+              "Type": "GET RELATED VISUALIZATION",
+              "Description": "This link provides direct download access via S3 to the granule"
+            }
+          ],
+          "DataGranule": {
+            "DayNightFlag": "Day",
+            "Identifiers": [
+              {
+                "Identifier": "HLS.S30.T15RUQ.2026042T165319",
+                "IdentifierType": "ProducerGranuleId"
+              }
+            ],
+            "ProductionDateTime": "2026-02-13T01:00:54.000Z",
+            "ArchiveAndDistributionInformation": [
+              {
+                "Name": "Not provided",
+                "SizeInBytes": 237226321,
+                "SizeUnit": "MB"
+              }
+            ]
+          },
+          "Platforms": [
+            {
+              "ShortName": "Sentinel-2B",
+              "Instruments": [
+                {
+                  "ShortName": "Sentinel-2 MSI"
+                }
+              ]
+            }
+          ],
+          "MetadataSpecification": {
+            "URL": "https://cdn.earthdata.nasa.gov/umm/granule/v1.6.7",
+            "Name": "UMM-G",
+            "Version": "1.6.7"
+          }
+        }
+      },
+      {
+        "meta": {
+          "concept-type": "granule",
+          "concept-id": "G4045871118-LPCLOUD",
+          "revision-id": 2,
+          "native-id": "HLS.S30.T15RUQ.2026047T165401.v2.0",
+          "collection-concept-id": "C2021957295-LPCLOUD",
+          "provider-id": "LPCLOUD",
+          "format": "application/echo10+xml",
+          "revision-date": "2026-02-25T17:45:55.097Z"
+        },
+        "umm": {
+          "TemporalExtent": {
+            "RangeDateTime": {
+              "BeginningDateTime": "2026-02-16T17:05:10.189Z",
+              "EndingDateTime": "2026-02-16T17:05:10.189Z"
+            }
+          },
+          "GranuleUR": "HLS.S30.T15RUQ.2026047T165401.v2.0",
+          "AdditionalAttributes": [
+            {
+              "Name": "PRODUCT_URI",
+              "Values": [
+                "S2C_MSIL1C_20260216T165401_N0512_R026_T15RUQ_20260216T185242.SAFE"
+              ]
+            },
+            {
+              "Name": "CLOUD_COVERAGE",
+              "Values": [
+                "20"
+              ]
+            },
+            {
+              "Name": "MGRS_TILE_ID",
+              "Values": [
+                "15RUQ"
+              ]
+            },
+            {
+              "Name": "SPATIAL_COVERAGE",
+              "Values": [
+                "98"
+              ]
+            },
+            {
+              "Name": "SPATIAL_RESOLUTION",
+              "Values": [
+                "30.0"
+              ]
+            },
+            {
+              "Name": "HLS_PROCESSING_TIME",
+              "Values": [
+                "2026-02-23T18:39:18Z"
+              ]
+            },
+            {
+              "Name": "SENSING_TIME",
+              "Values": [
+                "2026-02-16T17:05:10.18967Z"
+              ]
+            },
+            {
+              "Name": "HORIZONTAL_CS_CODE",
+              "Values": [
+                "EPSG:32615"
+              ]
+            },
+            {
+              "Name": "HORIZONTAL_CS_NAME",
+              "Values": [
+                "WGS84 / UTM zone 15N"
+              ]
+            },
+            {
+              "Name": "ULX",
+              "Values": [
+                "300000.0"
+              ]
+            },
+            {
+              "Name": "ULY",
+              "Values": [
+                "3500040.0"
+              ]
+            },
+            {
+              "Name": "SPATIAL_RESAMPLING_ALG",
+              "Values": [
+                "Area Weighted Average"
+              ]
+            },
+            {
+              "Name": "ADD_OFFSET",
+              "Values": [
+                "0"
+              ]
+            },
+            {
+              "Name": "REF_SCALE_FACTOR",
+              "Values": [
+                "0.0001"
+              ]
+            },
+            {
+              "Name": "ANG_SCALE_FACTOR",
+              "Values": [
+                "0.01"
+              ]
+            },
+            {
+              "Name": "FILLVALUE",
+              "Values": [
+                "-9999"
+              ]
+            },
+            {
+              "Name": "QA_FILLVALUE",
+              "Values": [
+                "255"
+              ]
+            },
+            {
+              "Name": "NCOLS",
+              "Values": [
+                "3660"
+              ]
+            },
+            {
+              "Name": "NROWS",
+              "Values": [
+                "3660"
+              ]
+            },
+            {
+              "Name": "MEAN_SUN_AZIMUTH_ANGLE",
+              "Values": [
+                "150.87240129"
+              ]
+            },
+            {
+              "Name": "MEAN_SUN_ZENITH_ANGLE",
+              "Values": [
+                "48.03153397"
+              ]
+            },
+            {
+              "Name": "MEAN_VIEW_AZIMUTH_ANGLE",
+              "Values": [
+                "103.92735803"
+              ]
+            },
+            {
+              "Name": "MEAN_VIEW_ZENITH_ANGLE",
+              "Values": [
+                "7.28566361"
+              ]
+            },
+            {
+              "Name": "NBAR_SOLAR_ZENITH",
+              "Values": [
+                "48.75375501"
+              ]
+            },
+            {
+              "Name": "MSI_BAND_01_BANDPASS_ADJUSTMENT_SLOPE_AND_OFFSET",
+              "Values": [
+                "1.003",
+                "-0.0"
+              ]
+            },
+            {
+              "Name": "MSI_BAND_02_BANDPASS_ADJUSTMENT_SLOPE_AND_OFFSET",
+              "Values": [
+                "0.9851",
+                "-0.0027"
+              ]
+            },
+            {
+              "Name": "MSI_BAND_03_BANDPASS_ADJUSTMENT_SLOPE_AND_OFFSET",
+              "Values": [
+                "1.0038",
+                "-0.0009"
+              ]
+            },
+            {
+              "Name": "MSI_BAND_04_BANDPASS_ADJUSTMENT_SLOPE_AND_OFFSET",
+              "Values": [
+                "0.9718",
+                "0.0011"
+              ]
+            },
+            {
+              "Name": "MSI_BAND_11_BANDPASS_ADJUSTMENT_SLOPE_AND_OFFSET",
+              "Values": [
+                "0.9994",
+                "-0.0007"
+              ]
+            },
+            {
+              "Name": "MSI_BAND_12_BANDPASS_ADJUSTMENT_SLOPE_AND_OFFSET",
+              "Values": [
+                "0.991",
+                "0.0004"
+              ]
+            },
+            {
+              "Name": "MSI_BAND_8A_BANDPASS_ADJUSTMENT_SLOPE_AND_OFFSET",
+              "Values": [
+                "0.9995",
+                "-0.0003"
+              ]
+            },
+            {
+              "Name": "AROP_AVE_XSHIFT(METERS)",
+              "Values": [
+                "0.0"
+              ]
+            },
+            {
+              "Name": "AROP_AVE_YSHIFT(METERS)",
+              "Values": [
+                "0.0"
+              ]
+            },
+            {
+              "Name": "AROP_NCP",
+              "Values": [
+                "0"
+              ]
+            },
+            {
+              "Name": "AROP_RMSE(METERS)",
+              "Values": [
+                "0.0"
+              ]
+            },
+            {
+              "Name": "AROP_S2_REFIMG",
+              "Values": [
+                "NONE"
+              ]
+            },
+            {
+              "Name": "ACCODE",
+              "Values": [
+                "LaSRC v3.5.1.0"
+              ]
+            },
+            {
+              "Name": "PROCESSING_BASELINE",
+              "Values": [
+                "05.12"
+              ]
+            },
+            {
+              "Name": "IDENTIFIER_PRODUCT_DOI",
+              "Values": [
+                "10.5067/HLS/HLSS30.002"
+              ]
+            },
+            {
+              "Name": "IDENTIFIER_PRODUCT_DOI_AUTHORITY",
+              "Values": [
+                "https://doi.org"
+              ]
+            }
+          ],
+          "SpatialExtent": {
+            "HorizontalSpatialDomain": {
+              "Geometry": {
+                "GPolygons": [
+                  {
+                    "Boundary": {
+                      "Points": [
+                        {
+                          "Longitude": -95.08670609,
+                          "Latitude": 30.62807084
+                        },
+                        {
+                          "Longitude": -93.94131389,
+                          "Latitude": 30.64141078
+                        },
+                        {
+                          "Longitude": -93.95114948,
+                          "Latitude": 31.6320042
+                        },
+                        {
+                          "Longitude": -95.02061744,
+                          "Latitude": 31.6195569
+                        },
+                        {
+                          "Longitude": -95.10156791,
+                          "Latitude": 31.30869068
+                        },
+                        {
+                          "Longitude": -95.08670609,
+                          "Latitude": 30.62807084
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "ProviderDates": [
+            {
+              "Date": "2026-02-23T18:40:21.058Z",
+              "Type": "Insert"
+            },
+            {
+              "Date": "2026-02-23T18:40:21.058Z",
+              "Type": "Update"
+            }
+          ],
+          "CollectionReference": {
+            "EntryTitle": "HLS Sentinel-2 Multi-spectral Instrument Surface Reflectance Daily Global 30m v2.0"
+          },
+          "RelatedUrls": [
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.VZA.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026047T165401.v2.0.VZA.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.SAA.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026047T165401.v2.0.SAA.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.B04.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026047T165401.v2.0.B04.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.B02.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026047T165401.v2.0.B02.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.B12.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026047T165401.v2.0.B12.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.B09.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026047T165401.v2.0.B09.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.VAA.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026047T165401.v2.0.VAA.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.Fmask.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026047T165401.v2.0.Fmask.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.B08.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026047T165401.v2.0.B08.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.B8A.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026047T165401.v2.0.B8A.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.B10.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026047T165401.v2.0.B10.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.B06.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026047T165401.v2.0.B06.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.B05.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026047T165401.v2.0.B05.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.B01.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026047T165401.v2.0.B01.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.B07.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026047T165401.v2.0.B07.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.B11.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026047T165401.v2.0.B11.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.SZA.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026047T165401.v2.0.SZA.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.B03.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026047T165401.v2.0.B03.tif"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.VZA.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.SAA.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.B04.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.B02.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.B12.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.B09.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.VAA.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.Fmask.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.B08.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.B8A.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.B10.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.B06.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.B05.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.B01.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.B07.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.B11.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.SZA.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.B03.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-public/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0_stac.json",
+              "Type": "VIEW RELATED INFORMATION",
+              "Description": "Download HLS.S30.T15RUQ.2026047T165401.v2.0_stac.json"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.cmr.xml",
+              "Type": "VIEW RELATED INFORMATION",
+              "Description": "Download HLS.S30.T15RUQ.2026047T165401.v2.0.cmr.xml"
+            },
+            {
+              "URL": "s3://lp-prod-public/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0_stac.json",
+              "Type": "VIEW RELATED INFORMATION",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.cmr.xml",
+              "Type": "VIEW RELATED INFORMATION",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/s3credentials",
+              "Type": "VIEW RELATED INFORMATION",
+              "Description": "api endpoint to retrieve temporary credentials valid for same-region direct s3 access"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-public/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.jpg",
+              "Type": "GET RELATED VISUALIZATION",
+              "Description": "Download HLS.S30.T15RUQ.2026047T165401.v2.0.jpg"
+            },
+            {
+              "URL": "s3://lp-prod-public/HLSS30.020/HLS.S30.T15RUQ.2026047T165401.v2.0/HLS.S30.T15RUQ.2026047T165401.v2.0.jpg",
+              "Type": "GET RELATED VISUALIZATION",
+              "Description": "This link provides direct download access via S3 to the granule"
+            }
+          ],
+          "DataGranule": {
+            "DayNightFlag": "Day",
+            "Identifiers": [
+              {
+                "Identifier": "HLS.S30.T15RUQ.2026047T165401",
+                "IdentifierType": "ProducerGranuleId"
+              }
+            ],
+            "ProductionDateTime": "2026-02-23T18:39:18.000Z",
+            "ArchiveAndDistributionInformation": [
+              {
+                "Name": "Not provided",
+                "SizeInBytes": 223785998,
+                "SizeUnit": "MB"
+              }
+            ]
+          },
+          "Platforms": [
+            {
+              "ShortName": "Sentinel-2C",
+              "Instruments": [
+                {
+                  "ShortName": "Sentinel-2 MSI"
+                }
+              ]
+            }
+          ],
+          "MetadataSpecification": {
+            "URL": "https://cdn.earthdata.nasa.gov/umm/granule/v1.6.7",
+            "Name": "UMM-G",
+            "Version": "1.6.7"
+          }
+        }
+      },
+      {
+        "meta": {
+          "concept-type": "granule",
+          "concept-id": "G4046726995-LPCLOUD",
+          "revision-id": 1,
+          "native-id": "HLS.S30.T15RUQ.2026052T165209.v2.0",
+          "collection-concept-id": "C2021957295-LPCLOUD",
+          "provider-id": "LPCLOUD",
+          "format": "application/echo10+xml",
+          "revision-date": "2026-02-24T01:45:54.090Z"
+        },
+        "umm": {
+          "TemporalExtent": {
+            "RangeDateTime": {
+              "BeginningDateTime": "2026-02-21T17:05:05.295Z",
+              "EndingDateTime": "2026-02-21T17:05:05.295Z"
+            }
+          },
+          "GranuleUR": "HLS.S30.T15RUQ.2026052T165209.v2.0",
+          "AdditionalAttributes": [
+            {
+              "Name": "PRODUCT_URI",
+              "Values": [
+                "S2B_MSIL1C_20260221T165209_N0512_R026_T15RUQ_20260221T220743.SAFE"
+              ]
+            },
+            {
+              "Name": "CLOUD_COVERAGE",
+              "Values": [
+                "92"
+              ]
+            },
+            {
+              "Name": "MGRS_TILE_ID",
+              "Values": [
+                "15RUQ"
+              ]
+            },
+            {
+              "Name": "SPATIAL_COVERAGE",
+              "Values": [
+                "98"
+              ]
+            },
+            {
+              "Name": "SPATIAL_RESOLUTION",
+              "Values": [
+                "30.0"
+              ]
+            },
+            {
+              "Name": "HLS_PROCESSING_TIME",
+              "Values": [
+                "2026-02-23T20:20:49Z"
+              ]
+            },
+            {
+              "Name": "SENSING_TIME",
+              "Values": [
+                "2026-02-21T17:05:05.295897Z"
+              ]
+            },
+            {
+              "Name": "HORIZONTAL_CS_CODE",
+              "Values": [
+                "EPSG:32615"
+              ]
+            },
+            {
+              "Name": "HORIZONTAL_CS_NAME",
+              "Values": [
+                "WGS84 / UTM zone 15N"
+              ]
+            },
+            {
+              "Name": "ULX",
+              "Values": [
+                "300000.0"
+              ]
+            },
+            {
+              "Name": "ULY",
+              "Values": [
+                "3500040.0"
+              ]
+            },
+            {
+              "Name": "SPATIAL_RESAMPLING_ALG",
+              "Values": [
+                "Area Weighted Average"
+              ]
+            },
+            {
+              "Name": "ADD_OFFSET",
+              "Values": [
+                "0"
+              ]
+            },
+            {
+              "Name": "REF_SCALE_FACTOR",
+              "Values": [
+                "0.0001"
+              ]
+            },
+            {
+              "Name": "ANG_SCALE_FACTOR",
+              "Values": [
+                "0.01"
+              ]
+            },
+            {
+              "Name": "FILLVALUE",
+              "Values": [
+                "-9999"
+              ]
+            },
+            {
+              "Name": "QA_FILLVALUE",
+              "Values": [
+                "255"
+              ]
+            },
+            {
+              "Name": "NCOLS",
+              "Values": [
+                "3660"
+              ]
+            },
+            {
+              "Name": "NROWS",
+              "Values": [
+                "3660"
+              ]
+            },
+            {
+              "Name": "MEAN_SUN_AZIMUTH_ANGLE",
+              "Values": [
+                "149.94268821"
+              ]
+            },
+            {
+              "Name": "MEAN_SUN_ZENITH_ANGLE",
+              "Values": [
+                "46.38230473"
+              ]
+            },
+            {
+              "Name": "MEAN_VIEW_AZIMUTH_ANGLE",
+              "Values": [
+                "104.94394744"
+              ]
+            },
+            {
+              "Name": "MEAN_VIEW_ZENITH_ANGLE",
+              "Values": [
+                "7.28106681"
+              ]
+            },
+            {
+              "Name": "NBAR_SOLAR_ZENITH",
+              "Values": [
+                "47.11647076"
+              ]
+            },
+            {
+              "Name": "MSI_BAND_01_BANDPASS_ADJUSTMENT_SLOPE_AND_OFFSET",
+              "Values": [
+                "0.9959",
+                "-0.0002"
+              ]
+            },
+            {
+              "Name": "MSI_BAND_02_BANDPASS_ADJUSTMENT_SLOPE_AND_OFFSET",
+              "Values": [
+                "0.9778",
+                "-0.004"
+              ]
+            },
+            {
+              "Name": "MSI_BAND_03_BANDPASS_ADJUSTMENT_SLOPE_AND_OFFSET",
+              "Values": [
+                "1.0075",
+                "-0.0008"
+              ]
+            },
+            {
+              "Name": "MSI_BAND_04_BANDPASS_ADJUSTMENT_SLOPE_AND_OFFSET",
+              "Values": [
+                "0.9761",
+                "0.001"
+              ]
+            },
+            {
+              "Name": "MSI_BAND_11_BANDPASS_ADJUSTMENT_SLOPE_AND_OFFSET",
+              "Values": [
+                "1.0",
+                "-0.0003"
+              ]
+            },
+            {
+              "Name": "MSI_BAND_12_BANDPASS_ADJUSTMENT_SLOPE_AND_OFFSET",
+              "Values": [
+                "0.9867",
+                "0.0004"
+              ]
+            },
+            {
+              "Name": "MSI_BAND_8A_BANDPASS_ADJUSTMENT_SLOPE_AND_OFFSET",
+              "Values": [
+                "0.9966",
+                "0.0"
+              ]
+            },
+            {
+              "Name": "AROP_AVE_XSHIFT(METERS)",
+              "Values": [
+                "0.0"
+              ]
+            },
+            {
+              "Name": "AROP_AVE_YSHIFT(METERS)",
+              "Values": [
+                "0.0"
+              ]
+            },
+            {
+              "Name": "AROP_NCP",
+              "Values": [
+                "0"
+              ]
+            },
+            {
+              "Name": "AROP_RMSE(METERS)",
+              "Values": [
+                "0.0"
+              ]
+            },
+            {
+              "Name": "AROP_S2_REFIMG",
+              "Values": [
+                "NONE"
+              ]
+            },
+            {
+              "Name": "ACCODE",
+              "Values": [
+                "LaSRC v3.5.1.0"
+              ]
+            },
+            {
+              "Name": "PROCESSING_BASELINE",
+              "Values": [
+                "05.12"
+              ]
+            },
+            {
+              "Name": "IDENTIFIER_PRODUCT_DOI",
+              "Values": [
+                "10.5067/HLS/HLSS30.002"
+              ]
+            },
+            {
+              "Name": "IDENTIFIER_PRODUCT_DOI_AUTHORITY",
+              "Values": [
+                "https://doi.org"
+              ]
+            }
+          ],
+          "SpatialExtent": {
+            "HorizontalSpatialDomain": {
+              "Geometry": {
+                "GPolygons": [
+                  {
+                    "Boundary": {
+                      "Points": [
+                        {
+                          "Longitude": -95.08670609,
+                          "Latitude": 30.62807084
+                        },
+                        {
+                          "Longitude": -93.94131389,
+                          "Latitude": 30.64141078
+                        },
+                        {
+                          "Longitude": -93.95114948,
+                          "Latitude": 31.6320042
+                        },
+                        {
+                          "Longitude": -95.01429515,
+                          "Latitude": 31.61965682
+                        },
+                        {
+                          "Longitude": -95.10107554,
+                          "Latitude": 31.28650955
+                        },
+                        {
+                          "Longitude": -95.08670609,
+                          "Latitude": 30.62807084
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "ProviderDates": [
+            {
+              "Date": "2026-02-23T20:21:51.531Z",
+              "Type": "Insert"
+            },
+            {
+              "Date": "2026-02-23T20:21:51.531Z",
+              "Type": "Update"
+            }
+          ],
+          "CollectionReference": {
+            "EntryTitle": "HLS Sentinel-2 Multi-spectral Instrument Surface Reflectance Daily Global 30m v2.0"
+          },
+          "RelatedUrls": [
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.B09.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026052T165209.v2.0.B09.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.B12.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026052T165209.v2.0.B12.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.SZA.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026052T165209.v2.0.SZA.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.Fmask.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026052T165209.v2.0.Fmask.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.B10.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026052T165209.v2.0.B10.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.B04.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026052T165209.v2.0.B04.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.B02.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026052T165209.v2.0.B02.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.B08.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026052T165209.v2.0.B08.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.B01.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026052T165209.v2.0.B01.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.B11.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026052T165209.v2.0.B11.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.B03.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026052T165209.v2.0.B03.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.SAA.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026052T165209.v2.0.SAA.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.B05.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026052T165209.v2.0.B05.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.VAA.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026052T165209.v2.0.VAA.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.B06.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026052T165209.v2.0.B06.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.B8A.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026052T165209.v2.0.B8A.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.B07.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026052T165209.v2.0.B07.tif"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.VZA.tif",
+              "Type": "GET DATA",
+              "Description": "Download HLS.S30.T15RUQ.2026052T165209.v2.0.VZA.tif"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.B09.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.B12.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.SZA.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.Fmask.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.B10.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.B04.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.B02.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.B08.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.B01.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.B11.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.B03.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.SAA.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.B05.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.VAA.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.B06.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.B8A.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.B07.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.VZA.tif",
+              "Type": "GET DATA VIA DIRECT ACCESS",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-public/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0_stac.json",
+              "Type": "VIEW RELATED INFORMATION",
+              "Description": "Download HLS.S30.T15RUQ.2026052T165209.v2.0_stac.json"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.cmr.xml",
+              "Type": "VIEW RELATED INFORMATION",
+              "Description": "Download HLS.S30.T15RUQ.2026052T165209.v2.0.cmr.xml"
+            },
+            {
+              "URL": "s3://lp-prod-public/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0_stac.json",
+              "Type": "VIEW RELATED INFORMATION",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "s3://lp-prod-protected/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.cmr.xml",
+              "Type": "VIEW RELATED INFORMATION",
+              "Description": "This link provides direct download access via S3 to the granule"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/s3credentials",
+              "Type": "VIEW RELATED INFORMATION",
+              "Description": "api endpoint to retrieve temporary credentials valid for same-region direct s3 access"
+            },
+            {
+              "URL": "https://data.lpdaac.earthdatacloud.nasa.gov/lp-prod-public/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.jpg",
+              "Type": "GET RELATED VISUALIZATION",
+              "Description": "Download HLS.S30.T15RUQ.2026052T165209.v2.0.jpg"
+            },
+            {
+              "URL": "s3://lp-prod-public/HLSS30.020/HLS.S30.T15RUQ.2026052T165209.v2.0/HLS.S30.T15RUQ.2026052T165209.v2.0.jpg",
+              "Type": "GET RELATED VISUALIZATION",
+              "Description": "This link provides direct download access via S3 to the granule"
+            }
+          ],
+          "DataGranule": {
+            "DayNightFlag": "Day",
+            "Identifiers": [
+              {
+                "Identifier": "HLS.S30.T15RUQ.2026052T165209",
+                "IdentifierType": "ProducerGranuleId"
+              }
+            ],
+            "ProductionDateTime": "2026-02-23T20:20:49.000Z",
+            "ArchiveAndDistributionInformation": [
+              {
+                "Name": "Not provided",
+                "SizeInBytes": 245574258,
+                "SizeUnit": "MB"
+              }
+            ]
+          },
+          "Platforms": [
+            {
+              "ShortName": "Sentinel-2B",
+              "Instruments": [
+                {
+                  "ShortName": "Sentinel-2 MSI"
+                }
+              ]
+            }
+          ],
+          "MetadataSpecification": {
+            "URL": "https://cdn.earthdata.nasa.gov/umm/granule/v1.6.7",
+            "Name": "UMM-G",
+            "Version": "1.6.7"
+          }
+        }
+      }
+    ]
+  }
+]

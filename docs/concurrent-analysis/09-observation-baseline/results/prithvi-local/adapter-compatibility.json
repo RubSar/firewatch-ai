@@ -1,0 +1,39 @@
+{
+  "status": "passed",
+  "scope": "one real 224x224 publisher-demo crop; extracted upstream inference definitions",
+  "device": "cuda",
+  "torch": "2.11.0+cu128",
+  "checks": {
+    "backbone": {
+      "max_absolute_difference": 0.0,
+      "rtol": 1e-05,
+      "atol": 1e-05
+    },
+    "neck": {
+      "max_absolute_difference": 0.0,
+      "rtol": 1e-05,
+      "atol": 1e-05
+    },
+    "fcn_conv_bn_relu": {
+      "max_absolute_difference": 0.0,
+      "rtol": 1e-05,
+      "atol": 1e-05
+    },
+    "head": {
+      "max_absolute_difference": 0.0,
+      "rtol": 1e-05,
+      "atol": 1e-05
+    }
+  },
+  "class_label_agreement": 1.0,
+  "source_sha256": {
+    "timm-v0.4.12-mlp.py": "9aaef8df464caee2e0d8241c4ebe47521d1a3b73ab42b8ea5fffba43cfbbf4cb",
+    "timm-v0.4.12-vit.py": "948b1de82dfb8ebcc439b7ae5df03d4f9d089121ebba493cb587109f7e59b8af",
+    "legacy-geospatial_fm_geospatial_fm.py": "5e16a033253c358d5fac09f2a0b98164335a2737d81bc3ec8dd4c73ef975bb31",
+    "mmseg-fcn_head.py": "04edeaad1a30d6ba57787ebc5830935d842fc60442843d9723508288e56f3038",
+    "mmseg-decode_head.py": "141f9463e3eaa240a7687dd9e7d2360c24a8753c2acb2e7d513126177b7b90d0"
+  },
+  "adapter_sha256": "95e1df9bc83804bb0459a115b1fbfe9ea993dd992924202eaed3faafce4d23b8",
+  "verifier_sha256": "5b885d8a161fff52eeab30bfcf476bfed322258cee79bdda73e21d45887b2952",
+  "limits": "Not an end-to-end legacy MMSegmentation environment test; training/augmentation paths not verified"
+}

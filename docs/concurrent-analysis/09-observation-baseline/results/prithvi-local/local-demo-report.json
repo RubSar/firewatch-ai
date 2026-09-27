@@ -1,0 +1,100 @@
+{
+  "schema_version": "firewatch.research.prithvi-local-smoke.v1",
+  "created_at_utc": "2026-09-27T07:10:02.254860+00:00",
+  "status": "passed_execution_check_only",
+  "purpose": "hardware/adapter execution check on publisher demo, not an accuracy evaluation",
+  "model": {
+    "repository": "ibm-nasa-geospatial/Prithvi-EO-1.0-100M-burn-scar",
+    "revision": "0e9e0dba1045e9c4e05a4d68c7b8de2fc6768a7b",
+    "license": "Apache-2.0"
+  },
+  "checkpoint_sha256": "9285c40cc6005c1bafb40c3d245aafd445f37ba2d89b6ec5af7b21316e0fc284",
+  "assets": [
+    {
+      "filename": "burn_scars_Prithvi_100M.pth",
+      "url": "https://huggingface.co/ibm-nasa-geospatial/Prithvi-EO-1.0-100M-burn-scar/resolve/0e9e0dba1045e9c4e05a4d68c7b8de2fc6768a7b/burn_scars_Prithvi_100M.pth",
+      "size_bytes": 1198537753,
+      "sha256": "9285c40cc6005c1bafb40c3d245aafd445f37ba2d89b6ec5af7b21316e0fc284",
+      "role": "selected pretrained burn-scar checkpoint, including saved training state"
+    },
+    {
+      "filename": "subsetted_512x512_HLS.S30.T10TGS.2018285.v1.4_merged.tif",
+      "url": "https://huggingface.co/spaces/ibm-nasa-geospatial/Prithvi-100M-Burn-scars-demo/resolve/9b531552cd6c802647e7ae4714c9010e0cebfc18/subsetted_512x512_HLS.S30.T10TGS.2018285.v1.4_merged.tif",
+      "size_bytes": 12586630,
+      "sha256": "4680447af6e80df15616c5148a7d004d9c958905c082ea51b16c2e9e4ab29d85",
+      "role": "publisher demo only; not Cypress Creek, not held-out evaluation; no Fmask supplied"
+    }
+  ],
+  "device": "cuda",
+  "python": "3.12.14",
+  "torch": "2.11.0+cu128",
+  "cuda_runtime": "12.8",
+  "numpy": "2.5.2",
+  "rasterio": "1.5.1",
+  "model_code_sha256": "95e1df9bc83804bb0459a115b1fbfe9ea993dd992924202eaed3faafce4d23b8",
+  "runner_sha256": "5358e437b064bf75145f4d7f189e467c712eb6da74433d2b66ecea786c67e091",
+  "accuracy_metrics": null,
+  "cypress_creek_evaluation_completed": false,
+  "limitations": [
+    "No reference labels scored",
+    "No Fmask supplied with demo",
+    "No held-out claim; sample may overlap model development data",
+    "Unknown input context is filled at the training mean"
+  ],
+  "gpu": "NVIDIA GeForce RTX 3050 Laptop GPU",
+  "gpu_total_bytes": 4294508544,
+  "parameters_including_unused_auxiliary_head": 99963140,
+  "checkpoint_load": "weights_only=True; strict=True; all keys matched",
+  "gpu_peak_allocated_bytes": 671573504,
+  "gpu_peak_reserved_bytes": 868220928,
+  "inference_seconds": 1.692280599992955,
+  "load_and_inference_seconds": 5.764292799998657,
+  "input_shape": [
+    6,
+    512,
+    512
+  ],
+  "reflectance_range": [
+    0.0024999999441206455,
+    0.5443999767303467
+  ],
+  "reflectance_values_outside_0_1": 0,
+  "normalization": {
+    "means": [
+      0.033349706741586264,
+      0.05701185520536176,
+      0.05889748132001316,
+      0.2323245113436119,
+      0.1972854853760658,
+      0.11944914225186566
+    ],
+    "stds": [
+      0.02269135568823774,
+      0.026807560223070237,
+      0.04004109844362779,
+      0.07791732423672691,
+      0.08708738838140137,
+      0.07241979477437814
+    ],
+    "clipping": false
+  },
+  "inference": {
+    "precision": "float32; TF32 disabled",
+    "crop": 224,
+    "stride": 112,
+    "batch_size": 1,
+    "windows": 16,
+    "aggregation": "arithmetic mean of overlapping logits; argmax"
+  },
+  "class_counts": {
+    "-1": 0,
+    "0": 206229,
+    "1": 55915
+  },
+  "nodata_valid_fraction": 1.0,
+  "fmask_quality_verified": false,
+  "outputs": {
+    "candidate-burn-scar.tif": "6e52fa83b5440f4753ce491f1a8811e2fcbd3babbfffe7507d7c3524b06a835a",
+    "preview.png": "8987401912e47de3e0b9fc8fdb39690cbd577167955efd795290d68c1e64584d"
+  }
+}

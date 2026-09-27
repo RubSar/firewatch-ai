@@ -1,0 +1,59 @@
+{
+  "schema_version": "firewatch.research.prithvi-burn-scar.v1",
+  "experiment_id": "cypress-creek-prithvi-hls-v1",
+  "status": "prepared_not_run",
+  "incident": {
+    "name": "Cypress Creek",
+    "incident_id": "8432b888-2a01-4825-8eb6-c74589de24fc",
+    "source_snapshot": "../../docs/concurrent-analysis/09-observation-baseline/results/cypress-creek-wfigs-snapshot.json",
+    "source_snapshot_sha256": "fbdfb6d085fed0f8082798a2a91bbf99a3c690b97274e77ca534781b573f48d8",
+    "aoi_source_report": "../../docs/concurrent-analysis/09-observation-baseline/results/cypress-creek-satellite/report.json",
+    "crs": "EPSG:32615"
+  },
+  "model": {
+    "repository": "ibm-nasa-geospatial/Prithvi-EO-1.0-100M-burn-scar",
+    "license": "Apache-2.0",
+    "task": "single-date burned-area segmentation",
+    "classes": {
+      "0": "unburnt",
+      "1": "burn scar",
+      "-1": "unknown_or_invalid"
+    },
+    "upstream_workflow": "https://github.com/NASA-IMPACT/HLS-workshop-2026-Prithvi-Applications",
+    "upstream_revision": null,
+    "checkpoint_sha256": null
+  },
+  "imagery": {
+    "product_candidates": ["HLSS30", "HLSL30"],
+    "level": "surface reflectance",
+    "model_band_order": ["blue", "green", "red", "narrow_nir", "swir1", "swir2"],
+    "reflectance_units": "0_to_1",
+    "pre_window_utc": ["2026-02-10T00:00:00Z", "2026-02-24T18:29:59Z"],
+    "post_window_utc": ["2026-03-09T19:18:00Z", "2026-03-24T23:59:59Z"],
+    "post_scene_role": "Prithvi single-date input; earliest eligible product/time group passing the Fmask coverage and same-product pre-pair gates in the protocol",
+    "pre_scene_role": "dNBR comparator only; latest eligible pre-fire group from the same product family with at least 95% joint valid AOI coverage",
+    "quality_mask": "HLS Fmask; exclude cloud, cloud shadow, snow, water, and no-data; retain exclusions as unknown",
+    "min_valid_aoi_fraction": 0.95,
+    "target_grid_resolution_m": 30
+  },
+  "reference": {
+    "type": "WFIGS mapped incident perimeter",
+    "geometry_source": "the frozen incident snapshot and existing satellite-case rasterization rules",
+    "observation_time_verified": false,
+    "use": "exploratory burned-area overlap only"
+  },
+  "comparison": {
+    "metrics": ["iou", "dice", "precision", "recall", "valid_coverage", "unknown_fraction", "burned_area_ha", "area_bias_ha"],
+    "score_only_common_valid_pixels": true,
+    "baseline": "fixed dNBR >= 0.1 and dNBR >= 0.1 with pre-fire NBR >= 0.1 on the same HLS dates, grid, and valid mask",
+    "tune_on_this_case": false,
+    "fine_tune_on_this_case": false,
+    "generalization_claim_allowed": false
+  },
+  "runtime": {
+    "entrypoint": "NASA-IMPACT/HLS-workshop-2026-Prithvi-Applications notebook, adapted only for this frozen AOI and WFIGS reference",
+    "execution_targets": ["Local Windows laptop (NVIDIA GeForce RTX 3050 Laptop GPU, 4 GB VRAM; CUDA smoke-tested)", "NVIDIA GPU server", "DGX Cloud Lepton", "funded Brev GPU environment"],
+    "gpu_allocation_verified": false,
+    "environment_lockfile": "requirements-prithvi-local-lock.txt"
+  }
+}
