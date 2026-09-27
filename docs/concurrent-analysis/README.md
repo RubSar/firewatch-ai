@@ -13,7 +13,7 @@ Research date: 2026-09-26. Scope: public product and science pages, one vendor c
 7. [Source register and evidence gaps](07-sources/register.md)
 8. [Drone near-realtime pipeline](08-drone-realtime/pipeline.md)
 9. [Historical fire similarity experiment](09-historical-similarity/README.md)
-9. [Fire-observation baseline experiment](09-observation-baseline/README.md) — started 2026-09-27; public-data pilot, mask audit, split checks and independent annotation tools. [Review handoff](09-observation-baseline/review-handoff.md) is prepared; no human reviewers are available and benchmark acceptance remains open.
+9. [Fire-observation baseline experiment](09-observation-baseline/README.md) — started 2026-09-27; public-data pilot, mask audit, split checks and independent annotation tools. [Review handoff](09-observation-baseline/review-handoff.md) is prepared; no human reviewers are available and benchmark acceptance remains open. A separate [Prithvi burn-scar experiment](09-observation-baseline/prithvi-cypress-creek-experiment.md) has passed a local GPU demo; Cypress HLS acquisition and evaluation remain pending Earthdata setup.
 
 ## Main finding
 

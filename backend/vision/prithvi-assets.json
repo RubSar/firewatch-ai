@@ -1,0 +1,23 @@
+{
+  "model": {
+    "repository": "ibm-nasa-geospatial/Prithvi-EO-1.0-100M-burn-scar",
+    "revision": "0e9e0dba1045e9c4e05a4d68c7b8de2fc6768a7b",
+    "license": "Apache-2.0"
+  },
+  "assets": [
+    {
+      "filename": "burn_scars_Prithvi_100M.pth",
+      "url": "https://huggingface.co/ibm-nasa-geospatial/Prithvi-EO-1.0-100M-burn-scar/resolve/0e9e0dba1045e9c4e05a4d68c7b8de2fc6768a7b/burn_scars_Prithvi_100M.pth",
+      "size_bytes": 1198537753,
+      "sha256": "9285c40cc6005c1bafb40c3d245aafd445f37ba2d89b6ec5af7b21316e0fc284",
+      "role": "selected pretrained burn-scar checkpoint, including saved training state"
+    },
+    {
+      "filename": "subsetted_512x512_HLS.S30.T10TGS.2018285.v1.4_merged.tif",
+      "url": "https://huggingface.co/spaces/ibm-nasa-geospatial/Prithvi-100M-Burn-scars-demo/resolve/9b531552cd6c802647e7ae4714c9010e0cebfc18/subsetted_512x512_HLS.S30.T10TGS.2018285.v1.4_merged.tif",
+      "size_bytes": 12586630,
+      "sha256": "4680447af6e80df15616c5148a7d004d9c958905c082ea51b16c2e9e4ab29d85",
+      "role": "publisher demo only; not Cypress Creek, not held-out evaluation; no Fmask supplied"
+    }
+  ]
+}

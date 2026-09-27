@@ -30,6 +30,13 @@ release; 16 pass geometry validation. A metadata-only Sentinel screen finds zero
 covering matches within six hours. Original survey verification, target semantics
 and temporal uncertainty remain open; no thresholds were tuned or models trained.
 
+Next satellite experiment: [Cypress Creek Prithvi burn-scar evaluation](prithvi-cypress-creek-experiment.md).
+An inference-only HLS run is specified with a pretrained NASA/IBM checkpoint, fixed
+band order, Fmask unknowns and a same-scene HLS dNBR comparison. The 100M checkpoint
+now runs a public HLS demo on the local RTX 3050; ten Cypress granules are catalogued.
+Earthdata registration/login, imagery screening and Cypress evaluation remain
+outstanding. The demo is an execution check, not a scientific accuracy result.
+
 [M1 findings and remaining acceptance criteria](milestone-1.md): acquired
 992 FLAME2 image/mask triplets, checked label encoding and similarity, and executed
 the incident split gate. One incident and unresolved target/review evidence prevent
@@ -84,6 +91,10 @@ multiple incident groups, then train a compact RGB segmentation model. Keep
 Sycan pilot images in development data. Use another incident for untouched testing;
 do not manufacture a train/test result by randomly splitting related images from
 this one burn. Thermal/temporal fusion follows only after data and registration checks.
+
+This drone milestone is independent of the prepared satellite Prithvi experiment.
+The latter tests a fixed burn-scar checkpoint on HLS imagery; it cannot clear the
+drone review/split gates or validate active-fire boundaries.
 
 The present baseline includes no learned model, motion tracking, calibrated ground
 mapping or simulator integration. Component tests validate computation and data

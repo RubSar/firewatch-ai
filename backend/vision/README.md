@@ -1,8 +1,9 @@
 # Fire observation research
 
 Offline research: reproducible RGB/thermal rules (M0), followed by acquired
-segmentation masks, annotation audits and incident split checks (M1). No trained
-model or live API is included. The M1 benchmark acceptance gate remains blocked;
+segmentation masks, annotation audits and incident split checks (M1). A separate
+Prithvi satellite adapter runs a public pretrained model locally; there is no
+FireWatch-trained model or live API. The M1 benchmark acceptance gate remains blocked;
 see the [measured findings](../../docs/concurrent-analysis/09-observation-baseline/milestone-1.md).
 
 Scope: this new `backend/vision/` component holds perception research and its tests.
@@ -67,7 +68,7 @@ have not been independently assessed.
 Image presence uses publisher labels. RGB IoU/Dice require independently supplied
 `visible_flame` masks in RGB coordinates; without these, segmentation metrics are
 null. No temporal persistence/tracking, learned inference or georeferencing is
-implemented. M1 adds a separate annotation editor and human agreement scorer;
+implemented in M0. M1 adds a separate annotation editor and human agreement scorer;
 their results do not change the original M0 report.
 
 Tests use generated synthetic fixtures solely to validate bookkeeping, missing
@@ -115,7 +116,7 @@ python audit_boreal_catalog.py data/flame2-rff/provenance/boreal-files.json --ou
 Obtain that catalogue from the public `CATALOG_URL` in the script; it contains only
 filenames, file IDs and sizes. This step downloads no Boreal imagery or masks and
 cannot verify their pixel quality. No external code, ML frameworks or model weights
-have been installed.
+were installed for that catalogue audit.
 
 ## M1: Independent annotation preparation
 
@@ -188,6 +189,78 @@ reference layers, a PNG comparison and JSON report. The 95% coverage gate does n
 resolve the reference-time mismatch. See the
 [satellite contract](../../contracts/research/satellite-case.md) for units,
 mask meanings, exact radiometry, conditional metrics and limitations.
+
+## Prithvi HLS burn-scar experiment
+
+The prepared [Cypress Creek Prithvi protocol](../../docs/concurrent-analysis/09-observation-baseline/prithvi-cypress-creek-experiment.md)
+defines a portable, inference-only run with the NASA/IBM burn-scar checkpoint on
+HLS six-band imagery. The frozen machine-readable case is
+`prithvi-cypress-creek-config.json`. A local Python 3.12.14 environment is set up
+in the ignored `.venv/` folder and uses the NVIDIA RTX 3050 through CUDA. The
+PyTorch CUDA tensor smoke test and imports for TerraTorch, Rasterio, GeoPandas,
+Earthaccess and the model stack passed; JupyterLab and its IPython kernel are
+installed, and the project-local kernel `FireWatch Prithvi (CUDA)` is registered.
+`pip check` reported no broken requirements. The selected 100M checkpoint now
+loads strictly and runs a real public 512x512 HLS demo on the RTX 3050. One measured
+inference took 1.69 seconds with 641 MiB peak allocated GPU memory (828 MiB reserved).
+This is an execution check, not Cypress accuracy or a latency benchmark.
+An extracted-source compatibility check matched original inference calculations
+on one 224x224 crop. The newer NASA workshop uses a different 300M model; the
+local adapter preserves our selected legacy 100M model. Details and evidence are
+in the [local report](../../docs/concurrent-analysis/09-observation-baseline/results/prithvi-local/README.md).
+The exact resolved environment is recorded in
+`requirements-prithvi-local-lock.txt`.
+
+From this directory, activate the environment in PowerShell with:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+$env:IPYTHONDIR = Join-Path (Get-Location) '.venv\.ipython'
+$env:JUPYTER_CONFIG_DIR = Join-Path (Get-Location) '.venv\.jupyter\config'
+$env:JUPYTER_DATA_DIR = Join-Path (Get-Location) '.venv\.jupyter\data'
+$env:JUPYTER_RUNTIME_DIR = Join-Path (Get-Location) '.venv\.jupyter\runtime'
+python -m pip check
+python -c "import torch; print(torch.__version__, torch.cuda.is_available(), torch.cuda.get_device_name(0))"
+jupyter kernelspec list
+```
+
+To recreate the resolved environment in a Python 3.12 environment, install the
+lockfile with the official CUDA wheel index:
+
+```powershell
+python -m pip install --extra-index-url https://download.pytorch.org/whl/cu128 -r requirements-prithvi-local-lock.txt
+```
+
+The lockfile targets Windows and CUDA 12.8. HLS acquisition still requires an
+interactive NASA Earthdata login. Keep credentials, the model checkpoint,
+downloaded imagery and outputs out of Git. Use the local GPU for the first
+inference; cloud execution remains an optional fallback.
+
+Run the pinned public demo from `backend/vision/` without Earthdata credentials:
+
+```powershell
+.\.venv\Scripts\python.exe download_prithvi_assets.py
+.\.venv\Scripts\python.exe prithvi_local.py --output runs/prithvi-demo-new
+.\.venv\Scripts\python.exe download_prithvi_assets.py --reference-sources
+.\.venv\Scripts\python.exe verify_prithvi_adapter.py --output runs/prithvi-demo-new/adapter-compatibility.json
+```
+
+Use a new output path on every run. The download is about 1.2 GB; cached files are
+reused only after SHA-256 verification. Failed partial files are preserved. The
+inference adapter uses 224-pixel windows, 112-pixel stride, float32 and batch size
+one; it averages logits before selecting a class. Model/data files remain ignored.
+`THIRD_PARTY_PRITHVI.md` records upstream code attribution and adaptation limits.
+
+`prithvi_hls_catalog.py prithvi-cypress-creek-config.json --output data/cypress-prithvi/catalog-new`
+queries public NASA metadata without authentication. The first query found ten
+granules, but none is accepted before pixel-level screening. The authenticated
+Cypress acquisition, Fmask screening and comparison runner remain to be completed;
+the demo runner does not perform those stages. Create a personal
+[Earthdata account](https://urs.earthdata.nasa.gov/users/new) and verify its email.
+Sign in interactively in a local Python/Jupyter session using
+`earthaccess.login(strategy="interactive", persist=False)`; credentials are kept
+in that session, so subsequent downloads must use the same process. Do not send
+credentials in chat or save them in a notebook cell.
 
 ## Satellite transfer and perimeter history
 

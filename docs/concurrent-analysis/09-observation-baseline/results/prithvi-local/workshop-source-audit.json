@@ -1,0 +1,17 @@
+{
+  "audited_on": "2026-09-27",
+  "workshop_repository": "https://github.com/NASA-IMPACT/HLS-workshop-2026-Prithvi-Applications",
+  "workshop_commit": "e74cba351f97394d2bce0e6e6b6bce258a726a4b",
+  "notebook_path": "Prithvi_Burnscar/notebook/Prithvi_Burnscar_Park_Fire_2024_nb.ipynb",
+  "notebook_sha256": "252219550df8eec75a683f939ee6c8beb22c3b8029c5937be96373b6edbd0aef",
+  "workshop_config_public_drive_id": "1qaCrkMhXlsAvj_z81y5KBjgzYZBvL6MT",
+  "workshop_config_sha256": "135b1f3d06e164611ba682517ae8e30fc09f0a95e136b68c7156aac63be8af13",
+  "observed_workshop_backbone": "prithvi_eo_v2_300",
+  "observed_workshop_decoder": "UperNetDecoder",
+  "decision": "Retain selected Prithvi-EO-1.0-100M burn-scar model and adapt its original architecture; do not substitute workshop checkpoint",
+  "workshop_checkpoint_downloaded": false,
+  "selected_model_repository": "ibm-nasa-geospatial/Prithvi-EO-1.0-100M-burn-scar",
+  "selected_model_revision": "0e9e0dba1045e9c4e05a4d68c7b8de2fc6768a7b",
+  "selected_repository_config_yaml_bytes": 0,
+  "legacy_implementation_commit": "3b6d401f3b4527059af0e44bd640225285e1933d"
+}
