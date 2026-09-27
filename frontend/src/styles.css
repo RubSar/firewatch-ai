@@ -43,12 +43,6 @@ body {
 
 .header .spacer { flex: 1; }
 
-.scenario-select {
-  background: var(--panel-2); color: var(--text); border: 1px solid var(--line);
-  border-radius: 8px; padding: 7px 10px; font-size: 13px; max-width: 230px;
-}
-.scenario-select:focus { outline: 2px solid var(--ember-dim); }
-
 .danger-badge {
   display: flex; align-items: center; gap: 9px;
   background: var(--panel-2); border: 1px solid var(--line);
@@ -133,8 +127,6 @@ input[type="range"]:disabled::-webkit-slider-thumb { background: var(--muted); c
   border-radius: 8px; padding: 8px 12px; cursor: pointer; font-size: 12.5px; font-weight: 550;
 }
 .btn:hover { border-color: #46566b; }
-.btn.primary { background: var(--ember); border-color: var(--ember); color: #1a0c04; }
-.btn.primary:hover { background: #ff7f39; }
 .btn.ghost { background: transparent; }
 .btn:disabled { opacity: .45; cursor: not-allowed; }
 

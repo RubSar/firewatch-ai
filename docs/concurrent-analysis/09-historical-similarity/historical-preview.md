@@ -50,7 +50,7 @@ ignition-point weather or SRTM slope. All source measurements, including the
 separately labeled ignition context and NASA additions, can be inspected below.
 The full raw sidecars and coordinate-free previews are not modified by the exporter.
 
-The static frontend file is `frontend/Wildfire/public/data/historical-pilot.json`.
+The static frontend file is `frontend/public/data/historical-pilot.json`.
 It contains actual values, measurement provenance, flags, source timestamps and
 checksums; there are no synthetic demonstration values. It is approximately 5.7 MB
 before compression and is fetched only on the historical route. The contract is
@@ -94,13 +94,13 @@ More groups/fields and validated scales can be introduced after review.
 
 ## Run and refresh
 
-From `frontend`, use the existing workspace commands (Node 20+):
+From `frontend`, use the existing workspace commands (Node 24+):
 
 ```sh
 npm ci
 npm run dev:web
 # Open http://localhost:5173/history
-npm run build --workspace=wildfire-sim
+npm run build:web
 ```
 
 Production hosts must serve `index.html` for the `/history` SPA route.
@@ -111,10 +111,10 @@ To refresh the static library from local historical data, from `backend/api`:
   --data-dir .research-data/enrichment-pilot/data \
   --archive .research-data/GOFER-v02.zip \
   --nifc-dir .research-data/nifc-pilot \
-  --output ../../frontend/Wildfire/public/data/historical-pilot.json
+  --output ../../frontend/public/data/historical-pilot.json
 ```
 
-Checks, from `frontend/Wildfire`, with Node 24 (native TypeScript type stripping):
+Checks, from `frontend`, with Node 24 (native TypeScript type stripping):
 
 ```sh
 node --test scripts/history.test.mjs
@@ -128,7 +128,7 @@ from observed growth. Browser checks cover the single map, sorted event options 
 playback, snapshot null growth, record downloads, source inspection, mobile width and
 load errors. Screenshots default to `/tmp/firewatch-history-single`.
 
-The new `@firewatch/visualization` workspace makes the existing visualization folder
-usable by the app. It reuses React 18 and Leaflet 1.9 already selected by the project;
-the lockfile changes primarily relocate shared dependencies. No historical-data API
-or model-provider integration is needed for this static research screen.
+The historical map is part of the single frontend app at
+`frontend/src/visualization/HistoricalMap.tsx`, imported locally by the history page.
+It shares the app's React and Leaflet dependencies. No historical-data API or
+model-provider integration is needed for this static research screen.

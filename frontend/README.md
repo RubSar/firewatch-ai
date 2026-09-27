@@ -1,6 +1,6 @@
 # 🔥 Ember — wildfire spread sandbox
 
-The separate **[historical event viewer](../../docs/concurrent-analysis/09-historical-similarity/historical-preview.md)**
+The separate **[historical event viewer](../docs/concurrent-analysis/09-historical-similarity/historical-preview.md)**
 is available at `/history` or through **Historical atlas** in the header. It displays
 one real GOFER event or NIFC perimeter snapshot on a large map, with timestamp playback,
 environmental measurements and source evidence. Event options show loaded record counts
@@ -19,9 +19,32 @@ The fire runs either in the browser or on a server, and the UI cannot tell the
 difference — see [Where the fire runs](#where-the-fire-runs).
 
 ```bash
-npm install          # at the repo root: this is an npm workspace
+npm install          # from frontend/ (Node 24+)
 npm run dev:web      # in-browser simulation, no server needed
 ```
+
+## Project layout and commands
+
+The web app lives directly in `frontend/`, with one app manifest, Vite config and
+TypeScript config. The former `Wildfire/` app and visualization workspace are merged;
+`src/history/HistoryPage.tsx` imports `src/visualization/HistoricalMap.tsx` locally.
+`api/`, `sim/` and `contracts/` remain npm workspaces because the browser and server
+share the kernel and wire types. Their interfaces are unchanged. Component ownership
+has not yet been assigned.
+
+Run commands from `frontend/` with Node 24+:
+
+- `npm run dev:web`: browser app; `npm run dev`: app and API.
+- `npm run build`: web production build (`dist/`) and workspace builds.
+- `npm run typecheck`: app and workspace type checks.
+- `npm test`: history and simulation tests.
+- `npm run smoke:history`: historical viewer browser checks, with the dev server running.
+- `npm run preview`: serve the production build locally.
+
+Old commands targeting `--workspace=wildfire-sim` should use the corresponding
+root command, such as `npm run build:web`. Historical data exports now target
+`frontend/public/data/historical-pilot.json`. Run `npm install` after updating an
+existing checkout to refresh workspace links.
 
 ## What you can do
 
@@ -319,7 +342,7 @@ hillshade side by side with band percentiles, for retuning those thresholds:
 
 ```bash
 npm run dev:web                 # from frontend/
-npm run calibrate               # from frontend/Wildfire, writes shots/calibrate.png
+npm run calibrate               # from frontend, writes shots/calibrate.png
 ```
 
 Known simplifications worth naming before anyone asks: no crown fire or
@@ -361,22 +384,14 @@ frontend/                     workspace root — run every script from here
     hindcast.ts               replays real fires against mapped WFIGS perimeters
     smoke.ts                  boots the server and decodes the stream
 
-  Wildfire/                   this app
-    src/data/realData.ts      DEM + imagery tile fetch in the browser
-    src/transport/
-      local.ts                steps the kernel in the browser
-      remote.ts               mirrors server deltas into a Sim
-    src/render/
-      paint.ts                base raster layers, one pixel per cell
-      contour.ts              marching squares + field blur + corner rounding
-      fireGeometry.ts         the fire as fillable paths in grid space
-    src/components/
-      MapView.tsx             Leaflet map + canvas overlay
-      ControlPanel.tsx  WindDial.tsx  StatsPanel.tsx  Legend.tsx
-      GrowthChart.tsx   ForecastStrip.tsx
-    scripts/
-      smoke.mjs               headless browser test driving every control
-      calibrate.mjs           renders the fuel-classifier calibration sheet
+  src/                        React application, browser data, rendering and transport
+    visualization/            historical map component (part of this app)
+  public/                     static historical data
+  scripts/                    browser smoke checks, history tests and calibration
+  index.html                  application entry point
+  calibrate.html              calibration entry point
+  vite.config.ts
+  tsconfig.json
 ```
 
 The map is Leaflet. The fire is **not** drawn as a raster: scaling up a grid of
