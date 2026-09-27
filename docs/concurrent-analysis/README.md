@@ -12,6 +12,7 @@ Research date: 2026-09-26. Scope: public product and science pages, one vendor c
 6. [Product direction and scope options](06-product-direction/options.md)
 7. [Source register and evidence gaps](07-sources/register.md)
 8. [Drone near-realtime pipeline](08-drone-realtime/pipeline.md)
+9. [Historical fire similarity experiment](09-historical-similarity/README.md)
 9. [Fire-observation baseline experiment](09-observation-baseline/README.md) — started 2026-09-27; public-data pilot, mask audit, split checks and independent annotation tools. [Review handoff](09-observation-baseline/review-handoff.md) is prepared; no human reviewers are available and benchmark acceptance remains open.
 
 ## Main finding

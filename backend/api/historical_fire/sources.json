@@ -1,0 +1,133 @@
+{
+  "dataset": "CFSDS",
+  "version": "1.1",
+  "metadata_url": "https://api.osf.io/v2/nodes/f48ry/files/osfstorage/690a34e60e2a0a648996cde8/",
+  "files": [
+    {
+      "name": "Firegrowth_groups_v1_1_2002.zip",
+      "year": 2002,
+      "url": "https://osf.io/download/qep6c/",
+      "sha256": "8ff633eab8ff0d64955f901cc0dcacba0d4e4f9ac93d7b6015445ea00d08e9d9"
+    },
+    {
+      "name": "Firegrowth_groups_v1_1_2003.zip",
+      "year": 2003,
+      "url": "https://osf.io/download/2j63s/",
+      "sha256": "f8c0087746a915ff810b80670c1261e3adf2e7216430b6f65609a48a07a1651a"
+    },
+    {
+      "name": "Firegrowth_groups_v1_1_2004.zip",
+      "year": 2004,
+      "url": "https://osf.io/download/dc4z3/",
+      "sha256": "cc8a0818b8885daa66d32c66e7d92ae51416cc4183cbcd3822399d88fd8d0ccf"
+    },
+    {
+      "name": "Firegrowth_groups_v1_1_2005.zip",
+      "year": 2005,
+      "url": "https://osf.io/download/bvu4k/",
+      "sha256": "44b627bf61b8bbc115b2041d9095cf1fee417ca91e6ca2586951e1c59a8bb1c9"
+    },
+    {
+      "name": "Firegrowth_groups_v1_1_2006.zip",
+      "year": 2006,
+      "url": "https://osf.io/download/d9wnj/",
+      "sha256": "c07596e8e70cbc4b14cc08c87196dcbdc5b5ede1adac0fe7caa380c63d42cbde"
+    },
+    {
+      "name": "Firegrowth_groups_v1_1_2007.zip",
+      "year": 2007,
+      "url": "https://osf.io/download/sy8nj/",
+      "sha256": "3616a094c3329fc14a9d59259bb5993736a5b1d3f9cfb0908526d6b5e86d2f4e"
+    },
+    {
+      "name": "Firegrowth_groups_v1_1_2008.zip",
+      "year": 2008,
+      "url": "https://osf.io/download/u5bgz/",
+      "sha256": "b3b06fc7d13d892310be0731bd729ccf26f3181d0fed4d6eff9c687688c53e76"
+    },
+    {
+      "name": "Firegrowth_groups_v1_1_2009.zip",
+      "year": 2009,
+      "url": "https://osf.io/download/dwnbm/",
+      "sha256": "764096010a41a6c6c60359e173f885f522337e3e5def5c8fd0ed5f9bab1767bd"
+    },
+    {
+      "name": "Firegrowth_groups_v1_1_2010.zip",
+      "year": 2010,
+      "url": "https://osf.io/download/xht8v/",
+      "sha256": "7f4172d13f35823bf8847a0fca7b4de18f91d8f4e607ce5cb76b1b86993280be"
+    },
+    {
+      "name": "Firegrowth_groups_v1_1_2011.zip",
+      "year": 2011,
+      "url": "https://osf.io/download/85gc9/",
+      "sha256": "c6ba1f0cfbd015b971e3f48a6223b6b5f2fd827cb345dc086e460b0b1c3ea5cb"
+    },
+    {
+      "name": "Firegrowth_groups_v1_1_2012.zip",
+      "year": 2012,
+      "url": "https://osf.io/download/jkr5x/",
+      "sha256": "f20ba62319de1c0590035c38a1d3a6e028bb3867ba4f1664241381c5ace649bb"
+    },
+    {
+      "name": "Firegrowth_groups_v1_1_2013.zip",
+      "year": 2013,
+      "url": "https://osf.io/download/jk9z5/",
+      "sha256": "912abfd34a4301df860daa12370789866908d50ccddc6162302b4858f9031bc7"
+    },
+    {
+      "name": "Firegrowth_groups_v1_1_2014.zip",
+      "year": 2014,
+      "url": "https://osf.io/download/8wytv/",
+      "sha256": "91883309f14f51a3dfbf732e16cecf5357301d1ca4129916ca6360e1cc875ca0"
+    },
+    {
+      "name": "Firegrowth_groups_v1_1_2015.zip",
+      "year": 2015,
+      "url": "https://osf.io/download/phx3v/",
+      "sha256": "55d0bb773866faf0f596a013925896055754ba40ed29dc91362ceeeea4c88326"
+    },
+    {
+      "name": "Firegrowth_groups_v1_1_2016.zip",
+      "year": 2016,
+      "url": "https://osf.io/download/3vk8j/",
+      "sha256": "7a8c28e1e1a20f1b0368a8080cbbc5339b3fb155f2224c734b90f8db25110c34"
+    },
+    {
+      "name": "Firegrowth_groups_v1_1_2017.zip",
+      "year": 2017,
+      "url": "https://osf.io/download/46kbz/",
+      "sha256": "46348459f37b22e68b0473146d858a096512652f3e47401ef6db425cd6f8dd63"
+    },
+    {
+      "name": "Firegrowth_groups_v1_1_2018.zip",
+      "year": 2018,
+      "url": "https://osf.io/download/j2esd/",
+      "sha256": "5cd96e243bb3bec6adf0db819f080ed7462baf1aea38a2aefe180793acd6ed16"
+    },
+    {
+      "name": "Firegrowth_groups_v1_1_2019.zip",
+      "year": 2019,
+      "url": "https://osf.io/download/dqvfb/",
+      "sha256": "55a97b20655b8ba6a3c83817b898ebfc3664c0119854365fe31e2a149d8bbfea"
+    },
+    {
+      "name": "Firegrowth_groups_v1_1_2020.zip",
+      "year": 2020,
+      "url": "https://osf.io/download/ajd3q/",
+      "sha256": "289654c15cbbf61e2e3932bc0a8b639399ef7c8352a6f0880731f1bae03cfd35"
+    },
+    {
+      "name": "Firegrowth_groups_v1_1_2021.zip",
+      "year": 2021,
+      "url": "https://osf.io/download/my5np/",
+      "sha256": "62631aad5a2350cf1caed72f97c4503f322bcd81b4367825c77ffc24f8724fb9"
+    }
+  ],
+  "gofer": {
+    "version": "0.2",
+    "summary_member": "GOFER/GOFER_Combined/GOFERC_summary.csv",
+    "summary_sha256": "2db846c1fbfec1af858dcf244f9b1f88405b49ab9b101c3a27991b4f3315e3d3",
+    "record_url": "https://zenodo.org/records/14642378"
+  }
+}

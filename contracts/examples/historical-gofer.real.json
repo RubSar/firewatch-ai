@@ -1,0 +1,173 @@
+{
+  "schema_version": "1.0",
+  "dataset": "GOFER",
+  "dataset_version": "0.2",
+  "event_id": "gofer:2019:Kincade",
+  "year": 2019,
+  "region": "California",
+  "interval": {
+    "start": "2019-10-24T05:00:00+00:00",
+    "end": "2019-10-24T06:00:00+00:00",
+    "resolution": "hourly",
+    "time_basis": "UTC"
+  },
+  "features": {
+    "terrain": {
+      "elevation_m": {
+        "value": null,
+        "unit": "m",
+        "source_field": null,
+        "retrospective": true
+      },
+      "slope_deg": {
+        "value": null,
+        "unit": "degree",
+        "source_field": null,
+        "retrospective": true
+      },
+      "aspect_deg": {
+        "value": null,
+        "unit": "degree",
+        "source_field": null,
+        "retrospective": true
+      },
+      "wetness_index": {
+        "value": null,
+        "unit": "index",
+        "source_field": null,
+        "retrospective": true
+      }
+    },
+    "fuels": {
+      "biomass_t_ha": {
+        "value": null,
+        "unit": "t/ha",
+        "source_field": null,
+        "retrospective": true
+      },
+      "canopy_cover_pct": {
+        "value": null,
+        "unit": "%",
+        "source_field": null,
+        "retrospective": true
+      },
+      "conifer_pct": {
+        "value": null,
+        "unit": "%",
+        "source_field": null,
+        "retrospective": true
+      },
+      "peat_fraction": {
+        "value": null,
+        "unit": "fraction",
+        "source_field": null,
+        "retrospective": true
+      },
+      "nonfuel_fraction_1km": {
+        "value": null,
+        "unit": "fraction",
+        "source_field": null,
+        "retrospective": true
+      }
+    },
+    "weather": {
+      "temperature_max_c": {
+        "value": null,
+        "unit": "degC",
+        "source_field": null,
+        "retrospective": true
+      },
+      "relative_humidity_pct": {
+        "value": null,
+        "unit": "%",
+        "source_field": null,
+        "retrospective": true
+      },
+      "precipitation_mm": {
+        "value": null,
+        "unit": "mm",
+        "source_field": null,
+        "retrospective": true
+      },
+      "vpd_kpa": {
+        "value": null,
+        "unit": "kPa",
+        "source_field": null,
+        "retrospective": true
+      },
+      "fine_fuel_moisture_code": {
+        "value": null,
+        "unit": "index",
+        "source_field": null,
+        "retrospective": true
+      },
+      "duff_moisture_code": {
+        "value": null,
+        "unit": "index",
+        "source_field": null,
+        "retrospective": true
+      },
+      "drought_code": {
+        "value": null,
+        "unit": "index",
+        "source_field": null,
+        "retrospective": true
+      }
+    },
+    "wind": {
+      "speed_m_s": {
+        "value": null,
+        "unit": "m/s",
+        "source_field": null,
+        "retrospective": true
+      }
+    }
+  },
+  "state": {
+    "starting_area_ha": 846.8,
+    "previous_growth_ha": null
+  },
+  "outcome": {
+    "growth_ha": 2325.9,
+    "proportional_growth": 2.7466934341048654
+  },
+  "quality_flags": [
+    "reconstructed_progression",
+    "environment_not_enriched",
+    "missing_previous_interval"
+  ],
+  "provenance": {
+    "file": "GOFERC_summary.csv",
+    "sha256": "2db846c1fbfec1af858dcf244f9b1f88405b49ab9b101c3a27991b4f3315e3d3",
+    "raw": {
+      "fname": "Kincade",
+      "fyear": "2019",
+      "tUTC": "2019-10-24 06:00:00",
+      "tLocal": "2019-10-23 23:00:00",
+      "tLocalGMT": "2019-10-23 22:00:00",
+      "timestep": "2",
+      "timestep_hh": "1.5",
+      "farea": "31.727",
+      "fareaPer": "9.1496350470214",
+      "fperim": "21.803",
+      "rflinelen": "11.481",
+      "cflinelen5": "21.803",
+      "cflinelen10": "21.803",
+      "cflinelen25": "21.803",
+      "cflinelen50": "21.803",
+      "cflinelen75": "21.803",
+      "cflinelen90": "19.096",
+      "rfline_fstate": "1",
+      "cfline5_fstate": "1",
+      "cfline10_fstate": "1",
+      "cfline25_fstate": "1",
+      "cfline50_fstate": "1",
+      "cfline75_fstate": "1",
+      "cfline90_fstate": "1",
+      "dfarea": "23.259",
+      "maefspread": "4.886",
+      "awefspread": "2.657"
+    },
+    "interpretation": "retrospective_association_only"
+  }
+}

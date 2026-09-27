@@ -1,0 +1,189 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FireWatch historical map preview",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "archive_sha256",
+    "geometry_simplification_m",
+    "events"
+  ],
+  "properties": {
+    "schema_version": {
+      "enum": [
+        "1.0",
+        "1.1"
+      ]
+    },
+    "archive_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "geometry_simplification_m": {
+      "type": "number",
+      "minimum": 0
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "year",
+          "bounds",
+          "source_sha256",
+          "intervals"
+        ],
+        "properties": {
+          "intervals": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/interval"
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "interval": {
+      "type": "object",
+      "required": [
+        "id",
+        "event_id",
+        "start",
+        "end",
+        "area_ha",
+        "growth_ha",
+        "perimeter",
+        "newly_burned",
+        "measurements",
+        "flags"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "event_id": {
+          "type": "string"
+        },
+        "start": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "end": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "area_ha": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "growth_ha": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "perimeter": {
+          "type": "object",
+          "description": "Recorded cumulative perimeter; GeoJSON EPSG:4326 longitude,latitude, simplified for display only."
+        },
+        "newly_burned": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "description": "Source interval footprint, simplified for display; null is retained on zero-growth intervals."
+        },
+        "measurements": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "field",
+              "value",
+              "unit",
+              "source",
+              "support",
+              "kind",
+              "time_window",
+              "flags",
+              "review_status"
+            ]
+          }
+        },
+        "flags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "kind": {
+          "enum": [
+            "perimeter_snapshot"
+          ]
+        },
+        "source_label": {
+          "type": "string"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "kind"
+            ],
+            "properties": {
+              "kind": {
+                "const": "perimeter_snapshot"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "source_label"
+            ],
+            "properties": {
+              "start": {
+                "type": "null"
+              },
+              "growth_ha": {
+                "type": "null"
+              },
+              "newly_burned": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "start": {
+                "type": "string"
+              },
+              "end": {
+                "type": "string"
+              },
+              "area_ha": {
+                "type": "number"
+              },
+              "growth_ha": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

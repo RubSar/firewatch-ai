@@ -1,0 +1,13 @@
+{
+  "python": "3.14.7",
+  "numpy": "2.5.3",
+  "source_hashes": {
+    "__init__.py": "3b8e3fa61f1296b9acb9a8da2a8343dfb9ccdff5d6c360ea337797d25efb2396",
+    "__main__.py": "b7abe5d011e7008c7548f935a40c8e2cfce7dadefb9d41adbcfa8892e90f4c11",
+    "acquire.py": "65078395191c09a9044e432ef490268d1fe956485a5800e1ad2c016c40c869b6",
+    "adapters.py": "fcd3ced7959eaffb3e676f293c0cdc3addbbdc85b26c9bfca6f450c9433326dc",
+    "experiment.py": "5a7afc4f7c5d7a4dcd4b1bbb9548d3c26ef07fd4d56d59f0fc1cc13869e2557d"
+  },
+  "uv_lock_sha256": "b323bbacf9b8af7769cdaba1fc6e1a445b62afed65d081d1ed39a2c0ec97a405",
+  "seed": 42
+}

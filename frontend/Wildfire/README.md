@@ -1,5 +1,11 @@
 # 🔥 Ember — wildfire spread sandbox
 
+The separate **[historical event viewer](../../docs/concurrent-analysis/09-historical-similarity/historical-preview.md)**
+is available at `/history` or through **Historical atlas** in the header. It displays
+one real GOFER event or NIFC perimeter snapshot on a large map, with timestamp playback,
+environmental measurements and source evidence. Event options show loaded record counts
+and are sorted by complete hourly record count, then parameter coverage and total records. It does not run the simulation.
+
 An interactive wildfire simulator on a terrain map. Change the weather, the fuel
 dryness and the wind, then watch how the fire behaves — where it runs, how fast,
 what it threatens, and whether you can hold it.

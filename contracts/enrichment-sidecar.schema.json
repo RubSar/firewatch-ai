@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://firewatch.example/contracts/enrichment-sidecar.schema.json",
+  "title": "FireWatch historical enrichment sidecar",
+  "type": "object",
+  "required": ["schema_version", "event_id", "interval_id", "measurements", "quality_flags"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "event_id": {"type": "string", "minLength": 1},
+    "interval_id": {"type": "string", "minLength": 1},
+    "interval": {"type": "object"},
+    "original": {"type": "object", "description": "Immutable GOFER provenance and source measurements."},
+    "footprint": {"type": "object", "required": ["kind", "geometry", "area_ha", "method"], "properties": {
+      "kind": {"const": "newly_burned"}, "crs": {"const": "EPSG:4326"},
+      "geometry": {"type": ["object", "null"]}, "area_ha": {"type": ["number", "null"], "minimum": 0},
+      "method": {"type": "string"}
+    }},
+    "ignition_context": {"type": "object"},
+    "measurements": {"type": "array", "items": {"$ref": "#/$defs/measurement"}},
+    "quality_flags": {"type": "array", "items": {"type": "string"}}
+  },
+  "$defs": {"measurement": {
+    "type": "object",
+    "required": ["field", "value", "unit", "kind", "source", "original", "time_window", "spatial_support", "method", "quality_flags", "evidence", "review_status", "conflicts"],
+    "properties": {
+      "field": {"type": "string"}, "value": {"type": ["number", "integer", "string", "object", "null"]},
+      "unit": {"type": ["string", "null"]}, "kind": {"enum": ["observed", "reconstructed", "calculated", "document_extracted"]},
+      "source": {"type": "object", "required": ["id"]}, "original": {}, "time_window": {"type": "object"},
+      "spatial_support": {"type": "object", "required": ["kind"]}, "method": {"type": "string"},
+      "quality_flags": {"type": "array", "items": {"type": "string"}},
+      "evidence": {"type": "array", "items": {"type": "object"}},
+      "review_status": {"enum": ["pending", "accepted", "rejected"]},
+      "conflicts": {"type": "array"}
+    }, "additionalProperties": true
+  }},
+  "additionalProperties": true
+}

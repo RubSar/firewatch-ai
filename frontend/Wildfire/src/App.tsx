@@ -344,6 +344,7 @@ export default function App() {
           <span className="chip-info" aria-hidden="true">i</span>
         </button>
         <div className="spacer" />
+        <a className="btn" href="/history" style={{ textDecoration: 'none' }}>Historical atlas ↗</a>
         <div className="danger-badge" title={`Chandler Burning Index ${cbi.toFixed(0)}`}>
           <span className="dot" style={{ background: danger.color, color: danger.color }} />
           <span className="lbl">Fire danger</span>
