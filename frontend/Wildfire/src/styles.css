@@ -221,7 +221,7 @@ input[type="range"]:disabled::-webkit-slider-thumb { background: var(--muted); c
 
 .fire-canvas { position: absolute; inset: 0; pointer-events: none; z-index: 420; }
 
-.hud-top { top: 12px; left: 12px; right: 256px; padding: 8px 10px; }
+.hud-top { padding: 8px 10px; align-self: stretch; }
 .hud-bl { bottom: 74px; }
 /* Keep Leaflet's own controls clear of the transport bar. */
 .leaflet-bottom { bottom: 58px; }
@@ -403,7 +403,20 @@ input[type="range"]:disabled::-webkit-slider-thumb { background: var(--muted); c
 }
 
 /* --- tool palette, on the map ---------------------------------------- */
-.hud-tl { top: 12px; left: 12px; }
+/*
+ * The palette and the forecast strip both want the top-left corner, so they
+ * share one column that positions them instead of each claiming the corner.
+ * The column is wider than the palette, so it passes clicks through to the
+ * map and only its children take them.
+ */
+.hud-stack {
+  position: absolute; z-index: 450;
+  top: 12px; left: 12px; right: 256px;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 8px;
+  pointer-events: none;
+}
+.hud-stack > * { position: static; pointer-events: auto; max-width: 100%; }
+.hud-tl { padding: 0; border: 0; background: none; box-shadow: none; backdrop-filter: none; }
 .maptools {
   display: flex;
   align-items: center;
