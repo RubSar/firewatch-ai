@@ -27,9 +27,10 @@
  */
 import { buildTerrain, scenarioAt } from '@firewatch/sim/terrain'
 import { Cell, attachCanopy, createSim, ignite, recomputeStats, step } from '@firewatch/sim/model'
-import { FUELS } from '@firewatch/sim/fuels'
+import { FUELS, Fuel } from '@firewatch/sim/fuels'
 import { andersonLB, lengthToBreadth } from '@firewatch/sim/shape'
 import type { Params } from '@firewatch/sim/weather'
+import { equilibriumMoisture, stepOneHourMoisture } from './providers/tier2.ts'
 import { loadConfig } from './config.ts'
 import { buildRegistry } from './providers/registry.ts'
 import { assumedCanopyFrom } from './providers/tier1.ts'
@@ -154,13 +155,29 @@ function inPolygon(rings: number[][][], lng: number, lat: number): boolean {
 }
 
 /** Hourly weather as it actually was, from Open-Meteo's archive. */
+/**
+ * Days of archive fetched BEFORE discovery, to settle the fuel moisture.
+ *
+ * 1-h fuels have about an hour of memory, so seven days is far more than the
+ * integrator needs — but it is what `nfdrs1hMoisture` uses in the product, and
+ * matching it is the point.
+ */
+const MOISTURE_PREROLL_DAYS = 7
+
+interface ReplayHour {
+  params: Params
+  /** Dead fine fuel moisture, %, from the shared NFDRS 1-h integrator. */
+  fmc: number
+}
+
 async function archiveWeather(
   lat: number, lng: number, startMs: number, hours: number, cfg: Config
-): Promise<Params[] | null> {
+): Promise<ReplayHour[] | null> {
   const iso = (t: number) => new Date(t).toISOString().slice(0, 10)
+  const preMs = startMs - MOISTURE_PREROLL_DAYS * 86400_000
   const url =
     `https://archive-api.open-meteo.com/v1/archive?latitude=${lat.toFixed(4)}&longitude=${lng.toFixed(4)}` +
-    `&start_date=${iso(startMs)}&end_date=${iso(startMs + hours * 3600_000)}` +
+    `&start_date=${iso(preMs)}&end_date=${iso(startMs + hours * 3600_000)}` +
     `&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,wind_direction_10m,precipitation&timezone=UTC`
   const ac = new AbortController()
   const timer = setTimeout(() => ac.abort(), cfg.fetchTimeoutMs)
@@ -176,24 +193,50 @@ async function archiveWeather(
     const h = json.hourly
     if (!h?.time?.length) return null
     const from = h.time.findIndex((t) => new Date(`${t}Z`).getTime() >= startMs)
+    const start = Math.max(0, from)
+
+    /**
+     * Integrate the 1-h fuel moisture across the pre-roll, so the replay starts
+     * with fuels that remember the week before the fire.
+     *
+     * The replay used to leave `moisture` off `StepInput` entirely, which sent the
+     * kernel down its scalar `fuelMoisture()` path — a memoryless linear function
+     * of RH and temperature. The PRODUCT runs `nfdrs1hMoisture`, a Simard EMC with
+     * a one-hour timelag, so the hindcast was validating a moisture model that
+     * ships nowhere. Same class of error as the replay once bypassing the provider
+     * registry.
+     */
+    let fmc = equilibriumMoisture(h.temperature_2m[0] ?? 20, h.relative_humidity_2m[0] ?? 40)
     let dry = 30
-    return h.time.slice(Math.max(0, from), Math.max(0, from) + hours).map((_, k) => {
-      const i = Math.max(0, from) + k
+    for (let i = 0; i < start; i++) {
       const rain = h.precipitation[i] ?? 0
       dry = rain > 0.2 ? 0 : dry + 1 / 24
-      return {
-        temperature: h.temperature_2m[i] ?? 20,
-        humidity: h.relative_humidity_2m[i] ?? 40,
-        windSpeed: h.wind_speed_10m[i] ?? 0,
-        windDir: h.wind_direction_10m[i] ?? 0,
-        gustiness: 0.3,
-        daysSinceRain: dry,
-        precipitation: rain,
-        spotting: 1,
-        suppression: 0,
-        followForecast: false,
-      }
-    })
+      fmc = stepOneHourMoisture(fmc, h.temperature_2m[i] ?? 20, h.relative_humidity_2m[i] ?? 40, rain)
+    }
+
+    const out: ReplayHour[] = []
+    for (let k = 0; k < hours && start + k < h.time.length; k++) {
+      const i = start + k
+      const rain = h.precipitation[i] ?? 0
+      dry = rain > 0.2 ? 0 : dry + 1 / 24
+      fmc = stepOneHourMoisture(fmc, h.temperature_2m[i] ?? 20, h.relative_humidity_2m[i] ?? 40, rain)
+      out.push({
+        fmc,
+        params: {
+          temperature: h.temperature_2m[i] ?? 20,
+          humidity: h.relative_humidity_2m[i] ?? 40,
+          windSpeed: h.wind_speed_10m[i] ?? 0,
+          windDir: h.wind_direction_10m[i] ?? 0,
+          gustiness: 0.3,
+          daysSinceRain: dry,
+          precipitation: rain,
+          spotting: 1,
+          suppression: 0,
+          followForecast: false,
+        },
+      })
+    }
+    return out
   } catch {
     return null
   } finally {
@@ -374,8 +417,8 @@ async function run(p: Perimeter, cfg: Config) {
 
   const weather = await archiveWeather(p.lat, p.lng, p.discovered, wantHours, cfg)
   if (!weather?.length) { console.log('  no archive weather — skipped'); return null }
-  const peak = weather.reduce((m, w) => Math.max(m, w.windSpeed), 0)
-  const rain = weather.reduce((m, w) => m + w.precipitation, 0)
+  const peak = weather.reduce((m, w) => Math.max(m, w.params.windSpeed), 0)
+  const rain = weather.reduce((m, w) => m + w.params.precipitation, 0)
   const span = mappedHours && mappedHours > 0
     ? `discovery to the polygon's own timestamp (${mappedHours} h)` +
       (containHours == null
@@ -388,6 +431,36 @@ async function run(p: Perimeter, cfg: Config) {
       : `neither timestamp — fixed ${FALLBACK_HOURS} h window`
   console.log(`  replay: ${weather.length} h — ${span}${truncated ? `, capped at ${MAX_REPLAY_HOURS / 24} d` : ''}`)
   console.log(`  weather: peak wind ${peak.toFixed(0)} km/h, ${rain.toFixed(1)} mm rain`)
+
+  /**
+   * Can anything here stop a fire?
+   *
+   * `moistureDamping` returns 0 once fmc reaches a fuel's moisture of extinction,
+   * and that is the only mechanism in the replay that halts spread without
+   * suppression or running out of fuel. Reporting hours-carrying per fuel makes
+   * "the fire never stops" a measurement instead of an inference — Anderson
+   * Bridge's timber carried 191 of 191 hours under the old memoryless formula.
+   */
+  {
+    const fm = weather.map((w) => w.fmc).sort((a, b) => a - b)
+    const q = (p: number) => fm[Math.floor(p * (fm.length - 1))]
+    const carries = (mx: number) => weather.filter((w) => w.fmc < mx).length
+    let longest = 0
+    let run = 0
+    for (const w of weather) {
+      if (w.fmc < FUELS[Fuel.Timber].mx) { run++; longest = Math.max(longest, run) } else run = 0
+    }
+    console.log(
+      `  fuel moisture (NFDRS 1-h, ${MOISTURE_PREROLL_DAYS} d pre-roll): ` +
+      `min ${q(0).toFixed(1)} median ${q(0.5).toFixed(1)} max ${q(1).toFixed(1)}%`
+    )
+    console.log(
+      `  hours able to carry: grass ${carries(FUELS[Fuel.Grass].mx)}/${weather.length}` +
+      ` · shrub ${carries(FUELS[Fuel.Shrub].mx)}/${weather.length}` +
+      ` · timber ${carries(FUELS[Fuel.Timber].mx)}/${weather.length}` +
+      ` · longest unbroken timber stretch ${longest} h`
+    )
+  }
 
   // Through the registry, so the hindcast scores whatever the product would
   // actually run. Calling a provider directly meant this kept measuring the
@@ -514,7 +587,7 @@ async function run(p: Perimeter, cfg: Config) {
   // Shape of the thing we are trying to reproduce, and the shape the wind says
   // it should be. MIDFLAME_WIND_FACTOR 0.4 converts the 10 m archive wind.
   const truthShape = lengthToBreadth(truth, cols)
-  const meanWind = weather.reduce((a, w) => a + w.windSpeed, 0) / weather.length
+  const meanWind = weather.reduce((a, w) => a + w.params.windSpeed, 0) / weather.length
   console.log(
     `  truth shape: L/B ${truthShape.lb.toFixed(2)} on bearing ${truthShape.bearing.toFixed(0)}deg · ` +
     `Anderson L/B for ${meanWind.toFixed(0)} km/h mean wind (${(meanWind * 0.4).toFixed(0)} midflame) ` +
@@ -582,11 +655,19 @@ async function run(p: Perimeter, cfg: Config) {
       ? [0.05, 0.1, 0.25, 0.5, 1].map((f) => Math.max(1, Math.round(f * weather.length)))
       : []
     const trace: string[] = []
+    /**
+     * A uniform moisture field, refilled each hour from the shared NFDRS 1-h
+     * integrator. Uniform because the replay has one weather series for the whole
+     * domain, and passing the field rather than omitting it is what keeps the
+     * kernel off its memoryless `fuelMoisture()` fallback.
+     */
+    const moisture = new Float32Array(cols * rows)
     for (let h = 0; h < weather.length; h++) {
-      const hour = weather[h]
+      const hour = weather[h].params
+      moisture.fill(weather[h].fmc)
       const hp = level === 0 ? hour : { ...hour, suppression: level }
       for (let s = 0; s < 3600 / DT; s++) {
-        step(sim, { params: hp, weather: hour, dt: DT, ...(blockFrac ? { blockFrac } : {}) })
+        step(sim, { params: hp, weather: hour, dt: DT, moisture, ...(blockFrac ? { blockFrac } : {}) })
       }
       if (marks.includes(h + 1)) {
         const snap = new Uint8Array(sim.state.length)
