@@ -29,7 +29,7 @@ for (const sc of SCENARIOS) {
   const row = document.createElement('div')
   row.className = 'row'
 
-  if (imagery) row.append(canvasOf(cols, rows, (d) => d.set(imagery), `${sc.name} — Esri imagery`))
+  if (imagery) row.append(canvasOf(cols, rows, (d) => d.set(imagery), `${sc.name} — Sentinel-2 cloudless`))
 
   row.append(
     canvasOf(cols, rows, (d) => {

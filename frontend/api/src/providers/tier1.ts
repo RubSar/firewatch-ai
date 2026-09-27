@@ -213,7 +213,10 @@ export function worldCoverFuel(cfg: Config): FuelProvider {
 
 export function imageryFuel(cfg: Config): FuelProvider {
   return {
-    id: 'esri-imagery-fuel',
+    // Renamed from 'esri-imagery-fuel' when the imagery source became
+    // Sentinel-2 cloudless. A provider id naming a source it no longer reads is
+    // the kind of label this codebase treats as a defect.
+    id: 's2cloudless-visible-band-fuel',
     fallbacks: [topographyFuel],
     async fetch(q: TerrainQuery, signal?: AbortSignal) {
       const { grid } = q
@@ -286,7 +289,7 @@ export function imageryFuel(cfg: Config): FuelProvider {
       return {
         data: expand(fuelId),
         provenance: prov({
-          source: land ? `esri-world-imagery+sentinel2-scl:${land.sceneId}` : 'esri-world-imagery',
+          source: land ? `s2cloudless+sentinel2-scl:${land.sceneId}` : 's2cloudless',
           kind: 'derived',
           nativeResolution: land ? 20 : metresPerPixel(midLat, z),
           observedAt: land?.observedAt ?? null,

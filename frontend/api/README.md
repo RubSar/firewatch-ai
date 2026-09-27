@@ -20,6 +20,7 @@ only, so **no TS `enum`, `namespace`, parameter properties or decorators**;
 | `src/providers/tier1.ts` | elevation, fuel fallbacks, canopy assumption, values-at-risk |
 | `src/providers/tier2.ts` | weather, wind field, fuel moisture |
 | `src/providers/landfire.ts` | LANDFIRE FBFM40 fuel, CONUS |
+| `src/providers/nws.ts` | NWS gridpoint forecast — the commercially-clean weather source |
 | `src/providers/worldcover.ts` | ESA WorldCover fuel, global |
 | `src/providers/sentinel.ts` | Sentinel-2 L2A: scene classification, band reads |
 | `src/providers/burnhistory.ts` | dNBR burn severity from a Sentinel-2 scene pair |
@@ -42,11 +43,11 @@ mode, and `GET /api/health` reports `measured` or `derived` for all ten.
 | Port | Live | Source |
 |---|---|---|
 | elevation | `terrarium-dem` | AWS Terrarium tiles |
-| fuel | `landfire-fbfm40` → `esa-worldcover` → `esri-imagery-fuel` | Scott & Burgan 40-model set in CONUS, WorldCover elsewhere |
+| fuel | `landfire-fbfm40` → `esa-worldcover` → `s2cloudless-visible-band-fuel` | Scott & Burgan 40-model set in CONUS, WorldCover elsewhere, Sentinel-2 cloudless visible-band as last resort |
 | canopy | `landfire-gbt-canopy` | gradient-boosted trees trained on LANDFIRE CBH/CBD/CC/CH |
 | barriers | `osm-barriers` | Overpass roads and watercourses, per-edge `blockFrac` |
 | burn history | `sentinel2-dnbr` | dNBR between two Sentinel-2 scenes |
-| weather | `open-meteo` | keyless, ~10 kB |
+| weather | `nws-gridpoint` → `open-meteo` | NWS gridpoint (US, public domain, free for commercial use); Open-Meteo elsewhere |
 | wind field | `open-meteo-windfield` | spatial anomaly, not absolute |
 | fuel moisture | `nfdrs-1h-timelag` | Simard EMC + 1-h timelag over 7 d of history |
 | observer | `firms-perimeter` | NASA FIRMS, 375 m pixels |

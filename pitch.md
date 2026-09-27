@@ -596,18 +596,18 @@ as live" is meant to be a type error.*
 | Port | Implementation | Source | Resolution | Keyless |
 |---|---|---|---|---|
 | elevation | `terrarium-dem` | AWS Terrarium terrain tiles | ~30 m | ✅ |
-| fuel | `landfire-fbfm40` → `esa-worldcover` → `esri-imagery-fuel` | LANDFIRE Scott & Burgan 40-model (CONUS); ESA WorldCover v200 (global) | 30 m / 10 m | ✅ |
+| fuel | `landfire-fbfm40` → `esa-worldcover` → `s2cloudless-visible-band-fuel` | LANDFIRE Scott & Burgan 40-model (CONUS); ESA WorldCover v200 (global) | 30 m / 10 m | ✅ |
 | canopy | `landfire-gbt-canopy` | trained model over Sentinel-2 + terrain | 30 m | ✅ |
 | barriers | `osm-barriers` | OpenStreetMap roads + watercourses via Overpass | per-edge | ✅ |
 | burn history | `sentinel2-dnbr` | Sentinel-2 L2A scene pair, AWS Open Data | 20 m | ✅ |
-| weather | `open-meteo` | Open-Meteo forecast + archive | hourly | ✅ |
+| weather | `nws-gridpoint` → `open-meteo` | NWS gridpoint forecast (US, public domain); Open-Meteo elsewhere | ~2.5 km | ✅ |
 | wind field | `open-meteo-windfield` | spatial anomaly, not absolute | grid cell | ✅ |
 | fuel moisture | `nfdrs-1h-timelag` | Simard EMC + 1-h timelag over 7 d history | per-cell | ✅ |
 | observer | `firms-perimeter` | NASA FIRMS VIIRS/MODIS | 375 m | ✅ |
 | values at risk | `osm-buildings` | counted OSM footprints, not a per-hectare estimate | per building | ✅ |
 
-Also used: **WFIGS interagency perimeters** (ground truth, offline only) and **Esri World
-Imagery** (basemap and last-resort fuel classifier).
+Also used: **WFIGS interagency perimeters** (ground truth, offline only) and **Sentinel-2
+cloudless** from EOX (basemap and last-resort fuel classifier, CC-BY-4.0).
 
 **Offline mode** swaps every one for a procedural or null implementation, so the whole
 system runs with no network and the header chip says so.
@@ -641,25 +641,52 @@ confirming by counsel before revenue.
 |---|---|---|
 | **LANDFIRE** (FBFM40, CBH/CBD) | US federal work — public domain | 🟢 low |
 | **WFIGS** perimeters | US federal — public domain | 🟢 low |
+| **NWS** `api.weather.gov` | US federal — public domain, free for commercial use | 🟢 low, requires a `User-Agent` by policy |
 | **NASA FIRMS** | US federal — public domain, attribution requested | 🟢 low |
 | **Sentinel-2 / Copernicus** | free and open, attribution required | 🟢 low |
-| **ESA WorldCover v200** | CC-BY-4.0 — attribution required | 🟢 low, attribution is mandatory |
+| **ESA WorldCover v200** | CC-BY-4.0 — attribution required | 🟢 low, attribution mandatory |
+| **Sentinel-2 cloudless** (EOX) | CC-BY-4.0 — attribution required | 🟢 low, attribution mandatory |
 | **AWS Terrarium terrain tiles** | open data, derived from public DEMs; attribution expected | 🟢 low |
-| **OpenStreetMap** (barriers, buildings) | **ODbL 1.0** | 🟠 **share-alike on a derived database.** Counting footprints per cell may constitute a derived database. Needs a considered position, not an assumption |
-| **Open-Meteo** | free tier is **non-commercial**; data CC-BY-4.0 | 🔴 **commercial use requires a paid plan.** This is a load-bearing source — weather drives everything |
-| **Esri World Imagery** | restricted to Esri/ArcGIS contexts without a licence | 🔴 **already flagged in the codebase as unexamined.** Used as basemap and last-resort fuel classifier |
+| **OpenStreetMap** (barriers, buildings) | **ODbL 1.0** | 🟠 **share-alike on a derived database.** Counting footprints per cell may constitute one. Needs a considered position, not an assumption |
+| **Open-Meteo** | free tier is **non-commercial**; data CC-BY-4.0 | 🟠 **reduced, not removed.** No longer the forecast source in the US; still used for the drought clock, the hindcast archive, and place-name search |
 | **OpenTopoMap** tiles | CC-BY-SA | 🟠 share-alike; also a courtesy tile server, not a CDN |
+| ~~Esri World Imagery~~ | ~~restricted without a licence~~ | ✅ **removed.** Replaced by Sentinel-2 cloudless in all three code paths |
 
-**Two of these block commercialisation as currently wired:**
+### What was fixed, and what remains
 
-1. **Open-Meteo** — the weather port. A commercial plan, or a swap to NWS/RAWS (US federal,
-   public domain), resolves it. The provider port design means that is one line in
-   `registry.ts`.
-2. **Esri World Imagery** — the basemap. Swappable for OpenStreetMap raster, Esri under
-   licence, or a commercial tile provider.
+**Esri is gone.** It was the basemap, the server-side fuel classifier's imagery and
+the browser-side classifier's imagery. All three now read **Sentinel-2 cloudless**
+(EOX, CC-BY-4.0), which is free for commercial use with attribution, keyless, and
+global. An annual cloudless composite is arguably better for land-cover
+classification than an arbitrary recent scene, having no seasonal or cloud
+variation to classify around.
 
-**One deserves a real decision:** OSM's ODbL. Attribution is easy; the share-alike
-obligation on derived databases is the part that needs thought.
+> **Cost of that swap, measured rather than assumed.** The visible-band
+> classifier's thresholds were tuned against *Esri* band statistics, so it reads
+> the new source slightly worse: at Angelina National Forest it now calls the
+> domain 64% Agriculture where Esri gave 52% Cropland — the same failure, a little
+> larger. It was already unusable outside Armenia, which is why WorldCover
+> replaced it, and it is now the **third** fallback behind FBFM40 and WorldCover.
+> Re-tuning against the new source is a `npm run calibrate` job and is not done.
+> Water and snow are unaffected: they come from Sentinel-2's Scene Classification
+> Layer, and `npm run watercheck` still classifies all six sites from Sentinel-2.
+
+**Open-Meteo is reduced, not eliminated.** `api.weather.gov` is now the forecast
+provider ahead of it, so in the United States — which is where every hindcast fire
+is — the forecast comes from a public-domain federal source. Outside the US the
+`/points` lookup 404s and the chain falls back, with `degradedFrom` recording it.
+Three uses remain and none has an NWS equivalent:
+
+| Remaining use | Why NWS cannot cover it | Exit |
+|---|---|---|
+| drought clock (days since rain) | NWS publishes forecasts, not archives. It is attempted and **degrades to the scenario preset**, so a US incident can run with zero Open-Meteo calls | NOAA NCEI, or self-host |
+| hindcast archive (historical hourly) | no NWS archive API | self-host, or ERA5 direct from Copernicus |
+| place-name search | not a weather service | Nominatim (ODbL), Photon, or GeoNames |
+
+**The two complete exits**, either of which removes the term entirely: **self-host
+Open-Meteo** — it is open source and the underlying ERA5/GFS/DWD data is public —
+or **buy their commercial plan**. The provider-port design means a swap is one line
+in `registry.ts`, which is how NWS was added.
 
 **Also relevant, and already recorded by the team:** ELMFIRE is AGPLv3 plus Commons Clause
 (`docs/concurrent-analysis/09-observation-baseline/external-models-cypress-creek.md`), and

@@ -638,6 +638,32 @@ the kernel stays usable without a server.
 - `Incident.rebuildFields()` runs before each step batch but early-returns on an unchanged
   weather signature, so it costs nothing while the weather is still.
 
+### Two sources were swapped for licensing, not accuracy
+
+Both were commercial blockers, and both fixes are in the provider chain rather than in
+any consumer.
+
+- **Esri World Imagery is gone**, replaced by **Sentinel-2 cloudless** (EOX, CC-BY-4.0)
+  in all three places it was used: `tiles.ts` `IMAGERY_URL`, `MapView.tsx`'s satellite
+  basemap and `realData.ts`'s browser classifier. Esri's terms restrict use outside
+  Esri/ArcGIS contexts without a licence. **Attribution is now a licence condition, not a
+  courtesy — do not remove it from the Leaflet control.** Cost, measured: the visible-band
+  classifier was tuned against *Esri* band statistics and reads the new source slightly
+  worse (Angelina NF now 64% Agriculture against Esri's documented 52% Cropland). It was
+  already unusable outside Armenia and is now the third fallback, so this was accepted
+  rather than fixed; re-tuning is an `npm run calibrate` job.
+- **`nwsWeather` sits ahead of `openMeteo`** because Open-Meteo's free tier is
+  **non-commercial** and weather drives every fire. `api.weather.gov` is US federal public
+  domain. Two quirks: it **requires a `User-Agent`** or answers 403, and its values are
+  **run-length encoded over ISO 8601 intervals** — every field has a different entry count
+  (temperature 160, wind direction 52, for the same period), so they must be expanded onto
+  a common hourly grid. Outside the US `/points` 404s and the chain falls back.
+  Open-Meteo still serves the drought clock, the hindcast archive and place-name search;
+  the complete exits are self-hosting it or a commercial plan.
+
+`kindOf` in `registry.ts` splits ids on `:` before lookup, because the NWS id carries its
+forecast office (`nws-gridpoint:HNX`).
+
 ### Water comes from Sentinel-2, not from colour
 
 `frontend/api/src/providers/sentinel.ts` reads the Sentinel-2 L2A **Scene
@@ -775,8 +801,8 @@ These are the interfaces designed to be swapped for real feeds, each marked `MOC
 Server-side the same seams are formal §9 ports in `frontend/api/src/providers/`. `registry.ts` is
 the **only** file that names concrete implementations. **All ten ports are real in live mode** —
 Terrarium DEM, LANDFIRE FBFM40 / ESA WorldCover fuel, a LANDFIRE-trained canopy model, OSM
-barriers and buildings, Sentinel-2 dNBR burn history, Open-Meteo weather and wind field, NFDRS 1-h
-moisture, FIRMS observations — and offline mode swaps each for a procedural or null one. Every
+barriers and buildings, Sentinel-2 dNBR burn history, NWS / Open-Meteo weather and wind field,
+NFDRS 1-h moisture, FIRMS observations — and offline mode swaps each for a procedural or null one. Every
 provider returns `Provided<T>` carrying `Provenance`, and the UI header chip
 lists which is which — "mock data presented as live" is meant to be a type error, so do not add a
 provider that returns bare data.
