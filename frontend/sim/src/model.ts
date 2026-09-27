@@ -485,13 +485,32 @@ export interface StepInput {
 }
 
 /**
- * How strongly a fuel's own moisture damps its spread, 0 = will not carry.
+ * Rothermel's moisture damping coefficient, 0 = will not carry.
+ *
+ *   eta_M = 1 - 2.59 r + 5.11 r^2 - 3.52 r^3,  r = fmc / mx
+ *
+ * Published, and identical to the term in `rothermel.ts` — so the kernel and its
+ * own external reference now agree on this factor by construction rather than by
+ * coincidence.
+ *
+ * It replaces `((mx - fmc) / (mx - 1.5))^1.5`, which was invented. The two agree
+ * closely at r ~ 0.4 and diverge by 2x by r ~ 0.65, and the old `mx` values
+ * happened to sit the test conditions right in the agreeing region — so
+ * correcting `mx` to published Anderson figures made the invented curve visible
+ * as a 0.5x disagreement in the calm-wind Rothermel check. Two wrong things
+ * cancelling, again, and only the external reference could see it.
+ *
+ * eta_M is exactly 0 at r = 1, so extinction still falls out of the formula
+ * rather than needing its own branch; r is clamped because beyond extinction the
+ * polynomial turns back upward.
  *
  * Extracted so the per-cell path can evaluate it against local moisture while
  * the scalar path keeps precomputing it once per fuel per step.
  */
-function moistureDamping(f: FuelModel, fmc: number): number {
-  return f.load <= 0 || fmc >= f.mx ? 0 : Math.pow((f.mx - fmc) / (f.mx - 1.5), 1.5)
+export function moistureDamping(f: FuelModel, fmc: number): number {
+  if (f.load <= 0 || f.mx <= 0) return 0
+  const r = Math.min(1, fmc / f.mx)
+  return Math.max(0, 1 - 2.59 * r + 5.11 * r * r - 3.52 * r * r * r)
 }
 
 /**
