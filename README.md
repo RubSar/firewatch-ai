@@ -134,8 +134,22 @@ configured test cases; they are not operational accuracy guarantees.
   some sections still need reconciliation with the current implementation.
 - [Proposed architecture](frontend/ARCHITECTURE.md) — a target design, not a
   description of every implemented feature.
-- [Contributor instructions](AGENTS.md)
+- [Contribution guide](CONTRIBUTING.md)
+- [Repository instructions](AGENTS.md)
 
 Our direction is open collaboration with researchers and analysts: inspect model
 assumptions, contribute regional data and strengthen reproducible validation. Wider
 collaboration can improve the evidence; accuracy must still be demonstrated.
+
+## Contributing
+
+Start with the [contribution guide](CONTRIBUTING.md), choose a bounded task from
+[open issues](https://github.com/RubSar/firewatch-ai/issues), or ask a question in
+[Discussions](https://github.com/RubSar/firewatch-ai/discussions). Contributions
+can include code, data audits, documentation and practitioner review.
+
+## License
+
+Original FireWatch AI code and documentation are available under the
+[MIT License](LICENSE). Third-party code, data, imagery and model assets retain
+their own terms; see [third-party notices](THIRD_PARTY_NOTICES.md).
