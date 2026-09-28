@@ -1,5 +1,8 @@
 # Workflows and interface implications
 
+> Dated background research, not current application setup or accepted scope.
+> See the [research index](../README.md) and [decision log](../../../AGENTS.md).
+
 Reviewed 2026-09-26. Workflow sequences below are our synthesis, not a verified walkthrough of the commercial application.
 
 ## Reference workflow

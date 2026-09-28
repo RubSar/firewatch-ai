@@ -1,5 +1,8 @@
 # 4. Capacity, deployment, reliability and acceptance
 
+> Design proposal, 2026-09-26. Services and acceptance targets below are not a deployed
+> or benchmarked system. See the [specification status](README.md).
+
 ## 4.1 Capacity assumptions and equations
 
 `capacity-assumptions.json` is the editable source of planning inputs. `python capacity.py` regenerates `capacity-results.json` and `capacity-table.md` for 10, 100 and 1,000 concurrent drones. Values are decimal units. Default concurrent design point is 100; hardware and model rates remain unselected.

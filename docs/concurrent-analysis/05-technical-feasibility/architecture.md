@@ -1,6 +1,9 @@
 # Technical feasibility
 
-Reviewed 2026-09-26. This is a conceptual proposal; no stack decision or implementation has been made.
+> Dated background research, not current application setup or accepted scope.
+> See the [research index](../README.md) and [decision log](../../../AGENTS.md).
+
+Reviewed 2026-09-26. This was a conceptual proposal before application implementation; it does not describe the current checkout.
 
 ## What public research does not establish
 

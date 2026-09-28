@@ -1,5 +1,9 @@
 # Historical data quality and enrichment
 
+For the current cache inventory, source attribution, consumer map and contributor
+setup, start with the [historical data documentation](../../research-data/README.md).
+The experiment results and handoff details below describe their original run.
+
 Current scope (user clarification, 2026-09-26): historical data quality and enrichment
 only. See [current phase](data-quality-phase.md). The default runner imports sources
 and writes normalized historical records and a quality report, then exits.

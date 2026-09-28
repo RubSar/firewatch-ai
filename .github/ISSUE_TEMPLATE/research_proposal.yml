@@ -1,0 +1,29 @@
+name: Research study or reproduction
+description: Propose a focused study, reproduction, negative result or research review.
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: Research question and scope
+      description: State one answerable question and identify related studies or issues.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Data and evidence
+      description: Sources, versions, terms, availability and known time, space or intervention gaps. Mark unknowns explicitly; do not upload credentials or large datasets.
+    validations:
+      required: true
+  - type: textarea
+    id: method
+    attributes:
+      label: Proposed method and deliverable
+      description: Describe the protocol, baseline or audit method and what would constitute a useful result, including a negative result.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction and review needs
+      description: Required components, environment, access or compute, and software or domain review needed. Use research/templates/study for the eventual study PR.

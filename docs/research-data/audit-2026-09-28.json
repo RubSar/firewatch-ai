@@ -1,0 +1,448 @@
+{
+  "audit_date": "2026-09-28",
+  "scope": "Local cached historical research artifacts; not an acquisition rerun, review acceptance, or global coverage estimate. Non-null is not a quality approval.",
+  "code_revision_at_audit": "f7ecbb4838c9c1b3d679a6070d34592e5e8cd129",
+  "inventory": [
+    {
+      "path": "backend/api/.research-data/GOFER-v02.zip",
+      "files": 1,
+      "bytes": 75711678
+    },
+    {
+      "path": "backend/api/.research-data/GOFERC_summary.csv",
+      "files": 1,
+      "bytes": 3913711
+    },
+    {
+      "path": "backend/api/.research-data/cfsds-v1.1",
+      "files": 20,
+      "bytes": 25680800
+    },
+    {
+      "path": "backend/api/.research-data/enrichment-pilot",
+      "files": 2275,
+      "bytes": 212327149
+    },
+    {
+      "path": "backend/api/.research-data/nifc-pilot",
+      "files": 11,
+      "bytes": 260961
+    },
+    {
+      "path": "backend/api/.research-data/results",
+      "files": 11,
+      "bytes": 444793870
+    }
+  ],
+  "total_files": 2319,
+  "total_bytes": 762688169,
+  "source_checksums": {
+    "GOFER-v02.zip": "96eca2e18529eb274ca94af9a730bcf1c9c6da597fb04a9b5cf9167aada451c2",
+    "GOFERC_summary.csv": "2db846c1fbfec1af858dcf244f9b1f88405b49ab9b101c3a27991b4f3315e3d3"
+  },
+  "cfsds_pinned_checks": [
+    {
+      "file": "Firegrowth_groups_v1_1_2002.zip",
+      "sha256": "8ff633eab8ff0d64955f901cc0dcacba0d4e4f9ac93d7b6015445ea00d08e9d9",
+      "matches_pinned_sha256": true
+    },
+    {
+      "file": "Firegrowth_groups_v1_1_2003.zip",
+      "sha256": "f8c0087746a915ff810b80670c1261e3adf2e7216430b6f65609a48a07a1651a",
+      "matches_pinned_sha256": true
+    },
+    {
+      "file": "Firegrowth_groups_v1_1_2004.zip",
+      "sha256": "cc8a0818b8885daa66d32c66e7d92ae51416cc4183cbcd3822399d88fd8d0ccf",
+      "matches_pinned_sha256": true
+    },
+    {
+      "file": "Firegrowth_groups_v1_1_2005.zip",
+      "sha256": "44b627bf61b8bbc115b2041d9095cf1fee417ca91e6ca2586951e1c59a8bb1c9",
+      "matches_pinned_sha256": true
+    },
+    {
+      "file": "Firegrowth_groups_v1_1_2006.zip",
+      "sha256": "c07596e8e70cbc4b14cc08c87196dcbdc5b5ede1adac0fe7caa380c63d42cbde",
+      "matches_pinned_sha256": true
+    },
+    {
+      "file": "Firegrowth_groups_v1_1_2007.zip",
+      "sha256": "3616a094c3329fc14a9d59259bb5993736a5b1d3f9cfb0908526d6b5e86d2f4e",
+      "matches_pinned_sha256": true
+    },
+    {
+      "file": "Firegrowth_groups_v1_1_2008.zip",
+      "sha256": "b3b06fc7d13d892310be0731bd729ccf26f3181d0fed4d6eff9c687688c53e76",
+      "matches_pinned_sha256": true
+    },
+    {
+      "file": "Firegrowth_groups_v1_1_2009.zip",
+      "sha256": "764096010a41a6c6c60359e173f885f522337e3e5def5c8fd0ed5f9bab1767bd",
+      "matches_pinned_sha256": true
+    },
+    {
+      "file": "Firegrowth_groups_v1_1_2010.zip",
+      "sha256": "7f4172d13f35823bf8847a0fca7b4de18f91d8f4e607ce5cb76b1b86993280be",
+      "matches_pinned_sha256": true
+    },
+    {
+      "file": "Firegrowth_groups_v1_1_2011.zip",
+      "sha256": "c6ba1f0cfbd015b971e3f48a6223b6b5f2fd827cb345dc086e460b0b1c3ea5cb",
+      "matches_pinned_sha256": true
+    },
+    {
+      "file": "Firegrowth_groups_v1_1_2012.zip",
+      "sha256": "f20ba62319de1c0590035c38a1d3a6e028bb3867ba4f1664241381c5ace649bb",
+      "matches_pinned_sha256": true
+    },
+    {
+      "file": "Firegrowth_groups_v1_1_2013.zip",
+      "sha256": "912abfd34a4301df860daa12370789866908d50ccddc6162302b4858f9031bc7",
+      "matches_pinned_sha256": true
+    },
+    {
+      "file": "Firegrowth_groups_v1_1_2014.zip",
+      "sha256": "91883309f14f51a3dfbf732e16cecf5357301d1ca4129916ca6360e1cc875ca0",
+      "matches_pinned_sha256": true
+    },
+    {
+      "file": "Firegrowth_groups_v1_1_2015.zip",
+      "sha256": "55d0bb773866faf0f596a013925896055754ba40ed29dc91362ceeeea4c88326",
+      "matches_pinned_sha256": true
+    },
+    {
+      "file": "Firegrowth_groups_v1_1_2016.zip",
+      "sha256": "7a8c28e1e1a20f1b0368a8080cbbc5339b3fb155f2224c734b90f8db25110c34",
+      "matches_pinned_sha256": true
+    },
+    {
+      "file": "Firegrowth_groups_v1_1_2017.zip",
+      "sha256": "46348459f37b22e68b0473146d858a096512652f3e47401ef6db425cd6f8dd63",
+      "matches_pinned_sha256": true
+    },
+    {
+      "file": "Firegrowth_groups_v1_1_2018.zip",
+      "sha256": "5cd96e243bb3bec6adf0db819f080ed7462baf1aea38a2aefe180793acd6ed16",
+      "matches_pinned_sha256": true
+    },
+    {
+      "file": "Firegrowth_groups_v1_1_2019.zip",
+      "sha256": "55a97b20655b8ba6a3c83817b898ebfc3664c0119854365fe31e2a149d8bbfea",
+      "matches_pinned_sha256": true
+    },
+    {
+      "file": "Firegrowth_groups_v1_1_2020.zip",
+      "sha256": "289654c15cbbf61e2e3932bc0a8b639399ef7c8352a6f0880731f1bae03cfd35",
+      "matches_pinned_sha256": true
+    },
+    {
+      "file": "Firegrowth_groups_v1_1_2021.zip",
+      "sha256": "62631aad5a2350cf1caed72f97c4503f322bcd81b4367825c77ffc24f8724fb9",
+      "matches_pinned_sha256": true
+    }
+  ],
+  "saved_import_counts": {
+    "cfsds": {
+      "situations": 82108,
+      "distinct_fires": 4164,
+      "complete_matching_situations": 76919
+    },
+    "gofer": {
+      "situations": 20273,
+      "distinct_fires": 28,
+      "complete_matching_situations": 0
+    }
+  },
+  "pilot_events": [
+    {
+      "event_id": "gofer:2019:Kincade",
+      "intervals": 72,
+      "one_hour_intervals": 72,
+      "internal_gap_count": 0,
+      "interval_ids_unique": true,
+      "newly_burned_footprints": 15,
+      "measurements_per_interval": [
+        49
+      ],
+      "simple_measurements_per_interval": [
+        29
+      ],
+      "intervals_sha256": "7ea2d5bff10372d5b07dbf569fb1b0d9cd9ee59e2c18bbbc037841a20848ab1a",
+      "preview_matches_sidecar_sha256": true,
+      "source_measurements": {
+        "ECMWF/ERA5_LAND/HOURLY": {
+          "measurement_slots": 1296,
+          "non_null_slots": 765
+        },
+        "LANDFIRE LF2016 Remap/LF2016_CBD_CONUS": {
+          "measurement_slots": 72,
+          "non_null_slots": 15
+        },
+        "LANDFIRE LF2016 Remap/LF2016_CBH_CONUS": {
+          "measurement_slots": 72,
+          "non_null_slots": 15
+        },
+        "LANDFIRE LF2016 Remap/LF2016_CC_CONUS": {
+          "measurement_slots": 72,
+          "non_null_slots": 15
+        },
+        "LANDFIRE LF2016 Remap/LF2016_CH_CONUS": {
+          "measurement_slots": 72,
+          "non_null_slots": 15
+        },
+        "LANDFIRE LF2016 Remap/LF2016_EVC_CONUS": {
+          "measurement_slots": 72,
+          "non_null_slots": 15
+        },
+        "LANDFIRE LF2016 Remap/LF2016_EVH_CONUS": {
+          "measurement_slots": 72,
+          "non_null_slots": 15
+        },
+        "LANDFIRE LF2016 Remap/LF2016_EVT_CONUS": {
+          "measurement_slots": 72,
+          "non_null_slots": 15
+        },
+        "LANDFIRE LF2016 Remap/LF2016_FBFM40_CONUS": {
+          "measurement_slots": 72,
+          "non_null_slots": 15
+        },
+        "MODIS/061/MCD64A1": {
+          "measurement_slots": 216,
+          "non_null_slots": 45
+        },
+        "NASA/FIRMS/VIIRS": {
+          "measurement_slots": 72,
+          "non_null_slots": 0
+        },
+        "NASA/GPM_L3/IMERG_V07": {
+          "measurement_slots": 432,
+          "non_null_slots": 258
+        },
+        "NASA/HLS/HLSS30/v002": {
+          "measurement_slots": 45,
+          "non_null_slots": 45
+        },
+        "NASA/HLS/v002": {
+          "measurement_slots": 171,
+          "non_null_slots": 0
+        },
+        "NASA/SMAP/SPL4SMGP/008": {
+          "measurement_slots": 288,
+          "non_null_slots": 172
+        },
+        "USGS/3DEP/10m_collection": {
+          "measurement_slots": 216,
+          "non_null_slots": 45
+        },
+        "USGS/SRTMGL1_003": {
+          "measurement_slots": 216,
+          "non_null_slots": 45
+        }
+      },
+      "raws_status": "not_acquired",
+      "ui_complete_hours": 13
+    },
+    {
+      "event_id": "gofer:2020:Bobcat",
+      "intervals": 72,
+      "one_hour_intervals": 72,
+      "internal_gap_count": 0,
+      "interval_ids_unique": true,
+      "newly_burned_footprints": 33,
+      "measurements_per_interval": [
+        49
+      ],
+      "simple_measurements_per_interval": [
+        29
+      ],
+      "intervals_sha256": "a2a01fef2db5cb17ff5a776c5afd453b256842053ed7c31cc711c29d3c3d5389",
+      "preview_matches_sidecar_sha256": true,
+      "source_measurements": {
+        "ECMWF/ERA5_LAND/HOURLY": {
+          "measurement_slots": 1296,
+          "non_null_slots": 918
+        },
+        "LANDFIRE LF2016 Remap/LF2016_CBD_CONUS": {
+          "measurement_slots": 72,
+          "non_null_slots": 33
+        },
+        "LANDFIRE LF2016 Remap/LF2016_CBH_CONUS": {
+          "measurement_slots": 72,
+          "non_null_slots": 33
+        },
+        "LANDFIRE LF2016 Remap/LF2016_CC_CONUS": {
+          "measurement_slots": 72,
+          "non_null_slots": 33
+        },
+        "LANDFIRE LF2016 Remap/LF2016_CH_CONUS": {
+          "measurement_slots": 72,
+          "non_null_slots": 33
+        },
+        "LANDFIRE LF2016 Remap/LF2016_EVC_CONUS": {
+          "measurement_slots": 72,
+          "non_null_slots": 33
+        },
+        "LANDFIRE LF2016 Remap/LF2016_EVH_CONUS": {
+          "measurement_slots": 72,
+          "non_null_slots": 33
+        },
+        "LANDFIRE LF2016 Remap/LF2016_EVT_CONUS": {
+          "measurement_slots": 72,
+          "non_null_slots": 33
+        },
+        "LANDFIRE LF2016 Remap/LF2016_FBFM40_CONUS": {
+          "measurement_slots": 72,
+          "non_null_slots": 33
+        },
+        "MODIS/061/MCD64A1": {
+          "measurement_slots": 216,
+          "non_null_slots": 99
+        },
+        "NASA/FIRMS/VIIRS": {
+          "measurement_slots": 72,
+          "non_null_slots": 0
+        },
+        "NASA/GPM_L3/IMERG_V07": {
+          "measurement_slots": 432,
+          "non_null_slots": 306
+        },
+        "NASA/HLS/HLSS30/v002": {
+          "measurement_slots": 99,
+          "non_null_slots": 0
+        },
+        "NASA/HLS/v002": {
+          "measurement_slots": 117,
+          "non_null_slots": 0
+        },
+        "NASA/SMAP/SPL4SMGP/008": {
+          "measurement_slots": 288,
+          "non_null_slots": 204
+        },
+        "USGS/3DEP/10m_collection": {
+          "measurement_slots": 216,
+          "non_null_slots": 99
+        },
+        "USGS/SRTMGL1_003": {
+          "measurement_slots": 216,
+          "non_null_slots": 99
+        }
+      },
+      "raws_status": "not_acquired",
+      "ui_complete_hours": 0
+    },
+    {
+      "event_id": "gofer:2020:Creek",
+      "intervals": 72,
+      "one_hour_intervals": 72,
+      "internal_gap_count": 0,
+      "interval_ids_unique": true,
+      "newly_burned_footprints": 63,
+      "measurements_per_interval": [
+        49
+      ],
+      "simple_measurements_per_interval": [
+        29
+      ],
+      "intervals_sha256": "f6ab5c36b49b831f573684bb9d9fe02a52395cb7586b45b6240005fda8838fe1",
+      "preview_matches_sidecar_sha256": true,
+      "source_measurements": {
+        "ECMWF/ERA5_LAND/HOURLY": {
+          "measurement_slots": 1296,
+          "non_null_slots": 1170
+        },
+        "LANDFIRE LF2016 Remap/LF2016_CBD_CONUS": {
+          "measurement_slots": 72,
+          "non_null_slots": 63
+        },
+        "LANDFIRE LF2016 Remap/LF2016_CBH_CONUS": {
+          "measurement_slots": 72,
+          "non_null_slots": 63
+        },
+        "LANDFIRE LF2016 Remap/LF2016_CC_CONUS": {
+          "measurement_slots": 72,
+          "non_null_slots": 63
+        },
+        "LANDFIRE LF2016 Remap/LF2016_CH_CONUS": {
+          "measurement_slots": 72,
+          "non_null_slots": 63
+        },
+        "LANDFIRE LF2016 Remap/LF2016_EVC_CONUS": {
+          "measurement_slots": 72,
+          "non_null_slots": 60
+        },
+        "LANDFIRE LF2016 Remap/LF2016_EVH_CONUS": {
+          "measurement_slots": 72,
+          "non_null_slots": 60
+        },
+        "LANDFIRE LF2016 Remap/LF2016_EVT_CONUS": {
+          "measurement_slots": 72,
+          "non_null_slots": 60
+        },
+        "LANDFIRE LF2016 Remap/LF2016_FBFM40_CONUS": {
+          "measurement_slots": 72,
+          "non_null_slots": 60
+        },
+        "MODIS/061/MCD64A1": {
+          "measurement_slots": 216,
+          "non_null_slots": 189
+        },
+        "NASA/FIRMS/VIIRS": {
+          "measurement_slots": 72,
+          "non_null_slots": 0
+        },
+        "NASA/GPM_L3/IMERG_V07": {
+          "measurement_slots": 432,
+          "non_null_slots": 387
+        },
+        "NASA/HLS/HLSL30/v002": {
+          "measurement_slots": 15,
+          "non_null_slots": 0
+        },
+        "NASA/HLS/HLSS30/v002": {
+          "measurement_slots": 165,
+          "non_null_slots": 165
+        },
+        "NASA/HLS/v002": {
+          "measurement_slots": 36,
+          "non_null_slots": 0
+        },
+        "NASA/SMAP/SPL4SMGP/008": {
+          "measurement_slots": 288,
+          "non_null_slots": 258
+        },
+        "USGS/3DEP/10m_collection": {
+          "measurement_slots": 216,
+          "non_null_slots": 189
+        },
+        "USGS/SRTMGL1_003": {
+          "measurement_slots": 216,
+          "non_null_slots": 189
+        }
+      },
+      "raws_status": "not_acquired",
+      "ui_complete_hours": 51
+    }
+  ],
+  "preview": {
+    "path": "frontend/public/data/historical-pilot.json",
+    "sha256": "0dee877d7e16466ef2f90864687cdfa2b665dafe7ca5fbcdc9f2f38eb6ebad44",
+    "events": 5,
+    "records": 218,
+    "snapshots": 2
+  },
+  "nifc": {
+    "records": 2,
+    "distinct_fires": 2,
+    "hourly_growth_observations": 0
+  },
+  "method": "Recursive regular-file inventory and SHA-256 of local files; parse current interval sidecars; compare saved import report and preview source hashes. No network reacquisition.",
+  "verification": {
+    "offline_preview_reexport_byte_identical": true,
+    "preview_contract_validation": "passed in exporter",
+    "historical_cli_help_commands_passed": 5,
+    "ui_availability_evaluated_with": "frontend/src/history/model.ts eventAvailability",
+    "live_acquisition_rerun": false,
+    "human_measurement_review_performed": false
+  }
+}

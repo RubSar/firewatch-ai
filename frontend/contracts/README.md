@@ -1,7 +1,7 @@
 # @firewatch/contracts
 
-Shared API schemas, wire protocol and provider ports. Types and codec only — no
-runtime logic, no I/O.
+Shared provider and wire types plus the runtime binary encode/decode implementation.
+The package performs no network I/O.
 
 | File | What |
 |---|---|
@@ -16,8 +16,11 @@ renders as a corrupted fire rather than an error — so change `encode*` and
 `decode*` together and re-run `npm run smoke:api`, which round-trips every frame
 type against a client-side mirror.
 
-`Provided<T>` is the load-bearing convention: no provider returns bare data, so
-"mock data presented as live" is a type error rather than a judgement call.
+`Provided<T>` requires provenance fields alongside data. Types enforce the shape,
+not the truth of source labels: adapters, tests and reviewers must check meaning,
+units, coverage and fallback behavior.
 
-This is distinct from the repo-root `contracts/` directory, which is the
-cross-team scaffold described in `AGENTS.md` and is not used by this work.
+The repository-root [contracts](../../contracts/README.md) define language-neutral
+historical and observation-research formats. This package defines the separate
+TypeScript simulation protocol. Run `npm run smoke:api` from `frontend/` after
+codec changes; also run the root workspace type checks and tests.

@@ -1,0 +1,29 @@
+name: Historical data or evidence contribution
+description: Propose a source audit, missing-data fix, domain review or bounded enrichment.
+body:
+  - type: textarea
+    id: objective
+    attributes:
+      label: Question and acceptance criteria
+      description: Choose one event, source or failure mode and explain the reviewable result.
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Source and access
+      description: Publisher URL, version, license or terms, retrieval date/hash if available, and access limitations. Do not attach large data or credentials.
+    validations:
+      required: true
+  - type: textarea
+    id: interpretation
+    attributes:
+      label: Time, space and uncertainty
+      description: Event/interval IDs, units, spatial support, missingness and intervention uncertainty. Mark unknown details explicitly.
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: Planned changes and validation
+      description: Affected modules/contracts, minimal fixture, checks and required human or domain review.

@@ -7,9 +7,9 @@ covering Sentinel-2 acquisition within the provisional six-hour screen. This is
 data-readiness evidence, not an accuracy result or a completed ML benchmark.
 
 Scope: `backend/vision/` acquisition/audit tools, `contracts/research/` formats, and
-this research directory. Continue the existing `codex/cypress-creek-case` worktree;
-remote main was fetched and remained at `3f7ca27`. Existing Cypress/transfer outputs
-are preserved. Vision/research ownership is unassigned. No API/UI interface changes.
+this research directory. The recorded run used `codex/cypress-creek-case` with
+remote main at `3f7ca27`; these are historical provenance, not current checkout
+instructions. Existing Cypress/transfer outputs were preserved. Vision/research ownership is unassigned. No API/UI interface changes.
 
 ## Source search and the 2026 reference gap
 

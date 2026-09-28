@@ -1,4 +1,4 @@
-# App flow — Ember (FireWatch frontend workspace)
+# Application flow — FireWatch frontend
 
 How a run of this application actually proceeds, end to end: what happens on load, where the
 fire is computed, what data is fetched, how state reaches the screen, and what a click does.
@@ -13,7 +13,7 @@ IR assimilation). Where the two disagree, this document follows `src/`.
 |---|---|---|
 | `firewatch-frontend` | `frontend/` | The app: React UI, Leaflet map, canvas rendering, browser tile loading |
 | `@firewatch/sim` | `frontend/sim/` | The kernel: fire spread, fuels, terrain, weather, classifier. DOM-free — identical code runs in the browser and in Node |
-| `@firewatch/contracts` | `frontend/contracts/` | Wire protocol, binary codec, provider ports. Types only, no runtime logic |
+| `@firewatch/contracts` | `frontend/contracts/` | Wire/provider types plus the executable binary codec |
 | `@firewatch/api` | `frontend/api/` | Fastify server that runs the kernel server-side, resolves real data providers, and streams state |
 
 One npm workspace rooted at `frontend/`. Dependencies point one way: the root app and `api` both
@@ -28,9 +28,10 @@ VITE_API_URL unset          →  LocalTransport   →  kernel steps in the brows
 VITE_API_URL set            →  RemoteTransport  →  kernel steps on the server, state streams back
 ```
 
-Both are first-class. Local mode needs no server and no network at all — that is what makes the
-app work offline and what the UI smoke test exercises deterministically. If a remote connect
-fails, the app logs a warning and falls back to local rather than failing.
+Local simulation needs no API server. It attempts network terrain/imagery loading
+and can fall back to procedural terrain; search and external tiles still need
+connectivity. Browser smoke checks are not fully offline or deterministic. If a
+remote connection fails, the app logs a warning and falls back to local simulation.
 
 The seam is `frontend/src/transport/`. Both transports expose a real `Sim` object;
 `RemoteTransport` mirrors wire deltas into it rather than stepping it. Everything downstream
@@ -39,10 +40,12 @@ cannot tell which transport produced them.
 
 ## 2. Boot
 
-1. `src/main.tsx` mounts `App`.
+1. `src/main.tsx` loads `HistoryPage` at `/history` (including a trailing slash),
+   otherwise `App`. The atlas consumes bundled historical records and does not
+   create a simulation. The remaining steps describe the simulator route.
 2. `App` holds a `Scenario` **value** in state, initialised to `SCENARIOS[0]` (Khosrov Forest
    Reserve). The three Armenian scenarios in `sim/src/terrain.ts` are bookmarks, not the
-   available set — every data source is global.
+   available set. Custom domains are allowed; source coverage varies by location.
 3. `useFireSource(scenario)` (`App.tsx`) owns the whole source lifecycle and runs immediately.
 4. A single `requestAnimationFrame` loop starts and runs for the life of the app.
 
@@ -76,7 +79,7 @@ buildTerrain(scenario)              procedural terrain, synchronous
 Fetched straight from the browser, because both services send CORS headers:
 
 - **Elevation** — AWS Terrarium terrain tiles, RGB-encoded height `(R*256 + G + B/256) - 32768` m.
-- **Land cover** — Esri World Imagery, classified into fuel models by `sim/src/classify.ts` from
+- **Fuel proxy** — EOX Sentinel-2 cloudless imagery, classified into fuel models by `sim/src/classify.ts` from
   visible-band greenness, brightness and local texture.
 
 It degrades rather than throws: a partial mosaic is accepted above 60% coverage, holes are grown
@@ -103,8 +106,8 @@ a bookmark is sent by id so the server keeps its hand-tuned placeholder terrain.
 ## 4. Incident creation on the server — `api/src/incident.ts`
 
 `Incident.create` builds the procedural grid, then resolves every provider port that needs only
-the grid **concurrently in one `Promise.all`**, so creation costs the slowest fetch (~7 s) rather
-than the sum:
+the grid concurrently in one `Promise.all`. Latency depends on the slowest provider
+and its fallback chain; there is no fixed acquisition-time guarantee:
 
 ```
 elevation · fuel · canopy · barriers · valuesAtRisk · observer · burnHistory · weather
@@ -114,8 +117,8 @@ then, sequentially, `wind` (needs elevation) and the moisture model. Adding an `
 of one of the concurrent ports instead of a slot in the array puts its latency on the critical
 path.
 
-`api/src/providers/registry.ts` is the **only** file that names concrete implementations, and
-`FIREWATCH_MODE` flips the whole set:
+`api/src/providers/registry.ts` selects the top-level providers. Adapter modules
+define fallback chains. `FIREWATCH_MODE` selects live attempts or offline providers:
 
 | Port | live | offline |
 |---|---|---|
@@ -124,7 +127,7 @@ path.
 | canopy | `landfire-gbt-canopy` (trees trained on LANDFIRE CBH/CBD) | `assumed-canopy` |
 | barriers | `osm-barriers` (Overpass) | `no-barriers` |
 | burnHistory | `sentinel2-dnbr` | `no-burn-history` |
-| weather | `open-meteo` | `mock-forecast` |
+| weather | `nws-gridpoint` → `open-meteo` | `mock-forecast` |
 | wind | `open-meteo-windfield` | `uniform-wind` |
 | moisture | `nfdrs-1h-timelag` | `rh-fuel-moisture` |
 | observer | `firms-perimeter` (NASA FIRMS) | `no-observations` |
@@ -133,8 +136,9 @@ path.
 Every provider returns `Provided<T>` = data **plus** `Provenance` (`measured` / `derived` /
 `synthetic`, native resolution, observation time, coverage, note). All ten are recorded on
 `Incident.provenance`, shipped in the `IncidentDto`, summarised in the header chip and listed in
-full by the ⓘ `DataSources` modal. A port missing from that record is a mocked source the UI
-never mentions — that is the rule the port design exists to enforce.
+full by the ⓘ `DataSources` modal. Types enforce the shape, not the truth of the
+metadata. Live resolution can fall back to synthetic inputs; review the resolved
+incident provenance rather than treating `/api/health` configuration as acquisition evidence.
 
 What the resolved data becomes:
 
@@ -207,16 +211,17 @@ Two behaviours worth knowing:
 Every relation named here is written out in **Appendix A**, with its source and where it lives.
 
 `recomputeStats()` is the separate O(cells) pass — area, perimeter, containment, structures —
-run once per rendered frame, not per step. `burnedCells`, `wuiCells`, `spotFires`, `peakRos` and
+run when the transport is sampled, not per simulation step. `burnedCells`, `wuiCells`, `spotFires`, `peakRos` and
 `crownCells` are maintained incrementally inside `step()`.
 
 ## 7. State on the wire — `contracts/src/codec.ts`
 
 Control is JSON (rare, wants to be readable); fire state is binary (10 Hz, wants to be small).
 
-`Incident.encode(full)` diffs the grid against `shadowState`/`shadowTreatment` — a full 132k-cell
-compare is ~0.2 ms and is provably correct. Fire is monotone, so the changed set stays a thin
-band at the front rather than growing with the scar. A frame carries:
+`Incident.encode(full)` diffs the grid against `shadowState`/`shadowTreatment` — a full-grid
+comparison. During ordinary spread, changes concentrate near the advancing front;
+reset and treatments can change many cells. The smoke test checks client/server
+state agreement, including reset. A frame carries:
 
 - header: time, revision, activeCells, peakIntensity, peakRos, 12 stat fields
 - changed cells: `u32 index + u8 state + f32 ignitedAt`
@@ -256,7 +261,8 @@ sim.state / ignitedAt / intensity / treatment
 - `thermal.ts` renders apparent temperature `T_amb + 1050·tanh(I/I_ref)` as a raster, not
   contours, on a fixed ambient→ambient+1050 K scale. It **replaces** the fire graphics rather
   than tinting them; control lines still draw. FIRMS markers reuse the same ramp keyed on
-  measured brightness temperature, which is what makes modelled and observed heat comparable.
+  measured brightness temperature. A shared colour ramp does not calibrate the
+  modelled temperature against a satellite instrument.
 - The canvas mirrors Leaflet's `zoomanim` with a CSS transform (250 ms, `cubic-bezier(0,0,.25,1)`)
   and clears it on `zoomend`/`viewreset` — without it the tiles glide and the fire snaps.
 
@@ -302,14 +308,15 @@ Run from `frontend/`:
 | `npm run dev:web` / `dev:api` | one side only; `FIREWATCH_MODE=offline` makes the API fully procedural and hermetic |
 | `npm run smoke` | Playwright drives every UI control in headless Chromium, fails on any console error. Needs a dev server. Both local and remote modes must pass before a transport change lands |
 | `npm run smoke:api` | boots the real server, drives an incident, decodes the binary frames with a client-side mirror. Offline by default |
-| `npm test` | kernel physics tests on Node's built-in runner |
+| `npm test` | history logic and kernel tests on Node's built-in runner |
 | `npm run bench` | the kernel against a direct Rothermel (1972) implementation on identical inputs |
 | `npm run hindcast` | replays real fires against WFIGS interagency perimeters with Open-Meteo archive weather |
-| `npm run watercheck` / `barriercheck` / `scarcheck` | provider diagnostics: the fuel classifier against six hard water bodies, OSM barrier geometry and whether the kernel honours it, burn-scar extraction |
+| `npm run watercheck` / `npm run barriercheck --workspace=@firewatch/api` / `npm run scarcheck` | provider diagnostics: the fuel classifier against six hard water bodies, OSM barrier geometry and whether the kernel honours it, burn-scar extraction |
 
 Hindcast numbers are research measurements, not operational accuracy: ignition is the reported
 point of origin or the perimeter centroid, the replay is scored against fires that were mostly
-fought, and the model does not yet beat an equal-area disc on a suppressed fire.
+fought, and archived replay results do not establish forecast skill. See
+[evaluation evidence and limits](../docs/simulation-evaluation.md).
 
 ## 12. Constraints the flow depends on
 
@@ -329,10 +336,9 @@ fought, and the model does not yet beat an equal-area disc on a suppressed fire.
 
 # Appendix A — The equations
 
-Every physical relation the model evaluates, what it is, and where it lives. The house rule in
-this codebase is that each term in `step()` is a one-or-two-line simplification of a real
-relation, kept short, with a comment naming the real thing — being individually defensible is
-the point. This appendix is that list made explicit.
+The main implemented equations, their units and source symbols. These are simplified
+parameterizations; citation of a physical relation does not validate its use in
+this kernel. Consult the source and tests when changing a term.
 
 Units are stated per formula; they are **not** uniform, because the published constants are not.
 Rothermel is imperial internally because that is the form its constants are published in —
@@ -349,7 +355,7 @@ network, solved by Dijkstra with a lazily-deleted binary min-heap.
 t_j  =  min over neighbours i of  [ t_i + d_ij / R(θ_ij) ]
 ```
 
-`sim/src/model.ts:610` (`relax`, edge relaxation) and `:523` (`step`, the settle loop);
+`sim/src/model.ts` (`relax`, edge relaxation) and `step` (the settle loop);
 `sim/src/heap.ts` is the heap. Travel time is a real number, so arrival is not quantised to
 `dt` — which is what removed the old `cellSize/dt` ceiling on head-fire rate and the
 percolation overshoot of the Bernoulli-draw scheme it replaced (`p = 1 − exp(−R·Δt/d)`).
@@ -370,7 +376,7 @@ R(θ)  =  R_head · (1 − e) / (1 − e·cos θ)
   θ = 180°  →  (1−e)/(1+e)  backing edge
 ```
 
-`sim/src/model.ts:440` (`ellipseShape`). Integrating it recovers L/B by construction — the
+`sim/src/model.ts` (`ellipseShape`). Integrating it recovers L/B by construction — the
 property the earlier cosine-scaled `φ_w` lacked.
 
 ### Eccentricity from wind — Anderson (1983)
@@ -380,7 +386,7 @@ L/B  =  0.936·e^(0.2566·U_mph)  +  0.461·e^(−0.1548·U_mph)  −  0.397
 e    =  sqrt(1 − 1/(L/B)²)
 ```
 
-`sim/src/shape.ts:80` (`andersonLB`), `sim/src/model.ts:421` (`ellipseEccentricity`).
+`sim/src/shape.ts` (`andersonLB`), `sim/src/model.ts` (`ellipseEccentricity`).
 `U_mph` is **midflame** wind. Calm air gives L/B = 1 exactly, hence e = 0 and a circle.
 Capped at `MAX_LB = 8`: Anderson's fit is calibrated to ~10 mi/h midflame and diverges above it
 (65 km/h would give L/B 56, a backing rate of 1/12,500 of the head), and FARSITE caps it for the
@@ -392,7 +398,7 @@ same reason.
 R_head  =  baseRos · η_M · η_T · φ_slope · (1 + φ_w)
 ```
 
-assembled in `relax` (`sim/src/model.ts:610`). Each factor:
+assembled in `relax` (`sim/src/model.ts`). Each factor:
 
 | Term | Formula | Source |
 |---|---|---|
@@ -400,7 +406,7 @@ assembled in `relax` (`sim/src/model.ts:610`). Each factor:
 | moisture damping `η_M` | `1 − 2.59·r + 5.11·r² − 3.52·r³`, `r = min(M/M_x, 1)` — Rothermel's own, exactly zero at extinction | `model.ts` `moistureDamping` |
 | temperature `η_T` | `max(0.2, 1 + 0.018·(T − 20))` | `model.ts` |
 | slope `φ_slope` | `min(8, exp(0.0693·θ_deg))`, θ clamped to ±25° | `model.ts` |
-| wind `1 + φ_w` | Rothermel's own wind coefficient, below | `model.ts:395` |
+| wind `1 + φ_w` | Rothermel's own wind coefficient, below | `model.ts` |
 
 The slope term is the 10°-per-doubling rule: `exp(0.0693·10) ≈ 2`.
 
@@ -417,7 +423,7 @@ The slope term is the 10°-per-doubling rule: `exp(0.0693·10) ≈ 2`.
 ```
 
 `σ` is the surface-area-to-volume ratio in ft²/ft³. C, B and the packing term depend only on the
-fuel bed, so they are precomputed once per fuel in `sim/src/fuels.ts:80` (`WIND_COEFFICIENTS`)
+fuel bed, so they are precomputed once per fuel in `sim/src/fuels.ts` (`WIND_COEFFICIENTS`)
 rather than per cell per step.
 
 Two conversions matter: `MIDFLAME_FACTOR = 0.4` converts the 10 m wind the weather feed reports
@@ -439,7 +445,7 @@ R_effective  =  R(θ) · (1 − blockFrac[i·8 + d])
 ```
 
 `blockFrac` is per **edge**, not per cell — `cols·rows·8` floats indexed by the direction's
-position in `NEIGHBOURS` (`model.ts:444`). It peaks around 0.6 in practice, because a 4–10 m road
+position in `NEIGHBOURS` (`model.ts`). It peaks around 0.6 in practice, because a 4–10 m road
 inside a 30–50 m cell obstructs part of an edge rather than severing it. Retardant multiplies by
 0.12; a dozer line is a hard skip; spotting ignores both, because an ember crosses a road.
 
@@ -464,13 +470,13 @@ Under crowning, canopy load joins the heat release: `I = H·(w_surface + w_canop
 L  =  0.0775 · I^0.46      m
 ```
 
-`sim/src/model.ts:867` (`recomputeStats`), reported in the stats panel.
+`sim/src/model.ts` (`recomputeStats`), reported in the stats panel.
 
 ### Residence and burnout
 
 ```
-burnout  =  360 + 900·w        seconds   (model.ts:342)
-flaming  =   60 +  60·w        seconds   (fuels.ts:100)
+burnout  =  360 + 900·w        seconds   (model.ts)
+flaming  =   60 +  60·w        seconds   (fuels.ts)
 ```
 
 Burning and flaming are deliberately different fields: a cell smoulders for its whole burnout
@@ -486,7 +492,7 @@ initiation:   I  ≥  I_0  =  [ 0.010 · CBH · (460 + 25.9·M_f) ]^1.5     kW/m
 active:       R  ≥  R_0  =  3.0 / CBD                                  m/min
 ```
 
-`sim/src/model.ts:280` and `:290`. `CBH` is canopy base height (m), `CBD` canopy bulk density
+`sim/src/model.ts` (`crownInitiationIntensity` and `activeCrownThreshold`). `CBH` is canopy base height (m), `CBD` canopy bulk density
 (kg/m³), `M_f` foliar moisture — fixed at 100%, because nothing in the model tracks the seasonal
 physiology that drives it. A 5 m base at 100% gives I₀ ≈ 1880 kW/m. `3.0` is the critical mass
 flow rate, kg·m⁻²·min⁻¹; sparse canopy needs a faster fire to keep itself alight, which is why
@@ -494,11 +500,9 @@ CBD is in the denominator.
 
 Crown fuel burns out on a `residence` of 60 s (active) or 180 s (torching).
 
-**Van Wagner's `R` is now the rate the kernel reports.** This used to be a problem: the front
-advanced at 4.45× the nominal rate, so feeding the emergent rate into `R ≥ 3.0/CBD` would have
-multiplied in a defect's magnitude, and a test asserted that realistic canopy must *not* crown
-actively. Minimum-travel-time propagation closed that gap to a few per cent, so `cellHeadRos` — the
-pre-ellipse head rate — is fed directly.
+Van Wagner's `R` receives `cellHeadRos`, the pre-ellipse nominal head rate.
+Emergent front speed can still differ from this rate because of discretization,
+slope and finite-run effects; inspect `npm run bench` and the evaluation page.
 
 `cellHeadRos` and `cellMaxRos` are deliberately different numbers. Byram intensity, Van Wagner
 crowning and the `peakRos` read-out use the head rate; suppression uses the fastest edge actually
@@ -536,7 +540,7 @@ because a crew holds the edge in front of them, and on a flank that is far slowe
 
 ## A.6 Rothermel (1972) — the external reference
 
-Implemented in full in `sim/src/rothermel.ts:82` as an **independent check**, not as the kernel.
+Implemented as a single-particle reference in `sim/src/rothermel.ts` as an **independent check**, not as the kernel.
 It shares no structure with the kernel: it derives spread from a heat balance where the kernel
 multiplies a tabulated base rate by empirical factors, so agreement between them means something.
 
@@ -563,18 +567,18 @@ Heat content `h` = 8000 Btu/lb, particle density 32 lb/ft³.
 (1-h, 10-h, 100-h, live) before entering the heat balance; this implementation treats the bed as
 one particle. Validated against published BehavePlus output: FM1 (short grass, nearly all 1-h)
 agrees to 4% — 26.97 vs 26.0 m/min. FM2, FM8 and FM10 are multi-class and disagree by 2–4×, and
-are present only to document that limit. It is sound for exactly the fuels it is used on, because
-this kernel's own `FUELS` are also single-load, single-SAV models.
+are present only to document that limit. The kernel's own `FUELS` also use
+single-load, single-SAV representations; this makes the comparison interpretable,
+but does not validate assumed fuel-bed values.
 
 The `fineLoad` vs `load` distinction is load-bearing for the same reason: only the 1-h fraction is
 the heat sink in the preignition term. Timber is 5.5 kg/m² total but ~0.9 fine, which is why it
 ignites at all — applying `Q_ig` to the whole bed makes heavy fuels non-ignitable.
 
-**Current benchmark** (`npm run bench`): `nominal/Rothermel` is now constant per fuel across wind
-speeds (grass 1.14× at 0, 15 and 40 km/h, previously 1.14 / 0.20 / 0.06). That constancy is the
-signature of a correct wind response; the residual is a per-fuel offset in the base-rate table,
-which is not being "fixed" by matching Rothermel because those beds were invented rather than
-measured.
+**Benchmark interpretation:** the current local run and its exceptions are recorded in
+[simulation evaluation](../docs/simulation-evaluation.md). Compare every case;
+a constant nominal/reference ratio across wind speeds does not establish the
+correct absolute rate or agreement on slopes.
 
 ## A.7 Weather, moisture and fire danger
 
@@ -586,7 +590,7 @@ H < 10:   EMC = 0.03229 + 0.281073·H − 0.000578·H·T_F
 H ≥ 50:   EMC = 21.0606 + 0.005565·H² − 0.00035·H·T_F − 0.483199·H
 ```
 
-`api/src/providers/tier2.ts:414`. `T_F` is Fahrenheit, `H` relative humidity %.
+`api/src/providers/tier2.ts`. `T_F` is Fahrenheit, `H` relative humidity %.
 
 ### 1-hour timelag integration
 
@@ -601,8 +605,8 @@ M(t+1)  =  M_target + (M(t) − M_target)·exp(−1/τ)
 
 Wetting is minutes, drying is hours — hence the asymmetric τ. This is why rain yesterday matters;
 the formula it replaced was memoryless. `compute` stays synchronous and kicks off its own history
-refresh, and `warmMoistureHistory` is awaited at incident creation so the first field has real
-data.
+refresh, and `warmMoistureHistory` is awaited at incident creation. Fetch failure can
+leave fallback inputs; inspect provenance and coverage before calling them measured.
 
 Terrain then adjusts it (aspect, elevation) — stated as an assumption, not an observation.
 
@@ -616,7 +620,7 @@ M *= 1 − 0.25·min(1, daysSinceRain/60)
 M += 5·precip,     clamped to [1.5, 60]
 ```
 
-`sim/src/weather.ts:82`. Explicitly a rough stand-in for the NFDRS calculation above.
+`sim/src/weather.ts`. Explicitly a rough stand-in for the NFDRS calculation above.
 
 ### Chandler Burning Index
 
@@ -624,7 +628,7 @@ M += 5·precip,     clamped to [1.5, 60]
 CBI  =  [ (110 − 1.373·H) − 0.54·(10.2 − T) ] · 124 · 10^(−0.0142·H)  / 60
 ```
 
-`sim/src/weather.ts:90`. Drives the header's fire-danger badge (Low / Moderate / High / Very
+`sim/src/weather.ts`. Drives the header's fire-danger badge (Low / Moderate / High / Very
 high / Extreme at 50 / 75 / 90 / 97.5).
 
 ### Gusting — a deterministic function of sim time
@@ -635,15 +639,15 @@ U(t)  = U·(1 + 0.55·gustiness·osc)
 dir(t)= dir + 18·gustiness·sin(t/89 + 2.3)
 ```
 
-`sim/src/model.ts:450`. Gusting is a **time** signal, not a place signal, so it rides on top of
+`sim/src/model.ts`. Gusting is a **time** signal, not a place signal, so it rides on top of
 the spatial wind field by scaling it (`gustScale`) and veering it (`gustVeer`) rather than
 replacing it.
 
 ### Synthetic diurnal forecast (offline/local only)
 
 Cosine diurnal cycle peaking at 16:00 for temperature, inverted for humidity, with an overnight
-cycle for downslope winds above 40 km/h and a sea-breeze cycle below. `sim/src/weather.ts:116`.
-`forecastAt` (`:144`) interpolates linearly between hours, taking wind direction the short way
+cycle for downslope winds above 40 km/h and a sea-breeze cycle below. `sim/src/weather.ts`.
+`forecastAt` interpolates linearly between hours, taking wind direction the short way
 round the compass.
 
 ## A.8 Wind as a field
@@ -699,7 +703,7 @@ aspect = atan2(dz/dy, −dz/dx)
 shade  = cos(slope)·sin(alt) + sin(slope)·cos(alt)·cos(az − aspect)
 ```
 
-`sim/src/terrain.ts:270`, az = 315°, alt = 45°. The remote transport recomputes this client-side
+`sim/src/terrain.ts`, az = 315°, alt = 45°. The remote transport recomputes this client-side
 rather than receiving it — 4 bytes per cell saved on a one-off payload.
 
 ### Procedural terrain — `sim/src/noise.ts`
@@ -742,9 +746,12 @@ reduction, never a mask — it is scarred timber, not suddenly barren ground —
 
 Two numerical traps recorded in source: **no-data must become NaN, never 0** (a granule-edge 0 in
 one band makes NBR exactly ±1 and differences into an invented scar), and Sentinel-2 band DNs
-carry the STAC `scale` but **not** the advertised `offset` — applying the offset gives an
-impossible ρ ≈ −0.09 for deep water. A pure scale cancels in a normalised difference, so NBR
-itself cannot reveal that error; only the absolute values can.
+are handled by this provider using its source-specific scale/offset assumptions.
+Do not transfer those assumptions to another product. The separate
+[satellite-case contract](../contracts/research/satellite-case.md) applies an additive
+offset to its selected Collection 1 files after masking source no-data. A common
+scale cancels in a normalized difference, but a common additive offset does not;
+verify STAC and raster metadata for each source before comparing results.
 
 Water and snow come from the Sentinel-2 Scene Classification Layer, which **overrides** the
 classifier for those two classes only. RGB cannot do that job: water is turquoise, black, pink or
@@ -752,7 +759,7 @@ brown depending on where you are, and only the NIR is consistent.
 
 ## A.11 Derived statistics
 
-### Area, perimeter, containment — `sim/src/model.ts:867`
+### Area, perimeter, containment — `sim/src/model.ts`
 
 ```
 area        =  burnedCells · cellSize² / 10,000            ha
@@ -764,7 +771,7 @@ The perimeter is the **4-connected** outline of everything burnt or burning. An 
 held when no active flame touches it, or a control line, retardant or unburnable ground sits on
 the far side.
 
-### Length-to-breadth and bearing of a burn mask — `sim/src/shape.ts:26`
+### Length-to-breadth and bearing of a burn mask — `sim/src/shape.ts`
 
 Second moments of the cell coordinates, eigenvalues of the 2×2 covariance:
 
@@ -785,9 +792,10 @@ major eigenvector collapses to (0,0) for a grid-aligned ellipse, so take whichev
 Dice  =  2·|A ∩ B| / (|A| + |B|)
 ```
 
-`api/src/hindcast.ts:242`. Reported against a null model — an equal-area disc at the same
+`api/src/hindcast.ts`. Reported against a null model — an equal-area disc at the same
 ignition point — because Dice alone rewards simply getting the area right. The `gap` (model minus
-circle) is the only number that says the physics is worth anything.
+circle) measures spatial overlap beyond this area-controlled comparator. It does
+not by itself establish causal model skill or forecast accuracy.
 
 ### Apparent temperature — the thermal view
 
@@ -797,31 +805,20 @@ T  =  T_amb + 0.34·ΔT                    smouldering
 T  =  T_amb + (T_peak − T_amb)·exp(−Δt/1800)   burnt, cooling
 ```
 
-`src/render/thermal.ts:65`. Saturating rather than scaling, because flame temperature is
-buffered by radiative loss and entrainment — it does not climb indefinitely with intensity. This
-is `ARCHITECTURE.md` §4's `T_f` map; the two must stay in sync. The scale is fixed to
-ambient→ambient+1050 K rather than tracking each frame's maximum, so apparent brightness tracks
-actual temperature — which is what makes modelled heat comparable against FIRMS brightness
-temperature on the same ramp.
+`src/render/thermal.ts`. This is a modelled apparent-temperature display. The
+fixed ramp avoids rescaling colours on every frame, but neither the formula nor
+its blur has been calibrated to a specific thermal sensor. Do not interpret it
+as a camera measurement or a validated comparison with FIRMS brightness temperature.
 
-The one blur pass before colouring is a **sensor model**, standing in for a thermal camera's
-point-spread function, not a smoothing hack. Two passes erase the flanks.
+## A.12 Limitations and contributor checks
 
-## A.12 Known departures from the physics
+The kernel uses assumed fuel-bed properties, a fixed foliar moisture value,
+per-direction slope effects and caps on wind/ellipse terms. It omits coupled
+atmosphere, operational suppression resources and verified observation assimilation.
+Historical overshoot and elongation claims in earlier notes predate later kernel
+changes; use current tests and benchmark output to assess those properties.
 
-Recorded here because every one of them is measured, characterised in source, and deliberately
-left in place:
-
-| Defect | Magnitude | Why it is still there |
-|---|---|---|
-| Fires never stop | sheltered timber carries 189/191 replay hours | Moisture of extinction is the only halt besides rain, and that spring was genuinely dry. `SHELTER_RH_GAIN` was **not** raised to force a pause — nothing here is tuned against a Dice score. This is the largest open defect: shape decays from L/B 3.74 at hour 10 to 1.02 at hour 191 |
-| Elongation reaches ~half of Anderson's L/B | flank runs 4–10× nominal, head 0.5–1.0× | Lattice, not the ellipse: an isotropic arrival overshoot (~2.8×) composes with lateral leakage through the diagonals (3.2×); 3.2 × 2.2 = 7.0 against a measured 6.9 |
-| `MAX_LB = 8`, `MAX_WIND_FACTOR = 1000` | caps on unbounded formulas | Anderson's fit and Rothermel's `φ_w` both diverge outside their calibration range. The proper wind limit is a function of reaction intensity; the flat ceiling is a backstop |
-| Slope is per-direction, not folded into a wind-slope vector | departs from FARSITE | The one deliberate departure from the Richards reference formulation |
-| Rothermel reference is single-particle | exact for this kernel's fuels, invalid against real Anderson/Scott & Burgan models | Multi-size-class aggregation is the prerequisite for ever comparing against a real fuel model |
-| `depth`, `sav`, `bulkDensity` | invented; timber depth is 0.65 m against FM8's published 0.061 | `mx` has been corrected to published Anderson values, but the bed parameters need multi-size-class Rothermel first — which is why reading operational FBFM40 fuel made the hindcast *worse*, not better. The highest-value work outstanding |
-| Foliar moisture fixed at 100% | enters Van Wagner's `I_0` directly | Nothing in the model tracks seasonal plant physiology. First assumption to replace if crown behaviour needs defending |
-| Barriers move Dice by < 0.003 | 30,000–46,000 blocked edges | Correct per the sub-cell design: `blockFrac` peaks near 0.6, so roads do not act as firebreaks at this resolution |
-
-`ARCHITECTURE.md` §4 specifies the deterministic energy-accumulator kernel that removes the first
-two; it is not implemented. Finney MTT (A.1) was the step before it and is what landed.
+[Evaluation evidence](../docs/simulation-evaluation.md) records current numerical
+checks, archived replay limitations and required evidence for a forecast benchmark.
+The [architecture proposal](ARCHITECTURE.md) describes possible future mechanisms;
+an unimplemented energy accumulator cannot be claimed to solve present errors.

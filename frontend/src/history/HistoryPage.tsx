@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { HistoricalMap } from '../visualization/HistoricalMap'
+import type { Basemap } from '../visualization/useLeafletMap.ts'
 import { SPECS, dateLabel, display, eventAvailability, hectares, measurement, sortByAvailability, value } from './model'
 import type { FireEvent, Interval, Library, Measurement, Spec } from './model'
 import './history.css'
@@ -65,8 +66,7 @@ export default function HistoryPage() {
   const [index, setIndex] = useState(0)
   const [playing, setPlaying] = useState(false)
   const [mapFocus, setMapFocus] = useState(false)
-  const [tiles, setTiles] = useState<'satellite' | 'topo' | 'none'>('satellite')
-  const [zoom, setZoom] = useState(11)
+  const [tiles, setTiles] = useState<Basemap>('satellite')
   const [fitKey, setFitKey] = useState(1)
   useEffect(() => {
     const controller = new AbortController()
@@ -123,7 +123,7 @@ export default function HistoryPage() {
         <div className="history-timestamp"><RecordTime record={record} /></div>
         <SnapshotNote record={record} />
         <Metrics record={record} />
-        <HistoricalMap event={event} interval={record} color="#f7b979" tiles={tiles} linked={false} zoom={zoom} onZoom={setZoom} fitKey={fitKey} />
+        <HistoricalMap event={event} interval={record} color="#f7b979" tiles={tiles} fitKey={fitKey} />
         <div className="history-area-stats"><div><small>Recorded extent</small><b>{hectares(record.area_ha)} <em>ha</em></b></div><div><small>Growth during interval</small><b>{record.growth_ha === null ? 'Unavailable' : <>+{hectares(record.growth_ha)} <em>ha</em></>}</b></div><div><small>Parameters available</small><b>{available} / {SPECS.length}</b></div></div>
         <Timeline side="Event" event={event} index={index} onChange={changeIndex} />
       </section>

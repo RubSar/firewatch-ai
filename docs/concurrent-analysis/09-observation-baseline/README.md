@@ -1,8 +1,9 @@
 # First fire-observation experiment
 
 Date: 2026-09-27. Status: fixed-rule pilot completed; M1 mask acquisition/audit
-executed, with full benchmark acceptance still blocked. No learned model trained
-or evaluated. This starts R01, it does not complete its generalization claim.
+executed, with full benchmark acceptance still blocked. No learned drone model was
+trained or evaluated in M0/M1. Separate satellite inference is described below.
+This starts R01; it does not complete its generalization claim.
 
 Latest: [review handoff and recorded gaps](review-handoff.md). Prepared two independent
 RGB annotation files for 25 pilot images and agreement-scoring tools. No human reviewers

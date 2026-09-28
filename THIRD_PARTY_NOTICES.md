@@ -23,6 +23,12 @@ checkpoints or quoted publisher material. Retain their original notices.
 
 ## Data, imagery and services
 
+The [historical source register](docs/research-data/sources.md) identifies the
+products, versions, access routes and gaps found in `.research-data`. Its
+[usage map](docs/research-data/README.md) traces derived files into the viewer.
+Source-specific redistribution review remains incomplete; publishing original code
+under MIT does not authorize packaging the research cache or every derived example.
+
 Historical records and examples may incorporate third-party measurements or
 geometries. Consult each record's provenance and the relevant research protocol
 for the source/version and publisher terms. Public download access alone does not

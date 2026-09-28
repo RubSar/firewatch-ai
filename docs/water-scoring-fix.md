@@ -1,9 +1,16 @@
 # Water scoring correction — 2026-09-26
 
+> Archived report from 2026-09-26 about the former fuel-index/investigation service.
+> That implementation and the referenced `contracts/examples/` receipts are absent
+> from the current checkout. Results and check counts below are historical claims,
+> not verification of the current app. Recover the original code and receipts from
+> repository history before reproducing them; use [current setup](../CONTRIBUTING.md)
+> for the maintained application.
+
 ## Reproduced defect
 
 User-reported cell: `32610-78-1050`, nominal 5 km grid, actual clipped area
-25.012904 km². Queried that grid square through `/v1/fuel-index` using the current
+25.012904 km². Queried that grid square through `/v1/fuel-index` using the then-current
 2025-07-01 to 2025-08-01 exclusive window. The v1 live result matched the user's
 6.5 score, 18.5% raw vegetation probability, NDMI 0.188, full coverage and mean
 3.6 observations. Four acquisition pairs were candidates for this square.
@@ -42,9 +49,9 @@ and mixed reflectance within 20 m pixels remain possible.
 Confirmed identical geometry, acquisition metadata and observation count (within
 floating point precision). Both receipts validate against AnalysisResponse.
 
-- [Request](../contracts/examples/fuel-index-request-water.json)
-- [Actual v1 receipt](../contracts/examples/fuel-index-response.water.v1.live.json)
-- [Actual v2 receipt](../contracts/examples/fuel-index-response.water.v2.live.json)
+- Request — historical path `contracts/examples/fuel-index-request-water.json` (not bundled)
+- Actual v1 receipt — historical path `contracts/examples/fuel-index-response.water.v1.live.json` (not bundled)
+- Actual v2 receipt — historical path `contracts/examples/fuel-index-response.water.v2.live.json` (not bundled)
 
 The receipts preserve the full HTTP response, including any near-zero-area edge
 fragments from projection roundoff. The table selects the reported cell by ID.
@@ -60,8 +67,8 @@ cell popups and Evidence show the new inputs separately.
 
 Scope: backend API/provider/scoring/tests, shared contract/schema/example receipts,
 frontend result/popups/method, and docs. No named component owners are recorded.
-Existing changes were preserved on codex/mock-polygons. No commit/push or remote
-overlap review; remote authentication was unavailable in this session.
+The original work was performed on `codex/mock-polygons`; this is provenance, not
+a branch instruction for current contributors.
 
 Verification: 35 backend tests (including water residual probability, shoreline
 mixing, missing coverage, invalid support and old evidence), Ruff, 10 frontend tests

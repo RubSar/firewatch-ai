@@ -1,5 +1,8 @@
 # 2. Microservice catalog
 
+> Design proposal, 2026-09-26. Services and acceptance targets below are not a deployed
+> or benchmarked system. See the [specification status](README.md).
+
 23 logical microservices. Pilot deployments may co-host compatible services; these contracts remain separate. All latency values are proposed allocations requiring load tests. Service-specific transactions use the inbox/outbox and fencing rules in 01-architecture.md.
 
 Each service exposes readiness, liveness and bounded shutdown hooks. Authenticated internal calls carry tenant/mission identity, trace context and a deadline. Service-owned database schemas are not writable by other services. Shared clusters are permitted; ownership is still enforced by database roles.

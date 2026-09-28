@@ -1,5 +1,8 @@
 # Science and candidate data
 
+> Dated background research, not current application setup or accepted scope.
+> See the [research index](../README.md) and [decision log](../../../AGENTS.md).
+
 Reviewed 2026-09-26.
 
 ## Competitor science

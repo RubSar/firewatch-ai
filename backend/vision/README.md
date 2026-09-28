@@ -3,10 +3,10 @@
 Offline research: reproducible RGB/thermal rules (M0), followed by acquired
 segmentation masks, annotation audits and incident split checks (M1). A separate
 Prithvi satellite adapter runs a public pretrained model locally; there is no
-FireWatch-trained model or live API. The M1 benchmark acceptance gate remains blocked;
+FireWatch-trained vision model or live vision API. The M1 benchmark acceptance gate remains blocked;
 see the [measured findings](../../docs/concurrent-analysis/09-observation-baseline/milestone-1.md).
 
-Scope: this new `backend/vision/` component holds perception research and its tests.
+Scope: the `backend/vision/` component holds perception research and its tests.
 `contracts/research/` defines the offline manifest; research decisions/results live
 in `docs/concurrent-analysis/09-observation-baseline/`. The simulator and its shared
 TypeScript contracts are unaffected. API/frontend integration is a later interface
@@ -24,10 +24,10 @@ python download_flame3.py --per-class 12
 python run_baseline.py data/flame3-pilot/manifest.json --output runs/flame3-pilot
 ```
 
-Use a new output directory on each run; existing reports are preserved. On this
-Windows host, the ordinary Python launcher is broken. The initial pilot used the
-Codex-bundled Python runtime; its packages were not modified. The repository does
-not require Codex, and ordinary Python environments can run the commands above.
+Use a fresh virtual environment and a new output directory on each run; existing
+reports are preserved. The commands do not depend on an editor or assistant runtime.
+Use `python -m venv .venv`, activate it for your shell, then install the requirements.
+GPU/model experiments have separate dependencies described below.
 
 The downloader requests publisher metadata and the complete filename catalogue,
 then selects 12 evenly spaced filename ranks per class. It downloads only corrected
@@ -120,8 +120,8 @@ were installed for that catalogue audit.
 
 ## M1: Independent annotation preparation
 
-The user has no reviewers yet. The package is ready, with zero human reviews and no
-accepted/frozen benchmark. From this directory:
+The recorded handoff has zero human reviews and no accepted/frozen benchmark.
+Independent reviewers remain an external research dependency. From this directory:
 
 ```sh
 python review_packet.py build data/flame2-rff/prepared/inventory.json runs/flame2-annotation-audit/report.json --output runs/m1-review-packet
@@ -195,11 +195,12 @@ mask meanings, exact radiometry, conditional metrics and limitations.
 The prepared [Cypress Creek Prithvi protocol](../../docs/concurrent-analysis/09-observation-baseline/prithvi-cypress-creek-experiment.md)
 defines a portable, inference-only run with the NASA/IBM burn-scar checkpoint on
 HLS six-band imagery. The frozen machine-readable case is
-`prithvi-cypress-creek-config.json`. A local Python 3.12.14 environment is set up
-in the ignored `.venv/` folder and uses the NVIDIA RTX 3050 through CUDA. The
+`prithvi-cypress-creek-config.json`. The recorded Windows run used Python 3.12.14
+in an ignored `.venv/` and an NVIDIA RTX 3050 through CUDA. That environment is not
+included in a clone and is not a claim about the contributor's current machine. The
 PyTorch CUDA tensor smoke test and imports for TerraTorch, Rasterio, GeoPandas,
 Earthaccess and the model stack passed; JupyterLab and its IPython kernel are
-installed, and the project-local kernel `FireWatch Prithvi (CUDA)` is registered.
+installed for that run, with a project-local `FireWatch Prithvi (CUDA)` kernel.
 `pip check` reported no broken requirements. The selected 100M checkpoint now
 loads strictly and runs a real public 512x512 HLS demo on the RTX 3050. One measured
 inference took 1.69 seconds with 641 MiB peak allocated GPU memory (828 MiB reserved).
@@ -211,7 +212,7 @@ in the [local report](../../docs/concurrent-analysis/09-observation-baseline/res
 The exact resolved environment is recorded in
 `requirements-prithvi-local-lock.txt`.
 
-From this directory, activate the environment in PowerShell with:
+After recreating that Windows environment, activate it from this directory in PowerShell:
 
 ```powershell
 .\.venv\Scripts\Activate.ps1
@@ -224,8 +225,9 @@ python -c "import torch; print(torch.__version__, torch.cuda.is_available(), tor
 jupyter kernelspec list
 ```
 
-To recreate the resolved environment in a Python 3.12 environment, install the
-lockfile with the official CUDA wheel index:
+On Windows with a compatible NVIDIA GPU/driver, create and activate a Python 3.12
+virtual environment before installing the recorded lockfile with the CUDA wheel index.
+This is a separate environment from the minimal NumPy/Pillow baseline:
 
 ```powershell
 python -m pip install --extra-index-url https://download.pytorch.org/whl/cu128 -r requirements-prithvi-local-lock.txt
@@ -233,8 +235,9 @@ python -m pip install --extra-index-url https://download.pytorch.org/whl/cu128 -
 
 The lockfile targets Windows and CUDA 12.8. HLS acquisition still requires an
 interactive NASA Earthdata login. Keep credentials, the model checkpoint,
-downloaded imagery and outputs out of Git. Use the local GPU for the first
-inference; cloud execution remains an optional fallback.
+downloaded imagery and outputs out of Git. The recorded CUDA environment is not portable to macOS or a non-CUDA host.
+Use the [portable experiment protocol](../../docs/concurrent-analysis/09-observation-baseline/prithvi-cypress-creek-experiment.md)
+to plan another environment; do not treat a new platform as already verified.
 
 Run the pinned public demo from `backend/vision/` without Earthdata credentials:
 
@@ -251,7 +254,7 @@ inference adapter uses 224-pixel windows, 112-pixel stride, float32 and batch si
 one; it averages logits before selecting a class. Model/data files remain ignored.
 `THIRD_PARTY_PRITHVI.md` records upstream code attribution and adaptation limits.
 
-`prithvi_hls_catalog.py prithvi-cypress-creek-config.json --output data/cypress-prithvi/catalog-new`
+`python prithvi_hls_catalog.py prithvi-cypress-creek-config.json --output data/cypress-prithvi/catalog-new`
 queries public NASA metadata without authentication. The first query found ten
 granules, but none is accepted before pixel-level screening. The authenticated
 Cypress acquisition, Fmask screening and comparison runner remain to be completed;

@@ -50,14 +50,9 @@
 .history-metric small { color:#7f9698; font-size:8px; display:block; line-height:1.5; }
 .history-metric.missing strong { color:#859796; font-size:12px; }
 .history-map-wrap { position:relative; }
-.history-map { height:340px; background:repeating-linear-gradient(0deg,#20303444 0px,#20303444 1px,transparent 1px,transparent 40px),repeating-linear-gradient(90deg,#20303444 0px,#20303444 1px,#121e22 1px,#121e22 40px); }
+.history-map { height:340px; }
 .history-map-caption { position:absolute; top:12px; left:12px; z-index:450; color:#d5e0d8; padding:5px 8px; font-size:9px; background:#152023dd; border:1px solid #738b7b44; border-radius:4px; pointer-events:none; }
-.history-tile-warning { position:absolute; bottom:25px; right:7px; left:7px; z-index:450; color:#e6c69d; font-size:10px; background:#1b242ddd; padding:4px 6px; }
-.history-map .leaflet-control-attribution { font-size:7px; background:#102024bb; color:#abbab3; }
-.history-map .leaflet-control-attribution a { color:#c7d6d2; }
-.history-map .leaflet-bar a { background:#1a2a2e; color:#d9e3de; border-color:#4d6063; }
-.history-map .leaflet-bar a:hover { background:#304346; }
-.history-map .leaflet-control-scale-line { background:#162024bb; color:#d1dbd4; border-color:#a3b8b1; text-shadow:none; font-size:9px; }
+.history-tile-warning { position:absolute; top:52px; right:12px; left:12px; z-index:450; color:#e6c69d; font-size:10px; background:#1b242ddd; padding:4px 6px; }
 .history-area-stats { display:flex; gap:30px; padding:14px 17px; border-bottom:1px solid var(--h-line); }
 .history-area-stats small { display:block; color:var(--h-muted); font-size:10px; }
 .history-area-stats b { font-size:21px; font-weight:450; }

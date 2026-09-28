@@ -1,5 +1,8 @@
 # Source register
 
+> Dated background research, not current application setup or accepted scope.
+> See the [research index](../README.md) and [decision log](../../../AGENTS.md).
+
 All sources accessed 2026-09-26. Technosylva pages are primary evidence of vendor positioning and claims, not independent validation. Public documentation was read; APIs were not exercised and no authenticated product was accessed.
 
 | ID | Source | Used for |

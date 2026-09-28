@@ -1,5 +1,8 @@
 # 3. Data contracts, APIs and consistency
 
+> Design proposal, 2026-09-26. Services and acceptance targets below are not a deployed
+> or benchmarked system. See the [specification status](README.md).
+
 ## 3.1 Canonical event envelope
 
 All events use the Firewatch envelope, an internal contract rather than a claim of formal CloudEvents compliance. Live topics use `fw.live.<event-type>.v1`; replay uses a separate `fw.replay.<run-id>.<event-type>.v1` namespace or equivalent isolated cluster/ACL boundary. Production consumers have no wildcard replay subscriptions.

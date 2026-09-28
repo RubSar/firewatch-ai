@@ -52,9 +52,10 @@ current acquisition results and remaining acceptance criteria are in that audit.
 | [FLAME 3 paper](https://arxiv.org/abs/2412.02831) | Additional burns beyond the public Sycan pilot are described | Availability/access, independent labels, complete sensor metadata and unseen-site split |
 | [UAV smoke segmentation study](https://openaccess.thecvf.com/content/WACV2025/html/Pesonen_Detecting_Wildfires_on_UAVs_with_Real-Time_Segmentation_Trained_by_Larger_WACV_2025_paper.html) | Teacher-assisted training of a compact smoke model is a relevant labeling/deployment direction | Dataset access, geographic overlap and the distinction between smoke segmentation and ground fire extent |
 
-We have not contacted authors, created accounts, accepted account-specific terms,
-downloaded candidate model weights, or incorporated external code. Public data
-selection is authorized; future account actions would depend on actual requirements.
+This FLAME/Boreal dataset audit did not contact authors, create accounts, download
+candidate model weights or incorporate external code. The later, separate
+[Prithvi satellite experiment](prithvi-cypress-creek-experiment.md) records its own
+checkpoint acquisition and adapter attribution.
 
 ## Consequence for the experiment
 

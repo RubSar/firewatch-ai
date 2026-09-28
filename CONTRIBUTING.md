@@ -11,7 +11,10 @@ agreement do not establish operational forecast accuracy.
   and [help wanted](https://github.com/RubSar/firewatch-ai/labels/help%20wanted).
 - Use [Discussions](https://github.com/RubSar/firewatch-ai/discussions) for questions,
   research ideas and workflow feedback. Use issues for reproducible problems or
-  a bounded piece of work with acceptance criteria.
+  a bounded piece of work with acceptance criteria. If Discussions is unavailable,
+  use an issue for a concrete question or proposal.
+- Browse the [technical contribution backlog](docs/contributor-strategy.md) for
+  scoped proposals; these drafts do not imply assigned reviewers.
 - Before a substantial change, comment on the relevant issue with your proposed
   scope, affected component and expected evidence. Check existing PRs for overlap.
   Small corrections can be submitted directly as a PR.
@@ -45,7 +48,7 @@ is `npm run dev:api`, and the web process needs
 
 Python research is optional for frontend work. Follow the relevant component:
 
-- [Historical acquisition and enrichment](docs/concurrent-analysis/09-historical-similarity/README.md)
+- [Historical acquisition and enrichment](docs/research-data/reproduce.md)
 - [Incident-document extraction](backend/llm/README.md)
 - [RGB/thermal and satellite observation research](backend/vision/README.md)
 
@@ -54,6 +57,11 @@ imagery downloads, model weights, Earth Engine and Earthdata access are not gene
 contribution prerequisites.
 
 ## Where changes belong
+
+For protocols, notebooks, reproductions and findings, use the
+[research contribution guide](research/CONTRIBUTING.md) and
+[study template](research/templates/study/README.md). Studies are submitted through
+pull requests; direct upstream push access is not required.
 
 | Component | Scope |
 | --- | --- |
@@ -65,13 +73,20 @@ contribution prerequisites.
 | `backend/llm/` | Document extraction and its evaluation |
 | `backend/vision/` | Offline observation research and tests |
 | `contracts/` | Language-neutral historical/research schemas and examples |
-| `docs/` | Protocols, evidence, setup and decisions |
+| `research/` | New studies, experiment-specific notebooks/scripts, protocols and findings |
+| `docs/` | Application setup, shared data guides, decisions and legacy research |
 
 Read the relevant README and [repository instructions](AGENTS.md) first. Contract
 changes need producer/consumer updates together, with units, coordinate conventions,
 time zones, missing-value behavior and compatibility documented.
 
 ## Evidence and data contributions
+
+Read the [historical source and usage register](docs/research-data/README.md) and
+[data contribution guide](docs/research-data/contributing.md) for starter tasks,
+contract links and acceptance criteria. The local `.research-data` cache is not
+included in a clone; bundled preview data supports frontend-only contributions.
+Use the data-evidence issue template for source gaps and collection proposals.
 
 - Record source URL, version, retrieval date, redistribution terms and processing
   method. Preserve original values and distinguish observed, reconstructed,

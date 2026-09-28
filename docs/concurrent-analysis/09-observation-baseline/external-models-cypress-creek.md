@@ -80,7 +80,7 @@ record does not by itself establish that the polygon represents the extent at
 containment, or the exact acquisition time of every mapped segment. Preserve both
 times and resolve the observation/reference time before a time-matched score.
 
-## Existing prototype and new remote work
+## Historical code assessment (revision `a0d5982`)
 
 Remote main fetched during this assessment advanced from `99eea09` to `a0d5982`.
 Three commits add and revise `frontend/api/src/hindcast.ts`: mapped-perimeter
@@ -101,13 +101,15 @@ Relevant existing code:
 - `frontend/sim/src/rothermel.ts` and `frontend/sim/bench/rothermel.ts`: the current
   analytical spread reference and benchmark; neither executes ELMFIRE or Cell2Fire.
 
-The current hindcast requests containment time but not the polygon timestamp. It
+The hindcast at the inspected revision requested containment time but not the polygon timestamp. It
 also chooses a small subset from service response order rather than a frozen incident
 list. For Cypress Creek, record identity and reference time should be made explicit
 before interpreting another score. Input terrain/fuel provenance also needs an event
 date audit: imagery selected today can incorporate the aftermath of the fire being
-replayed. Suppression remains absent from the replay. These are research-design
-dependencies; this task did not modify the simulator or its evaluations.
+replayed. Suppression was absent from that replay. Later code added polygon-time handling
+and suppression diagnostics; see [current evaluation limits](../../simulation-evaluation.md).
+The design gaps described here remain historical assessment evidence, not a claim
+that every listed implementation detail is still current.
 
 ## Recommended next experiment
 

@@ -1,29 +1,30 @@
-# Wildfire Spread Prediction — Architecture
+# Simulation architecture proposal
 
-Fuel extracted from satellite imagery, energy accounted for cell by cell, spread predicted on a
-rolling 5-minute horizon, and corrected against where the fire observably is.
+> Status: research design proposal, originally written during prototype development.
+> Reviewed for documentation clarity on 2026-09-28. This is not a committed roadmap,
+> deployed system, or evidence of measured forecast performance. Initial observation
+> scope is recorded in [DR005](../AGENTS.md); forecast work needs separate evaluation.
 
-> **Status: proposed target design. Mostly not implemented.** What ships is a smaller thing: a
-> front-tracking kernel on a ~38 m grid in `frontend/sim/src/model.ts`, described in `README.md`.
-> Read this as where the model is going, never as a description of the code.
->
-> **Two things here have since landed, by different means than §4 proposes.** §4's `1+√2`
-> front-speed error is fixed — not by an energy accumulator but by Finney (2002) minimum-travel-time
-> propagation, which made the front advance at the rate the kernel reports, within 6%. And
-> directional spread is Richards (1990) elliptical, not the cosine-scaled `φ_w` §4 criticises.
-> §9's provider ports are fully implemented and every one of the ten is now real.
->
-> What remains proposed: the 10 m grid, GPU execution, GEE-derived fuel, the ensemble, and the
-> IR assimilation loop of §6.
+The proposed system combines satellite-derived fuel inputs, a receiving-cell energy
+accumulator, an ensemble and repeated observation updates. The current application
+uses a minimum-travel-time kernel and Richards-style elliptical spread on a grid
+whose resolution depends on the domain (about 38 m for a 15 km scenario). See
+[implemented flow](APP-FLOW.md), [setup](README.md) and
+[evaluation evidence](../docs/simulation-evaluation.md).
 
-## Four decisions this design commits to
+The 10 m grid, GPU kernel, energy accumulator, ensemble and IR assimilation below
+remain proposed. Provider interfaces and crown-fire calculations exist, but their
+implementations differ from this pseudocode and can use synthetic fallbacks.
+Code and current tests are authoritative for implemented behavior.
+
+## Four proposed design choices
 
 | | |
 |---|---|
 | **Grid is 10 m, not 2 m** | A memory wall, not a compute preference — and there is no area-wide 2 m fuel data to spend it on. Fine-scale barriers handled as vectors, drone refinement as a local overlay. |
 | **The accumulator sits on the receiving cell** | Spread is driven by received energy, not by the emitting cell's max temperature. This removes a specific artifact — double-counted ignition probability — and nothing more; see the honesty note in §4. |
-| **Two fuel layers, not one** | Surface and canopy, with an explicit crowning criterion. A surface-only kernel cannot be wrong-but-useful in closed forest; it is just wrong, and closed forest is the target. |
-| **Learned perception, physics kernel** | Vision has abundant labels. Fire physics has to extrapolate to conditions no training set contains. |
+| **Two fuel layers, not one** | Surface and canopy, with an explicit crowning criterion. Model crown fire explicitly when evaluating closed-forest incidents; measure whether the additional inputs improve predictions. |
+| **Learned perception, physics kernel** | Separate observation estimation from spread dynamics; both need appropriate independent labels and evaluation of transfer. |
 
 ---
 
@@ -94,23 +95,28 @@ The tiers are split on refresh rate, because that is also how they fail:
 
 ---
 
-## 2 · What to use, and where it plugs in
+## 2 · Candidate tools and evaluation work
 
-| Library | Verdict | Use it for | Caveat |
-|---|---|---|---|
-| **Google Earth Engine** | ⭐ Backbone | Hosts Sentinel-2, WorldCover, Copernicus DEM in one place with server-side compute. Severity mapping, fuel layers, hindcast ground truth — no imagery download at all | Free for research; commercial use needs a paid Cloud licence. Batch only — never in the live loop |
-| **TorchGeo** | ✅ Backbone | CRS reprojection, tiling, samplers, Sentinel-2 multispectral pretrained weights. For anything GEE can't do server-side | — |
-| **ESA WorldCover v2** | ➕ Add — v1 | Land cover → fuel model crosswalk. Ships Tier 1 in days with no training at all | 11 coarse classes at 10 m; does not separate timber from scrub, and carries no canopy base height or bulk density — those need Sentinel-2/GEDI or assumed per class |
-| **Prithvi + TerraTorch** | ↪️ Redirect | Its *encoder*, fine-tuned for fuel | GEE dNBR is cheaper for burn-scar mapping. Needs 6-band HLS with NIR + SWIR, not JPEG |
-| **SegFormer** | ✅ Fallback | Fuel classifier, only if the WorldCover crosswalk proves too coarse | ADE20K weights are ground-level RGB — retrain and widen the input layer |
-| **GEDI / canopy height** | ➕ Add — gap | Canopy base height and bulk density for the crowning criterion (§4) | Sparse sampling; needs gap-filling against Sentinel-2 to make a raster |
-| **Ultralytics YOLO** | ↪️ Redirect | Structures and vehicles for values-at-risk — not fuel cover | Boxes, not dense cover. **AGPL-3.0** if this ever ships commercially |
-| **flirimageextractor** | ✅ Core | Drone IR → observed perimeter, and observed max temp to score the kernel against | Needs a radiometric camera (DJI H20T, FLIR) |
-| **WindNinja** | ➕ Add — gap | Mass-consistent terrain wind downscaling. Large accuracy gain in steep ground, though the figure is unmeasured here | Diagnostic, not prognostic: no fire-induced flow |
-| **Cell2Fire / ELMFIRE** | ⭐ **Gate, not a nice-to-have** | Benchmark the kernel against an established model on identical inputs | See §4 — the energy formulation has no explicit ROS to calibrate against, so an external reference is the only calibration handle |
+These were candidate components in the original design, not installation
+requirements or a current product recommendation. Check version, input compatibility,
+source terms and measured performance before selecting one.
 
-Two entries do a different job than the obvious one, and neither is wasted — YOLO earns its place on
-values-at-risk rather than fuel cover, Prithvi as a fuel encoder rather than a burn-scar mapper.
+| Candidate | Proposed role | Work needed before adoption |
+| --- | --- | --- |
+| Google Earth Engine | Batch satellite processing and fuel inputs | Access, quota, versioned exports and terms; derived scars are not independent ground truth |
+| TorchGeo | Geospatial sampling and model input pipelines | Match CRS, resolution, bands and dataset/license requirements |
+| ESA WorldCover | Coarse land-cover-to-fuel crosswalk | Validate crosswalk and vintage; cover classes do not supply fuel-bed or canopy parameters |
+| Prithvi / TerraTorch | Candidate remote-sensing representation | Separate from the current inference-only burn-scar experiment; compatible bands, checkpoint and evaluation required |
+| SegFormer | Candidate dense cover classifier | Appropriate training labels and bands; generic RGB weights do not establish fuel classification |
+| GEDI / canopy rasters | Canopy structure reference | Coverage, resolution, time and uncertainty checks; avoid treating height as bulk density |
+| Object detectors | Candidate mapped-structure support | Independent detection evaluation, redistribution terms and unknown handling |
+| Radiometric thermal tools | Drone observation extraction | Camera calibration, registration, geolocation and occlusion checks |
+| WindNinja | Candidate terrain wind downscaling | Measure benefit on chosen terrain; no assumption of fire-atmosphere coupling |
+| Cell2Fire / ELMFIRE | Independent simulation comparison | Match inputs, definitions and resolution; agreement is not field validation |
+
+See [third-party notices](../THIRD_PARTY_NOTICES.md) and the
+[Prithvi experiment record](../docs/concurrent-analysis/09-observation-baseline/prithvi-cypress-creek-experiment.md)
+for existing component-specific provenance.
 
 ---
 
@@ -248,8 +254,9 @@ measured at **4.45×** once percolation was included.
 
 > **This defect is fixed, and not by the accumulator below.** Finney (2002) minimum-travel-time
 > propagation replaced the per-step draw with a deterministic shortest-arrival search, and the
-> front now advances within 6% of the nominal rate on every wind case in the bench. The argument in this
-> section stands as a diagnosis; its proposed remedy was overtaken by a cheaper one.
+> current numerical behavior is covered by the tests and benchmark. Calm and slope
+> exceptions remain; see the [measured local benchmark](../docs/simulation-evaluation.md).
+> The historical diagnosis below does not establish that an energy accumulator is needed.
 
 ### Honesty note: what the accumulator does and does not fix
 
@@ -390,8 +397,8 @@ Sensitivity-test them first and report the derivative.
 
 #### Crown fire
 
-A surface-only kernel in closed beech and oak is not a conservative approximation; it is the wrong
-model. Van Wagner's criteria, both of them:
+A surface-only kernel omits crown-fire behavior. This proposal uses both Van Wagner
+criteria; evaluate the extra complexity and canopy inputs through an ablation:
 
 ```
 initiation:   I_0 = [0.010 · CBH · (460 + 25.9·M_f)]^1.5        kW/m
@@ -522,9 +529,9 @@ flowchart LR
     class M,D met
 ```
 
-A model that re-anchors to observed fire position every few minutes beats a more detailed model
-running open-loop. Two things the previous revision left as hand-waving, both of which decide whether
-this works:
+Hypothesis: observation updates may reduce drift compared with an open-loop model.
+Test this using independent observations and the same inputs and compute budget;
+errors in timing or geolocation can also worsen the result. Two design questions follow:
 
 **"Nudge state" is not a scheme.** You cannot stamp the observed perimeter into the grid: the interior
 `E_recv`, load consumption and `arrivalTime` fields would be inconsistent with it, and the kernel
@@ -540,16 +547,19 @@ Start with particle reweighting — it cannot produce an inconsistent state, and
 Move to EnKF only if member collapse is measured, not anticipated.
 
 **Drift must be logged before correction, or it is not a metric.** The prior departure — forecast
-minus observation, measured *before* the correction is applied — is a genuine free validation signal.
+minus observation, measured before correction — is a diagnostic subject to the
+observation's timing, coverage and uncertainty. It is not independent validation
+when the same observations were used for tuning.
 The posterior departure is not: it measures how hard the correction was pushed and is confounded with
 the nudge strength. The previous revision's diagram fed "drift per cycle" from the CORRECT node, which
 would have logged the wrong quantity and made the accuracy metric look better the more aggressively
 the model was corrected.
 
-Drone **thermal**, not drone RGB, is the sensor that matters: RGB fuel mapping mid-incident fights
-smoke and restricted airspace, while IR answers the single most valuable question — where the fire
-actually is right now. Radiometric IR also yields an *observed* max temperature, which is what the
-kernel's diagnostic `maxTemp` is scored against: a validation target, not a driver.
+Drone RGB and thermal channels provide different evidence and should retain their
+own coverage and uncertainty. Thermal anomalies need calibration, registration and
+geolocation before interpreting their boundaries as ground fire extent. A radiometric
+measurement is not automatically comparable with the kernel's apparent-temperature
+map; establish a sensor observation model before scoring temperatures.
 
 ---
 
@@ -621,15 +631,16 @@ This is the mechanism that makes the mock/real swap a one-line composition chang
 refactor, and it is the part of the design most worth putting in place before the kernel work starts —
 retrofitting seams is what makes a prototype unshippable.
 
-Written as TypeScript because Tier 3 and the UI are TypeScript; the Tier 1/2 batch implementations
-are Python behind an HTTP boundary and satisfy the same contracts as data shapes.
+The interfaces below are design sketches written in TypeScript. Python batch
+services are proposed here; the current simulation providers are TypeScript.
+See `contracts/src/providers.ts` and `api/src/providers/registry.ts` for actual interfaces.
 
 ### The rule that makes it work: provenance is part of the return type
 
-No provider returns bare data. It returns data plus where the data came from, and the UI is required
-to surface it. The shipped app already half-does this — `Terrain.source: 'synthetic' | 'live'` and the
-`dataNote` header chip in `App.tsx` — and it is the single most valuable convention in the codebase,
-because it makes "mock data presented as live" a type error rather than a judgement call.
+The proposed interface pairs values with provenance and requires consumers to
+surface it. The current code already uses `Provided<T>` and incident provenance.
+Types can require a label but cannot prove it is accurate; test provider behavior,
+fallbacks and UI handling. Synthetic inputs must remain visible.
 
 ```ts
 export type Provenance = {
@@ -832,95 +843,36 @@ export interface ValuesAtRisk extends Provider<GridSpec, {
 }> {}
 ```
 
-### Implementation matrix
+### Current implementation and proposed migration
 
-Each row is the same interface, three times over. The middle column is what exists now.
+Current provider selection and fallbacks are documented in [api/README.md](api/README.md).
+The live weather chain starts with NWS and falls back to Open-Meteo; failed
+providers can ultimately return synthetic values. `/api/health` describes registry
+configuration, while resolved provenance belongs to each incident.
 
-| Port | Offline implementation | Live implementation | Still ahead |
-|---|---|---|---|
-| `ElevationProvider` | `proceduralDem` — ridged noise | **`terrariumDem`** — AWS Terrarium tiles | `CopernicusDem` via GEE |
-| `FuelProvider` | `topographyFuel` — aspect and elevation rules | **`fbfm40Fuel`** (Scott & Burgan 40-model, CONUS) → **`worldCoverFuel`** (ESA, global) → `imageryFuel` (visible-band) | Scott & Burgan *bed parameters*, which need multi-size-class Rothermel first |
-| `CanopyProvider` | `assumedCanopy` — per-`Fuel` constants | **`learnedCanopy`** — gradient-boosted trees trained on LANDFIRE CBH/CBD/CC/CH | GEDI L2B lidar profiles for CBD, which optical bands barely see |
-| `BarrierProvider` | `noBarriers` | **`osmBarriers`** — Overpass roads + watercourses, per-edge, widths assumed per tag | — |
-| `BurnHistoryProvider` | `noBurnHistory` | **`sentinelBurnHistory`** — dNBR across a Sentinel-2 scene pair | — |
-| `WeatherProvider` | `mockWeather` + `PRESETS` | **`openMeteo`** — hourly forecast plus 61 d of daily precipitation | RAWS / NWS gridpoint |
-| `WindFieldProvider` | `uniformWind` + `gustAt()` | **`openMeteoWind`** — spatial anomaly, not absolute | `WindNinjaField` at 100 m |
-| `FuelMoistureModel` | `rhFuelMoisture` — snapshot RH formula | **`nfdrs1hMoisture`** — Simard EMC, 1-h timelag over 7 d, plus canopy sheltering | — |
-| `IgnitionSource` | `UserClickIgnition` | **`firmsPerimeter`** doubles as one — click a detection to ignite there | `ViirsFeed` / `GoesFeed` push |
-| `SuppressionPlan` | user-drawn dozer / retardant | same | incident action plan import |
-| `PerimeterObserver` | `noObservations` | **`firmsPerimeter`** — VIIRS/MODIS at their real 375 m footprint | `DroneIrPerimeter`, and §6's assimilation loop, which has no consumer yet |
-| `SpreadKernel` | — | `model.ts` — Rothermel `φ_w`, Richards ellipse, Finney MTT | the 10 m grid and GPU execution of §4 |
-| `ValuesAtRisk` | `densityValuesAtRisk` — 3 structures/ha | **`osmValuesAtRisk`** — mapped footprints counted per cell | `YoloDetections` for what OSM is missing |
+The proposed `SpreadKernel` and `Ensemble` abstractions above are not the current
+public kernel API. Before introducing an alternative implementation:
 
-**Every port now has a live implementation, and none returns invented data in live
-mode.** `GET /api/health` reports `measured` or `derived` for all ten. That is the
-claim this section existed to make true, and it is worth stating plainly because
-the interesting half is what it did *not* buy: see the note on the canopy model in
-`providers/canopy-learned.ts`, which is a real trained model that changes
-end-to-end accuracy by −0.0004 Dice.
+1. Freeze a reference input bundle and benchmark the existing kernel.
+2. Define interface semantics for arrival time, fuel state, treatments and reset.
+3. Implement an adapter without changing existing numerical behavior, and verify
+   browser/API state parity and offline operation.
+4. Evaluate the alternative on the same inputs, with predefined scientific criteria.
+   Preserve failed cases and report computational cost and remaining assumptions.
 
-The prediction that writing null implementations first would make each real
-provider one line of composition has now been tested three times. `BarrierProvider`
-cost one line in `registry.ts` plus two in the kernel, the kernel lines only
-because there was no per-edge term at all. `CanopyProvider` and `FuelProvider` each
-cost one line plus a fallback entry. The pattern held.
-
-### Composition
-
-One place names concrete implementations. Nothing else does.
-
-```ts
-export function buildIncident(env: 'offline' | 'live'): Incident {
-  const elevation = env === 'live'
-    ? new TerrariumDem({ fallbacks: [new ProceduralDem()] })
-    : new ProceduralDem()
-
-  return new Incident({
-    elevation,
-    fuel: env === 'live'
-      ? new WorldCoverCrosswalk({ fallbacks: [new ImageryClassifier(), new TopographyFuel()] })
-      : new TopographyFuel(),
-    canopy: new AssumedCanopy(),          // until GEDI
-    barriers: env === 'live' ? new OsmBarriers() : new NoBarriers(),
-    weather: env === 'live' ? new OpenMeteo() : new MockForecast(),
-    wind: new UniformWind(),              // until WindNinja
-    moisture: new RhFuelMoisture(),
-    kernel: mttKernel(),                  // Rothermel phi_w + Richards ellipse + Finney MTT
-    observer: new NoObservations(),
-  })
-}
-```
-
-Three properties this buys, each of which is currently unavailable:
-
-- **The offline path is a first-class configuration**, not an error branch. `npm run smoke` can run
-  fully deterministically with no network, which it presently cannot.
-- **A/B-ing two kernels on identical inputs is a constructor argument.** That is exactly what §8's
-  step-1 gate and §4's honesty note require, and it is impossible while the kernel is a module of
-  free functions.
-- **Provenance composes.** `degradedFrom` propagates up the fallback chain, so the UI chip can say
-  *"Live DEM, procedural fuel"* — which the current single `dataNote` string cannot express.
-
-### Migration, in dependency order
-
-Do not do this as a rewrite. Four steps, each shippable:
-
-1. Add `Provenance` / `Provided<T>` and thread them through the two providers that already exist in
-   spirit (`loadRealTerrain`, `mockForecast`). Replace `Terrain.source` and `dataNote` with the real
-   thing. Behaviour unchanged, types honest.
-2. Extract `ElevationProvider` and `FuelProvider` out of `buildTerrain`, which currently does both at
-   once and is the main reason real fuel cannot be swapped independently of real elevation.
-3. Add the null implementations for the five missing ports, and the composition root. Still one kernel.
-4. Put `SpreadKernel` around the existing `model.ts` functions **unchanged**. Only then is writing
-   `EnergyKernel` a matter of adding a file rather than replacing the simulation.
-
-Step 4 last, and step 4 without touching `model.ts`, is what keeps the demo working throughout.
+The offline API smoke test already exists (`npm run smoke:api` from `frontend/`).
+Browser smoke checks require a web server and may use external services; they
+should not be described as fully hermetic.
 
 ---
 
-## Verification
+## Proposed acceptance criteria
 
-- Isotropy and energy-closure checks run in CI and gate every kernel change:
+These criteria describe the proposed energy/ensemble system. They are not all
+implemented in CI. The current [workflow](../.github/workflows/frontend.yml) and
+[evaluation guide](../docs/simulation-evaluation.md) identify checks that actually run.
+
+- Proposed isotropy and energy-closure checks:
   - flat, no wind, uniform fuel → equal-area radius growth matches an **externally specified target
     ROS** for that fuel, within ±10 %. Note what changed here: the energy formulation has no internal
     ROS variable to compare against, so "matches the kernel's computed ROS" was circular. The target

@@ -16,7 +16,11 @@ Cornea's narrative or treating it as independent confirmation.
 | County Rd 169 | 2026-COELX-000171 | 2026-02-18 19:34:00.593 | 2260.5740 | 2265.6384 |
 | Cypress Creek | 2026-TXTXF-000138 | 2026-02-27 11:20:00 | 2733.2468 | 2733.2234 |
 
-The bounded query returns two features, one per event. This is not proof that no
+The timestamp column preserves the source `poly_PolygonDateTime`; it is not
+independently verified survey capture time. The separate [timing audit](../09-observation-baseline/reference-readiness.md)
+explains why source timestamps do not automatically qualify a validation reference.
+
+The bounded query returned two features, one per event. This is not proof that no
 additional perimeters exist in other archives. Neither record establishes hourly
 growth or final burned extent. Reported area, polygon GIS acreage, automated polygon
 acreage and source geometry remain separately available in the original response.
@@ -76,7 +80,10 @@ California GOFER display simplification in EPSG:3310. Source geometries stay int
 
 ## Reproduce
 
-From `backend/api`, using the existing authenticated Earth Engine project:
+From `backend/api`, after [environment setup](../../research-data/reproduce.md) and
+Earth Engine authentication. These commands reproduce the original output layout;
+use new research paths first for a changed source snapshot. The export below
+intentionally replaces the bundled preview after review:
 
 ```sh
 ./.venv/bin/python -m historical_fire.nifc \

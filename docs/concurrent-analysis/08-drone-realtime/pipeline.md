@@ -2,7 +2,7 @@
 
 Date: 2026-09-26. Status: research proposal, not an approved implementation design.
 Confirmed scope: detect the existing fire extent and track its observed spread in near realtime using drone imagery and pose. Temperature and weather provide supporting context.
-Affected components if implemented: backend ingestion/analysis, shared contracts, and frontend visualization. Vision and temporal mapping are separate from the optional LLM briefing component; placement of new processing code remains to be decided.
+Affected components if implemented: backend ingestion/analysis, shared contracts, and frontend visualization. Vision and temporal mapping are separate from the optional LLM briefing component; offline perception research now lives in `backend/vision/`; live processing remains proposed.
 
 ## Confirmed output
 

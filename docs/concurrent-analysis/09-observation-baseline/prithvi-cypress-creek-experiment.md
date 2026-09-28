@@ -113,8 +113,8 @@ Local setup was completed on 2026-09-27 in the ignored
 `backend/vision/.venv/` environment using Python 3.12.14, PyTorch 2.11.0+cu128
 (CUDA 12.8), TerraTorch 1.2.13, JupyterLab 4.6.4 and the NASA workflow's
 HLS/geospatial dependencies.
-The `FireWatch Prithvi (CUDA)` Jupyter kernel is registered locally. The device
-is an NVIDIA GeForce RTX 3050 Laptop GPU with 4 GB VRAM. PyTorch
+The recorded environment registered a `FireWatch Prithvi (CUDA)` Jupyter kernel.
+Its device was an NVIDIA GeForce RTX 3050 Laptop GPU with 4 GB VRAM. PyTorch
 reported CUDA available, identified that GPU and completed a CUDA tensor smoke
 test; required-library imports passed and `pip check` found no broken requirements.
 The exact package freeze is `backend/vision/requirements-prithvi-local-lock.txt`.
@@ -155,8 +155,9 @@ Cypress experiment.
 - Public discovery and a pinned-demo runner are implemented. The authenticated
   Cypress acquisition, Fmask screening, pairing, common-grid processing and
   comparison runner remain to be completed before calling this an experiment run.
-- Cloud compute remains unallocated; it is no longer required for the first
-  attempt because the local RTX 3050 is available.
+- The recorded RTX 3050 run demonstrates local execution feasibility; a new
+  contributor must supply and verify their own environment. No cloud allocation
+  is part of this repository.
 - The WFIGS geometry's observation time is unresolved, so this case cannot
   establish time-matched burn-scar accuracy.
 - A burn-scar mask is not an active-fire perimeter. This result cannot be shown

@@ -216,7 +216,9 @@ input[type="range"]:disabled::-webkit-slider-thumb { background: var(--muted); c
 .hud-top { padding: 8px 10px; align-self: stretch; }
 .hud-bl { bottom: 74px; }
 /* Keep Leaflet's own controls clear of the transport bar. */
-.leaflet-bottom { bottom: 58px; }
+.map-wrap .leaflet-bottom { bottom: 58px; }
+.firewatch-map .leaflet-bar a { color: #000; }
+.firewatch-map .leaflet-bar a.leaflet-disabled { color: #bbb; }
 
 .data-chip {
   display: inline-flex; align-items: center; gap: 7px;

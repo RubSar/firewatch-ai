@@ -1,5 +1,8 @@
 # Product direction options
 
+> Dated background research, not current application setup or accepted scope.
+> See the [research index](../README.md) and [decision log](../../../AGENTS.md).
+
 Reviewed 2026-09-26. Everything here is proposed, not approved scope.
 
 | Option | Demonstrated value | Tradeoff |
@@ -24,4 +27,4 @@ A user can find a relevant observation, inspect its supporting evidence, identif
 
 First choose the primary user. Then choose geography, prototype versus pilot expectations, available data, and the meaning of similarity to Technosylva. Deadline and budget will determine the depth of each workflow.
 
-The authoritative status of these proposals is in [AGENTS.md](../../AGENTS.md), D004–D005.
+The authoritative status of these proposals is in [AGENTS.md](../../../AGENTS.md), DR004–DR005.

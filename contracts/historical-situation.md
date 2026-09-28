@@ -1,7 +1,8 @@
 # Historical situation contract, version 1.0
 
-This is an offline research interface. It adds no HTTP endpoint and does not change
-the fuel-index API. The executable definition is `historical-situation.schema.json`.
+This is an offline research interface, not an HTTP endpoint. The executable
+schema is [historical-situation.schema.json](historical-situation.schema.json).
+The former fuel-index API is no longer present in this checkout.
 
 ## Meaning and units
 

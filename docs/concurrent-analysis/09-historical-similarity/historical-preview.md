@@ -39,9 +39,9 @@ The cumulative perimeter comes directly from the archive rather than a union of
 incremental growth. The orange layer is the existing newly burned footprint; null
 footprints are retained. Reported cumulative area is the source `farea` in km² × 100;
 reported growth is the original hectares. Display geometry alone is simplified by
-20 m in EPSG:3310 and returned to GeoJSON longitude/latitude EPSG:4326. Both maps
-have scale bars; linked zoom does not imply equal ground scale across latitudes.
-Basemap imagery is current service imagery, not historical evidence.
+20 m in EPSG:3310 and returned to GeoJSON longitude/latitude EPSG:4326. The map has a scale bar.
+Both pages share the EOX Sentinel-2 cloudless 2020 satellite basemap and OpenTopoMap
+option. These provide geographic context, not imagery from the selected fire record's time.
 
 GOFER top cards use **newly burned footprint** measurements: HLS NDVI/NDMI/NBR,
 LANDFIRE FBFM40 sampled distributions, 3DEP slope, and ERA5-Land temperature,
@@ -80,15 +80,15 @@ names follow [LANDFIRE FBFM40](https://landfire.gov/fuel/fbfm40) and the
 [NWCG reference table](https://training.nwcg.gov/dl/rx300/fbfm40-reference-guide.pdf).
 
 At least three groups must be enabled. **Every enabled parameter must be available
-in both records**. Missing data never contributes zero distance. The screen shows
-coverage and withholds the combined score when incomplete. Disabling a group changes
+in both records**. Missing data never contributes zero distance. The removed comparison screen showed
+coverage and withheld the combined score when incomplete. Disabling a group changes
 the comparison definition for every candidate; percentages across different group
 selections should not be compared. Only one closest interval per other fire is
 returned, with deterministic ID tie-breaking. The query fire is excluded entirely.
 Area, growth, latitude, longitude and year do not enter the score.
 
-This UI does not run the earlier normalized analog experiment or claim its validation
-results apply here. Retrospective footprint selection, differing source dates and
+Neither the archived comparison UI nor the current viewer runs the earlier
+normalized analog experiment or inherits its validation results. Retrospective footprint selection, differing source dates and
 resolutions, unreviewed measurements, and the three-fire sample remain limitations.
 More groups/fields and validated scales can be introduced after review.
 
@@ -104,7 +104,10 @@ npm run build:web
 ```
 
 Production hosts must serve `index.html` for the `/history` SPA route.
-To refresh the static library from local historical data, from `backend/api`:
+To refresh the static library, first follow the [environment and data setup](../../research-data/reproduce.md).
+The following export from `backend/api/` intentionally replaces the bundled frontend
+file. For source changes, export to a new research output first, inspect it and review
+redistribution terms before replacing the bundle:
 
 ```sh
 ./.venv/bin/python -m historical_fire.export_preview \

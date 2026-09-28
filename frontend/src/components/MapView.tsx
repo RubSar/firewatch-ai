@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import L from 'leaflet'
+import { useBasemap, useLeafletMap } from '../visualization/useLeafletMap.ts'
 import type { Sim } from '@firewatch/sim/model'
 import type { Terrain } from '@firewatch/sim/terrain'
 import { baseIsEmpty, paintGrid } from '../render/paint.ts'
@@ -27,31 +28,11 @@ interface Props {
   onFiresLoaded?: (s: { count: number; note: string; truncated: boolean; loading?: boolean } | null) => void
 }
 
-const TILES = {
-  topo: {
-    url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
-    attribution: '&copy; OpenStreetMap, SRTM | &copy; OpenTopoMap (CC-BY-SA)',
-    maxZoom: 17,
-  },
-  satellite: {
-    /**
-     * Sentinel-2 cloudless (EOX, CC-BY-4.0) rather than Esri World Imagery,
-     * whose terms restrict use outside Esri/ArcGIS contexts without a licence.
-     * Attribution is a CC-BY condition — do not remove it.
-     */
-    url: 'https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2020_3857/default/g/{z}/{y}/{x}.jpg',
-    attribution:
-      'Sentinel-2 cloudless 2020 &copy; <a href="https://s2maps.eu">EOX IT Services</a> (CC-BY-4.0), ' +
-      'contains modified Copernicus Sentinel data',
-    maxZoom: 16,
-  },
-}
-
 export function MapView(props: Props) {
   const hostRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const mapRef = useRef<L.Map | null>(null)
-  const tileRef = useRef<L.TileLayer | null>(null)
+  const mapRef = useLeafletMap(hostRef)
+  useBasemap(mapRef, props.layers.base === 'tiles' ? props.layers.tileStyle : 'none')
   const gridRef = useRef<HTMLCanvasElement | null>(null)
   const imgRef = useRef<ImageData | null>(null)
   const thermalRef = useRef<{ canvas: HTMLCanvasElement; img: ImageData } | null>(null)
@@ -67,23 +48,6 @@ export function MapView(props: Props) {
   const lastGeom = useRef({ time: -1, revision: -1, iso: false, at: 0 })
   const p = useRef(props)
   p.current = props
-
-  // --- map creation ---------------------------------------------------
-  useEffect(() => {
-    const map = L.map(hostRef.current!, {
-      zoomControl: false,
-      attributionControl: true,
-      zoomSnap: 0.25,
-      wheelPxPerZoomLevel: 140,
-    })
-    L.control.zoom({ position: 'bottomright' }).addTo(map)
-    L.control.scale({ position: 'bottomright', imperial: true }).addTo(map)
-    mapRef.current = map
-    return () => {
-      map.remove()
-      mapRef.current = null
-    }
-  }, [])
 
   // --- fit to the active scenario --------------------------------------
   useEffect(() => {
@@ -162,22 +126,6 @@ export function MapView(props: Props) {
       return { lat: c.lat, lng: c.lng, spanKm: Math.min(widthKm, heightKm) }
     })
   }, [])
-
-  // --- basemap tiles ----------------------------------------------------
-  useEffect(() => {
-    const map = mapRef.current
-    if (!map) return
-    tileRef.current?.remove()
-    tileRef.current = null
-    if (props.layers.base === 'tiles') {
-      const cfg = TILES[props.layers.tileStyle]
-      tileRef.current = L.tileLayer(cfg.url, {
-        attribution: cfg.attribution,
-        maxZoom: cfg.maxZoom,
-        crossOrigin: true,
-      }).addTo(map)
-    }
-  }, [props.layers.base, props.layers.tileStyle])
 
   // --- keep the fire canvas in step with Leaflet's zoom animation -------
   //
@@ -558,7 +506,7 @@ export function MapView(props: Props) {
 
   return (
     <>
-      <div ref={hostRef} style={{ position: 'absolute', inset: 0 }} />
+      <div ref={hostRef} className="firewatch-map" style={{ position: 'absolute', inset: 0 }} />
       <canvas ref={canvasRef} className="fire-canvas" />
     </>
   )

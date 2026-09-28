@@ -5,6 +5,10 @@ This separate runner appends NASA-derived measurements to the three pilot
 the earlier completeness report or the tracked Creek example. Those older artifacts
 remain snapshots of the previous enrichment stage.
 
+Follow the [environment setup and acquisition order](../../research-data/reproduce.md)
+first. The command below updates existing pilot sidecars; use a fresh research run
+directory when testing changed acquisition or enrichment code.
+
 ```sh
 cd backend/api
 ./.venv/bin/python -m historical_fire.enrichment_nasa \

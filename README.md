@@ -1,7 +1,5 @@
 # FireWatch AI
 
-**See where wildfire could spread. Explore how to respond.**
-
 FireWatch AI is a research prototype for exploring wildfire spread on an interactive
 map and inspecting historical fire progression. It combines terrain, vegetation and
 weather inputs with a physics-based simulation, alongside a historical atlas with
@@ -20,7 +18,7 @@ source evidence and explicit data gaps.
 The simulator is at `/`; the historical atlas is at `/history`. The atlas displays
 observations from the loaded pilot library; it does not run the spread simulator.
 
-## Demo
+## Recorded UI examples
 
 Two screen recordings of the simulator running locally (no audio). Both show
 exploratory scenarios, not validated forecasts.
@@ -51,17 +49,19 @@ synthetic fallbacks; inspect the displayed source and quality information.
 
 ## Run locally
 
-Use **Node.js 24+ and npm**. From the repository root:
+Use **Node.js 24+ and npm**. On macOS/Linux, from the repository root:
 
 ```sh
 cd frontend
-npm install
+npm ci
 npm run dev
 ```
 
 This starts the web app at **http://localhost:5173** and the simulation API at
 **http://127.0.0.1:8787**. Open **http://localhost:5173/history** for the historical
-atlas. Live data retrieval requires internet access.
+atlas. Live data retrieval requires internet access. For Windows, use the
+[separate-terminal commands](frontend/README.md#run-the-simulation-api); the combined
+`dev` script uses a POSIX shell.
 
 For a browser-only simulation, run `npm run dev:web` instead, with `VITE_API_URL`
 unset. To run the API separately, use `npm run dev:api`; point the web app at it
@@ -101,7 +101,8 @@ it does not make external browser map tiles available offline.
 | [`backend/llm/`](backend/llm/README.md) | Historical incident-document extraction and evaluations |
 | [`backend/vision/`](backend/vision/README.md) | Separate experimental RGB/thermal and satellite observation research |
 | [`contracts/`](contracts/README.md) | Language-neutral historical and research data schemas |
-| [`docs/`](docs/) | Research, design documents and presentation materials |
+| [`research/`](research/README.md) | Contributor studies, protocols, notebooks and findings |
+| [`docs/`](docs/) | Application guides, shared data documentation, proposed designs and legacy research |
 | [`assets/`](assets/) | Screen recordings and media used by the documentation |
 
 The Python research and enrichment tools have their own setup instructions; they
@@ -124,22 +125,23 @@ configured test cases; they are not operational accuracy guarantees.
 
 ## Documentation
 
+- [Research studies and researcher contribution guide](research/README.md)
+
+- [Historical data inventory, sources and actual usage](docs/research-data/README.md)
+- [Reproduce historical acquisition and enrichment](docs/research-data/reproduce.md)
+- [Contribute data, provenance and domain review](docs/research-data/contributing.md)
 - [Application setup and controls](frontend/README.md)
 - [Current application flow and model details](frontend/APP-FLOW.md)
 - [Simulation API, providers and diagnostics](frontend/api/README.md)
 - [Historical atlas behavior and data refresh](docs/concurrent-analysis/09-historical-similarity/historical-preview.md)
 - [Historical data research and reproduction](docs/concurrent-analysis/09-historical-similarity/README.md)
 - [Observation research and its validation gaps](docs/concurrent-analysis/09-observation-baseline/README.md)
-- [Technical and pitch reference](pitch.md) — detailed claims and measurements;
-  some sections still need reconciliation with the current implementation.
+- [Simulation evaluation and limitations](docs/simulation-evaluation.md) — numerical
+  checks, archived replay measurements and unresolved validation work.
 - [Proposed architecture](frontend/ARCHITECTURE.md) — a target design, not a
   description of every implemented feature.
 - [Contribution guide](CONTRIBUTING.md)
 - [Repository instructions](AGENTS.md)
-
-Our direction is open collaboration with researchers and analysts: inspect model
-assumptions, contribute regional data and strengthen reproducible validation. Wider
-collaboration can improve the evidence; accuracy must still be demonstrated.
 
 ## Contributing
 

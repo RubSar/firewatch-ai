@@ -1,5 +1,8 @@
 # 1. Architecture and horizontal scaling
 
+> Design proposal, 2026-09-26. Services and acceptance targets below are not a deployed
+> or benchmarked system. See the [specification status](README.md).
+
 ## 1.1 Product boundary and invariants
 
 The real-time product reports observations: flame/smoke detections, thermal anomalies, surface-temperature statistics, vegetation candidates, geolocated coverage and changes over time. Forecasting and crew routing are future, independently validated services. No model-generated future image becomes a measured fire perimeter.

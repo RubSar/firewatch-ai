@@ -8,8 +8,9 @@ candidate experiment, not RGB-visible flame, thermal temperature, or future spre
 
 `firewatch.research.satellite-case.v1` fixes incident UUID, source response SHA-256,
 collection, UTC acquisition windows, grid, cloud policy and thresholds. The Cypress
-v1 implementation supports EPSG:32615, 20 m cells and a 1,000 m buffer around the
-projected perimeter bounding box. Bounds snap outward to multiples of 20 m. WGS84
+v1 experiment uses EPSG:32615, 20 m cells and a 1,000 m buffer around the
+projected perimeter bounding box. The later [transfer extension](satellite-transfer.md)
+permits other northern UTM zones. Bounds snap outward to multiples of 20 m. WGS84
 positions are [longitude, latitude]; projected coordinates are metres. Raster rows
 increase southward from the upper-left pixel corner; comparisons use cell centres.
 

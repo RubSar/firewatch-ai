@@ -1,5 +1,12 @@
 # Investigation area coverage comparison
 
+> Archived report from 2026-09-26 about the former fuel-index/investigation service.
+> That implementation and the referenced `contracts/examples/` receipts are absent
+> from the current checkout. Results and check counts below are historical claims,
+> not verification of the current app. Recover the original code and receipts from
+> repository history before reproducing them; use [current setup](../CONTRIBUTING.md)
+> for the maintained application.
+
 Measured on 2026-09-26 using the same hypothetical Sierra fire, its 28 km
 investigation ring (fire excluded), and the UTC imagery window 2025-07-01 through
 2025-08-01 exclusive. Both requests used the same 77 matched Dynamic World and
@@ -28,7 +35,7 @@ no usable data, and 2 excluded for built cover. Per-filter loss diagnostics are 
 currently returned, so these results alone cannot determine whether clouds, shadows,
 snow, uncertain land cover or another mask explains a particular gap. Investigating
 those masks is the next step before changing source or quality policy. A 1 km grid
-for this entire polygon exceeds the current 2,048-cell service limit.
+for this entire polygon exceeds the then-current 2,048-cell service limit.
 
 ## Metric definitions
 
@@ -48,8 +55,8 @@ Each percentage uses its own summary denominator consistently.
 
 ## Reproducible receipts and verification
 
-- [5 km receipt](../contracts/examples/fire-investigation-response.sierra.live.json)
-- [2 km receipt](../contracts/examples/fire-investigation-response.sierra-2km.live.json)
+- 5 km receipt — historical path `contracts/examples/fire-investigation-response.sierra.live.json` (not bundled)
+- 2 km receipt — historical path `contracts/examples/fire-investigation-response.sierra-2km.live.json` (not bundled)
 
 Verified identical fire/wrapper/ring geometries, method and acquisition records;
 synthetic=false; all scored cells have at least 70% valid coverage. The 2 km receipt

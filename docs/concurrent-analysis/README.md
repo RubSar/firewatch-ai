@@ -1,6 +1,14 @@
-# Technosylva investigation
+# Research index
 
-Research date: 2026-09-26. Scope: public product and science pages, one vendor case study, and candidate public data documentation. This is an initial competitor investigation, not an approved implementation specification.
+New contributor studies belong in [research/](../../research/README.md). This index
+retains existing dated investigations; studies migrate individually with forwarding
+links. The first migrated study is [historical data quality](../../research/studies/historical-data-quality/README.md).
+
+This directory contains dated background research and experiment records. Sections
+01–07 were an initial Technosylva/product investigation on 2026-09-26, not an
+implementation specification. The drone, historical-data and observation workstreams
+have their own protocols and later evidence. Read each report's date and status.
+Current contributor setup is in [CONTRIBUTING](../../CONTRIBUTING.md).
 
 ## Categories
 
@@ -13,11 +21,15 @@ Research date: 2026-09-26. Scope: public product and science pages, one vendor c
 7. [Source register and evidence gaps](07-sources/register.md)
 8. [Drone near-realtime pipeline](08-drone-realtime/pipeline.md)
 9. [Historical fire similarity experiment](09-historical-similarity/README.md)
-9. [Fire-observation baseline experiment](09-observation-baseline/README.md) — started 2026-09-27; public-data pilot, mask audit, split checks and independent annotation tools. [Review handoff](09-observation-baseline/review-handoff.md) is prepared; no human reviewers are available and benchmark acceptance remains open. A separate [Prithvi burn-scar experiment](09-observation-baseline/prithvi-cypress-creek-experiment.md) has passed a local GPU demo; Cypress HLS acquisition and evaluation remain pending Earthdata setup.
+10. [Fire-observation baseline experiment](09-observation-baseline/README.md) — started 2026-09-27; public-data pilot, mask audit, split checks and independent annotation tools. [Review handoff](09-observation-baseline/review-handoff.md) is prepared; no human reviewers are available and benchmark acceptance remains open. A separate [Prithvi burn-scar experiment](09-observation-baseline/prithvi-cypress-creek-experiment.md) has passed a local GPU demo; Cypress HLS acquisition and evaluation remain pending Earthdata setup.
 
-## Main finding
+## Scope decisions
 
-Our inference: the useful reference is a set of workflows connecting observations, forecasts, exposure, and coordination. A first Firewatch AI release should select one user and one workflow before choosing implementation details. See the scope options for alternatives.
+The original product-options pages remain background proposals. DR005 selected
+existing-fire extent and observed change as the initial observation scope, excluding
+future spread and pre-ignition prediction from that milestone. The simulator and
+historical atlas are separate experimental components. Follow the decision log and
+each experiment protocol rather than treating all proposals as accepted requirements.
 
 ## Evidence rules
 

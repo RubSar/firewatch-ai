@@ -8,8 +8,9 @@ tuned, learned model trained, benchmark frozen, or M1 human review completed.
 
 Scope: offline processing in `backend/vision/`, research contracts and evidence in
 `contracts/research/` and this directory. No frontend/API interface changes. Research
-and vision ownership remain unassigned. Work continues on `codex/cypress-creek-case`;
-remote main was fetched at `3f7ca27` before work. The application checkout was preserved.
+and vision ownership remain unassigned. The recorded run used
+`codex/cypress-creek-case`, with remote main at `3f7ca27`; these are historical
+provenance, not current checkout instructions. The application checkout was preserved.
 
 ## What the dated reference audit found
 

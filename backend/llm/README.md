@@ -7,7 +7,20 @@ Prompts, model integrations, and evaluations belong here.
 [`historical_documents.py`](historical_documents.py) extracts candidate facts from one official
 incident-report page at a time. It uses local Ollama `qwen3:8b` for text and
 `ibm/granite-docling` for image-rendered pages with inadequate text. Run it only after acquiring
-the source document:
+the source document. These are offline research tools, not a wired browser/API feature.
+
+Use Python 3.11+ and the [historical research environment](../../docs/research-data/reproduce.md).
+The `backend/api` research extra supplies PDF/text/image dependencies. Run the
+commands below from `backend/llm/` with that environment activated. A local Ollama
+server must be running on port 11434 with the selected models available; acquisition
+and model downloads are separate, potentially large prerequisites. Inspect
+`python historical_documents.py --help` for the page, event and resume options (model names are currently fixed in code).
+
+```sh
+cd backend/llm
+```
+
+Run extraction from that directory:
 
 ```sh
 python historical_documents.py /path/to/official-report.pdf \
